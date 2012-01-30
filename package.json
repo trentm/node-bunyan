@@ -1,0 +1,6 @@
+{
+  "name": "bunyan",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./lib/bunyan.js"
+}

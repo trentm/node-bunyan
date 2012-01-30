@@ -1,0 +1,10 @@
+- node-bunyan and push to priv
+- .bind or equiv with diff name
+- info's siblings
+- `bunyan` cli
+- expand set of fields
+- renderer support (i.e. repr of a restify request obj)
+- docs
+- feel out usage
+- Logger.set to mutate config or `this.fields`
+- Logger.del to remove a field
