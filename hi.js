@@ -16,7 +16,7 @@ function Wuzzle(options) {
 }
 
 Wuzzle.prototype.woos = function () {
-  this.log.info("This wuzzle is woosey.")
+  this.log.warn("This wuzzle is woosey.")
 }
 
 var wuzzle = new Wuzzle({log: log.clone({component: "wuzzle"})});

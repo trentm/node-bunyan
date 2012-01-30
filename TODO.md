@@ -1,4 +1,6 @@
-- info's siblings
+- mark wants pretty output for debug output
+    - not sure if 'bunyan --pretty' or whatever would suffice
+- mark suggested a list of streams. This is what ring could be.
 - `bunyan` cli
 - expand set of fields
     <https://github.com/Graylog2/graylog2-docs/wiki/GELF>
