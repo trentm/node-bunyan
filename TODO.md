@@ -1,17 +1,25 @@
-- mark wants pretty output for debug output
-    - not sure if 'bunyan --pretty' or whatever would suffice
-- mark suggested a list of streams. This is what ring could be.
 - `bunyan` cli
-- expand set of fields
+- renderer support (i.e. repr of a restify request obj)
+- expand set of fields: from dap
+    time, hostname
     <https://github.com/Graylog2/graylog2-docs/wiki/GELF>
     <http://journal.paul.querna.org/articles/2011/12/26/log-for-machines-in-json/>
     require: facility and hostname
-- renderer support (i.e. repr of a restify request obj)
 - docs
-- feel out usage
-- not sure about `log.info()` for is-enabled. Perhaps `log.isInfo()` because
-  can then use that for `log.isInfo(true)` for 'ring' argument. Separate level
-  and ringLevel.
+- mark wants pretty output for debug output
+    - not sure if 'bunyan --pretty' or whatever would suffice
+- ringBuffer stream
+- syslog: Josh uses https://github.com/chrisdew/node-syslog
+    streams: [
+        ...
+        {
+            level: "warn",
+            type: "syslog",
+            syslog_facility: "LOG_LOCAL1", // one of the syslog facility defines
+            syslog_pid: true,   // syslog logopt "LOG_PID"
+            syslog_cons: false  // syslog logopt "LOG_CONS"
+        }
 - Logger.set to mutate config or `this.fields`
 - Logger.del to remove a field
+- "canWrite" handling for full streams. Need to buffer a la log4js
 - test suite

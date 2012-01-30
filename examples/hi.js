@@ -1,14 +1,22 @@
-var Logger = require('./lib/bunyan');
+var Logger = require('../lib/bunyan');
 
+// Basic usage.
 var log = new Logger({facility: "myapp", level: "info"});
+
+// isInfoEnabled replacement
 console.log("log.info() is:", log.info())
+
+// `util.format`-based printf handling
 log.info("hi");
 log.info("hi", "trent");
 log.info("hi %s there", true);
+
+// First arg as an object adds fields to the log record.
 log.info({foo:"bar"}, "hi %d", 1, "two", 3);
 
 
-console.log("\n--\n")
+// Shows `log.clone(...)` to specialize a logger for a sub-component.
+console.log("\n\n")
 
 function Wuzzle(options) {
   this.log = options.log;
