@@ -5,7 +5,6 @@
     <http://journal.paul.querna.org/articles/2011/12/26/log-for-machines-in-json/>
     require: facility and hostname
 - bunyan cli: more layouts (http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html)
-
 - bunyan cli: filter args a la json
 - bunyan cli: -c COND args a la json
 - docs
