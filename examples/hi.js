@@ -1,7 +1,7 @@
 var Logger = require('../lib/bunyan');
 
 // Basic usage.
-var log = new Logger({facility: "myapp", level: "info"});
+var log = new Logger({service: "myapp", level: "info"});
 
 // isInfoEnabled replacement
 console.log("log.info() is:", log.info())

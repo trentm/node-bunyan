@@ -1,0 +1,420 @@
+#!/usr/bin/env node
+//
+// bunyan -- filter and pretty-print JSON logs, like Bunyan logs.
+//
+// See <https://github.com/trentm/node-bunyan>.
+//
+
+var VERSION = "0.1.0";
+
+var util = require('util');
+var pathlib = require('path');
+var vm = require('vm');
+var warn = console.warn;
+
+
+
+//---- globals and constants
+
+// Output modes.
+var OM_PAUL = 1;
+var OM_JSON = 2;
+var OM_INSPECT = 3;
+var OM_SIMPLE = 4;
+var OM_FROM_NAME = {
+  "paul": OM_PAUL,
+  "json": OM_JSON,
+  "inspect": OM_INSPECT,
+  "simple": OM_SIMPLE
+}
+
+
+// Levels
+var DEBUG = 1;
+var INFO = 2;
+var WARN = 3;
+var ERROR = 4;
+var FATAL = 5;
+
+var levelFromName = {
+  'debug': DEBUG,
+  'info': INFO,
+  'warn': WARN,
+  'error': ERROR,
+  'fatal': FATAL
+};
+var nameFromLevel = [undefined].concat(Object.keys(levelFromName));
+var upperNameFromLevel = [undefined].concat(
+  Object.keys(levelFromName).map(function (l) { return l.toUpperCase(); }));
+
+
+
+//---- support functions
+
+function getVersion() {
+  return VERSION;
+}
+
+
+var format = util.format;
+if (!format) {
+  // If not node 0.6, then use its `util.format`:
+  // <https://github.com/joyent/node/blob/master/lib/util.js#L22>:
+  var inspect = util.inspect;
+  var formatRegExp = /%[sdj%]/g;
+  format = function format(f) {
+    if (typeof f !== 'string') {
+      var objects = [];
+      for (var i = 0; i < arguments.length; i++) {
+        objects.push(inspect(arguments[i]));
+      }
+      return objects.join(' ');
+    }
+  
+    var i = 1;
+    var args = arguments;
+    var len = args.length;
+    var str = String(f).replace(formatRegExp, function(x) {
+      if (i >= len) return x;
+      switch (x) {
+        case '%s': return String(args[i++]);
+        case '%d': return Number(args[i++]);
+        case '%j': return JSON.stringify(args[i++]);
+        case '%%': return '%';
+        default:
+          return x;
+      }
+    });
+    for (var x = args[i]; i < len; x = args[++i]) {
+      if (x === null || typeof x !== 'object') {
+        str += ' ' + x;
+      } else {
+        str += ' ' + inspect(x);
+      }
+    }
+    return str;
+  };
+}
+
+
+function isArray(ar) {
+  return ar instanceof Array ||
+         Array.isArray(ar) ||
+         (ar && ar !== Object.prototype && isArray(ar.__proto__));
+}
+
+// json_parse.js (<https://github.com/douglascrockford/JSON-js>)
+// START json_parse
+var json_parse=function(){"use strict";var a,b,c={'"':'"',"\\":"\\","/":"/",b:"\b",f:"\f",n:"\n",r:"\r",t:"\t"},d,e=function(b){throw{name:"SyntaxError",message:b,at:a,text:d}},f=function(c){return c&&c!==b&&e("Expected '"+c+"' instead of '"+b+"'"),b=d.charAt(a),a+=1,b},g=function(){var a,c="";b==="-"&&(c="-",f("-"));while(b>="0"&&b<="9")c+=b,f();if(b==="."){c+=".";while(f()&&b>="0"&&b<="9")c+=b}if(b==="e"||b==="E"){c+=b,f();if(b==="-"||b==="+")c+=b,f();while(b>="0"&&b<="9")c+=b,f()}a=+c;if(!isFinite(a))e("Bad number");else return a},h=function(){var a,d,g="",h;if(b==='"')while(f()){if(b==='"')return f(),g;if(b==="\\"){f();if(b==="u"){h=0;for(d=0;d<4;d+=1){a=parseInt(f(),16);if(!isFinite(a))break;h=h*16+a}g+=String.fromCharCode(h)}else if(typeof c[b]=="string")g+=c[b];else break}else g+=b}e("Bad string")},i=function(){while(b&&b<=" ")f()},j=function(){switch(b){case"t":return f("t"),f("r"),f("u"),f("e"),!0;case"f":return f("f"),f("a"),f("l"),f("s"),f("e"),!1;case"n":return f("n"),f("u"),f("l"),f("l"),null}e("Unexpected '"+b+"'")},k,l=function(){var a=[];if(b==="["){f("["),i();if(b==="]")return f("]"),a;while(b){a.push(k()),i();if(b==="]")return f("]"),a;f(","),i()}}e("Bad array")},m=function(){var a,c={};if(b==="{"){f("{"),i();if(b==="}")return f("}"),c;while(b){a=h(),i(),f(":"),Object.hasOwnProperty.call(c,a)&&e('Duplicate key "'+a+'"'),c[a]=k(),i();if(b==="}")return f("}"),c;f(","),i()}}e("Bad object")};return k=function(){i();switch(b){case"{":return m();case"[":return l();case'"':return h();case"-":return g();default:return b>="0"&&b<="9"?g():j()}},function(c,f){var g;return d=c,a=0,b=" ",g=k(),i(),b&&e("Syntax error"),typeof f=="function"?function h(a,b){var c,d,e=a[b];if(e&&typeof e=="object")for(c in e)Object.prototype.hasOwnProperty.call(e,c)&&(d=h(e,c),d!==undefined?e[c]=d:delete e[c]);return f.call(a,b,e)}({"":g},""):g}}();
+// END json_parse
+
+function printHelp() {
+  util.puts("Usage:");
+  util.puts("  cat some-json-log-file.log | bunyan [OPTIONS]");
+  util.puts("");
+  util.puts("Pipe in your JSON log file content (e.g. bunyan logs) for nicer ");
+  util.puts("output");
+  util.puts("");
+  util.puts("Options:");
+  util.puts("  -h, --help    print this help info and exit");
+  util.puts("  --version     print version of this command and exit");
+  util.puts("");
+  util.puts("  -e CODE       execute the given code on input, on each array item");
+  util.puts("                if '-a' is used. This execution is run before ");
+  util.puts("                filtering.");
+  util.puts("");
+  util.puts("  -o, --output MODE   Specify an output mode. One of");
+  util.puts("                  json: JSON output, 2-space indent");
+  util.puts("                  json-N: JSON output, N-space indent, e.g. 'json-4'");
+  util.puts("                  inspect: node.js `util.inspect` output");
+  util.puts("  -j            shortcut for `-o json`");
+  util.puts("");
+  util.puts("See <https://github.com/trentm/json> for more complete docs.");
+}
+
+
+/**
+ * Parse the command-line options and arguments into an object.
+ *
+ *    {
+ *      'args': [...]       // arguments
+ *      'help': true,       // true if '-h' option given
+ *       // etc.
+ *    }
+ *
+ * @return {Object} The parsed options. `.args` is the argument list.
+ * @throws {Error} If there is an error parsing argv.
+ */
+function parseArgv(argv) {
+  var parsed = {
+    args: [],
+    help: false,
+    quiet: false,
+    dropHeaders: false,
+    executableSnippets: [],
+    outputMode: OM_PAUL,
+    jsonIndent: 2
+  };
+  
+  // Turn '-iH' into '-i -H', except for argument-accepting options.
+  var args = argv.slice(2);  // drop ['node', 'scriptname']
+  var newArgs = [];
+  var optTakesArg = {'d': true, 'o': true};
+  for (var i = 0; i < args.length; i++) {
+    if (args[i].charAt(0) === "-" && args[i].charAt(1) !== '-' && args[i].length > 2) {
+      var splitOpts = args[i].slice(1).split("");
+      for (var j = 0; j < splitOpts.length; j++) {
+        newArgs.push('-' + splitOpts[j])
+        if (optTakesArg[splitOpts[j]]) {
+          var optArg = splitOpts.slice(j+1).join("");
+          if (optArg.length) {
+            newArgs.push(optArg);
+          }
+          break;
+        }
+      }
+    } else {
+      newArgs.push(args[i]);
+    }
+  }
+  args = newArgs;
+
+  endOfOptions = false;
+  while (args.length > 0) {
+    var arg = args.shift();
+    switch(arg) {
+      case "--":
+        endOfOptions = true;
+        break;
+      case "-h": // display help and exit
+      case "--help":
+        parsed.help = true;
+        break;
+      case "--version":
+        parsed.version = true;
+        break;
+      case "-q":
+      case "--quiet":
+        parsed.quiet = true;
+        break;
+      case "-H": // drop any headers
+        parsed.dropHeaders = true;
+        break;
+      case "-o":
+      case "--output":
+        var name = args.shift();
+        var idx = name.lastIndexOf('-');
+        if (idx !== -1) {
+          var indent = Number(name.slice(idx+1));
+          if (! isNaN(indent)) {
+            parsed.jsonIndent = indent;
+            name = name.slice(0, idx);
+          }
+        }
+        parsed.outputMode = OM_FROM_NAME[name];
+        if (parsed.outputMode === undefined) {
+          throw new Error("unknown output mode: '"+name+"'");
+        }
+        break;
+      case "-j": // output with JSON.stringify
+        parsed.outputMode = OM_JSON;
+        break;
+      case "-e":
+        parsed.executableSnippets.push(args.shift());
+        break;
+      default: // arguments
+        if (!endOfOptions && arg.length > 0 && arg[0] === '-') {
+          throw new Error("unknown option '"+arg+"'");
+        }
+        parsed.args.push(arg);
+        break;
+    } 
+  }
+  //TODO: '--' handling and error on a first arg that looks like an option.
+
+  return parsed;
+}
+
+
+function isInteger(s) {
+  return (s.search(/^-?[0-9]+$/) == 0);
+}
+
+
+/**
+ * Print out a single result, considering input options.
+ */
+function handleLogLine(line, opts) {
+  // Handle non-JSON lines.
+  var rec;
+  if (!line) {
+    return emit(line + '\n');
+  } else if (line[0] !== '{') {
+    return emit(line + '\n');  // not JSON
+  } else {
+    try {
+      rec = JSON.parse(line);
+    } catch(e) {
+      return emit(line + '\n');
+    }
+  }
+
+  switch (opts.outputMode) {
+  case OM_PAUL:
+    // Single-line msg:
+    //    [time] LEVEL: service[/component] on hostname: msg (request_id, $latencyms)
+    // Multi-line msg:
+    //    [time] LEVEL: service[/component] on hostname: (request_id, $latencyms)
+    //        msg
+    // Request/HTTP info:
+    //    TODO
+    var svc = rec.service;
+    if (rec.component) {
+      svc += '/' + rec.component;
+    }
+    var levelStr = (upperNameFromLevel[rec.level]
+      || "<unknown-level " + rec.level + ">");
+    var extras = [
+      rec.request_id || "<no-request_id>"
+    ];
+    if (rec.latency) {
+      extras.push(rec.latency + "ms");
+    }
+    extras = extras.join(', ')
+    if (rec.msg.indexOf('\n') !== -1) {
+      XXX
+    } else {
+      emit(format("[%s] %s: %s on %s: %s (%s)\n",
+        rec.time,
+        upperNameFromLevel[rec.level] || "<unknown-level " + rec.level + ">",
+        svc,
+        rec.hostname || "<no-hostname>",
+        rec.msg,
+        extras));
+    }
+    break;
+  case OM_INSPECT:
+    emit(util.inspect(rec, false, Infinity, true) + '\n');
+    break;
+  case OM_JSON:
+    emit(JSON.stringify(rec, null, opts.jsonIndent) + '\n');
+    break;
+  case OM_SIMPLE:
+    // <http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/SimpleLayout.html>
+    emit(format("%s - %s",
+      upperNameFromLevel[rec.level] || "???",
+      rec.msg));
+    break;
+  default:
+    throw new Error("unknown output mode: "+opts.outputMode);
+  }
+}
+
+
+var stdoutFlushed = true;
+function emit(s) {
+  // TODO:PERF If this is try/catch is too slow (too granular): move up to
+  //    mainline and be sure to only catch this particular error.
+  try {
+    stdoutFlushed = process.stdout.write(s);
+  } catch (e) {
+    // Handle any exceptions in stdout writing in the "error" event above.
+  }
+}
+
+process.stdout.on("error", function (err) {
+  if (err.code === "EPIPE") {
+    // Pass. See <https://github.com/trentm/json/issues/9>.
+  } else {
+    warn(err)
+    drainStdoutAndExit(1);
+  }
+});
+
+
+/**
+ * A hacked up version of "process.exit" that will first drain stdout
+ * before exiting. *WARNING: This doesn't stop event processing.* IOW,
+ * callers have to be careful that code following this call isn't
+ * accidentally executed.
+ *
+ * In node v0.6 "process.stdout and process.stderr are blocking when they
+ * refer to regular files or TTY file descriptors." However, this hack might
+ * still be necessary in a shell pipeline.
+ */
+function drainStdoutAndExit(code) {
+  process.stdout.on('drain', function () {
+    process.exit(code);
+  });
+  if (stdoutFlushed) {
+    process.exit(code);
+  }
+}
+
+
+
+//---- mainline
+
+function main(argv) {
+  var opts;
+  try {
+    opts = parseArgv(argv);
+  } catch (e) {
+    warn("json: error: %s", e.message)
+    return drainStdoutAndExit(1);
+  }
+  //warn(opts);
+  if (opts.help) {
+    printHelp();
+    return;
+  }
+  if (opts.version) {
+    util.puts("bunyan " + getVersion());
+    return;
+  }
+  
+  var leftover = "";  // Left-over partial line from last chunk.
+  var stdin = process.openStdin();
+  stdin.setEncoding('utf8');
+  stdin.on('data', function (chunk) {
+    var lines = chunk.split(/\r\n|\n/);
+    var length = lines.length;
+    if (length === 1) {
+      leftover += lines[0];
+      return;
+    }
+    
+    if (length > 1) {
+      handleLogLine(leftover + lines[0], opts);
+    }
+    leftover = lines.pop();
+    length -= 1;
+    for (var i=1; i < length; i++) {
+      handleLogLine(lines[i], opts);
+    }
+  });
+  
+  stdin.on('end', function () {
+    if (leftover) {
+      handleLogLine(leftover, opts);
+      leftover = '';
+    }
+  });
+}
+
+if (require.main === module) {
+  // HACK guard for <https://github.com/trentm/json/issues/24>.
+  // We override the `process.stdout.end` guard that core node.js puts in
+  // place. The real fix is that `.end()` shouldn't be called on stdout
+  // in node core. Hopefully node v0.6.9 will fix that. Only guard
+  // for v0.6.0..v0.6.8.
+  var nodeVer = process.versions.node.split('.').map(Number);
+  if ([0,6,0] <= nodeVer && nodeVer <= [0,6,8]) {
+    var stdout = process.stdout;
+    stdout.end = stdout.destroy = stdout.destroySoon = function() {
+      /* pass */
+    };
+  }
+  
+  main(process.argv);
+}
