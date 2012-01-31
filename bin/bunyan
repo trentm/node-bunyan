@@ -274,17 +274,14 @@ function handleLogLine(line, opts) {
     }
     var levelStr = (upperNameFromLevel[rec.level]
       || "<unknown-level " + rec.level + ">");
-    var extras = [
-      rec.request_id || "<no-request_id>"
-    ];
-    if (rec.latency) {
-      extras.push(rec.latency + "ms");
-    }
-    extras = extras.join(', ')
+    var extras = [];
+    if (rec.request_id) extras.push(rec.request_id);
+    if (rec.latency) extras.push(rec.latency + "ms");
+    extras = (extras.length ? ' (' + extras.join(', ') + ')' : '');
     if (rec.msg.indexOf('\n') !== -1) {
       XXX
     } else {
-      emit(format("[%s] %s: %s on %s: %s (%s)\n",
+      emit(format("[%s] %s: %s on %s: %s%s\n",
         rec.time,
         upperNameFromLevel[rec.level] || "<unknown-level " + rec.level + ">",
         svc,

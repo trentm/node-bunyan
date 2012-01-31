@@ -9,7 +9,6 @@ log = new Logger({
     {
       level: "error",
       path: "tmp/error.log"
-      // when to close file stream?
     }
   ]
 });
