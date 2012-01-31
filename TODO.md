@@ -1,5 +1,6 @@
 - add `clone` to readme
 - renderer support (i.e. repr of a restify request obj)
+- 'x' extra fields object or no? discuss
 - expand set of fields: from dap
     time, hostname
     <https://github.com/Graylog2/graylog2-docs/wiki/GELF>
