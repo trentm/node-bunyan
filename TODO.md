@@ -1,5 +1,7 @@
 - add `clone` to readme
-- renderer support (i.e. repr of a restify request obj)
+- serializer support (i.e. repr of a restify request obj):
+    server.js example
+    restify-server.js example
 - 'x' extra fields object or no? discuss
 - expand set of fields: from dap
     time, hostname
@@ -35,3 +37,15 @@
     - test for a cloned logger double-`stream.end()` causing problems.
       Perhaps the "closeOnExit" for existing streams should be false for
       clones.
+- a "rolling-file" stream: but specifically by time, e.g. hourly. (MarkC
+  requested)
+
+
+# someday/maybe
+
+- custom "emitter" feature: an additional "emitter" param on the "streams"
+  objects: <https://github.com/trentm/node-bunyan/blob/master/examples/multi.js#L4-13>
+  which you'd give instead of "stream" (a node "Writable Stream").
+  It would take a Bunyan log record object and be expected to emit it.
+  It would be a good hook for people with custom needs that Bunyan doesn't
+  care about (e.g. log.ly or hook.io or whatever).

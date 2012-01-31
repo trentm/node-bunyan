@@ -30,13 +30,15 @@ var OM_FROM_NAME = {
 
 
 // Levels
-var DEBUG = 1;
-var INFO = 2;
-var WARN = 3;
-var ERROR = 4;
-var FATAL = 5;
+var TRACE = 1;
+var DEBUG = 2;
+var INFO = 3;
+var WARN = 4;
+var ERROR = 5;
+var FATAL = 6;
 
 var levelFromName = {
+  'trace': TRACE,
   'debug': DEBUG,
   'info': INFO,
   'warn': WARN,
@@ -262,9 +264,9 @@ function handleLogLine(line, opts) {
   switch (opts.outputMode) {
   case OM_PAUL:
     // Single-line msg:
-    //    [time] LEVEL: service[/component] on hostname: msg (request_id, $latencyms)
+    //    [time] LEVEL: service[/component] on hostname: msg (extras...)
     // Multi-line msg:
-    //    [time] LEVEL: service[/component] on hostname: (request_id, $latencyms)
+    //    [time] LEVEL: service[/component] on hostname: (extras...)
     //        msg
     // Request/HTTP info:
     //    TODO
