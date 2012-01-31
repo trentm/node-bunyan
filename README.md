@@ -69,7 +69,7 @@ streams at different levels**.
       ]
     });
 
-A `log.clone(...)` is provided to specialize a logger for a sub-component.
+A **`log.clone(...)`** is provided to specialize a logger for a sub-component.
 The following will have log records from "Wuzzle" instances use exactly the
 same config as its parent, plus include the "component" field.
 
@@ -88,6 +88,9 @@ same config as its parent, plus include the "component" field.
     var wuzzle = new Wuzzle({log: log.clone({component: "wuzzle"})});
     wuzzle.woos();
     log.info("done with the wuzzle")
+
+
+
 
 
 # Future
