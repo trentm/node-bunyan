@@ -1,4 +1,3 @@
-- add `clone` to readme
 - serializer support (i.e. repr of a restify request obj):
     server.js example
     restify-server.js example

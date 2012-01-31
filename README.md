@@ -69,6 +69,25 @@ streams at different levels**.
       ]
     });
 
+A `log.clone(...)` is provided to specialize a logger for a sub-component.
+The following will have log records from "Wuzzle" instances use exactly the
+same config as its parent, plus include the "component" field.
+
+    var log = new Logger(...);
+
+    ...
+    
+    function Wuzzle(options) {
+      this.log = options.log;
+      this.log.info("creating a wuzzle")
+    }
+    Wuzzle.prototype.woos = function () {
+      this.log.warn("This wuzzle is woosey.")
+    }
+    
+    var wuzzle = new Wuzzle({log: log.clone({component: "wuzzle"})});
+    wuzzle.woos();
+    log.info("done with the wuzzle")
 
 
 # Future
