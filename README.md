@@ -90,7 +90,49 @@ same config as its parent, plus include the "component" field.
     log.info("done with the wuzzle")
 
 
+Back to the `log.{trace|debug|...|fatal}(...)` API:
 
+    log.info();     // returns a boolean: is the "info" level enabled?
+    log.info("hi"); // log a simple string message
+    log.info("hi %s", bob, anotherVar); // uses `util.format` for msg formatting
+    log.info({foo: "bar"}, "hi");       // adds "foo" field to log record
+
+Bunyan has a concept of **"serializers" to produce a JSON-able object from a
+JavaScript object**, so your can easily do the following:
+
+    log.info({req: <request object>}, "something about handling this request");
+
+Association is by log record field name, "req" in this example, so this
+requires a registered serializer something like this:
+
+    function reqSerializer(req) {
+      return {
+        method: req.method,
+        url: req.url,
+        headers: req.headers
+      }
+    }
+    var log = new Logger({
+      ...
+      serializers: {
+        req: reqSerializer
+      }
+    });
+
+Or this:
+
+    var log = new Logger({
+      ...
+      serializers: {req: Logger.stdSerializers.req}
+    });
+
+because Buyan includes a small set of standard serializers. To use all the
+standard serializers you can use:
+
+    var log = new Logger({
+      ...
+      serializers: Logger.stdSerializers
+    });
 
 
 # Future

@@ -1,7 +1,12 @@
-- serializer support (i.e. repr of a restify request obj):
-    server.js example
-    restify-server.js example
-- 'x' extra fields object or no? discuss
+- serializer support:
+    - Ask mark what else to put in `req`
+    - Ask mark what to put in `res`
+    - restify-server.js example -> restifyReq ? or have `req` detect that.
+      That is nicer for the "use all standard ones". *Does* restify req
+      have anything special?
+    - Add `err`.
+    - `request_id` that pulls it from req? `log.info({request_id: req}, "hi")`
+- `log.close` to close streams and shutdown and `this.closed`
 - expand set of fields: from dap
     time, hostname
     <https://github.com/Graylog2/graylog2-docs/wiki/GELF>
@@ -32,10 +37,13 @@
 - Logger.set to mutate config or `this.fields`
 - Logger.del to remove a field
 - "canWrite" handling for full streams. Need to buffer a la log4js
+- test file log with logadm rotation: does it handle that?
 - test suite:
     - test for a cloned logger double-`stream.end()` causing problems.
       Perhaps the "closeOnExit" for existing streams should be false for
       clones.
+    - test that a `log.clone(...)` adding a new field matching a serializer
+      works *and* that an existing field in the parent is not *re-serialized*.
 - a "rolling-file" stream: but specifically by time, e.g. hourly. (MarkC
   requested)
 
