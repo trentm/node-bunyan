@@ -134,23 +134,17 @@ standard serializers you can use:
       serializers: Logger.stdSerializers
     });
 
+*Note: Your own serializers should never throw, otherwise you'll get an
+ugly message on stderr from Bunyan (along with the traceback) and the field
+in your log record will be replaced with a short error message.*
+
+
 
 # Future
 
 See "TODO.md", but basically:
 
-- "Serializer" support to handle extracting a JSON object for a log record
-  for particular object types, e.g. an HTTP request. So for example we
-  could do:
-  
-        log.info({req: req}, "something about handling this request")
-
-  And the "req" serializer would extract a reasonable JSON object for that
-  request object -- presumably a subset of all attributes on the request
-  object.
-  
-  This will key off the field name, IOW by convention, rather than getting
-  into `instanceof` grossness.
+- More std serializers. See TODO.md.
 
 - Spec'ing and enforcing the fields (from dap's section in eng guide).
 
