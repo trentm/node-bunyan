@@ -9,7 +9,11 @@ Also: log4j is way more than you need.
 
 # Current Status
 
-Just play stuff here. Don't try to use this for realz yet.
+Basic functionality there. Still a fair amount of planned work... most
+importantly the clarifying of required and suggested fields.
+
+Currently supports node 0.4+, but I'll probably make the jump to node 0.6+ as a
+base soonish.
 
 
 # Usage
