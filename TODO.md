@@ -1,10 +1,10 @@
-- `log.close` to close streams and shutdown and `this.closed`
 - expand set of fields: from dap
     time, hostname
     <https://github.com/Graylog2/graylog2-docs/wiki/GELF>
     <http://journal.paul.querna.org/articles/2011/12/26/log-for-machines-in-json/>
     require: facility and hostname
     line/file: possible to get quickly with v8? Yunong asked.
+- `log.close` to close streams and shutdown and `this.closed`
 - bunyan cli: more layouts (http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/EnhancedPatternLayout.html)
   Custom log formats (in config file? in '-f' arg) using printf or hogan.js
   or whatever. Dap wants field width control for lining up. Hogan.js is
