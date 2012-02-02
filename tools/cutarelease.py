@@ -13,7 +13,7 @@ Conventions:
 - XXX
 """
 
-__version_info__ = (1, 0, 1)
+__version_info__ = (1, 0, 4)
 __version__ = '.'.join(map(str, __version_info__))
 
 import sys
@@ -120,9 +120,9 @@ def cutarelease(project_name, version_files, dry_run=False):
         raise Error("'%s' not found" % changes_path)
     changes_txt = changes_txt_before = codecs.open(changes_path, 'r', 'utf-8').read()
     
-    changes_parser = re.compile(r'^## (?:%s )?(?P<ver>[\d\.abc]+)'
+    changes_parser = re.compile(r'^##\s+(?:.*?\s+)?v?(?P<ver>[\d\.abc]+)'
         r'(?P<nyr>\s+\(not yet released\))?'
-        r'(?P<body>.*?)(?=^##|\Z)' % project_name, re.M | re.S)
+        r'(?P<body>.*?)(?=^##|\Z)', re.M | re.S)
     changes_sections = changes_parser.findall(changes_txt)
     try:
         top_ver = changes_sections[0][0]
@@ -166,12 +166,12 @@ def cutarelease(project_name, version_files, dry_run=False):
         run('git push --tags')
 
     # Optionally release.
-    if version_file_type == "package.json":
+    if exists("package.json"):
         answer = query_yes_no("\n* * *\nPublish to npm?", default="yes")
         print "* * *"
         if answer == "yes":
             run('npm publish')
-    elif version_file_type == "python" and exists("setup.py"):
+    elif exists("setup.py"):
         answer = query_yes_no("\n* * *\nPublish to pypi?", default="yes")
         print "* * *"
         if answer == "yes":
@@ -200,7 +200,7 @@ def cutarelease(project_name, version_files, dry_run=False):
     for i, ver_file in enumerate(version_files):
         ver_content = codecs.open(ver_file, 'r', 'utf-8').read()
         ver_file_type, ver_info = parsed_version_files[i]
-        if ver_file_type == "package.json":
+        if ver_file_type == "json":
             marker = '"version": "%s"' % version
             if marker not in ver_content:
                 raise Error("couldn't find `%s' version marker in `%s' "
@@ -288,31 +288,70 @@ def _version_info_from_version(version):
 def _parse_version_file(version_file):
     """Get version info from the given file. It can be any of:
     
-    - package.json with "version" field
-    - VERSION.txt or VERSION file with just the version string
-    - python file with __version_info__
-    - .js file with `var VERSION = "1.2.3";`
+    Supported version file types (i.e. types of files from which we know
+    how to parse the version string/number -- often by some convention):
+    - json: use the "version" key
+    - javascript: look for a `var VERSION = "1.2.3";`
+    - python: Python script/module with `__version_info__ = (1, 2, 3)`
+    - version: a VERSION.txt or VERSION file where the whole contents are
+      the version string
+    
+    @param version_file {str} Can be a path or "type:path", where "type"
+        is one of the supported types.
     """
+    # Get version file *type*.
+    version_file_type = None
+    match = re.compile("^([a-z]+):(.*)$").search(version_file)
+    if match:
+        version_file = match.group(2)
+        version_file_type = match.group(1)
+        aliases = {
+            "js": "javascript"
+        }
+        if version_file_type in aliases:
+            version_file_type = aliases[version_file_type]
+    
     f = codecs.open(version_file, 'r', 'utf-8')
     content = f.read()
     f.close()
     
-    if basename(version_file) == "package.json":
-        version_file_type = "package.json"
+    if not version_file_type:
+        # Guess the type.
+        base = basename(version_file)
+        ext = splitext(base)[1]
+        if ext == ".json":
+            version_file_type = "json"
+        elif ext == ".py":
+            version_file_type = "python"
+        elif ext == ".js":
+            version_file_type = "javascript"
+        elif content.startswith("#!"):
+            shebang = content.splitlines(False)[0]
+            shebang_bits = re.split(r'[/ \t]', shebang)
+            for name, typ in {"python": "python", "node": "javascript"}.items(): 
+                if name in shebang_bits:
+                    version_file_type = typ
+                    break
+        elif base in ("VERSION", "VERSION.txt"):
+            version_file_type = "version"
+    if not version_file_type:
+        raise RuntimeError("can't extract version from '%s': no idea "
+            "what type of file it it" % version_file)
+    
+    if version_file_type == "json":
         obj = json.loads(content)
         version_info = _version_info_from_version(obj["version"])
-    elif splitext(version_file)[1] == ".py":
-        version_file_type = "python"
+    elif version_file_type == "python":
         m = re.search(r'^__version_info__ = (.*?)$', content, re.M)
         version_info = eval(m.group(1))
-    elif splitext(version_file)[1] == ".js":
-        version_file_type = "javascript"
+    elif version_file_type == "javascript":
         m = re.search(r'^var VERSION = "(.*?)";$', content, re.M)
         version_info = _version_info_from_version(m.group(1))
-    else:
-        # Presume a text file with just the version.
-        version_file_type = "version"
+    elif version_file_type == "version":
         version_info = _version_info_from_version(content.strip())
+    else:
+        raise RuntimeError("unexpected version_file_type: %r"
+            % version_file_type)
     return version_file_type, version_info
 
 
@@ -409,7 +448,7 @@ def main(argv):
     parser.add_option("-p", "--project-name", metavar="NAME",
         help='the name of this project (default is the base dir name)',
         default=basename(os.getcwd()))
-    parser.add_option("-f", "--version-file", metavar="PATH",
+    parser.add_option("-f", "--version-file", metavar="[TYPE:]PATH",
         action='append', dest="version_files",
         help='The path to the project file holding the version info. Can be '
              'specified multiple times if more than one file should be updated '

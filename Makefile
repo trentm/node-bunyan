@@ -8,5 +8,5 @@ versioncheck:
 	@echo Version check ok.
 
 cutarelease: versioncheck
-	./tools/cutarelease.py -p bunyan -f package.json -f lib/bunyan.js
+	./tools/cutarelease.py -p bunyan -f package.json -f lib/bunyan.js -f bin/bunyan
 
