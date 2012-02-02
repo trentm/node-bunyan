@@ -1,7 +1,6 @@
 {
   "name": "bunyan",
   "version": "0.1.0",
-  "private": true,
   "main": "./lib/bunyan.js",
   "bin": {
     "bunyan": "./bin/bunyan"
