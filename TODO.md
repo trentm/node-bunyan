@@ -1,11 +1,3 @@
-- serializer support:
-    - Ask mark what else to put in `req`
-    - Ask mark what to put in `res`
-    - restify-server.js example -> restifyReq ? or have `req` detect that.
-      That is nicer for the "use all standard ones". *Does* restify req
-      have anything special?
-    - Add `err`.
-    - `request_id` that pulls it from req? `log.info({request_id: req}, "hi")`
 - `log.close` to close streams and shutdown and `this.closed`
 - expand set of fields: from dap
     time, hostname
@@ -56,3 +48,9 @@
   It would take a Bunyan log record object and be expected to emit it.
   It would be a good hook for people with custom needs that Bunyan doesn't
   care about (e.g. log.ly or hook.io or whatever).
+- serializer `request_id` that pulls it from req? `log.info({request_id: req}, "hi")`
+- serializer support:
+    - restify-server.js example -> restifyReq ? or have `req` detect that.
+      That is nicer for the "use all standard ones". *Does* restify req
+      have anything special?
+    - differential HTTP *client* req/res with *server* req/res.

@@ -98,17 +98,15 @@ if (!format) {
   };
 }
 
+function indent(s) {
+  return '    ' + s.split(/\r?\n/).join('\n    ')
+}
 
 function isArray(ar) {
   return ar instanceof Array ||
          Array.isArray(ar) ||
          (ar && ar !== Object.prototype && isArray(ar.__proto__));
 }
-
-// json_parse.js (<https://github.com/douglascrockford/JSON-js>)
-// START json_parse
-var json_parse=function(){"use strict";var a,b,c={'"':'"',"\\":"\\","/":"/",b:"\b",f:"\f",n:"\n",r:"\r",t:"\t"},d,e=function(b){throw{name:"SyntaxError",message:b,at:a,text:d}},f=function(c){return c&&c!==b&&e("Expected '"+c+"' instead of '"+b+"'"),b=d.charAt(a),a+=1,b},g=function(){var a,c="";b==="-"&&(c="-",f("-"));while(b>="0"&&b<="9")c+=b,f();if(b==="."){c+=".";while(f()&&b>="0"&&b<="9")c+=b}if(b==="e"||b==="E"){c+=b,f();if(b==="-"||b==="+")c+=b,f();while(b>="0"&&b<="9")c+=b,f()}a=+c;if(!isFinite(a))e("Bad number");else return a},h=function(){var a,d,g="",h;if(b==='"')while(f()){if(b==='"')return f(),g;if(b==="\\"){f();if(b==="u"){h=0;for(d=0;d<4;d+=1){a=parseInt(f(),16);if(!isFinite(a))break;h=h*16+a}g+=String.fromCharCode(h)}else if(typeof c[b]=="string")g+=c[b];else break}else g+=b}e("Bad string")},i=function(){while(b&&b<=" ")f()},j=function(){switch(b){case"t":return f("t"),f("r"),f("u"),f("e"),!0;case"f":return f("f"),f("a"),f("l"),f("s"),f("e"),!1;case"n":return f("n"),f("u"),f("l"),f("l"),null}e("Unexpected '"+b+"'")},k,l=function(){var a=[];if(b==="["){f("["),i();if(b==="]")return f("]"),a;while(b){a.push(k()),i();if(b==="]")return f("]"),a;f(","),i()}}e("Bad array")},m=function(){var a,c={};if(b==="{"){f("{"),i();if(b==="}")return f("}"),c;while(b){a=h(),i(),f(":"),Object.hasOwnProperty.call(c,a)&&e('Duplicate key "'+a+'"'),c[a]=k(),i();if(b==="}")return f("}"),c;f(","),i()}}e("Bad object")};return k=function(){i();switch(b){case"{":return m();case"[":return l();case'"':return h();case"-":return g();default:return b>="0"&&b<="9"?g():j()}},function(c,f){var g;return d=c,a=0,b=" ",g=k(),i(),b&&e("Syntax error"),typeof f=="function"?function h(a,b){var c,d,e=a[b];if(e&&typeof e=="object")for(c in e)Object.prototype.hasOwnProperty.call(e,c)&&(d=h(e,c),d!==undefined?e[c]=d:delete e[c]);return f.call(a,b,e)}({"":g},""):g}}();
-// END json_parse
 
 function printHelp() {
   util.puts("Usage:");
@@ -121,11 +119,9 @@ function printHelp() {
   util.puts("  -h, --help    print this help info and exit");
   util.puts("  --version     print version of this command and exit");
   util.puts("");
-  util.puts("  -e CODE       execute the given code on input, on each array item");
-  util.puts("                if '-a' is used. This execution is run before ");
-  util.puts("                filtering.");
-  util.puts("");
-  util.puts("  -o, --output MODE   Specify an output mode. One of");
+  util.puts("  -o, --output MODE");
+  util.puts("                Specify an output mode/format. One of");
+  util.puts("                  paul: (the default) pretty")
   util.puts("                  json: JSON output, 2-space indent");
   util.puts("                  json-N: JSON output, N-space indent, e.g. 'json-4'");
   util.puts("                  inspect: node.js `util.inspect` output");
@@ -152,8 +148,6 @@ function parseArgv(argv) {
     args: [],
     help: false,
     quiet: false,
-    dropHeaders: false,
-    executableSnippets: [],
     outputMode: OM_PAUL,
     jsonIndent: 2
   };
@@ -199,9 +193,6 @@ function parseArgv(argv) {
       case "--quiet":
         parsed.quiet = true;
         break;
-      case "-H": // drop any headers
-        parsed.dropHeaders = true;
-        break;
       case "-o":
       case "--output":
         var name = args.shift();
@@ -220,9 +211,6 @@ function parseArgv(argv) {
         break;
       case "-j": // output with JSON.stringify
         parsed.outputMode = OM_JSON;
-        break;
-      case "-e":
-        parsed.executableSnippets.push(args.shift());
         break;
       default: // arguments
         if (!endOfOptions && arg.length > 0 && arg[0] === '-') {
@@ -268,11 +256,12 @@ function handleLogLine(line, opts) {
     // Multi-line msg:
     //    [time] LEVEL: service[/component] on hostname: (extras...)
     //        msg
-    // Request/HTTP info:
-    //    TODO
-    var svc = rec.service;
+    // If 'req', show the request.
+    // If 'res', show the response.
+    // If 'err' and 'err.stack' then show that.
+    var serviceStr = rec.service;
     if (rec.component) {
-      svc += '/' + rec.component;
+      serviceStr += '/' + rec.component;
     }
     var levelStr = (upperNameFromLevel[rec.level]
       || "<unknown-level " + rec.level + ">");
@@ -280,24 +269,46 @@ function handleLogLine(line, opts) {
     if (rec.request_id) extras.push(rec.request_id);
     if (rec.latency) extras.push(rec.latency + "ms");
     extras = (extras.length ? ' (' + extras.join(', ') + ')' : '');
+    var details = [];
+    onelineMsg = ' ' + rec.msg;
     if (rec.msg.indexOf('\n') !== -1) {
-      XXX
-    } else {
-      emit(format("[%s] %s: %s on %s: %s%s\n",
-        rec.time,
-        upperNameFromLevel[rec.level] || "<unknown-level " + rec.level + ">",
-        svc,
-        rec.hostname || "<no-hostname>",
-        rec.msg,
-        extras));
+      onelineMsg = '';
+      details.push(indent(rec.msg));
     }
+    if (rec.req) {
+      var headers = rec.req.headers;
+      details.push(indent(format("%s %s\n%s", rec.req.method,
+        rec.req.url,
+        Object.keys(headers).map(
+          function (h) { return h + ': ' + headers[h]}).join('\n'))));
+    }
+    if (rec.res) {
+      var s = rec.res._header.trimRight()
+        + (rec.res._hasBody ? '\n(body)\n' : '') + rec.res._trailer;
+      details.push(indent(s.trimRight()));
+    }
+    if (rec.err && rec.err.stack) {
+      details.push(indent(rec.err.stack))
+    }
+    details = (details.length ? details.join('\n--\n') + '\n' : '');
+    emit(format("[%s] %s: %s on %s:%s%s\n%s",
+      rec.time,
+      upperNameFromLevel[rec.level] || "<unknown-level " + rec.level + ">",
+      serviceStr,
+      rec.hostname || "<no-hostname>",
+      onelineMsg,
+      extras,
+      details));
     break;
+
   case OM_INSPECT:
     emit(util.inspect(rec, false, Infinity, true) + '\n');
     break;
+
   case OM_JSON:
     emit(JSON.stringify(rec, null, opts.jsonIndent) + '\n');
     break;
+
   case OM_SIMPLE:
     // <http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/SimpleLayout.html>
     emit(format("%s - %s",
