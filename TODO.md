@@ -1,3 +1,4 @@
+- cutarelease -f bin/bunyan (doesn't work right now)
 - expand set of fields: from dap
     time, hostname
     <https://github.com/Graylog2/graylog2-docs/wiki/GELF>
