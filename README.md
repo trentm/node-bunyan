@@ -19,7 +19,7 @@ base soonish.
 # Usage
 
 **The usual.** All loggers must provide a "service" name. This is somewhat akin
-to log4j logger "name", but Bunyan doesn't so hierarchical logger names.
+to log4j logger "name", but Bunyan doesn't do hierarchical logger names.
 
     $ cat hi.js
     var Logger = require('bunyan');
@@ -164,12 +164,12 @@ See "TODO.md", but basically:
 
 # Levels
 
-- "fatal": the service is going to stop or become unusable now
-- "error": fatal for a particular request, but the service continues servicing other requests
-- "warn": a note on something that should probably be looked at by an operator
-- "info": detail on regular operation
-- "debug": anything else, i.e. too verbose to be included in "info" level.
-- "trace": logging from external libraries used by your app
+- "fatal" (6): the service is going to stop or become unusable now
+- "error" (5): fatal for a particular request, but the service continues servicing other requests
+- "warn" (4): a note on something that should probably be looked at by an operator
+- "info" (3): detail on regular operation
+- "debug" (2): anything else, i.e. too verbose to be included in "info" level.
+- "trace" (1): logging from external libraries used by your app
 
 "debug" should be used sparingly. Information that will be useful to debug
 errors *post mortem* should usually be included in "info" messages if it's
@@ -177,19 +177,124 @@ generally relevant or else with the corresponding "error" event. Don't rely on
 spewing mostly irrelevant debug messages all the time and sifting through them
 when an error occurs.
 
-Integers are used for the actual level values (1 for "trace", ..., 6 for "fatal") and
-constants are defined for the (Logger.TRACE ... Logger.DEBUG). The lowercase
-level names are aliases supported in the API.
+Integers are used for the actual level values (1 for "trace", ..., 6 for
+"fatal") and constants are defined for the (Logger.TRACE ... Logger.DEBUG).
+The lowercase level names are aliases supported in the API.
 
 
 # Log Record Fields
 
-TODO: from dap and enforce these
+This section will describe *rules* for the Bunyan log format: field names,
+field meanings, required fields, etc. However, a Bunyan library doesn't
+strictly enforce all these rules while records are being emitted. For example,
+Bunyan will add a `time` field with the correct format to your log records,
+but you can specify your own. It is the caller's responsibility to specify
+the appropriate format.
 
-- "request\_id" (better name?) can't be required because some things don't
-  happen in a per-request context. Startup and background processing stuff
-  for example. Tho for request-y things, it is strongly encouraged because it
-  allows collating logs from multiple services for the same request.
+The reason for the above leniency is because IMO logging a message should
+never break your app. This leads to this rule of logging: **a thrown
+exception from `log.info(...)` or equivalent (other than for calling with the
+incorrect signature) is always a bug in Bunyan.**
+
+
+A typical Bunyan log record looks like this:
+
+    {"service":"myserver","hostname":"banana.local","req":{"method":"GET","url":"/path?q=1#anchor","headers":{"x-hi":"Mom","connection":"close"}},"level":3,"msg":"start request","time":"2012-02-03T19:02:46.178Z","v":0}
+
+Pretty-printed:
+
+    {
+      "service": "myserver",
+      "hostname": "banana.local",
+      "req": {
+        "method": "GET",
+        "url": "/path?q=1#anchor",
+        "headers": {
+          "x-hi": "Mom",
+          "connection": "close"
+        },
+        "remoteAddress": "120.0.0.1",
+        "remotePort": 51244
+      },
+      "level": 3,
+      "msg": "start request",
+      "time": "2012-02-03T19:02:57.534Z",
+      "v": 0
+    }
+
+
+Core fields:
+
+- `v`: Required. Integer. Added by Bunion. Cannot be overriden.
+  This is the Bunyan log format version (`require('bunyan').LOG_VERSION`).
+  The log version is a single integer. `0` is until I release a version
+  "1.0.0" of node-bunyan. Thereafter, starting with `1`, this will be
+  incremented if there is any backward incompatible change to the log record
+  format. Details will be in "CHANGES.md" (the change log).
+- `level`: Required. Integer. Added by Bunion. Cannot be overriden.
+  See the "Levels" section.
+- `service`: Required. String. Provided at Logger creation.
+  You must specify a service name for your logger when creating it.
+- `hostname`: Required. String. Provided or determined at Logger creation.
+  You can specify your hostname at Logger creation or it will be retrieved
+  vi `os.hostname()`.
+- `time`: Required. String. Added by Bunion. Can be overriden.
+  The date and time of the event in [ISO 8601
+  Extended Format](http://en.wikipedia.org/wiki/ISO_8601) format and in UTC,
+  as from
+  [`Date.toISOString()`](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date/toISOString).
+- `msg`: Required. String.
+  Every `log.debug(...)` et al call must provide a log message.
+
+
+Go ahead and add more fields, and nest ones are fine (and recommended) as
+well. This is why we're using JSON. Some suggestions and best practices
+follow (feedback from actual users welcome).
+
+
+Recommended/Best Practice Fields:
+
+- `err`: Object. A caught JS exception. Log that thing with
+  `log.error({err: err}, "oops")`! JS exceptions `JSON.stringify` quite
+  nicely so you don't need to do anything else. See "examples/err.js".
+- `req_id`: String. A request identifier. Including this field in all logging
+  tied to handling a particular request to your server is strongly suggested.
+  This allows post analysis of logs to easily collate all related logging
+  for a request. This really shines when you have a SOA with multiple services
+  and you carry a single request ID from the top API down through all APIs
+  (as [node-restify](https://github.com/mcavage/node-restify) facilitates
+  with its 'X-Request-Id' header).
+- `req`: An HTTP server request. Bunyan provides `Logger.stdSerializers.req`
+  to serialize a request with a suggested set of keys. Example:
+  
+        {
+          "method": "GET",
+          "url": "/path?q=1#anchor",
+          "headers": {
+            "x-hi": "Mom",
+            "connection": "close"
+          },
+          "remoteAddress": "120.0.0.1",
+          "remotePort": 51244
+        }
+
+- `res`: An HTTP server response. Bunyan provides `Logger.stdSerializers.res`
+  to serialize a response with a suggested set of keys. Example: 
+
+        {
+          "statusCode": 200,
+          "header": "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nConnection: keep-alive\r\nTransfer-Encoding: chunked\r\n\r\n"
+        }
+
+
+Other fields to consider:
+
+- `req.username`: Authenticated user (or for a 401, the user attempting to
+  auth).
+- Some mechanism to calculate response latency. "restify" users will have
+  a "X-Response-Time" header. A `latency` custom field would be fine.
+- `req.body`: If you know that request bodies are small (common in APIs,
+  for example), then logging the request body is good.
 
 
 # Streams

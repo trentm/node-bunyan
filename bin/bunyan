@@ -5,11 +5,12 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = "0.1.1";
+var VERSION = "0.2.0";
 
 var util = require('util');
 var pathlib = require('path');
 var vm = require('vm');
+var http = require('http');
 var warn = console.warn;
 
 
@@ -277,15 +278,27 @@ function handleLogLine(line, opts) {
     }
     if (rec.req) {
       var headers = rec.req.headers;
-      details.push(indent(format("%s %s\n%s", rec.req.method,
+      details.push(indent(format("%s %s HTTP/1.1\n%s", rec.req.method,
         rec.req.url,
         Object.keys(headers).map(
           function (h) { return h + ': ' + headers[h]}).join('\n'))));
     }
     if (rec.res) {
-      var s = rec.res._header.trimRight()
-        + (rec.res._hasBody ? '\n(body)\n' : '') + rec.res._trailer;
-      details.push(indent(s.trimRight()));
+      var s = '';
+      if (rec.res.header) {
+        s += rec.res.header.trimRight()
+      } else if (rec.res.headers) {
+        if (rec.res.statusCode) {
+          s += format("HTTP/1.1 %s %s\n", rec.res.statusCode,
+            http.STATUS_CODES[rec.res.statusCode]);
+        }
+        var headers = rec.res.headers;
+        s += Object.keys(headers).map(
+          function (h) { return h + ': ' + headers[h]}).join('\n');
+      }
+      if (s) {
+        details.push(indent(s));
+      }
     }
     if (rec.err && rec.err.stack) {
       details.push(indent(rec.err.stack))

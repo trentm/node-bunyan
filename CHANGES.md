@@ -1,8 +1,10 @@
 # bunyan Changelog
 
-## bunyan 0.1.1 (not yet released)
+## bunyan 0.2.0 (not yet released)
 
-(nothing yet)
+- Spec'ing core/recommended log record fields.
+- Add `LOG_VERSION` to exports.
+- Improvements to request/response serializations.
 
 
 ## bunyan 0.1.0

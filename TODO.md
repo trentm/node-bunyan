@@ -4,6 +4,8 @@
     <http://journal.paul.querna.org/articles/2011/12/26/log-for-machines-in-json/>
     require: facility and hostname
     line/file: possible to get quickly with v8? Yunong asked.
+- fast clone: basically make it reasonable to clone per HTTP request.
+  Ditch mutability. Add another context (another entry in Log record tuple?)?
 - `log.close` to close streams and shutdown and `this.closed`
 - bunyan cli: more layouts (http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/EnhancedPatternLayout.html)
   Custom log formats (in config file? in '-f' arg) using printf or hogan.js
@@ -42,15 +44,38 @@
 
 # someday/maybe
 
-- custom "emitter" feature: an additional "emitter" param on the "streams"
-  objects: <https://github.com/trentm/node-bunyan/blob/master/examples/multi.js#L4-13>
-  which you'd give instead of "stream" (a node "Writable Stream").
-  It would take a Bunyan log record object and be expected to emit it.
+- file/line fields automatic: "but it's fucking slow" (https://gist.github.com/1733234)
+        function getFileAndLine() {
+            var self = this;
+            var saveLimit = Error.stackTraceLimit;
+            var savePrepare = Error.prepareStackTrace;
+            Error.stackTraceLimit = 1;
+            Error.captureStackTrace(this, getFileAndLine);
+            Error.prepareStackTrace = function(_, stack) {
+                self.file = stack[0].getFileName();
+                self.line = stack[0].getLineNumber();
+            };
+            this.stack;
+            Error.stackTraceLimit = saveLimit;
+            Error.prepareStackTrace = savePrepare;
+            return {
+                file: self.file,
+                line: self.line
+            }
+        }
+    Want some way to have file/line only at certain levesl and lazily.
+- add option to "streams" to take the raw object, not serialized.
   It would be a good hook for people with custom needs that Bunyan doesn't
   care about (e.g. log.ly or hook.io or whatever).
+- split out `bunyan` cli to a "bunyan" or "bunyan-reader" or "node-bunyan-reader"
+  as the basis for tools to consume bunyan logs. It can grow indep of node-bunyan
+  for generating the logs.
+  It would take a Bunyan log record object and be expected to emit it.
 - serializer `request_id` that pulls it from req? `log.info({request_id: req}, "hi")`
 - serializer support:
     - restify-server.js example -> restifyReq ? or have `req` detect that.
       That is nicer for the "use all standard ones". *Does* restify req
       have anything special?
     - differential HTTP *client* req/res with *server* req/res.
+- statsd stream? http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/
+  Think about it.
