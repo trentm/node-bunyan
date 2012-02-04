@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.2.1 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.2.0
 
 - Spec'ing core/recommended log record fields.
