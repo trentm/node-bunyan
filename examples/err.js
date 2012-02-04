@@ -2,12 +2,12 @@
 
 var http = require('http');
 var Logger = require('../lib/bunyan');
+var util = require('util');
 
 var log = new Logger({
   service: "myserver",
   serializers: {
-    req: Logger.stdSerializers.req,
-    res: Logger.stdSerializers.res
+    err: Logger.stdSerializers.err,   // <--- use this
   }
 });
 
@@ -25,6 +25,7 @@ $ node err.js  | ../bin/bunyan -j
   "hostname": "banana.local",
   "err": {
     "stack": "TypeError: boom\n    at Object.<anonymous> (/Users/trentm/tm/node-bunyan/examples/err.js:15:9)\n    at Module._compile (module.js:411:26)\n    at Object..js (module.js:417:10)\n    at Module.load (module.js:343:31)\n    at Function._load (module.js:302:12)\n    at Array.0 (module.js:430:10)\n    at EventEmitter._tickCallback (node.js:126:26)",
+    "name": "TypeError",
     "message": "boom"
   },
   "level": 4,

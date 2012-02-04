@@ -15,7 +15,7 @@ log.info("hi %s there", true);
 log.info({foo:"bar"}, "hi %d", 1, "two", 3);
 
 
-// Shows `log.clone(...)` to specialize a logger for a sub-component.
+// Shows `log.child(...)` to specialize a logger for a sub-component.
 console.log("\n\n")
 
 function Wuzzle(options) {
@@ -27,7 +27,7 @@ Wuzzle.prototype.woos = function () {
   this.log.warn("This wuzzle is woosey.")
 }
 
-var wuzzle = new Wuzzle({log: log.clone({component: "wuzzle"})});
+var wuzzle = new Wuzzle({log: log.child({component: "wuzzle"})});
 wuzzle.woos();
 log.info("done with the wuzzle")
 

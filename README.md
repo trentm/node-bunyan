@@ -255,8 +255,8 @@ follow (feedback from actual users welcome).
 Recommended/Best Practice Fields:
 
 - `err`: Object. A caught JS exception. Log that thing with
-  `log.error({err: err}, "oops")`! JS exceptions `JSON.stringify` quite
-  nicely so you don't need to do anything else. See "examples/err.js".
+  `log.error({err: err}, "oops")` and **use the `Logger.stdSerializers.err`**
+  serializer for it. See "examples/err.js".
 - `req_id`: String. A request identifier. Including this field in all logging
   tied to handling a particular request to your server is strongly suggested.
   This allows post analysis of logs to easily collate all related logging
