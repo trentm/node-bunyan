@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.2.0 (not yet released)
+## bunyan 0.2.0
 
 - Spec'ing core/recommended log record fields.
 - Add `LOG_VERSION` to exports.
