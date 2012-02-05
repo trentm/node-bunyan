@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.3.0 (not yet released)
+## bunyan 0.3.0
 
 - `log.child(options[, simple])` Added `simple` boolean arg. Set `true` to
   assert that options only add fields (no config changes). Results in a 10x
