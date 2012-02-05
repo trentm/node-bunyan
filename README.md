@@ -73,7 +73,7 @@ streams at different levels**.
       ]
     });
 
-A **`log.clone(...)`** is provided to specialize a logger for a sub-component.
+A **`log.child(...)`** is provided to specialize a logger for a sub-component.
 The following will have log records from "Wuzzle" instances use exactly the
 same config as its parent, plus include the "component" field.
 
@@ -89,9 +89,23 @@ same config as its parent, plus include the "component" field.
       this.log.warn("This wuzzle is woosey.")
     }
     
-    var wuzzle = new Wuzzle({log: log.clone({component: "wuzzle"})});
+    var wuzzle = new Wuzzle({log: log.child({component: "wuzzle"})});
     wuzzle.woos();
     log.info("done with the wuzzle")
+
+
+An example and a hack: The [node-restify](https://github.com/mcavage/node-restify)
+framework integrates bunyan. One feature is that each restify request handler
+includes a `req.log` logger that is a:
+
+    log.child({req_id: <unique request id>}, true)
+
+Apps using restify can then use `req.log` and have all such log records
+include the unique request id (as "req_id"). Handy. *What is that `true`?* It
+is a small bunyan hack by which you can assert that you're just adding
+simple fields to the child logger. This makes `log.child` 10x faster and,
+hence, never a worry for slowing down HTTP request handling. See the
+changelog for node-bunyan 0.3.0 for details.
 
 
 Back to the `log.{trace|debug|...|fatal}(...)` API:

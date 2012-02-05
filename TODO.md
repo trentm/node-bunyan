@@ -1,5 +1,3 @@
-- fast clone: basically make it reasonable to clone per HTTP request.
-  Ditch mutability. Add another context (another entry in Log record tuple?)?
 - `log.close` to close streams and shutdown and `this.closed`
 - line/file: possible to get quickly with v8? Yunong asked.
 - what's the API for changing the logger/stream level(s)?
@@ -58,6 +56,8 @@
             }
         }
     Want some way to have file/line only at certain levesl and lazily.
+- get Mark to show me dtrace provider stuff and consider adding for
+  logging, if helpful.
 - add option to "streams" to take the raw object, not serialized.
   It would be a good hook for people with custom needs that Bunyan doesn't
   care about (e.g. log.ly or hook.io or whatever).
