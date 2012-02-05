@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.3.1 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.3.0
 
 - `log.child(options[, simple])` Added `simple` boolean arg. Set `true` to
