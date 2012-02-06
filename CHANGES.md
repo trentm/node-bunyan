@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.5.1 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.5.0
 
 - Use 10/20/... instead of 1/2/... for level constant values. Ostensibly this
