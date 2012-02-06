@@ -1,3 +1,4 @@
+- document streams better in the readme
 - buffered writes to increase speed: Yunong said he'd work on a patch:
     - perhaps this would be a "buffered: true" option on the stream object
     - then wrap the "stream" with a local class that handles the buffering
@@ -17,6 +18,8 @@
 
 # someday/maybe
 
+- `log.close` to close streams and shutdown and `this.closed`
+  process.on('exit', log.close)
 - bunyan cli: -c COND args a la json
 - bunyan cli: more layouts (http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/EnhancedPatternLayout.html)
   Custom log formats (in config file? in '-f' arg) using printf or hogan.js
@@ -35,7 +38,6 @@
 - bunyan "compact" or "light", '-l'? Something like. Or pehaps this (with
   color) could be the default, with '-l' for long output.
     13:51.340 [src.js:20#Wuzzle.woos] WARN: This wuzzle is woosey.
-- `log.close` to close streams and shutdown and `this.closed`
 - get Mark to show me dtrace provider stuff and consider adding for
   logging, if helpful.
 - add option to "streams" to take the raw object, not serialized.
