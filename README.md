@@ -220,6 +220,22 @@ Integers are used for the actual level values (1 for "trace", ..., 6 for
 "fatal") and constants are defined for the (Logger.TRACE ... Logger.DEBUG).
 The lowercase level names are aliases supported in the API.
 
+Here is the API for changing levels in an existing logger:
+
+    log.level() -> INFO   // gets current level (lowest level of all streams)
+ 
+    log.level(INFO)       // set all streams to level INFO
+    log.level("info")     // set all streams to level INFO
+
+    log.levels() -> [DEBUG, INFO]   // get array of levels of all streams
+    log.levels(0) -> DEBUG          // get level of stream at index 0
+    log.levels("foo")               // get level of stream with name "foo"
+ 
+    log.levels(0, INFO)             // set level of stream 0 to INFO
+    log.levels(0, "info")           // can use "info" et al aliases
+    log.levels("foo", WARN)         // set stream named "foo" to WARN
+
+
 
 # Log Record Fields
 

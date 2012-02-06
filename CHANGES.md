@@ -2,6 +2,9 @@
 
 ## bunyan 0.5.0 (not yet released)
 
+- Add `log.level(...)` and `log.levels(...)` API for changing logger stream
+  levels.
+- Add `TRACE|DEBUG|INFO|WARN|ERROR|FATAL` level constants to exports.
 - Add `log.info(err)` special case for logging an `Error` instance. For
   example `log.info(new TypeError("boom")` will produce:
 
