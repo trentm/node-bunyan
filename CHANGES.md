@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.4.1 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.4.0
 
 - Add `new Logger({src: true})` config option to have a 'src' attribute be
