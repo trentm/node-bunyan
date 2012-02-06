@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = "0.3.1";
+var VERSION = "0.4.0";
 
 var util = require('util');
 var pathlib = require('path');
@@ -253,9 +253,9 @@ function handleLogLine(line, opts) {
   switch (opts.outputMode) {
   case OM_PAUL:
     // Single-line msg:
-    //    [time] LEVEL: service[/component] on hostname: msg (extras...)
+    //    [time] LEVEL: service[/component] on hostname (src): msg (extras...)
     // Multi-line msg:
-    //    [time] LEVEL: service[/component] on hostname: (extras...)
+    //    [time] LEVEL: service[/component] on hostname (src): (extras...)
     //        msg
     // If 'req', show the request.
     // If 'res', show the response.
@@ -266,8 +266,17 @@ function handleLogLine(line, opts) {
     }
     var levelStr = (upperNameFromLevel[rec.level]
       || "<unknown-level " + rec.level + ">");
+    var src = "";
+    if (rec.src && rec.src.file) {
+      var s = rec.src;
+      if (s.func) {
+        src = format(" (%s:%d in %s)", s.file, s.line, s.func);
+      } else {
+        src = format(" (%s:%d)", s.file, s.line);
+      }
+    }
     var extras = [];
-    if (rec.request_id) extras.push(rec.request_id);
+    if (rec.req_id) extras.push("req_id=" + rec.req_id);
     if (rec.latency) extras.push(rec.latency + "ms");
     extras = (extras.length ? ' (' + extras.join(', ') + ')' : '');
     var details = [];
@@ -304,11 +313,12 @@ function handleLogLine(line, opts) {
       details.push(indent(rec.err.stack))
     }
     details = (details.length ? details.join('\n--\n') + '\n' : '');
-    emit(format("[%s] %s: %s on %s:%s%s\n%s",
+    emit(format("[%s] %s: %s on %s%s:%s%s\n%s",
       rec.time,
       upperNameFromLevel[rec.level] || "<unknown-level " + rec.level + ">",
       serviceStr,
       rec.hostname || "<no-hostname>",
+      src,
       onelineMsg,
       extras,
       details));

@@ -32,6 +32,16 @@ format version) are added for you.
     $ node hi.js
     {"service":"myapp","hostname":"banana.local","level":2,"msg":"hi","time":"2012-01-31T00:07:44.216Z","v":0}
 
+The full `log.{trace|debug|...|fatal}(...)` API is:
+
+    log.info();     // returns a boolean: is the "info" level enabled?
+    log.info("hi"); // log a simple string message
+    log.info("hi %s", bob, anotherVar); // uses `util.format` for msg formatting
+    log.info({foo: "bar"}, "hi");       // adds "foo" field to log record
+
+
+## bunyan tool
+
 A `bunyan` tool is provided **for pretty-printing bunyan logs** and, eventually,
 for filtering (e.g. `| bunyan -c 'level>3'`). This shows the default output
 (which is fluid right now) and indented-JSON output. More output formats will
@@ -49,6 +59,9 @@ be added, including support for custom formats.
       "time": "2012-01-31T00:10:00.676Z",
       "v": 0
     }
+
+
+## streams
 
 By default, log output is to stdout (**stream**) and at the "info" level.
 Explicitly that looks like:
@@ -72,6 +85,9 @@ streams at different levels**.
         }
       ]
     });
+
+
+## log.child
 
 A `log.child(...)` is provided to **specialize a logger for a sub-component**.
 The following will have log records from "Wuzzle" instances use exactly the
@@ -111,12 +127,7 @@ See the changelog for node-bunyan 0.3.0 for details.
 
 * * *
 
-Back to the `log.{trace|debug|...|fatal}(...)` API:
-
-    log.info();     // returns a boolean: is the "info" level enabled?
-    log.info("hi"); // log a simple string message
-    log.info("hi %s", bob, anotherVar); // uses `util.format` for msg formatting
-    log.info({foo: "bar"}, "hi");       // adds "foo" field to log record
+## serializers
 
 Bunyan has a concept of **"serializers" to produce a JSON-able object from a
 JavaScript object**, so your can easily do the following:
@@ -159,7 +170,32 @@ standard serializers you can use:
 ugly message on stderr from Bunyan (along with the traceback) and the field
 in your log record will be replaced with a short error message.*
 
+## src
 
+The **call source file, line and function** (if not at the global level) can
+be added to log records by using the `src: true` config option:
+
+    var log = new Logger({src: true, ...});
+
+This adds the call source info with the 'src' field, like this:
+
+    {
+      "service": "src-example",
+      "hostname": "banana.local",
+      "component": "wuzzle",
+      "level": 4,
+      "msg": "This wuzzle is woosey.",
+      "time": "2012-02-06T04:19:35.605Z",
+      "src": {
+        "file": "/Users/trentm/tm/node-bunyan/examples/src.js",
+        "line": 20,
+        "func": "Wuzzle.woos"
+      },
+      "v": 0
+    }
+
+**WARNING: Determining the call source info is slow. Never use this option
+in production.**
 
 
 # Levels
@@ -245,6 +281,9 @@ Core fields:
   [`Date.toISOString()`](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date/toISOString).
 - `msg`: Required. String.
   Every `log.debug(...)` et al call must provide a log message.
+- `src`: Optional. Object giving log call source info. This is added
+  automatically by Bunyan if the "src: true" config option is given to the
+  Logger. Never use in production as this is really slow.
 
 
 Go ahead and add more fields, and nest ones are fine (and recommended) as

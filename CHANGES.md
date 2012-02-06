@@ -1,8 +1,16 @@
 # bunyan Changelog
 
-## bunyan 0.3.1 (not yet released)
+## bunyan 0.4.0 (not yet released)
 
-(nothing yet)
+- Add `new Logger({src: true})` config option to have a 'src' attribute be
+  automatically added to log records with the log call source info. Example:
+
+        "src": {
+          "file": "/Users/trentm/tm/node-bunyan/examples/src.js",
+          "line": 20,
+          "func": "Wuzzle.woos"
+        },
+
 
 ## bunyan 0.3.0
 
