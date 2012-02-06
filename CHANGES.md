@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.4.0 (not yet released)
+## bunyan 0.4.0
 
 - Add `new Logger({src: true})` config option to have a 'src' attribute be
   automatically added to log records with the log call source info. Example:
