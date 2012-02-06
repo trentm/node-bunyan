@@ -203,12 +203,12 @@ in production.**
 
 # Levels
 
-- "fatal" (6): the service/app is going to stop or become unusable now
-- "error" (5): fatal for a particular request, but the service/app continues servicing other requests
-- "warn" (4): a note on something that should probably be looked at by an operator
-- "info" (3): detail on regular operation
-- "debug" (2): anything else, i.e. too verbose to be included in "info" level.
-- "trace" (1): logging from external libraries used by your app
+- "fatal" (60): the service/app is going to stop or become unusable now
+- "error" (50): fatal for a particular request, but the service/app continues servicing other requests
+- "warn" (40): a note on something that should probably be looked at by an operator
+- "info" (30): detail on regular operation
+- "debug" (20): anything else, i.e. too verbose to be included in "info" level.
+- "trace" (10): logging from external libraries used by your app
 
 "debug" should be used sparingly. Information that will be useful to debug
 errors *post mortem* should usually be included in "info" messages if it's

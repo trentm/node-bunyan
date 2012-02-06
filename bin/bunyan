@@ -31,12 +31,12 @@ var OM_FROM_NAME = {
 
 
 // Levels
-var TRACE = 1;
-var DEBUG = 2;
-var INFO = 3;
-var WARN = 4;
-var ERROR = 5;
-var FATAL = 6;
+var TRACE = 10;
+var DEBUG = 20;
+var INFO = 30;
+var WARN = 40;
+var ERROR = 50;
+var FATAL = 60;
 
 var levelFromName = {
   'trace': TRACE,
@@ -46,9 +46,13 @@ var levelFromName = {
   'error': ERROR,
   'fatal': FATAL
 };
-var nameFromLevel = [undefined].concat(Object.keys(levelFromName));
-var upperNameFromLevel = [undefined].concat(
-  Object.keys(levelFromName).map(function (l) { return l.toUpperCase(); }));
+var nameFromLevel = {};
+var upperNameFromLevel = {};
+Object.keys(levelFromName).forEach(function (name) {
+  var lvl = levelFromName[name];
+  nameFromLevel[lvl] = name;
+  upperNameFromLevel[lvl] = name.toUpperCase();
+});
 
 
 

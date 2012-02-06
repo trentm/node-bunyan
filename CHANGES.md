@@ -2,6 +2,11 @@
 
 ## bunyan 0.5.0 (not yet released)
 
+- Use 10/20/... instead of 1/2/... for level constant values. Ostensibly this
+  allows for intermediary levels from the defined "trace/debug/..." set.
+  However, that is discouraged. I'd need a strong user argument to add
+  support for easily using alternative levels. Consider using a separate
+  JSON field instead.
 - s/service/name/ for Logger name field. "service" is unnecessarily tied
   to usage for a service. No need to differ from log4j Logger "name".
 - Add `log.level(...)` and `log.levels(...)` API for changing logger stream

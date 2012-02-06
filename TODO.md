@@ -1,7 +1,3 @@
-- Logger.setLevel()? How to change level for a given stream. Default all,
-  else, give an index... or type ... or support stream "names". Some positives
-  to stream names.
-- service -> name
 - 10, 20,...
 - bunyan cli: more layouts (http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/EnhancedPatternLayout.html)
   Custom log formats (in config file? in '-f' arg) using printf or hogan.js
