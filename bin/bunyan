@@ -312,7 +312,7 @@ function handleLogLine(line, opts) {
     if (rec.err && rec.err.stack) {
       details.push(indent(rec.err.stack))
     }
-    details = (details.length ? details.join('\n--\n') + '\n' : '');
+    details = (details.length ? details.join('\n    --\n') + '\n' : '');
     emit(format("[%s] %s: %s on %s%s:%s%s\n%s",
       rec.time,
       upperNameFromLevel[rec.level] || "<unknown-level " + rec.level + ">",
