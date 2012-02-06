@@ -32,7 +32,7 @@ format version) are added for you.
     $ node hi.js
     {"service":"myapp","hostname":"banana.local","level":2,"msg":"hi","time":"2012-01-31T00:07:44.216Z","v":0}
 
-A **`bunyan` tool is provided for pretty-printing** bunyan logs and, eventually,
+A `bunyan` tool is provided **for pretty-printing bunyan logs** and, eventually,
 for filtering (e.g. `| bunyan -c 'level>3'`). This shows the default output
 (which is fluid right now) and indented-JSON output. More output formats will
 be added, including support for custom formats.
@@ -73,7 +73,7 @@ streams at different levels**.
       ]
     });
 
-A **`log.child(...)`** is provided to specialize a logger for a sub-component.
+A `log.child(...)` is provided to **specialize a logger for a sub-component**.
 The following will have log records from "Wuzzle" instances use exactly the
 same config as its parent, plus include the "component" field.
 
@@ -93,20 +93,23 @@ same config as its parent, plus include the "component" field.
     wuzzle.woos();
     log.info("done with the wuzzle")
 
+* * *
 
 An example and a hack: The [node-restify](https://github.com/mcavage/node-restify)
 framework integrates bunyan. One feature is that each restify request handler
-includes a `req.log` logger that is a:
+includes a `req.log` logger that is:
 
     log.child({req_id: <unique request id>}, true)
 
 Apps using restify can then use `req.log` and have all such log records
-include the unique request id (as "req_id"). Handy. *What is that `true`?* It
-is a small bunyan hack by which you can assert that you're just adding
-simple fields to the child logger. This makes `log.child` 10x faster and,
-hence, never a worry for slowing down HTTP request handling. See the
-changelog for node-bunyan 0.3.0 for details.
+include the unique request id (as "req_id"). Handy.
 
+*What is that `true`?* It is a small bunyan hack by which you can assert that
+you're just adding simple fields to the child logger. This makes `log.child`
+10x faster and, hence, never a worry for slowing down HTTP request handling.
+See the changelog for node-bunyan 0.3.0 for details.
+
+* * *
 
 Back to the `log.{trace|debug|...|fatal}(...)` API:
 
@@ -156,23 +159,6 @@ standard serializers you can use:
 ugly message on stderr from Bunyan (along with the traceback) and the field
 in your log record will be replaced with a short error message.*
 
-
-
-# Future
-
-See "TODO.md", but basically:
-
-- More std serializers. See TODO.md.
-
-- Spec'ing and enforcing the fields (from dap's section in eng guide).
-
-- Syslog support. Ring-buffer support for storing last N debug messages
-  (or whatever) in memory to support debugability without too much log load.
-
-- More `bunyan` output formats and filtering features.
-
-- Think about a bunyan dashboard that supports organizing and viewing logs
-  from multiple hosts and services.
 
 
 
@@ -327,4 +313,22 @@ are:
 # License
 
 MIT.
+
+
+# Future
+
+See "TODO.md", but basically:
+
+- Ring-buffer support for storing last N debug messages
+  (or whatever) in memory to support debugability without too much log load.
+
+- More `bunyan` output formats and filtering features.
+
+- Think about a bunyan dashboard that supports organizing and viewing logs
+  from multiple hosts and services.
+
+- Syslog support.
+
+- Some speed comparisons with others to get a feel for Bunyan's speed.
+
 
