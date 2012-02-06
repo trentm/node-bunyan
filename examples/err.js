@@ -17,6 +17,15 @@ try {
   log.warn({err: err}, "operation went boom: %s", err)   // <--- here
 }
 
+log.info(new TypeError("how about this?"))  // <--- alternatively this
+
+
+try {
+  throw "boom string";
+} catch (err) {
+  log.error(err)
+}
+
 /*
 
 $ node err.js  | ../bin/bunyan -j

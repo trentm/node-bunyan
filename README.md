@@ -34,10 +34,13 @@ format version) are added for you.
 
 The full `log.{trace|debug|...|fatal}(...)` API is:
 
-    log.info();     // returns a boolean: is the "info" level enabled?
-    log.info("hi"); // log a simple string message
-    log.info("hi %s", bob, anotherVar); // uses `util.format` for msg formatting
-    log.info({foo: "bar"}, "hi");       // adds "foo" field to log record
+    log.info();     // Returns a boolean: is the "info" level enabled?
+    log.info(err);  // Log an `Error` instance, adds "err" key with exception details
+                    // (including the stack) and sets "msg" to the exception message.
+                    // A special case, b/c logging errors should be easy.
+    log.info("hi"); // Log a simple string message.
+    log.info("hi %s", bob, anotherVar); // Uses `util.format` for msg formatting.
+    log.info({foo: "bar"}, "hi");       // Adds "foo" field to log record.
 
 
 ## bunyan tool
@@ -293,9 +296,21 @@ follow (feedback from actual users welcome).
 
 Recommended/Best Practice Fields:
 
-- `err`: Object. A caught JS exception. Log that thing with
-  `log.error({err: err}, "oops")` and **use the `Logger.stdSerializers.err`**
-  serializer for it. See "examples/err.js".
+-   `err`: Object. A caught JS exception. Log that thing with `log.info(err)`
+    to get:
+  
+        ...
+        "err": {
+          "message": "boom",
+          "name": "TypeError",
+          "stack": "TypeError: boom\n    at Object.<anonymous> ..."
+        },
+        "msg": "boom",
+        ...
+
+    Or use the `Logger.stdSerializers.err` serializer in your Logger and
+    do this `log.error({err: err}, "oops")`. See "examples/err.js".
+
 - `req_id`: String. A request identifier. Including this field in all logging
   tied to handling a particular request to your server is strongly suggested.
   This allows post analysis of logs to easily collate all related logging
@@ -303,6 +318,7 @@ Recommended/Best Practice Fields:
   and you carry a single request ID from the top API down through all APIs
   (as [node-restify](https://github.com/mcavage/node-restify) facilitates
   with its 'X-Request-Id' header).
+
 - `req`: An HTTP server request. Bunyan provides `Logger.stdSerializers.req`
   to serialize a request with a suggested set of keys. Example:
   

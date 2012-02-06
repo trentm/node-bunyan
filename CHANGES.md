@@ -1,8 +1,19 @@
 # bunyan Changelog
 
-## bunyan 0.4.1 (not yet released)
+## bunyan 0.5.0 (not yet released)
 
-(nothing yet)
+- Add `log.info(err)` special case for logging an `Error` instance. For
+  example `log.info(new TypeError("boom")` will produce:
+
+        ...
+        "err": {
+          "message": "boom",
+          "name": "TypeError",
+          "stack": "TypeError: boom\n    at Object.<anonymous> ..."
+        },
+        "msg": "boom",
+        ...
+
 
 ## bunyan 0.4.0
 
