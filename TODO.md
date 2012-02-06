@@ -1,19 +1,6 @@
-- 10, 20,...
-- bunyan cli: more layouts (http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/EnhancedPatternLayout.html)
-  Custom log formats (in config file? in '-f' arg) using printf or hogan.js
-  or whatever. Dap wants field width control for lining up. Hogan.js is
-  probably overkill for this.
-- ringBuffer stream
-- syslog: Josh uses https://github.com/chrisdew/node-syslog
-    streams: [
-        ...
-        {
-            level: "warn",
-            type: "syslog",
-            syslog_facility: "LOG_LOCAL1", // one of the syslog facility defines
-            syslog_pid: true,   // syslog logopt "LOG_PID"
-            syslog_cons: false  // syslog logopt "LOG_CONS"
-        }
+- buffered writes to increase speed: Yunong said he'd work on a patch:
+    - perhaps this would be a "buffered: true" option on the stream object
+    - then wrap the "stream" with a local class that handles the buffering
 - "canWrite" handling for full streams. Need to buffer a la log4js
 - test file log with logadm rotation: does it handle that?
 - test suite:
@@ -24,20 +11,27 @@
       works *and* that an existing field in the parent is not *re-serialized*.
 - a "rolling-file" stream: but specifically by time, e.g. hourly. (MarkC
   requested)
-- (mark) instanceof-based serialization:
-    log.info(new Error("blah blah")) -> {err: ..., msg: ""}
-  perhaps at least default for Error. Then perhaps augment or replace
-  serializers with registerable instanceof's.
-    log = new Logger({
-        serializers
-    })
+- ringBuffer stream
     
 
 
 # someday/maybe
 
-- bunyan cli: filter args a la json
 - bunyan cli: -c COND args a la json
+- bunyan cli: more layouts (http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/EnhancedPatternLayout.html)
+  Custom log formats (in config file? in '-f' arg) using printf or hogan.js
+  or whatever. Dap wants field width control for lining up. Hogan.js is
+  probably overkill for this.
+- syslog: Josh uses https://github.com/chrisdew/node-syslog
+    streams: [
+        ...
+        {
+            level: "warn",
+            type: "syslog",
+            syslog_facility: "LOG_LOCAL1", // one of the syslog facility defines
+            syslog_pid: true,   // syslog logopt "LOG_PID"
+            syslog_cons: false  // syslog logopt "LOG_CONS"
+        }
 - bunyan "compact" or "light", '-l'? Something like. Or pehaps this (with
   color) could be the default, with '-l' for long output.
     13:51.340 [src.js:20#Wuzzle.woos] WARN: This wuzzle is woosey.
