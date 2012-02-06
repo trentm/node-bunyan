@@ -1,6 +1,6 @@
 var Logger = require('../lib/bunyan');
 log = new Logger({
-  service: "amon",
+  name: "amon",
   streams: [
     {
       level: "info",
@@ -8,7 +8,7 @@ log = new Logger({
     },
     {
       level: "error",
-      path: "tmp/error.log"
+      path: "multi.log"
     }
   ]
 });

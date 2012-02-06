@@ -3,7 +3,7 @@
 
 var Logger = require('../lib/bunyan');
 
-var log = new Logger({service: "src-example", src: true});
+var log = new Logger({name: "src-example", src: true});
 
 log.info("one");
 log.info("two");

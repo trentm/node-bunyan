@@ -4,7 +4,7 @@ var http = require('http');
 var Logger = require('../lib/bunyan');
 
 var log = new Logger({
-  service: "myserver",
+  name: "myserver",
   serializers: {
     req: Logger.stdSerializers.req,
     res: Logger.stdSerializers.res

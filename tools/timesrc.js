@@ -17,7 +17,7 @@ Collector.prototype.write = function(s) {
 var collector = new Collector();
 
 var logwith = new Logger({
-  service: "with-src",
+  name: "with-src",
   src: true,
   stream: collector
 });
@@ -28,7 +28,7 @@ var ms = ben(1e5, function () {
 console.log(' - log.info with    src:  %dms per iteration', ms);
 
 var logwithout = new Logger({
-  service: "without-src",
+  name: "without-src",
   stream: collector
 });
 var ms = ben(1e5, function () {

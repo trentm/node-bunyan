@@ -17,7 +17,7 @@ var ben = require('ben');  // npm install ben
 var Logger = require('../lib/bunyan');
 
 var log = new Logger({
-  service: "svc",
+  name: "svc",
   streams: [
     {
       path: __dirname + "/timechild.log"

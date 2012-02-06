@@ -2,6 +2,8 @@
 
 ## bunyan 0.5.0 (not yet released)
 
+- s/service/name/ for Logger name field. "service" is unnecessarily tied
+  to usage for a service. No need to differ from log4j Logger "name".
 - Add `log.level(...)` and `log.levels(...)` API for changing logger stream
   levels.
 - Add `TRACE|DEBUG|INFO|WARN|ERROR|FATAL` level constants to exports.

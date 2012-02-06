@@ -10,7 +10,7 @@ var assert = require('assert');
 
 // Basic usage.
 var log = new Logger({
-  service: 'example-level',
+  name: 'example-level',
   streams: [
     {
       name: 'stdout',

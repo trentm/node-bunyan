@@ -253,16 +253,16 @@ function handleLogLine(line, opts) {
   switch (opts.outputMode) {
   case OM_PAUL:
     // Single-line msg:
-    //    [time] LEVEL: service[/component] on hostname (src): msg (extras...)
+    //    [time] LEVEL: name[/component] on hostname (src): msg (extras...)
     // Multi-line msg:
-    //    [time] LEVEL: service[/component] on hostname (src): (extras...)
+    //    [time] LEVEL: name[/component] on hostname (src): (extras...)
     //        msg
     // If 'req', show the request.
     // If 'res', show the response.
     // If 'err' and 'err.stack' then show that.
-    var serviceStr = rec.service;
+    var nameStr = rec.name;
     if (rec.component) {
-      serviceStr += '/' + rec.component;
+      nameStr += '/' + rec.component;
     }
     var levelStr = (upperNameFromLevel[rec.level]
       || "<unknown-level " + rec.level + ">");
@@ -316,7 +316,7 @@ function handleLogLine(line, opts) {
     emit(format("[%s] %s: %s on %s%s:%s%s\n%s",
       rec.time,
       upperNameFromLevel[rec.level] || "<unknown-level " + rec.level + ">",
-      serviceStr,
+      nameStr,
       rec.hostname || "<no-hostname>",
       src,
       onelineMsg,

@@ -18,19 +18,19 @@ base soonish.
 
 # Usage
 
-**The usual.** All loggers must provide a "service" name. This is somewhat akin
+**The usual.** All loggers must provide a "name". This is somewhat akin
 to log4j logger "name", but Bunyan doesn't do hierarchical logger names.
 
     $ cat hi.js
     var Logger = require('bunyan');
-    var log = new Logger({service: "myapp"});
+    var log = new Logger({name: "myapp"});
     log.info("hi");
 
 **Log records are JSON.** "hostname", "time" and "v" (the Bunyan log
 format version) are added for you.
 
     $ node hi.js
-    {"service":"myapp","hostname":"banana.local","level":2,"msg":"hi","time":"2012-01-31T00:07:44.216Z","v":0}
+    {"name":"myapp","hostname":"banana.local","level":2,"msg":"hi","time":"2012-01-31T00:07:44.216Z","v":0}
 
 The full `log.{trace|debug|...|fatal}(...)` API is:
 
@@ -38,9 +38,9 @@ The full `log.{trace|debug|...|fatal}(...)` API is:
     log.info(err);  // Log an `Error` instance, adds "err" key with exception details
                     // (including the stack) and sets "msg" to the exception message.
                     // A special case, b/c logging errors should be easy.
-    log.info("hi"); // Log a simple string message.
-    log.info("hi %s", bob, anotherVar); // Uses `util.format` for msg formatting.
-    log.info({foo: "bar"}, "hi");       // Adds "foo" field to log record.
+    log.info('hi'); // Log a simple string message.
+    log.info('hi %s', bob, anotherVar); // Uses `util.format` for msg formatting.
+    log.info({foo: 'bar'}, 'hi');       // Adds "foo" field to log record.
 
 
 ## bunyan tool
@@ -55,7 +55,7 @@ be added, including support for custom formats.
     
     $ node hi.js | ./bin/bunyan -o json
     {
-      "service": "myapp",
+      "name": "myapp",
       "hostname": "banana.local",
       "level": 2,
       "msg": "hi",
@@ -69,14 +69,14 @@ be added, including support for custom formats.
 By default, log output is to stdout (**stream**) and at the "info" level.
 Explicitly that looks like:
 
-    var log = new Logger({service: "myapp", stream: process.stdout, 
+    var log = new Logger({name: "myapp", stream: process.stdout, 
       level: "info"});
 
 That is an abbreviated form for a single stream. **You can defined multiple
 streams at different levels**.
 
     var log = new Logger({
-      service: "amon",
+      name: "amon",
       streams: [
         {
           level: "info",
@@ -183,7 +183,7 @@ be added to log records by using the `src: true` config option:
 This adds the call source info with the 'src' field, like this:
 
     {
-      "service": "src-example",
+      "name": "src-example",
       "hostname": "banana.local",
       "component": "wuzzle",
       "level": 4,
@@ -203,8 +203,8 @@ in production.**
 
 # Levels
 
-- "fatal" (6): the service is going to stop or become unusable now
-- "error" (5): fatal for a particular request, but the service continues servicing other requests
+- "fatal" (6): the service/app is going to stop or become unusable now
+- "error" (5): fatal for a particular request, but the service/app continues servicing other requests
 - "warn" (4): a note on something that should probably be looked at by an operator
 - "info" (3): detail on regular operation
 - "debug" (2): anything else, i.e. too verbose to be included in "info" level.
@@ -254,12 +254,12 @@ incorrect signature) is always a bug in Bunyan.**
 
 A typical Bunyan log record looks like this:
 
-    {"service":"myserver","hostname":"banana.local","req":{"method":"GET","url":"/path?q=1#anchor","headers":{"x-hi":"Mom","connection":"close"}},"level":3,"msg":"start request","time":"2012-02-03T19:02:46.178Z","v":0}
+    {"name":"myserver","hostname":"banana.local","req":{"method":"GET","url":"/path?q=1#anchor","headers":{"x-hi":"Mom","connection":"close"}},"level":3,"msg":"start request","time":"2012-02-03T19:02:46.178Z","v":0}
 
 Pretty-printed:
 
     {
-      "service": "myserver",
+      "name": "myserver",
       "hostname": "banana.local",
       "req": {
         "method": "GET",
@@ -288,8 +288,9 @@ Core fields:
   format. Details will be in "CHANGES.md" (the change log).
 - `level`: Required. Integer. Added by Bunion. Cannot be overriden.
   See the "Levels" section.
-- `service`: Required. String. Provided at Logger creation.
-  You must specify a service name for your logger when creating it.
+- `name`: Required. String. Provided at Logger creation.
+  You must specify a name for your logger when creating it. Typically this
+  is the name of the service/app using Bunyan for logging.
 - `hostname`: Required. String. Provided or determined at Logger creation.
   You can specify your hostname at Logger creation or it will be retrieved
   vi `os.hostname()`.
