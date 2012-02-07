@@ -1,0 +1,15 @@
+
+# building pycairo (needed for graphite)
+
+wget http://cairographics.org/releases/pycairo-1.10.0.tar.bz2
+ 
+hack pycairo wscript:
+      #ctx.check_python_version((3,1,0))
+
+brew install cairo
+    LDFLAGS  -L/usr/local/Cellar/cairo/1.10.2/lib
+    CPPFLAGS -I/usr/local/Cellar/cairo/1.10.2/include
+
+PKG_CONFIG_PATH=/usr/local/Cellar/cairo/1.10.2/lib/pkgconfig ./waf configure
+
+FAIL so far.

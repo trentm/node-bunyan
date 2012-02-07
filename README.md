@@ -89,6 +89,8 @@ streams at different levels**.
       ]
     });
 
+More on streams in the "Streams" section below.
+
 
 ## log.child
 
@@ -371,15 +373,57 @@ Other fields to consider:
 
 # Streams
 
-A "stream" is Bunyan's name for an output for log messages. It expects a
+A "stream" is Bunyan's name for an output for log messages (the equivalent
+to a log4j Appender). Ultimately Bunyan uses a
 [Writable Stream](http://nodejs.org/docs/latest/api/all.html#writable_Stream)
-interface. See above for some examples of specifying streams. Supported streams
-are:
+interface, but there are some additional attributes used to create and
+manage the stream. A Bunyan Logger instance has one or more streams.
+General streams are specified with the "streams" option:
 
-- A writable "stream". Often this is one of the std handles (`process.stdout` or
-  `process.stderr`), but it can be anything you want supporting the node
-  writable stream interface, e.g. `fs.createWriteStream`.
-- A file. Will append to the given "path". 
+    var Logger = require('bunyan');
+    var log = new Logger({
+      name: "foo",
+      streams: [
+        {
+            stream: process.stderr,
+            level: "debug"
+        },
+        ...
+      ]
+    })
+
+For convenience, if there is only one stream, it can specified with the
+"stream" and "level" options (internal converted to a `Logger.streams`):
+
+    var log = new Logger({
+      name: "foo",
+      stream: process.stderr,
+      level: "debug"
+    })
+
+If none are specified, the default is a stream on `process.stdout` at the
+"info" level.
+
+`Logger.streams` is an array of stream objects with the following attributes:
+
+- `type`: Typically implied. E.g. "stream" or "file". See supported types
+  below.
+- `stream`: This is the "Writable Stream", e.g. a std handle or an open
+  file write stream.
+- `level`: The level at which logging to this stream is enabled. If not
+  specified it defaults to INFO.
+
+Supported stream types are:
+
+- `stream`: A "stream" argument is given.
+- `file`: A "path" argument is given. Bunyan will open this file for
+  appending. E.g.:
+
+        {
+          "path": "/var/log/foo.log",
+          "level": "warn"
+        }
+
 
 
 # License
