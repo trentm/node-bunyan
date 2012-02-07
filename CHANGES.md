@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.5.1 (not yet released)
+## bunyan 0.5.1
 
 - [issue #2] Add guard on `JSON.stringify`ing of log records before emission.
   This will prevent `log.info` et al throwing on record fields that cannot be
