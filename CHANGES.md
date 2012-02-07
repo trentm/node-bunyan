@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.5.2 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.5.1
 
 - [issue #2] Add guard on `JSON.stringify`ing of log records before emission.
