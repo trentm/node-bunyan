@@ -2,7 +2,27 @@
 
 ## bunyan 0.5.1 (not yet released)
 
-(nothing yet)
+- Add guard on `JSON.stringify`ing of log records before emission. This will
+  prevent `log.info` et al throwing on record fields that cannot be
+  represented as JSON. An error will be printed on stderr and a clipped
+  log record emitted with a 'bunyanMsg' key including error details. E.g.:
+  
+        bunyan: ERROR: could not stringify log record from /Users/trentm/tm/node-bunyan/examples/unstringifyable.js:12: TypeError: Converting circular structure to JSON
+        {
+          "name": "foo",
+          "hostname": "banana.local",
+          "bunyanMsg": "bunyan: ERROR: could not stringify log record from /Users/trentm/tm/node-bunyan/examples/unstringifyable.js:12: TypeError: Converting circular structure to JSON",
+        ...
+
+  Some timing shows this does effect log speed: 
+  
+        $ node tools/timeguard.js     # before
+        Time try/catch-guard on JSON.stringify:
+         - log.info:  0.07365ms per iteration
+        $ node tools/timeguard.js     # after
+        Time try/catch-guard on JSON.stringify:
+         - log.info:  0.07368ms per iteration
+  
 
 ## bunyan 0.5.0
 
