@@ -42,7 +42,7 @@
   logging, if helpful.
 - add option to "streams" to take the raw object, not serialized.
   It would be a good hook for people with custom needs that Bunyan doesn't
-  care about (e.g. log.ly or hook.io or whatever).
+  care about (e.g. http://loggly.com/ or hook.io or whatever).
 - split out `bunyan` cli to a "bunyan" or "bunyan-reader" or "node-bunyan-reader"
   as the basis for tools to consume bunyan logs. It can grow indep of node-bunyan
   for generating the logs.

@@ -2,6 +2,8 @@
 
 ## bunyan 0.5.2 (not yet released)
 
+- [issue #3] More type checking of `new Logger(...)` and `log.child(...)`
+  options.
 - Start a test suite.
 
 
