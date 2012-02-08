@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.5.4 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.5.3
 
 - Add 'client_req' (HTTP client request) standard formatting in `bunyan` CLI
