@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.5.3 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.5.2
 
 - [issue #3] More type checking of `new Logger(...)` and `log.child(...)`
