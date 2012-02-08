@@ -20,6 +20,7 @@
   as the basis for tools to consume bunyan logs. It can grow indep of node-bunyan
   for generating the logs.
   It would take a Bunyan log record object and be expected to emit it.
+- document "well-known" keys from bunyan CLI p.o.v.. Add "client_req".
 
 
 

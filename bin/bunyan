@@ -332,6 +332,23 @@ function handleLogLine(line, opts) {
     }
     delete rec.req;
 
+    if (rec.client_req) {
+      var headers = rec.client_req.headers;
+      var hostHeaderLine = '';
+      if (rec.client_req.address) {
+        hostHeaderLine = 'Host: ' + rec.client_req.address;
+        if (rec.client_req.port)
+          hostHeaderLine += ':' + rec.client_req.port;
+        hostHeaderLine += '\n';
+      }
+      details.push(indent(format("%s %s HTTP/1.1\n%s%s", rec.client_req.method,
+        rec.client_req.url,
+        hostHeaderLine,
+        Object.keys(headers).map(
+          function (h) { return h + ': ' + headers[h]}).join('\n'))));
+    }
+    delete rec.client_req;
+
     if (rec.res) {
       var s = '';
       if (rec.res.header) {
