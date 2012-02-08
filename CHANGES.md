@@ -2,6 +2,8 @@
 
 ## bunyan 0.5.3 (not yet released)
 
+- Add 'client_req' (HTTP client request) standard formatting in `bunyan` CLI
+  default output.
 - Improve `bunyan` CLI default output to include *all* log record keys. Unknown keys
   are either included in the first line parenthetical (if short) or in the indented
   subsequent block (if long or multiline).
