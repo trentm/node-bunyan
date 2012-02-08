@@ -2,7 +2,8 @@
 
 ## bunyan 0.5.2 (not yet released)
 
-(nothing yet)
+- Start a test suite.
+
 
 ## bunyan 0.5.1
 
