@@ -1,6 +1,10 @@
-- buffered writes to increase speed: Yunong said he'd work on a patch:
+- [Yuonong] buffered writes to increase speed:
+    - I'd start with a tools/timeoutput.js for some numbers to compare
+      before/after. Sustained high output to a file.
     - perhaps this would be a "buffered: true" option on the stream object
     - then wrap the "stream" with a local class that handles the buffering
+    - to finish this, need the 'log.close' and `process.on('exit', ...)`
+      work that Trent has started.
 - "canWrite" handling for full streams. Need to buffer a la log4js
 - test file log with logadm rotation: does it handle that?
 - test suite:
@@ -12,11 +16,16 @@
 - a "rolling-file" stream: but specifically by time, e.g. hourly. (MarkC
   requested)
 - ringBuffer stream
-    
+- split out `bunyan` cli to a "bunyan" or "bunyan-reader" or "node-bunyan-reader"
+  as the basis for tools to consume bunyan logs. It can grow indep of node-bunyan
+  for generating the logs.
+  It would take a Bunyan log record object and be expected to emit it.
+
 
 
 # someday/maybe
 
+- what about promoting 'latency' field and making that easier?
 - `log.close` to close streams and shutdown and `this.closed`
   process.on('exit', log.close)
 - bunyan cli: -c COND args a la json
@@ -42,11 +51,7 @@
 - add option to "streams" to take the raw object, not serialized.
   It would be a good hook for people with custom needs that Bunyan doesn't
   care about (e.g. http://loggly.com/ or hook.io or whatever).
-- split out `bunyan` cli to a "bunyan" or "bunyan-reader" or "node-bunyan-reader"
-  as the basis for tools to consume bunyan logs. It can grow indep of node-bunyan
-  for generating the logs.
-  It would take a Bunyan log record object and be expected to emit it.
-- serializer `request_id` that pulls it from req? `log.info({request_id: req}, "hi")`
+- serializer `req_id` that pulls it from req? `log.info({req_id: req}, "hi")`
 - serializer support:
     - restify-server.js example -> restifyReq ? or have `req` detect that.
       That is nicer for the "use all standard ones". *Does* restify req
