@@ -107,10 +107,18 @@ function indent(s) {
   return '    ' + s.split(/\r?\n/).join('\n    ')
 }
 
-function isArray(ar) {
-  return ar instanceof Array ||
-         Array.isArray(ar) ||
-         (ar && ar !== Object.prototype && isArray(ar.__proto__));
+function objCopy(obj) {
+  if (obj === null) {
+    return null;
+  } else if (Array.isArray(obj)) {
+    return obj.slice();
+  } else {
+    var copy = {};
+    Object.keys(obj).forEach(function (k) {
+      copy[k] = obj[k];
+    });
+    return copy;
+  }
 }
 
 function printHelp() {
@@ -256,20 +264,31 @@ function handleLogLine(line, opts) {
 
   switch (opts.outputMode) {
   case OM_PAUL:
-    // Single-line msg:
-    //    [time] LEVEL: name[/component] on hostname (src): msg (extras...)
-    // Multi-line msg:
-    //    [time] LEVEL: name[/component] on hostname (src): (extras...)
-    //        msg
+    //    [time] LEVEL: name[/component] on hostname (src): msg* (extras...)
+    //        msg*
+    //        --
+    //        long and multi-line extras
+    //        ...
+    // If 'msg' is single-line, then it goes in the top line.
     // If 'req', show the request.
     // If 'res', show the response.
     // If 'err' and 'err.stack' then show that.
+    delete rec.v;
+
+    var time = rec.time;
+    delete rec.time;
+
     var nameStr = rec.name;
+    delete rec.name;
+
     if (rec.component) {
       nameStr += '/' + rec.component;
     }
-    var levelStr = (upperNameFromLevel[rec.level]
-      || "<unknown-level " + rec.level + ">");
+    delete rec.component;
+
+    var level = (upperNameFromLevel[rec.level] || "<level " + rec.level + ">");
+    delete rec.level;
+
     var src = "";
     if (rec.src && rec.src.file) {
       var s = rec.src;
@@ -279,16 +298,31 @@ function handleLogLine(line, opts) {
         src = format(" (%s:%d)", s.file, s.line);
       }
     }
+    delete rec.src;
+    
+    var hostname = rec.hostname;
+    delete rec.hostname;
+
     var extras = [];
-    if (rec.req_id) extras.push("req_id=" + rec.req_id);
-    if (rec.latency) extras.push(rec.latency + "ms");
-    extras = (extras.length ? ' (' + extras.join(', ') + ')' : '');
     var details = [];
+
+    if (rec.req_id) {
+      extras.push("req_id=" + rec.req_id);
+    }
+    delete rec.req_id;
+    
+    if (rec.latency) {
+      extras.push(rec.latency + "ms");
+    }
+    delete rec.latency;
+
     onelineMsg = ' ' + rec.msg;
     if (rec.msg.indexOf('\n') !== -1) {
       onelineMsg = '';
       details.push(indent(rec.msg));
     }
+    delete rec.msg;
+
     if (rec.req) {
       var headers = rec.req.headers;
       details.push(indent(format("%s %s HTTP/1.1\n%s", rec.req.method,
@@ -296,6 +330,8 @@ function handleLogLine(line, opts) {
         Object.keys(headers).map(
           function (h) { return h + ': ' + headers[h]}).join('\n'))));
     }
+    delete rec.req;
+
     if (rec.res) {
       var s = '';
       if (rec.res.header) {
@@ -313,15 +349,35 @@ function handleLogLine(line, opts) {
         details.push(indent(s));
       }
     }
+    delete rec.res;
+    
     if (rec.err && rec.err.stack) {
       details.push(indent(rec.err.stack))
     }
+    delete rec.err;
+
+    var leftover = Object.keys(rec);
+    for (var i = 0; i < leftover.length; i++) {
+      var key = leftover[i];
+      var value = rec[key];
+      var type = typeof(value);
+      if (typeof(value) !== 'string') {
+        value = JSON.stringify(value, null, 2);
+      }
+      if (value.indexOf('\n') !== -1 || value.length > 50) {
+        details.push(indent(key + ': ' + value))
+      } else {
+        extras.push(key + '=' + value)
+      }
+    }
+
+    extras = (extras.length ? ' (' + extras.join(', ') + ')' : '');
     details = (details.length ? details.join('\n    --\n') + '\n' : '');
     emit(format("[%s] %s: %s on %s%s:%s%s\n%s",
-      rec.time,
-      upperNameFromLevel[rec.level] || "<unknown-level " + rec.level + ">",
+      time,
+      level,
       nameStr,
-      rec.hostname || "<no-hostname>",
+      hostname || "<no-hostname>",
       src,
       onelineMsg,
       extras,
