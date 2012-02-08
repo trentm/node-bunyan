@@ -1,4 +1,3 @@
-- document streams better in the readme
 - buffered writes to increase speed: Yunong said he'd work on a patch:
     - perhaps this would be a "buffered: true" option on the stream object
     - then wrap the "stream" with a local class that handles the buffering

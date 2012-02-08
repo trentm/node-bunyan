@@ -15,6 +15,7 @@
   "keywords": ["log", "logging", "log4j", "json"],
   
   "devDependencies": {
-    "tap": "0.2.0"
+    "tap": "0.2.0",
+    "ben": "0.0.0"
   }
 }
