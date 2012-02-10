@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.6.2 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.6.1
 
 - Internal: starting jsstyle usage.
