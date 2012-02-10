@@ -17,10 +17,10 @@ var ben = require('ben');  // npm install ben
 var Logger = require('../lib/bunyan');
 
 var log = new Logger({
-  name: "svc",
+  name: 'svc',
   streams: [
     {
-      path: __dirname + "/timechild.log"
+      path: __dirname + '/timechild.log'
     },
     {
       stream: process.stdout
@@ -31,7 +31,7 @@ var log = new Logger({
   }
 });
 
-console.log("Time `log.child`:");
+console.log('Time `log.child`:');
 
 var ms = ben(1e5, function () {
   var child = log.child();
@@ -62,12 +62,11 @@ console.log(' - adding serializer and one field: %dms per iteration', ms);
 var ms = ben(1e5, function () {
   var child = log.child({
     a: 1,
-    streams: [{
-      stream: process.stderr
-    }]
+    streams: [ {stream: process.stderr} ]
   });
 });
-console.log(' - adding a (stderr) stream and one field: %dms per iteration', ms);
+console.log(' - adding a (stderr) stream and one field: %dms per iteration',
+  ms);
 
 var ms = ben(1e6, function () {
   var child = log.child({}, true);
@@ -83,4 +82,3 @@ var ms = ben(1e6, function () {
   var child = log.child({a:1, b:2}, true);
 });
 console.log(' - [fast] adding two fields: %dms per iteration', ms);
-

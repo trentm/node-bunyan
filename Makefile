@@ -4,6 +4,12 @@
 TAP := ./node_modules/.bin/tap
 
 
+#---- Files
+
+JSSTYLE_FILES := $(shell find lib test tools -name *.js)
+
+
+
 #---- Targets
 
 all:
@@ -23,3 +29,14 @@ cutarelease: versioncheck
 test: $(TAP)
 	TAP=1 $(TAP) test/*.test.js
 
+.PHONY: check-jsstyle
+check-jsstyle: $(JSSTYLE_FILES)
+	./tools/jsstyle -o indent=2,doxygen,unparenthesized-return=0,blank-after-start-comment=0 $(JSSTYLE_FILES)
+
+.PHONY: check
+check: check-jsstyle
+	@echo "Check ok."
+
+.PHONY: prepush
+prepush: check test
+	@echo "Okay to push."

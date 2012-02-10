@@ -34,7 +34,7 @@ test('ensure Logger creation options', function (t) {
     {name: 'TypeError', message: 'invalid options.streams: must be an array'},
     '"streams" must be an array');
 
-  options = {name: 'foo', serializers: "a string"};
+  options = {name: 'foo', serializers: 'a string'};
   t.throws(function () { new Logger(options); },
     {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
     '"serializers" cannot be a string');
@@ -87,5 +87,3 @@ test('ensure Logger child() options', function (t) {
 
   t.end();
 });
-
-
