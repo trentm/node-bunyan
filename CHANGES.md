@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.6.0 (not yet released)
+## bunyan 0.6.0
 
 - Add 'pid' automatic log record field.
 
