@@ -52,7 +52,7 @@ be added, including support for custom formats.
 
     $ node hi.js | ./bin/bunyan  # CLI tool to filter/pretty-print JSON logs.
     [2012-01-31T00:08:11.387Z] INFO: myapp on banana.local: hi
-    
+
     $ node hi.js | ./bin/bunyan -o json
     {
       "name": "myapp",
@@ -69,7 +69,7 @@ be added, including support for custom formats.
 By default, log output is to stdout (**stream**) and at the "info" level.
 Explicitly that looks like:
 
-    var log = new Logger({name: "myapp", stream: process.stdout, 
+    var log = new Logger({name: "myapp", stream: process.stdout,
       level: "info"});
 
 That is an abbreviated form for a single stream. **You can defined multiple
@@ -101,7 +101,7 @@ same config as its parent, plus include the "component" field.
     var log = new Logger(...);
 
     ...
-    
+
     function Wuzzle(options) {
       this.log = options.log;
       this.log.info("creating a wuzzle")
@@ -109,7 +109,7 @@ same config as its parent, plus include the "component" field.
     Wuzzle.prototype.woos = function () {
       this.log.warn("This wuzzle is woosey.")
     }
-    
+
     var wuzzle = new Wuzzle({log: log.child({component: "wuzzle"})});
     wuzzle.woos();
     log.info("done with the wuzzle")
@@ -225,14 +225,14 @@ The lowercase level names are aliases supported in the API.
 Here is the API for changing levels in an existing logger:
 
     log.level() -> INFO   // gets current level (lowest level of all streams)
- 
+
     log.level(INFO)       // set all streams to level INFO
     log.level("info")     // set all streams to level INFO
 
     log.levels() -> [DEBUG, INFO]   // get array of levels of all streams
     log.levels(0) -> DEBUG          // get level of stream at index 0
     log.levels("foo")               // get level of stream with name "foo"
- 
+
     log.levels(0, INFO)             // set level of stream 0 to INFO
     log.levels(0, "info")           // can use "info" et al aliases
     log.levels("foo", WARN)         // set stream named "foo" to WARN
@@ -256,13 +256,14 @@ incorrect signature) is always a bug in Bunyan.**
 
 A typical Bunyan log record looks like this:
 
-    {"name":"myserver","hostname":"banana.local","req":{"method":"GET","url":"/path?q=1#anchor","headers":{"x-hi":"Mom","connection":"close"}},"level":3,"msg":"start request","time":"2012-02-03T19:02:46.178Z","v":0}
+    {"name":"myserver","hostname":"banana.local","pid":123,"req":{"method":"GET","url":"/path?q=1#anchor","headers":{"x-hi":"Mom","connection":"close"}},"level":3,"msg":"start request","time":"2012-02-03T19:02:46.178Z","v":0}
 
 Pretty-printed:
 
     {
       "name": "myserver",
       "hostname": "banana.local",
+      "pid": 123,
       "req": {
         "method": "GET",
         "url": "/path?q=1#anchor",
@@ -296,6 +297,7 @@ Core fields:
 - `hostname`: Required. String. Provided or determined at Logger creation.
   You can specify your hostname at Logger creation or it will be retrieved
   vi `os.hostname()`.
+- `pid`: Required. Integer. Filled in automatically at Logger creation.
 - `time`: Required. String. Added by Bunion. Can be overriden.
   The date and time of the event in [ISO 8601
   Extended Format](http://en.wikipedia.org/wiki/ISO_8601) format and in UTC,
@@ -317,7 +319,7 @@ Recommended/Best Practice Fields:
 
 -   `err`: Object. A caught JS exception. Log that thing with `log.info(err)`
     to get:
-  
+
         ...
         "err": {
           "message": "boom",
@@ -340,7 +342,7 @@ Recommended/Best Practice Fields:
 
 - `req`: An HTTP server request. Bunyan provides `Logger.stdSerializers.req`
   to serialize a request with a suggested set of keys. Example:
-  
+
         {
           "method": "GET",
           "url": "/path?q=1#anchor",
@@ -353,7 +355,7 @@ Recommended/Best Practice Fields:
         }
 
 - `res`: An HTTP server response. Bunyan provides `Logger.stdSerializers.res`
-  to serialize a response with a suggested set of keys. Example: 
+  to serialize a response with a suggested set of keys. Example:
 
         {
           "statusCode": 200,
@@ -446,5 +448,3 @@ See "TODO.md", but basically:
 - Syslog support.
 
 - Some speed comparisons with others to get a feel for Bunyan's speed.
-
-

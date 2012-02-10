@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = "0.5.4";
+var VERSION = "0.6.0";
 
 var util = require('util');
 var pathlib = require('path');
@@ -77,7 +77,7 @@ if (!format) {
       }
       return objects.join(' ');
     }
-  
+
     var i = 1;
     var args = arguments;
     var len = args.length;
@@ -164,7 +164,7 @@ function parseArgv(argv) {
     outputMode: OM_PAUL,
     jsonIndent: 2
   };
-  
+
   // Turn '-iH' into '-i -H', except for argument-accepting options.
   var args = argv.slice(2);  // drop ['node', 'scriptname']
   var newArgs = [];
@@ -231,7 +231,7 @@ function parseArgv(argv) {
         }
         parsed.args.push(arg);
         break;
-    } 
+    }
   }
   //TODO: '--' handling and error on a first arg that looks like an option.
 
@@ -264,7 +264,7 @@ function handleLogLine(line, opts) {
 
   switch (opts.outputMode) {
   case OM_PAUL:
-    //    [time] LEVEL: name[/component] on hostname (src): msg* (extras...)
+    //    [time] LEVEL: name[/component]/pid on hostname (src): msg* (extras...)
     //        msg*
     //        --
     //        long and multi-line extras
@@ -286,6 +286,9 @@ function handleLogLine(line, opts) {
     }
     delete rec.component;
 
+    nameStr += '/' + rec.pid;
+    delete rec.pid;
+
     var level = (upperNameFromLevel[rec.level] || "<level " + rec.level + ">");
     delete rec.level;
 
@@ -299,7 +302,7 @@ function handleLogLine(line, opts) {
       }
     }
     delete rec.src;
-    
+
     var hostname = rec.hostname;
     delete rec.hostname;
 
@@ -310,7 +313,7 @@ function handleLogLine(line, opts) {
       extras.push("req_id=" + rec.req_id);
     }
     delete rec.req_id;
-    
+
     if (rec.latency) {
       extras.push(rec.latency + "ms");
     }
@@ -367,7 +370,7 @@ function handleLogLine(line, opts) {
       }
     }
     delete rec.res;
-    
+
     if (rec.err && rec.err.stack) {
       details.push(indent(rec.err.stack))
     }
@@ -482,7 +485,7 @@ function main(argv) {
     util.puts("bunyan " + getVersion());
     return;
   }
-  
+
   var leftover = "";  // Left-over partial line from last chunk.
   var stdin = process.openStdin();
   stdin.setEncoding('utf8');
@@ -493,7 +496,7 @@ function main(argv) {
       leftover += lines[0];
       return;
     }
-    
+
     if (length > 1) {
       handleLogLine(leftover + lines[0], opts);
     }
@@ -503,7 +506,7 @@ function main(argv) {
       handleLogLine(lines[i], opts);
     }
   });
-  
+
   stdin.on('end', function () {
     if (leftover) {
       handleLogLine(leftover, opts);
@@ -525,6 +528,6 @@ if (require.main === module) {
       /* pass */
     };
   }
-  
+
   main(process.argv);
 }
