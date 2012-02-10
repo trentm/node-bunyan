@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.6.1 (not yet released)
+## bunyan 0.6.1
 
 - Internal: starting jsstyle usage.
 - Internal: add .npmignore. Previous packages had reams of bunyan crud in them.
