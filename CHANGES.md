@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.6.2 (not yet released)
+## bunyan 0.6.2
 
 - Fix/guard against unintended inclusion of some files in npm published package
   due to <https://github.com/isaacs/npm/issues/2144>
