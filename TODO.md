@@ -1,3 +1,4 @@
+- finish jsstyle work
 - [Yuonong] buffered writes to increase speed:
     - I'd start with a tools/timeoutput.js for some numbers to compare
       before/after. Sustained high output to a file.
@@ -26,6 +27,7 @@
 
 # someday/maybe
 
+- remove "rm -rf tmp" when this fixed: <https://github.com/isaacs/npm/issues/2144>
 - what about promoting 'latency' field and making that easier?
 - `log.close` to close streams and shutdown and `this.closed`
   process.on('exit', log.close)
