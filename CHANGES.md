@@ -2,7 +2,11 @@
 
 ## bunyan 0.6.3 (not yet released)
 
-(nothing yet)
+- `bunyan` cli output: clarify extra fields with quoting if empty or have
+  spaces. E.g. 'cmd' and 'stderr' in the following:
+
+        [2012-02-12T00:30:43.736Z] INFO: mo-docs/43194 on banana.local: buildDocs results (req_id=185edca2-2886-43dc-911c-fe41c09ec0f5, route=PutDocset, error=null, stderr="", cmd="make docs")
+
 
 ## bunyan 0.6.2
 

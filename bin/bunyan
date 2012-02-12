@@ -381,11 +381,16 @@ function handleLogLine(line, opts) {
       var key = leftover[i];
       var value = rec[key];
       var type = typeof(value);
+      var stringified = false;
       if (typeof(value) !== 'string') {
         value = JSON.stringify(value, null, 2);
+        stringified = true;
       }
       if (value.indexOf('\n') !== -1 || value.length > 50) {
         details.push(indent(key + ': ' + value))
+      } else if (!stringified && (value.indexOf(' ') != -1 ||
+                                  value.length === 0)) {
+        extras.push(key + '=' + JSON.stringify(value))
       } else {
         extras.push(key + '=' + value)
       }
