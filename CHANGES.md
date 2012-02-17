@@ -2,6 +2,15 @@
 
 ## bunyan 0.6.3 (not yet released)
 
+- Allow an optional `msg` and arguments to the `log.info(<Error> err)` logging
+  form. For example, before:
+
+        log.debug(my_error_instance)            // good
+        log.debug(my_error_instance, "boom!")   // wasn't allowed
+
+  Now the latter is allowed if you want to expliciting set the log msg. Of course
+  this applies to all the `log.{trace|debug|info...}()` methods.
+
 - `bunyan` cli output: clarify extra fields with quoting if empty or have
   spaces. E.g. 'cmd' and 'stderr' in the following:
 
