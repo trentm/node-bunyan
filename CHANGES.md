@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.6.3 (not yet released)
+## bunyan 0.6.3
 
 - Allow an optional `msg` and arguments to the `log.info(<Error> err)` logging
   form. For example, before:
