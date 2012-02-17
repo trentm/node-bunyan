@@ -35,13 +35,17 @@ format version) are added for you.
 The full `log.{trace|debug|...|fatal}(...)` API is:
 
     log.info();     // Returns a boolean: is the "info" level enabled?
-    log.info(err);  // Log an `Error` instance, adds "err" key with exception details
-                    // (including the stack) and sets "msg" to the exception message.
-                    // A special case, b/c logging errors should be easy.
-    log.info('hi'); // Log a simple string message.
+
+    log.info('hi');                     // Log a simple string message.
     log.info('hi %s', bob, anotherVar); // Uses `util.format` for msg formatting.
+
     log.info({foo: 'bar'}, 'hi');       // Adds "foo" field to log record.
 
+    log.info(err);  // Special case to log an `Error` instance, adds "err"
+                    // key with exception details (including the stack) and
+                    // sets "msg" to the exception message.
+    log.info(err, 'more on this: %s', more);
+                    // ... or you can specify the "msg".
 
 ## bunyan tool
 
