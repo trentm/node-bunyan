@@ -9,8 +9,8 @@ Also: log4j is way more than you need.
 
 # Current Status
 
-Basic functionality there. Still a fair amount of planned work... most
-importantly the clarifying of required and suggested fields.
+Basic functionality there. Still a fair amount of planned work, but I'm using
+it for some production services.
 
 Currently supports node 0.4+, but I'll probably make the jump to node 0.6+ as a
 base soonish.
