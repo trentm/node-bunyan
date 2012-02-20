@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.6.5 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.6.4
 
 - [issue #5] Fix `log.info() -> boolean` to work properly. Previous all were
