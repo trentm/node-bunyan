@@ -1,5 +1,11 @@
 # bunyan Changelog
 
+## bunyan 0.6.4 (not yet released)
+
+- [issue #5] Fix `log.info() -> boolean` to work properly. Previous all were
+  returning false. Ditto all trace/debug/.../fatal methods.
+
+
 ## bunyan 0.6.3
 
 - Allow an optional `msg` and arguments to the `log.info(<Error> err)` logging
