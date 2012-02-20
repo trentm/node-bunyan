@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.6.4 (not yet released)
+## bunyan 0.6.4
 
 - [issue #5] Fix `log.info() -> boolean` to work properly. Previous all were
   returning false. Ditto all trace/debug/.../fatal methods.
