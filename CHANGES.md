@@ -2,7 +2,10 @@
 
 ## bunyan 0.6.5 (not yet released)
 
-(nothing yet)
+- Add 'level' field to log record before custom fields for that record. This just
+  means that the raw record JSON will show the 'level' field earlier, which is a bit
+  nicer for raw reading.
+
 
 ## bunyan 0.6.4
 
