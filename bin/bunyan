@@ -137,6 +137,7 @@ function printHelp() {
   util.puts("");
   util.puts("  --color       Colorize output. Defaults to try if output");
   util.puts("                stream is a TTY.");
+  util.puts("  --no-color    Force no coloring (e.g. terminal doesn't support it)");
   util.puts("  -o, --output MODE");
   util.puts("                Specify an output mode/format. One of");
   util.puts("                  paul: (the default) pretty")
@@ -209,6 +210,9 @@ function parseArgv(argv) {
         break;
       case "--color":
         parsed.color = true;
+        break;
+      case "--no-color":
+        parsed.color = false;
         break;
       case "-o":
       case "--output":

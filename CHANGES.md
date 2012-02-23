@@ -4,10 +4,11 @@
 
 - ANSI coloring output from `bunyan` CLI tool (for the default output mode/style).
   Also add the '--color' option to force coloring if the output stream is not
-  a TTY, e.g. `cat my.log | bunyan --color | less -R`.
-- Add 'level' field to log record before custom fields for that record. This just
-  means that the raw record JSON will show the 'level' field earlier, which is a bit
-  nicer for raw reading.
+  a TTY, e.g. `cat my.log | bunyan --color | less -R`. Use `--no-color` to
+  disable coloring, e.g. if your terminal doesn't support ANSI codes.
+- Add 'level' field to log record before custom fields for that record. This
+  just means that the raw record JSON will show the 'level' field earlier,
+  which is a bit nicer for raw reading.
 
 
 ## bunyan 0.6.4
@@ -72,7 +73,7 @@
   This will prevent `log.info` et al throwing on record fields that cannot be
   represented as JSON. An error will be printed on stderr and a clipped log
   record emitted with a 'bunyanMsg' key including error details. E.g.:
-  
+
         bunyan: ERROR: could not stringify log record from /Users/trentm/tm/node-bunyan/examples/unstringifyable.js:12: TypeError: Converting circular structure to JSON
         {
           "name": "foo",
@@ -80,8 +81,8 @@
           "bunyanMsg": "bunyan: ERROR: could not stringify log record from /Users/trentm/tm/node-bunyan/examples/unstringifyable.js:12: TypeError: Converting circular structure to JSON",
         ...
 
-  Some timing shows this does effect log speed: 
-  
+  Some timing shows this does effect log speed:
+
         $ node tools/timeguard.js     # before
         Time try/catch-guard on JSON.stringify:
          - log.info:  0.07365ms per iteration
@@ -131,7 +132,7 @@
 
 - `log.child(options[, simple])` Added `simple` boolean arg. Set `true` to
   assert that options only add fields (no config changes). Results in a 10x
-  speed increase in child creation. See "tools/timechild.js". On my Mac, 
+  speed increase in child creation. See "tools/timechild.js". On my Mac,
   "fast child" creation takes about 0.001ms. IOW, if your app is dishing
   10,000 req/s, then creating a log child for each request will take
   about 1% of the request time.
@@ -155,4 +156,3 @@
 ## bunyan 0.1.0
 
 First release.
-
