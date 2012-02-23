@@ -48,10 +48,13 @@ var levelFromName = {
 };
 var nameFromLevel = {};
 var upperNameFromLevel = {};
+var upperPaddedNameFromLevel = {};
 Object.keys(levelFromName).forEach(function (name) {
   var lvl = levelFromName[name];
   nameFromLevel[lvl] = name;
   upperNameFromLevel[lvl] = name.toUpperCase();
+  upperPaddedNameFromLevel[lvl] = (
+    name.length === 4 ? ' ' : '') + name.toUpperCase();
 });
 
 
@@ -132,6 +135,8 @@ function printHelp() {
   util.puts("  -h, --help    print this help info and exit");
   util.puts("  --version     print version of this command and exit");
   util.puts("");
+  util.puts("  --color       Colorize output. Defaults to try if output");
+  util.puts("                stream is a TTY.");
   util.puts("  -o, --output MODE");
   util.puts("                Specify an output mode/format. One of");
   util.puts("                  paul: (the default) pretty")
@@ -160,7 +165,7 @@ function parseArgv(argv) {
   var parsed = {
     args: [],
     help: false,
-    quiet: false,
+    color: process.stdout.isTTY,
     outputMode: OM_PAUL,
     jsonIndent: 2
   };
@@ -202,9 +207,8 @@ function parseArgv(argv) {
       case "--version":
         parsed.version = true;
         break;
-      case "-q":
-      case "--quiet":
-        parsed.quiet = true;
+      case "--color":
+        parsed.color = true;
         break;
       case "-o":
       case "--output":
@@ -244,10 +248,45 @@ function isInteger(s) {
 }
 
 
+// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+// Suggested colors (some are unreadable in common cases):
+// - Good: cyan, yellow (limited use), grey, bold, green, magenta, red
+// - Bad: blue (not visible on cmd.exe)
+var colors = {
+  'bold' : [1, 22],
+  'italic' : [3, 23],
+  'underline' : [4, 24],
+  'inverse' : [7, 27],
+  'white' : [37, 39],
+  'grey' : [90, 39],
+  'black' : [30, 39],
+  'blue' : [34, 39],
+  'cyan' : [36, 39],
+  'green' : [32, 39],
+  'magenta' : [35, 39],
+  'red' : [31, 39],
+  'yellow' : [33, 39]
+};
+
+function stylizeWithColor(str, color) {
+  var codes = colors[color];
+  if (codes) {
+    return '\033[' + codes[0] + 'm' + str +
+           '\033[' + codes[1] + 'm';
+  } else {
+    return str;
+  }
+}
+
+function stylizeWithoutColor(str, color) {
+  return str;
+}
+
+
 /**
  * Print out a single result, considering input options.
  */
-function handleLogLine(line, opts) {
+function handleLogLine(line, opts, stylize) {
   // Handle non-JSON lines.
   var rec;
   if (!line) {
@@ -275,7 +314,7 @@ function handleLogLine(line, opts) {
     // If 'err' and 'err.stack' then show that.
     delete rec.v;
 
-    var time = rec.time;
+    var time = stylize('[' + rec.time + ']', 'XXX');
     delete rec.time;
 
     var nameStr = rec.name;
@@ -289,7 +328,18 @@ function handleLogLine(line, opts) {
     nameStr += '/' + rec.pid;
     delete rec.pid;
 
-    var level = (upperNameFromLevel[rec.level] || "<level " + rec.level + ">");
+    var level = (upperPaddedNameFromLevel[rec.level] || "LVL" + rec.level);
+    if (opts.color) {
+      var colorFromLevel = {
+        10: 'grey',     // TRACE
+        20: 'grey',     // DEBUG
+        30: 'cyan',     // INFO
+        40: 'magenta',  // WARN
+        50: 'red',      // ERROR
+        60: 'inverse',  // FATAL
+      }
+      level = stylize(level, colorFromLevel[rec.level])
+    }
     delete rec.level;
 
     var src = "";
@@ -319,10 +369,12 @@ function handleLogLine(line, opts) {
     }
     delete rec.latency;
 
-    onelineMsg = ' ' + rec.msg;
+    var onelineMsg;
     if (rec.msg.indexOf('\n') !== -1) {
       onelineMsg = '';
-      details.push(indent(rec.msg));
+      details.push(indent(stylize(rec.msg, 'cyan')));
+    } else {
+      onelineMsg = ' ' + stylize(rec.msg, 'cyan');
     }
     delete rec.msg;
 
@@ -396,9 +448,11 @@ function handleLogLine(line, opts) {
       }
     }
 
-    extras = (extras.length ? ' (' + extras.join(', ') + ')' : '');
-    details = (details.length ? details.join('\n    --\n') + '\n' : '');
-    emit(format("[%s] %s: %s on %s%s:%s%s\n%s",
+    extras = stylize(
+      (extras.length ? ' (' + extras.join(', ') + ')' : ''), 'grey');
+    details = stylize(
+      (details.length ? details.join('\n    --\n') + '\n' : ''), 'grey');
+    emit(format("%s %s: %s on %s%s:%s%s\n%s",
       time,
       level,
       nameStr,
@@ -419,8 +473,7 @@ function handleLogLine(line, opts) {
 
   case OM_SIMPLE:
     // <http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/SimpleLayout.html>
-    emit(format("%s - %s",
-      upperNameFromLevel[rec.level] || "???",
+    emit(format("%s - %s", upperNameFromLevel[rec.level] || "LVL" + rec.level,
       rec.msg));
     break;
   default:
@@ -490,6 +543,7 @@ function main(argv) {
     util.puts("bunyan " + getVersion());
     return;
   }
+  var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
 
   var leftover = "";  // Left-over partial line from last chunk.
   var stdin = process.openStdin();
@@ -503,18 +557,18 @@ function main(argv) {
     }
 
     if (length > 1) {
-      handleLogLine(leftover + lines[0], opts);
+      handleLogLine(leftover + lines[0], opts, stylize);
     }
     leftover = lines.pop();
     length -= 1;
     for (var i=1; i < length; i++) {
-      handleLogLine(lines[i], opts);
+      handleLogLine(lines[i], opts, stylize);
     }
   });
 
   stdin.on('end', function () {
     if (leftover) {
-      handleLogLine(leftover, opts);
+      handleLogLine(leftover, opts, stylize);
       leftover = '';
     }
   });

@@ -2,6 +2,9 @@
 
 ## bunyan 0.6.5 (not yet released)
 
+- ANSI coloring output from `bunyan` CLI tool (for the default output mode/style).
+  Also add the '--color' option to force coloring if the output stream is not
+  a TTY, e.g. `cat my.log | bunyan --color | less -R`.
 - Add 'level' field to log record before custom fields for that record. This just
   means that the raw record JSON will show the 'level' field earlier, which is a bit
   nicer for raw reading.
