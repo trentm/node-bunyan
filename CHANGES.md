@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.6.5 (not yet released)
+## bunyan 0.6.5
 
 - ANSI coloring output from `bunyan` CLI tool (for the default output mode/style).
   Also add the '--color' option to force coloring if the output stream is not
