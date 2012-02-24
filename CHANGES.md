@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.6.7 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.6.6
 
 - Add support to the `bunyan` CLI taking log file path args, `bunyan foo.log`,
