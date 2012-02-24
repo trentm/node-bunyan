@@ -11,6 +11,7 @@ var util = require('util');
 var pathlib = require('path');
 var vm = require('vm');
 var http = require('http');
+var fs = require('fs');
 var warn = console.warn;
 
 
@@ -126,7 +127,7 @@ function objCopy(obj) {
 
 function printHelp() {
   util.puts("Usage:");
-  util.puts("  cat some-json-log-file.log | bunyan [OPTIONS]");
+  util.puts("  bunyan [OPTIONS] [FILE ...]");
   util.puts("");
   util.puts("Pipe in your JSON log file content (e.g. bunyan logs) for nicer ");
   util.puts("output");
@@ -146,7 +147,7 @@ function printHelp() {
   util.puts("                  inspect: node.js `util.inspect` output");
   util.puts("  -j            shortcut for `-o json`");
   util.puts("");
-  util.puts("See <https://github.com/trentm/json> for more complete docs.");
+  util.puts("See <https://github.com/trentm/node-bunyan> for more complete docs.");
 }
 
 
@@ -273,6 +274,8 @@ var colors = {
 };
 
 function stylizeWithColor(str, color) {
+  if (!str)
+    return '';
   var codes = colors[color];
   if (codes) {
     return '\033[' + codes[0] + 'm' + str +
@@ -284,6 +287,25 @@ function stylizeWithColor(str, color) {
 
 function stylizeWithoutColor(str, color) {
   return str;
+}
+
+
+/**
+ * Is this a valid Bunyna log record.
+ */
+function isValidRecord(rec) {
+  if (rec.v == null ||
+      rec.level == null ||
+      rec.name == null ||
+      rec.hostname == null ||
+      rec.pid == null ||
+      rec.time == null ||
+      rec.msg == null) {
+    // Not valid Bunyan log.
+    return false;
+  } else {
+    return true;
+  }
 }
 
 
@@ -316,6 +338,10 @@ function handleLogLine(line, opts, stylize) {
     // If 'req', show the request.
     // If 'res', show the response.
     // If 'err' and 'err.stack' then show that.
+    if (!isValidRecord(rec)) {
+      return emit(line + '\n');
+    }
+
     delete rec.v;
 
     var time = stylize('[' + rec.time + ']', 'XXX');
@@ -477,7 +503,10 @@ function handleLogLine(line, opts, stylize) {
 
   case OM_SIMPLE:
     // <http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/SimpleLayout.html>
-    emit(format("%s - %s", upperNameFromLevel[rec.level] || "LVL" + rec.level,
+    if (!isValidRecord(rec)) {
+      return emit(line + '\n');
+    }
+    emit(format("%s - %s\n", upperNameFromLevel[rec.level] || "LVL" + rec.level,
       rec.msg));
     break;
   default:
@@ -527,30 +556,17 @@ function drainStdoutAndExit(code) {
 }
 
 
-
-//---- mainline
-
-function main(argv) {
-  var opts;
-  try {
-    opts = parseArgv(argv);
-  } catch (e) {
-    warn("json: error: %s", e.message)
-    return drainStdoutAndExit(1);
-  }
-  //warn(opts);
-  if (opts.help) {
-    printHelp();
-    return;
-  }
-  if (opts.version) {
-    util.puts("bunyan " + getVersion());
-    return;
-  }
-  var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
-
+/**
+ * Process all input from stdin.
+ *
+ * @params opts {Object} Bunyan options object.
+ * @param stylize {Function} Output stylize function to use.
+ * @param callback {Function} `function ()`
+ */
+function processStdin(opts, stylize, callback) {
   var leftover = "";  // Left-over partial line from last chunk.
-  var stdin = process.openStdin();
+  var stdin = process.stdin;
+  stdin.resume();
   stdin.setEncoding('utf8');
   stdin.on('data', function (chunk) {
     var lines = chunk.split(/\r\n|\n/);
@@ -569,21 +585,144 @@ function main(argv) {
       handleLogLine(lines[i], opts, stylize);
     }
   });
-
   stdin.on('end', function () {
     if (leftover) {
       handleLogLine(leftover, opts, stylize);
       leftover = '';
     }
+    callback();
   });
+}
+
+
+/**
+ * Process all input from the given log file.
+ *
+ * @param file {String} Log file path to process.
+ * @params opts {Object} Bunyan options object.
+ * @param stylize {Function} Output stylize function to use.
+ * @param callback {Function} `function ()`
+ */
+function processFile(file, opts, stylize, callback) {
+  var stream = fs.createReadStream(file, {encoding: 'utf8'});
+
+  stream.on('error', function (err) {
+    callback(err);
+  })
+
+  var leftover = '';  // Left-over partial line from last chunk.
+  stream.on('data', function (chunk) {
+    var lines = chunk.split(/\r\n|\n/);
+    var length = lines.length;
+    if (length === 1) {
+      leftover += lines[0];
+      return;
+    }
+
+    if (length > 1) {
+      handleLogLine(leftover + lines[0], opts, stylize);
+    }
+    leftover = lines.pop();
+    length -= 1;
+    for (var i=1; i < length; i++) {
+      handleLogLine(lines[i], opts, stylize);
+    }
+  });
+
+  stream.on('end', function () {
+    if (leftover) {
+      handleLogLine(leftover, opts, stylize);
+      leftover = '';
+    }
+    callback();
+  });
+}
+
+
+/**
+ * From node async module.
+ */
+function asyncForEachSeries(arr, iterator, callback) {
+    if (!arr.length) {
+        return callback();
+    }
+    var completed = 0;
+    var iterate = function () {
+        iterator(arr[completed], function (err) {
+            if (err) {
+                callback(err);
+                callback = function () {};
+            }
+            else {
+                completed += 1;
+                if (completed === arr.length) {
+                    callback();
+                }
+                else {
+                    iterate();
+                }
+            }
+        });
+    };
+    iterate();
+};
+
+
+
+//---- mainline
+
+function main(argv) {
+  var opts;
+  try {
+    opts = parseArgv(argv);
+  } catch (e) {
+    warn("bunyan: error: %s", e.message)
+    return drainStdoutAndExit(1);
+  }
+  if (opts.help) {
+    printHelp();
+    return;
+  }
+  if (opts.version) {
+    util.puts("bunyan " + getVersion());
+    return;
+  }
+  var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
+
+  var retval = 0;
+  if (opts.args.length > 0) {
+    var files = opts.args;
+    var i = 0;
+    asyncForEachSeries(files,
+      function (file, next) {
+        processFile(file, opts, stylize, function (err) {
+          if (err) {
+            warn('bunyan: %s', err.message);
+            retval += 1;
+          }
+          next();
+        });
+      },
+      function (err) {
+        if (err) {
+          warn("bunyan: unexpected error: %s", err.stack || err);
+          return drainStdoutAndExit(1);
+        }
+        process.exit(retval);
+      }
+    );
+  } else {
+    processStdin(opts, stylize, function () {
+      process.exit(retval);
+    })
+  }
 }
 
 if (require.main === module) {
   // HACK guard for <https://github.com/trentm/json/issues/24>.
   // We override the `process.stdout.end` guard that core node.js puts in
   // place. The real fix is that `.end()` shouldn't be called on stdout
-  // in node core. Hopefully node v0.6.9 will fix that. Only guard
-  // for v0.6.0..v0.6.8.
+  // in node core. Node v0.6.9 fixes that. Only guard for v0.6.0..v0.6.8.
   var nodeVer = process.versions.node.split('.').map(Number);
   if ([0,6,0] <= nodeVer && nodeVer <= [0,6,8]) {
     var stdout = process.stdout;

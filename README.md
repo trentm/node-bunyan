@@ -118,7 +118,7 @@ same config as its parent, plus include the "component" field.
     wuzzle.woos();
     log.info("done with the wuzzle")
 
-* * *
+### A little log.child hack.
 
 An example and a hack: The [node-restify](https://github.com/mcavage/node-restify)
 framework integrates bunyan. One feature is that each restify request handler
@@ -129,12 +129,12 @@ includes a `req.log` logger that is:
 Apps using restify can then use `req.log` and have all such log records
 include the unique request id (as "req_id"). Handy.
 
-*What is that `true`?* It is a small bunyan hack by which you can assert that
-you're just adding simple fields to the child logger. This makes `log.child`
-10x faster and, hence, never a worry for slowing down HTTP request handling.
-See the changelog for node-bunyan 0.3.0 for details.
+The hack is that `, true`. It is a small bunyan performance hack by which you
+can assert that you're just adding simple fields to the child logger -- i.e.
+not special fields like "level", "serializers", "streams". This makes
+`log.child` 10x faster and, hence, never a worry for slowing down HTTP
+request handling. See the changelog for node-bunyan 0.3.0 for details.
 
-* * *
 
 ## serializers
 
@@ -181,8 +181,8 @@ in your log record will be replaced with a short error message.*
 
 ## src
 
-The **call source file, line and function** (if not at the global level) can
-be added to log records by using the `src: true` config option:
+The **source file, line and function of the log call site** can be added to
+log records by using the `src: true` config option:
 
     var log = new Logger({src: true, ...});
 
@@ -209,6 +209,8 @@ in production.**
 
 # Levels
 
+The log levels in bunyan are:
+
 - "fatal" (60): the service/app is going to stop or become unusable now
 - "error" (50): fatal for a particular request, but the service/app continues servicing other requests
 - "warn" (40): a note on something that should probably be looked at by an operator
@@ -216,13 +218,13 @@ in production.**
 - "debug" (20): anything else, i.e. too verbose to be included in "info" level.
 - "trace" (10): logging from external libraries used by your app
 
-"debug" should be used sparingly. Information that will be useful to debug
-errors *post mortem* should usually be included in "info" messages if it's
-generally relevant or else with the corresponding "error" event. Don't rely on
-spewing mostly irrelevant debug messages all the time and sifting through them
-when an error occurs.
+General level usage suggestions: "debug" should be used sparingly.
+Information that will be useful to debug errors *post mortem* should usually
+be included in "info" messages if it's generally relevant or else with the
+corresponding "error" event. Don't rely on spewing mostly irrelevant debug
+messages all the time and sifting through them when an error occurs.
 
-Integers are used for the actual level values (1 for "trace", ..., 6 for
+Integers are used for the actual level values (10 for "trace", ..., 60 for
 "fatal") and constants are defined for the (Logger.TRACE ... Logger.DEBUG).
 The lowercase level names are aliases supported in the API.
 

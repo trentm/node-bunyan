@@ -2,7 +2,12 @@
 
 ## bunyan 0.6.6 (not yet released)
 
-(nothing yet)
+- Add support to the `bunyan` CLI taking log file path args, `bunyan foo.log`,
+  in addition to the usual `cat foo.log | bunyan`.
+- Improve reliability of the default output formatting of the `bunyan` CLI.
+  Before it could blow up processing log records missing some expected
+  fields.
+
 
 ## bunyan 0.6.5
 
