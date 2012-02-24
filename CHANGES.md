@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.6.8 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.6.7
 
 - [issue #6] Fix bleeding 'type' var to global namespace. (Thanks Mike!)
