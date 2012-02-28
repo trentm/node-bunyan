@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.6.8 (not yet released)
+## bunyan 0.6.8
 
 - Fix bad bug in `log.child({...}, true);` where the added child fields **would
   be added to the parent's fields**. This bug only existed for the "fast child"
