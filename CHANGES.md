@@ -2,7 +2,9 @@
 
 ## bunyan 0.6.9 (not yet released)
 
-(nothing yet)
+- Tweak `bunyan` CLI default output to still show an "err" field if it doesn't
+  have a "stack" attribute.
+
 
 ## bunyan 0.6.8
 

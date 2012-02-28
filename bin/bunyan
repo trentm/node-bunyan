@@ -455,8 +455,8 @@ function handleLogLine(line, opts, stylize) {
 
     if (rec.err && rec.err.stack) {
       details.push(indent(rec.err.stack))
+      delete rec.err;
     }
-    delete rec.err;
 
     var leftover = Object.keys(rec);
     for (var i = 0; i < leftover.length; i++) {
