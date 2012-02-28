@@ -2,7 +2,12 @@
 
 ## bunyan 0.6.8 (not yet released)
 
-(nothing yet)
+- Fix bad bug in `log.child({...}, true);` where the added child fields **would
+  be added to the parent's fields**. This bug only existed for the "fast child"
+  path (that second `true` argument). A side-effect of fixing this is that
+  the "fast child" path is only 5 times as fast as the regular `log.child`,
+  instead of 10 times faster.
+
 
 ## bunyan 0.6.7
 
