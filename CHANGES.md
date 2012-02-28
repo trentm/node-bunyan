@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## bunyan 0.6.9 (not yet released)
+
+(nothing yet)
+
 ## bunyan 0.6.8
 
 - Fix bad bug in `log.child({...}, true);` where the added child fields **would
