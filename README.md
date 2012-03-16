@@ -139,7 +139,7 @@ request handling. See the changelog for node-bunyan 0.3.0 for details.
 ## serializers
 
 Bunyan has a concept of **"serializers" to produce a JSON-able object from a
-JavaScript object**, so your can easily do the following:
+JavaScript object**, so you can easily do the following:
 
     log.info({req: <request object>}, "something about handling this request");
 
