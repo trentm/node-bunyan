@@ -124,22 +124,14 @@ same config as its parent, plus include the "component" field.
     wuzzle.woos();
     log.info("done with the wuzzle")
 
-### A little log.child hack.
-
-An example and a hack: The [node-restify](https://github.com/mcavage/node-restify)
-framework integrates bunyan. One feature is that each restify request handler
-includes a `req.log` logger that is:
+The [node-restify](https://github.com/mcavage/node-restify)
+framework integrates bunyan. One feature of its integration, is that each
+restify request handler includes a `req.log` logger that is:
 
     log.child({req_id: <unique request id>}, true)
 
 Apps using restify can then use `req.log` and have all such log records
 include the unique request id (as "req_id"). Handy.
-
-The hack is that `, true`. It is a small bunyan performance hack by which you
-can assert that you're just adding simple fields to the child logger -- i.e.
-not special fields like "level", "serializers", "streams". This makes
-`log.child` 10x faster and, hence, never a worry for slowing down HTTP
-request handling. See the changelog for node-bunyan 0.3.0 for details.
 
 
 ## serializers
