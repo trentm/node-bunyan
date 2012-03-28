@@ -23,7 +23,7 @@ versioncheck:
 
 .PHONY: cutarelease
 cutarelease: versioncheck
-	[[ ! -d tmp ]]   # No 'tmp/' allowed: https://github.com/isaacs/npm/issues/2144
+	[[ ! -d tmp ]]   # No 'tmp/' allowed: https://github.com/isaacs/npm/issues/2144 (fixed in npm 1.1.12 / node 0.6.14 I think)
 	./tools/cutarelease.py -p bunyan -f package.json -f lib/bunyan.js -f bin/bunyan
 
 .PHONY: test

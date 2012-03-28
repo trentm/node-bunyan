@@ -16,6 +16,11 @@ Currently supports node 0.4+, but I'll probably make the jump to node 0.6+ as a
 base soonish.
 
 
+# Installation
+
+    npm install bunyan
+
+
 # Usage
 
 **The usual.** All loggers must provide a "name". This is somewhat akin
@@ -386,7 +391,7 @@ to a log4j Appender). Ultimately Bunyan uses a
 [Writable Stream](http://nodejs.org/docs/latest/api/all.html#writable_Stream)
 interface, but there are some additional attributes used to create and
 manage the stream. A Bunyan Logger instance has one or more streams.
-General streams are specified with the "streams" option:
+In general streams are specified with the "streams" option:
 
     var Logger = require('bunyan');
     var log = new Logger({
