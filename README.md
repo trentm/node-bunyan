@@ -19,6 +19,8 @@ base soonish.
 Follow <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
 for updates to Bunyan.
 
+See also: [Bunyan for Bash](https://github.com/trevoro/bash-bunyan).
+
 
 # Installation
 
