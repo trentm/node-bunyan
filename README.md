@@ -41,7 +41,7 @@ to log4j logger "name", but Bunyan doesn't do hierarchical logger names.
 format version) are added for you.
 
     $ node hi.js
-    {"name":"myapp","hostname":"banana.local","level":2,"msg":"hi","time":"2012-01-31T00:07:44.216Z","v":0}
+    {"name":"myapp","hostname":"banana.local","pid":123,"level":2,"msg":"hi","time":"2012-01-31T00:07:44.216Z","v":0}
 
 The full `log.{trace|debug|...|fatal}(...)` API is:
 
@@ -66,12 +66,13 @@ for filtering (e.g. `| bunyan -c 'level>3'`). This shows the default output
 be added, including support for custom formats.
 
     $ node hi.js | ./bin/bunyan  # CLI tool to filter/pretty-print JSON logs.
-    [2012-01-31T00:08:11.387Z] INFO: myapp on banana.local: hi
+    [2012-01-31T00:08:11.387Z] INFO: myapp on banana.local/123: hi
 
     $ node hi.js | ./bin/bunyan -o json
     {
       "name": "myapp",
       "hostname": "banana.local",
+      "pid": 123,
       "level": 2,
       "msg": "hi",
       "time": "2012-01-31T00:10:00.676Z",
@@ -194,6 +195,7 @@ This adds the call source info with the 'src' field, like this:
     {
       "name": "src-example",
       "hostname": "banana.local",
+      "pid": 123,
       "component": "wuzzle",
       "level": 4,
       "msg": "This wuzzle is woosey.",
