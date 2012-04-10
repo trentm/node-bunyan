@@ -22,6 +22,8 @@
   for generating the logs.
   It would take a Bunyan log record object and be expected to emit it.
 - document "well-known" keys from bunyan CLI p.o.v.. Add "client_req".
+- bunyan tool: built in less usage (a la git?) so that I don't have to
+  go through this: `bunyan --color master.log  | less -R`
 
 
 
