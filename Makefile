@@ -26,9 +26,34 @@ cutarelease: versioncheck
 	[[ ! -d tmp ]]   # No 'tmp/' allowed: https://github.com/isaacs/npm/issues/2144 (fixed in npm 1.1.12 / node 0.6.14 I think)
 	./tools/cutarelease.py -p bunyan -f package.json -f lib/bunyan.js -f bin/bunyan
 
+
+#---- test
+
 .PHONY: test
 test: $(TAP)
 	TAP=1 $(TAP) test/*.test.js
+
+# Test will all node supported versions (presumes install locations I use on my machine).
+.PHONY: testall
+testall: test06 test07 testmaster
+
+.PHONY: testmaster
+testmaster:
+	@echo "# Test node master (with node `$(HOME)/opt/node-master/bin/node --version`)"
+	PATH="$(HOME)/opt/node-master/bin:$(PATH)" TAP=1 $(TAP) test/*.test.js
+
+.PHONY: test07
+test07:
+	@echo "# Test node 0.7.x (with node `$(HOME)/opt/node-0.7/bin/node --version`)"
+	PATH="$(HOME)/opt/node-0.7/bin:$(PATH)" TAP=1 $(TAP) test/*.test.js
+
+.PHONY: test06
+test06:
+	@echo "# Test node 0.6.x (with node `$(HOME)/opt/node-0.6/bin/node --version`)"
+	PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" TAP=1 $(TAP) test/*.test.js
+
+
+#---- check
 
 .PHONY: check-jsstyle
 check-jsstyle: $(JSSTYLE_FILES)

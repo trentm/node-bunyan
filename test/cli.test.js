@@ -123,7 +123,12 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
       t.ok(err)
       t.equal(err.code, 2)
       t.equal(stdout, '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message\n');
-      t.equal(stderr, "bunyan: ENOENT, no such file or directory 'doesnotexist1.log'\nbunyan: ENOENT, no such file or directory 'doesnotexist2.log'\n");
+      // Note: node v0.6.10:
+      //   ENOENT, no such file or directory 'asdf.log'
+      // but node v0.6.14:
+      //   ENOENT, open 'asdf.log'
+      // Somewhat annoying change.
+      t.equal(stderr, "bunyan: ENOENT, open 'doesnotexist1.log'\nbunyan: ENOENT, open 'doesnotexist2.log'\n");
       t.end();
     }
   );
