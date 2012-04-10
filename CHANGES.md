@@ -2,6 +2,13 @@
 
 ## bunyan 0.6.9 (not yet released)
 
+- Change `bunyan` CLI default output to color "src" info red. Before the "src"
+  information was uncolored. The "src" info is the filename, line number and
+  function name resulting from using `src: true` in `Logger` creation. I.e.,
+  the `(/Users/trentm/tm/node-bunyan/examples/hi.js:10)` in:
+
+        [2012-04-10T22:28:58.237Z]  INFO: myapp/39339 on banana.local (/Users/trentm/tm/node-bunyan/examples/hi.js:10): hi
+
 - Tweak `bunyan` CLI default output to still show an "err" field if it doesn't
   have a "stack" attribute.
 

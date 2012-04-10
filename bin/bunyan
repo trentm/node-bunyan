@@ -380,6 +380,7 @@ function handleLogLine(line, opts, stylize) {
       } else {
         src = format(" (%s:%d)", s.file, s.line);
       }
+      src = stylize(src, 'green');
     }
     delete rec.src;
 
