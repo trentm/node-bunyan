@@ -37,6 +37,12 @@ to log4j logger "name", but Bunyan doesn't do hierarchical logger names.
     var log = new Logger({name: "myapp"});
     log.info("hi");
 
+Alternatively, bunyan 0.7.0 and up supports a more node.js-land typical
+style (which might become the preferred form over time):
+
+    var bunyan = require('bunyan');
+    var log = bunyan.createLogger({name: "myapp"});
+
 **Log records are JSON.** "hostname", "time" and "v" (the Bunyan log
 format version) are added for you.
 

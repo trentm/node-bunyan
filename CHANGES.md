@@ -1,8 +1,9 @@
 # bunyan Changelog
 
-## bunyan 0.6.10 (not yet released)
+## bunyan 0.7.0 (not yet released)
 
-(nothing yet)
+- [issue #12] Add `bunyan.createLogger(OPTIONS)` form, as is more typical in
+  node.js APIs.  This'll eventually become the preferred form.
 
 
 ## bunyan 0.6.9

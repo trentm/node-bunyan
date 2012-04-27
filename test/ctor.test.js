@@ -5,7 +5,9 @@
  */
 
 var test = require('tap').test;
-var Logger = require('../lib/bunyan');
+var bunyan = require('../lib/bunyan'),
+    Logger = bunyan;
+
 
 
 test('ensure Logger creation options', function (t) {
@@ -41,6 +43,46 @@ test('ensure Logger creation options', function (t) {
 
   options = {name: 'foo', serializers: [1,2,3]};
   t.throws(function () { new Logger(options); },
+    {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
+    '"serializers" cannot be an array');
+
+  t.end();
+});
+
+
+test('ensure Logger creation options (createLogger)', function (t) {
+  t.throws(function () { bunyan.createLogger(); },
+    {name: 'TypeError', message: 'options (object) is required'},
+    'no options should throw');
+
+  t.throws(function () { bunyan.createLogger({}); },
+    {name: 'TypeError', message: 'options.name (string) is required'},
+    'no options.name should throw');
+
+  t.doesNotThrow(function () { bunyan.createLogger({name: 'foo'}); },
+    'just options.name should be sufficient');
+
+  var options = {name: 'foo', stream: process.stdout, streams: []};
+  t.throws(function () { bunyan.createLogger(options); },
+    'cannot use "stream" and "streams"');
+
+  options = {name: 'foo', level: 'info', streams: []};
+  t.throws(function () { bunyan.createLogger(options); },
+    'cannot use "level" and "streams"');
+
+  // https://github.com/trentm/node-bunyan/issues/3
+  options = {name: 'foo', streams: {}};
+  t.throws(function () { bunyan.createLogger(options); },
+    {name: 'TypeError', message: 'invalid options.streams: must be an array'},
+    '"streams" must be an array');
+
+  options = {name: 'foo', serializers: 'a string'};
+  t.throws(function () { bunyan.createLogger(options); },
+    {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
+    '"serializers" cannot be a string');
+
+  options = {name: 'foo', serializers: [1,2,3]};
+  t.throws(function () { bunyan.createLogger(options); },
     {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
     '"serializers" cannot be an array');
 
