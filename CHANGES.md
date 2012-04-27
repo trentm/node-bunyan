@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.7.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.7.0
 
 - [issue #12] Add `bunyan.createLogger(OPTIONS)` form, as is more typical in
