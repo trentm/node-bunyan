@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.6.9 (not yet released)
+## bunyan 0.6.9
 
 - Change `bunyan` CLI default output to color "src" info red. Before the "src"
   information was uncolored. The "src" info is the filename, line number and
