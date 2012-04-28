@@ -1,4 +1,3 @@
-- finish jsstyle work
 - [Yuonong] buffered writes to increase speed:
     - I'd start with a tools/timeoutput.js for some numbers to compare
       before/after. Sustained high output to a file.
