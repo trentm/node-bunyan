@@ -57,7 +57,9 @@ test('--bogus', function (t) {
 test('simple.log', function (t) {
   exec(BUNYAN + ' corpus/simple.log', function (err, stdout, stderr) {
     t.error(err)
-    t.equal(stdout, '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message\n');
+    t.equal(stdout,
+      '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
+      + 'My message\n');
     t.end();
   });
 });
@@ -65,7 +67,9 @@ test('cat simple.log', function (t) {
   exec(format('cat corpus/simple.log | %s', BUNYAN),
     function (err, stdout, stderr) {
       t.error(err)
-      t.equal(stdout, '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message\n');
+      t.equal(stdout,
+        '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
+        + 'My message\n');
       t.end();
     }
   );
@@ -73,7 +77,9 @@ test('cat simple.log', function (t) {
 test('simple.log with color', function (t) {
   exec(BUNYAN + ' --color corpus/simple.log', function (err, stdout, stderr) {
     t.error(err)
-    t.equal(stdout, '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 on example.com: \u001b[36mMy message\u001b[39m\n');
+    t.equal(stdout,
+      '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 '
+      + 'on example.com: \u001b[36mMy message\u001b[39m\n');
     t.end();
   });
 });
@@ -81,14 +87,20 @@ test('simple.log with color', function (t) {
 test('extrafield.log', function (t) {
   exec(BUNYAN + ' corpus/extrafield.log', function (err, stdout, stderr) {
     t.error(err)
-    t.equal(stdout, '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message (extra=field)\n');
+    t.equal(stdout,
+      '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
+      + 'My message (extra=field)\n');
     t.end();
   });
 });
 test('extrafield.log with color', function (t) {
-  exec(BUNYAN + ' --color corpus/extrafield.log', function (err, stdout, stderr) {
+  exec(BUNYAN + ' --color corpus/extrafield.log',
+       function (err, stdout, stderr) {
     t.error(err)
-    t.equal(stdout, '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 on example.com: \u001b[36mMy message\u001b[39m\u001b[90m (extra=field)\u001b[39m\n');
+    t.equal(stdout,
+      '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 '
+      + 'on example.com: \u001b[36mMy message\u001b[39m'
+      + '\u001b[90m (extra=field)\u001b[39m\n');
     t.end();
   });
 });
@@ -122,13 +134,17 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
     function (err, stdout, stderr) {
       t.ok(err)
       t.equal(err.code, 2)
-      t.equal(stdout, '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message\n');
+      t.equal(stdout,
+        '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
+        + 'My message\n');
       // Note: node v0.6.10:
       //   ENOENT, no such file or directory 'asdf.log'
       // but node v0.6.14:
       //   ENOENT, open 'asdf.log'
       // Somewhat annoying change.
-      t.equal(stderr, "bunyan: ENOENT, open 'doesnotexist1.log'\nbunyan: ENOENT, open 'doesnotexist2.log'\n");
+      t.equal(stderr,
+        'bunyan: ENOENT, open \'doesnotexist1.log\'\nbunyan: ENOENT, '
+        + 'open \'doesnotexist2.log\'\n');
       t.end();
     }
   );

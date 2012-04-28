@@ -64,11 +64,11 @@ Report bugs to <https://github.com/davepacheco/jsstyle/issues>.
 Options:
 	-h 	print this help and exit
 	-v	verbose
-	
+
 	-c	check continuation indentation inside functions
 	-t	specify tab width for line length calculation
 	-C	don't check anything in header block comments
-	
+
 	-f PATH
 		path to a jsstyle config file
 	-o OPTION1,OPTION2
@@ -107,6 +107,9 @@ my %config = (
 	"unparenthesized-return" => 1,
 	"literal-string-quote" => "single",  # 'single' or 'double'
 	"blank-after-start-comment" => 1,
+	"continuation-at-front" => 0,
+	"leading-right-paren-ok" => 0,
+	"strict-indent" => 0
 );
 sub add_config_var ($$) {
 	my ($scope, $str) = @_;
@@ -128,7 +131,14 @@ sub add_config_var ($$) {
 	} elsif ($name eq "doxygen" ||   # boolean vars
 		 $name eq "splint" ||
 		 $name eq "unparenthesized-return" ||
+		 $name eq "continuation-at-front" ||
+		 $name eq "leading-right-paren-ok" ||
+		 $name eq "leading-comma-ok" ||
+		 $name eq "uncuddled-else-ok" ||
+		 $name eq "whitespace-after-left-paren-ok" ||
+		 $name eq "strict-indent" ||
 		 $name eq "blank-after-start-comment") {
+
 		if ($value != 1 && $value != 0) {
 			die "$scope: invalid '$name': don't give a value";
 		}
@@ -483,7 +493,11 @@ line: while (<$filehandle>) {
 		my $indent = $1;
 		if (length($indent) < $config{"indent"}) {
 			err("indent of " . length($indent) .
-				" space(s) instead of " . $config{'indent'});
+				" space(s) instead of " . $config{"indent"});
+		} elsif ($config{"strict-indent"} &&
+			length($indent) % $config{"indent"} != 0) {
+			err("indent is " . length($indent) .
+				" not a multiple of " . $config{'indent'} . " spaces");
 		}
 	}
 	if (/^\t+ [^ \t\*]/ || /^\t+  \S/ || /^\t+   \S/) {
@@ -566,17 +580,26 @@ line: while (<$filehandle>) {
 	    !/\/.*?\{\d+,?\d*\}.*?\//) {
 		err("comma or semicolon followed by non-blank");
 	}
-	# allow "for" statements to have empty "while" clauses
-	if (/\s[,;]/ && !/^[\t]+;$/ && !/^\s*for \([^;]*; ;[^;]*\)/) {
-		err("comma or semicolon preceded by blank");
+	# check for commas preceded by blanks
+	if ((!$config{"leading-comma-ok"} && /^\s*,/) || (!/^\s*,/ && /\s,/)) {
+		err("comma preceded by blank");
 	}
-	if (/^\s*(&&|\|\|)/) {
+	# check for semicolons preceded by blanks
+	# allow "for" statements to have empty "while" clauses
+	if (/\s;/ && !/^[\t]+;$/ && !/^\s*for \([^;]*; ;[^;]*\)/) {
+		err("semicolon preceded by blank");
+	}
+	if (!$config{"continuation-at-front"} && /^\s*(&&|\|\|)/) {
 		err("improper boolean continuation");
+	} elsif ($config{"continuation-at-front"} && /(&&|\|\||\+)$/) {
+		err("improper continuation");
 	}
 	if (/\S   *(&&|\|\|)/ || /(&&|\|\|)   *\S/) {
 		err("more than one space around boolean operator");
 	}
-	if (/\b(delete|typeof|instanceOf|throw|with|catch|new|function|in|for|if|while|switch|return|case)\(/) {
+	# We allow methods which look like obj.delete() but not keywords without
+	# spaces ala: delete(obj)
+	if (/(?<!\.)\b(delete|typeof|instanceof|throw|with|catch|new|function|in|for|if|while|switch|return|case)\(/) {
 		err("missing space between keyword and paren");
 	}
 	if (/(\b(catch|for|if|with|while|switch|return)\b.*){2,}/) {
@@ -612,12 +635,16 @@ line: while (<$filehandle>) {
 	if (/\btypeof\b/ && !/\btypeof\s*\(.*\)/) {
 		err("unparenthesized typeof expression");
 	}
-	if (/\(\s/) {
+	if (!$config{"whitespace-after-left-paren-ok"} && /\(\s/) {
 		err("whitespace after left paren");
 	}
 	# allow "for" statements to have empty "continue" clauses
 	if (/\s\)/ && !/^\s*for \([^;]*;[^;]*; \)/) {
-		err("whitespace before right paren");
+		if ($config{"leading-right-paren-ok"} && /^\s+\)/) {
+			# this is allowed
+		} else {
+			err("whitespace before right paren");
+		}
 	}
 	if (/^\s*\(void\)[^ ]/) {
 		err("missing space after (void) cast");
@@ -654,7 +681,7 @@ line: while (<$filehandle>) {
 	}
 
 	if (/^\s*else\W/) {
-		if ($prev =~ /^\s*}$/) {
+		if (!$config{"uncuddled-else-ok"} && $prev =~ /^\s*}$/) {
 			err_prefix($prev,
 			    "else and right brace should be on same line");
 		}

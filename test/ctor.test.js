@@ -38,12 +38,18 @@ test('ensure Logger creation options', function (t) {
 
   options = {name: 'foo', serializers: 'a string'};
   t.throws(function () { new Logger(options); },
-    {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
+    {
+      name: 'TypeError',
+      message: 'invalid options.serializers: must be an object'
+    },
     '"serializers" cannot be a string');
 
-  options = {name: 'foo', serializers: [1,2,3]};
+  options = {name: 'foo', serializers: [1, 2, 3]};
   t.throws(function () { new Logger(options); },
-    {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
+    {
+      name: 'TypeError',
+      message: 'invalid options.serializers: must be an object'
+    },
     '"serializers" cannot be an array');
 
   t.end();
@@ -78,12 +84,18 @@ test('ensure Logger creation options (createLogger)', function (t) {
 
   options = {name: 'foo', serializers: 'a string'};
   t.throws(function () { bunyan.createLogger(options); },
-    {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
+    {
+      name: 'TypeError',
+      message: 'invalid options.serializers: must be an object'
+    },
     '"serializers" cannot be a string');
 
-  options = {name: 'foo', serializers: [1,2,3]};
+  options = {name: 'foo', serializers: [1, 2, 3]};
   t.throws(function () { bunyan.createLogger(options); },
-    {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
+    {
+      name: 'TypeError',
+      message: 'invalid options.serializers: must be an object'
+    },
     '"serializers" cannot be an array');
 
   t.end();
@@ -100,7 +112,10 @@ test('ensure Logger child() options', function (t) {
     'empty options should be fine too');
 
   t.throws(function () { log.child({name: 'foo'}); },
-    {name: 'TypeError', message: 'invalid options.name: child cannot set logger name'},
+    {
+      name: 'TypeError',
+      message: 'invalid options.name: child cannot set logger name'
+    },
     'child cannot change name');
 
   var options = {stream: process.stdout, streams: []};
@@ -117,14 +132,20 @@ test('ensure Logger child() options', function (t) {
     {name: 'TypeError', message: 'invalid options.streams: must be an array'},
     '"streams" must be an array');
 
-  options = {serializers: "a string"};
+  options = {serializers: 'a string'};
   t.throws(function () { log.child(options); },
-    {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
+    {
+      name: 'TypeError',
+      message: 'invalid options.serializers: must be an object'
+    },
     '"serializers" cannot be a string');
 
-  options = {serializers: [1,2,3]};
+  options = {serializers: [1, 2, 3]};
   t.throws(function () { log.child(options); },
-    {name: 'TypeError', message: 'invalid options.serializers: must be an object'},
+    {
+      name: 'TypeError',
+      message: 'invalid options.serializers: must be an object'
+    },
     '"serializers" cannot be an array');
 
   t.end();
