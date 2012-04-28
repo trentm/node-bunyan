@@ -2,7 +2,7 @@
 
 ## bunyan 0.7.1 (not yet released)
 
-(nothing yet)
+- jsstyle'ing (via `make check`)
 
 
 ## bunyan 0.7.0
