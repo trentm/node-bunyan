@@ -149,3 +149,22 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
     }
   );
 });
+
+test('multiple logs', function (t) {
+  exec(BUNYAN + ' corpus/log1.log corpus/log2.log',
+      function (err, stdout, stderr) {
+    t.error(err);
+    t.equal(stdout, [
+      '[2012-05-08T16:57:55.586Z]  INFO: agent1/73267 on headnode: message\n',
+      '[2012-05-08T16:58:55.586Z]  INFO: agent2/73267 on headnode: message\n',
+      '[2012-05-08T17:01:49.339Z]  INFO: agent2/73267 on headnode: message\n',
+      '[2012-05-08T17:02:47.404Z]  INFO: agent2/73267 on headnode: message\n',
+      '[2012-05-08T17:02:49.339Z]  INFO: agent1/73267 on headnode: message\n',
+      '[2012-05-08T17:02:49.404Z]  INFO: agent1/73267 on headnode: message\n',
+      '[2012-05-08T17:02:49.404Z]  INFO: agent1/73267 on headnode: message\n',
+      '[2012-05-08T17:02:57.404Z]  INFO: agent2/73267 on headnode: message\n',
+      '[2012-05-08T17:08:01.105Z]  INFO: agent2/76156 on headnode: message\n',
+    ].join(''));
+    t.end();
+  });
+});
