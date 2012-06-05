@@ -443,7 +443,13 @@ Supported stream types are:
           "level": "warn"
         }
 
-- Bunyan re-emits error events if the file cannot be opened successfully.
+  Bunyan re-emits error events from the created `WriteStream`. So you can
+  do this:
+
+        var log = new Logger({name: 'mylog', streams: [{path: LOG_PATH}]});
+        log.on('error', function (err, stream) {
+            // Handle stream write or create error here.
+        });
 
 
 # License
