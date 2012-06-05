@@ -34,4 +34,3 @@ setTimeout(function () {
     log.warn('warn log message');
     console.warn('- Called log.warn(...).')
 }, 1000);
-
