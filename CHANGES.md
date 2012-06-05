@@ -1,6 +1,15 @@
 # bunyan Changelog
 
-## bunyan 0.7.1 (not yet released)
+## bunyan 0.8.0 (not yet released)
+
+- [pull #21] Bunyan loggers now re-emit `fs.createWriteStream` error events.
+  By github.com/EvanOxfeld. See "examples/handle-fs-error.js" and
+  "test/error-event.js" for details.
+
+        var log = new Logger({name: 'mylog', streams: [{path: FILENAME}]});
+        log.on('error', function (err, stream) {
+            // Handle error writing to or creating FILENAME.
+        });
 
 - jsstyle'ing (via `make check`)
 
