@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.8.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.8.0
 
 - [pull #21] Bunyan loggers now re-emit `fs.createWriteStream` error events.
