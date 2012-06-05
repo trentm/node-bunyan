@@ -443,6 +443,7 @@ Supported stream types are:
           "level": "warn"
         }
 
+- Bunyan re-emits error events if the file cannot be opened successfully.
 
 
 # License
