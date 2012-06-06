@@ -2,7 +2,8 @@
 
 ## bunyan 0.8.1 (not yet released)
 
-(nothing yet)
+- Add test/corpus/*.log files (accidentally excluded) so that test suite
+  works(!).
 
 
 ## bunyan 0.8.0
