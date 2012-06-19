@@ -13,7 +13,7 @@ Conventions:
 - XXX
 """
 
-__version_info__ = (1, 0, 6)
+__version_info__ = (1, 0, 7)
 __version__ = '.'.join(map(str, __version_info__))
 
 import sys
@@ -213,12 +213,23 @@ def cutarelease(project_name, version_files, dry_run=False):
             ver_content = ver_content.replace(marker,
                 '"version": "%s"' % next_version)
         elif ver_file_type == "javascript":
-            marker = 'var VERSION = "%s";' % version
-            if marker not in ver_content:
-                raise Error("couldn't find `%s' version marker in `%s' "
-                    "content: can't prep for subsequent dev" % (marker, ver_file))
-            ver_content = ver_content.replace(marker,
-                'var VERSION = "%s";' % next_version)
+            candidates = [
+                ("single", "var VERSION = '%s';" % version),
+                ("double", 'var VERSION = "%s";' % version),
+            ]
+            for quote_type, marker in candidates:
+                if marker in ver_content:
+                    break
+            else:
+                raise Error("couldn't find any candidate version marker in "
+                    "`%s' content: can't prep for subsequent dev: %r"
+                    % (ver_file, candidates))
+            if quote_type == "single":
+                ver_content = ver_content.replace(marker,
+                    "var VERSION = '%s';" % next_version)
+            else:
+                ver_content = ver_content.replace(marker,
+                    'var VERSION = "%s";' % next_version)
         elif ver_file_type == "python":
             marker = "__version_info__ = %r" % (version_info,)
             if marker not in ver_content:
@@ -299,7 +310,8 @@ def _parse_version_file(version_file):
     Supported version file types (i.e. types of files from which we know
     how to parse the version string/number -- often by some convention):
     - json: use the "version" key
-    - javascript: look for a `var VERSION = "1.2.3";`
+    - javascript: look for a `var VERSION = "1.2.3";` or
+      `var VERSION = '1.2.3';`
     - python: Python script/module with `__version_info__ = (1, 2, 3)`
     - version: a VERSION.txt or VERSION file where the whole contents are
       the version string
@@ -353,8 +365,8 @@ def _parse_version_file(version_file):
         m = re.search(r'^__version_info__ = (.*?)$', content, re.M)
         version_info = eval(m.group(1))
     elif version_file_type == "javascript":
-        m = re.search(r'^var VERSION = "(.*?)";$', content, re.M)
-        version_info = _version_info_from_version(m.group(1))
+        m = re.search(r'^var VERSION = (\'|")(.*?)\1;$', content, re.M)
+        version_info = _version_info_from_version(m.group(2))
     elif version_file_type == "version":
         version_info = _version_info_from_version(content.strip())
     else:

@@ -64,6 +64,14 @@ The full `log.{trace|debug|...|fatal}(...)` API is:
     log.info(err, 'more on this: %s', more);
                     // ... or you can specify the "msg".
 
+Note that this implies **you cannot pass any object as the first argument
+to log it**. IOW, `log.info(myobject)` isn't going to work the way you
+expect. Adding support for this API would necessitate (a) JSON-ifying safely
+that given object (sometimes hard, and probably slow) and (b) putting all its
+attribs under a top-level 'x' field name or something to avoid field name
+collisions.
+
+
 ## bunyan tool
 
 A `bunyan` tool is provided **for pretty-printing bunyan logs** and, eventually,
@@ -443,6 +451,13 @@ Supported stream types are:
           "level": "warn"
         }
 
+  Bunyan re-emits error events from the created `WriteStream`. So you can
+  do this:
+
+        var log = new Logger({name: 'mylog', streams: [{path: LOG_PATH}]});
+        log.on('error', function (err, stream) {
+            // Handle stream write or create error here.
+        });
 
 
 # License

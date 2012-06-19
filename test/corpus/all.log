@@ -1,0 +1,20 @@
+# levels
+{"name":"myservice","pid":123,"hostname":"example.com","level":10,"msg":"My message","time":"2012-02-08T22:56:50.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":20,"msg":"My message","time":"2012-02-08T22:56:51.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":30,"msg":"My message","time":"2012-02-08T22:56:52.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":40,"msg":"My message","time":"2012-02-08T22:56:53.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":50,"msg":"My message","time":"2012-02-08T22:56:54.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":55,"msg":"My message","time":"2012-02-08T22:56:55.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":60,"msg":"My message","time":"2012-02-08T22:56:56.856Z","v":0}
+
+# extra fields
+{"name":"myservice","pid":123,"hostname":"example.com","level":30,"one":"short","msg":"My message","time":"2012-02-08T22:56:52.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":30,"two":"short with space","msg":"My message","time":"2012-02-08T22:56:52.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":30,"three":"multi\nline","msg":"My message","time":"2012-02-08T22:56:52.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":30,"four":"over 50 chars long long long long long long long long long","msg":"My message","time":"2012-02-08T22:56:52.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":30,"five":{"a": "json object"},"msg":"My message","time":"2012-02-08T22:56:52.856Z","v":0}
+{"name":"myservice","pid":123,"hostname":"example.com","level":30,"six":["a", "json", "array"],"msg":"My message","time":"2012-02-08T22:56:52.856Z","v":0}
+
+# bogus
+not a JSON line
+{"hi": "there"}

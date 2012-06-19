@@ -6,7 +6,7 @@ TAP := ./node_modules/.bin/tap
 
 #---- Files
 
-JSSTYLE_FILES := $(shell find lib test tools -name "*.js")
+JSSTYLE_FILES := $(shell find lib test tools examples -name "*.js")
 
 
 
@@ -18,7 +18,7 @@ all:
 .PHONY: versioncheck
 versioncheck:
 	[[ `cat package.json | json version` == `grep '^var VERSION' bin/bunyan | awk -F'"' '{print $$2}'` ]]
-	[[ `cat package.json | json version` == `grep '^var VERSION' lib/bunyan.js | awk -F'"' '{print $$2}'` ]]
+	[[ `cat package.json | json version` == `grep '^var VERSION' lib/bunyan.js | awk -F"'" '{print $$2}'` ]]
 	@echo Version check ok.
 
 .PHONY: cutarelease

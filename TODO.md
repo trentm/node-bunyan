@@ -1,4 +1,4 @@
-- [Yuonong] buffered writes to increase speed:
+- [Yunong] buffered writes to increase speed:
     - I'd start with a tools/timeoutput.js for some numbers to compare
       before/after. Sustained high output to a file.
     - perhaps this would be a "buffered: true" option on the stream object
@@ -20,9 +20,14 @@
   as the basis for tools to consume bunyan logs. It can grow indep of node-bunyan
   for generating the logs.
   It would take a Bunyan log record object and be expected to emit it.
+
+        node-bunyan-reader
+            .createReadStream(path, [options]) ?
+
 - document "well-known" keys from bunyan CLI p.o.v.. Add "client_req".
 - bunyan tool: built in less usage (a la git?) so that I don't have to
   go through this: `bunyan --color master.log  | less -R`
+- want `bunyan -f foo.log` a la `tail -f`
 
 
 
