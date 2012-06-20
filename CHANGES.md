@@ -1,6 +1,23 @@
 # bunyan Changelog
 
-## bunyan 0.8.1 (not yet released)
+## bunyan 0.9.0 (not yet released)
+
+- Add support for "raw" streams. This is a logging stream that is given
+  raw log record objects instead of a JSON-stringified string.
+
+        function Collector() {
+            this.records = [];
+        }
+        Collector.prototype.write = function (rec) {
+            this.records.push(rec);
+        }
+        var log = new Logger({
+            name: 'mylog',
+            stream: new Collector(),
+            raw: true
+        });
+
+  See "examples/raw-stream.js".
 
 - Add test/corpus/*.log files (accidentally excluded) so that test suite
   works(!).

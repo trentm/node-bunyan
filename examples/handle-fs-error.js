@@ -1,5 +1,5 @@
-// Example handling as fs error for a Bunyan-created
-// stream.
+// Example handling an fs error for a Bunyan-created
+// stream: we create a logger to a file that is read-only.
 
 var fs = require('fs');
 var path = require('path');

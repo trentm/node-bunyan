@@ -420,7 +420,8 @@ In general streams are specified with the "streams" option:
     })
 
 For convenience, if there is only one stream, it can specified with the
-"stream" and "level" options (internal converted to a `Logger.streams`):
+"stream", "level" and "raw" options (internal converted to a
+`Logger.streams`):
 
     var log = new Logger({
       name: "foo",
@@ -439,6 +440,9 @@ If none are specified, the default is a stream on `process.stdout` at the
   file write stream.
 - `level`: The level at which logging to this stream is enabled. If not
   specified it defaults to INFO.
+- `raw`: A boolean indicating if the `write()` method of this stream should
+  be given the raw log record object instead of the JSON-stringified
+  string. See "examples/raw-stream.js".
 
 Supported stream types are:
 
@@ -467,16 +471,4 @@ MIT.
 
 # Future
 
-See "TODO.md", but basically:
-
-- Ring-buffer support for storing last N debug messages
-  (or whatever) in memory to support debugability without too much log load.
-
-- More `bunyan` output formats and filtering features.
-
-- Think about a bunyan dashboard that supports organizing and viewing logs
-  from multiple hosts and services.
-
-- Syslog support.
-
-- Some speed comparisons with others to get a feel for Bunyan's speed.
+See "TODO.md".
