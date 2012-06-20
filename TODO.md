@@ -15,7 +15,6 @@
       works *and* that an existing field in the parent is not *re-serialized*.
 - a "rolling-file" stream: but specifically by time, e.g. hourly. (MarkC
   requested)
-- ringBuffer stream
 - split out `bunyan` cli to a "bunyan" or "bunyan-reader" or "node-bunyan-reader"
   as the basis for tools to consume bunyan logs. It can grow indep of node-bunyan
   for generating the logs.

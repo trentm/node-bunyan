@@ -463,6 +463,38 @@ Supported stream types are:
             // Handle stream write or create error here.
         });
 
+Bunyan comes with a special stream called a RingBuffer which keeps the last N
+records in memory and does *not* write the data anywhere else.  One common
+strategy is to log 'info' and higher to a normal log file but log all records
+(including 'trace') to a ringbuffer that you can access via a debugger, or your
+own HTTP interface, or a post-mortem facility like MDB or node-panic.
+
+To use a RingBuffer:
+
+    /* Create a ring buffer that stores the last 100 entries. */
+    var bunyan = require('bunyan');
+    var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
+    var log = new bunyan({
+        name: "foo",
+        raw: true,
+        stream: ringbuffer,
+        level: "debug"
+    });
+
+    log.info('hello world');
+    console.log(ringbuffer.entries);
+
+This example emits:
+
+    [ { name: 'foo',
+        hostname: '912d2b29',
+        raw: true,
+        pid: 50346,
+        level: 30,
+        msg: 'hello world',
+        time: '2012-06-19T21:34:19.906Z',
+        v: 0 } ]
+
 
 # License
 
