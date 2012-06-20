@@ -476,6 +476,7 @@ To use a RingBuffer:
     var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
     var log = new bunyan({
         name: "foo",
+        raw: true,
         stream: ringbuffer,
         level: "debug"
     });
@@ -487,6 +488,7 @@ This example emits:
 
     [ { name: 'foo',
         hostname: '912d2b29',
+        raw: true,
         pid: 50346,
         level: 30,
         msg: 'hello world',

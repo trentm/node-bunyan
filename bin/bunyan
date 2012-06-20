@@ -212,10 +212,10 @@ function emitNextRecord(opts, stylize)
           continue;
 
         if (streams[ofile].records.length > 0) {
-	  if (!streams[ofile].paused) {
+          if (!streams[ofile].paused) {
             streams[ofile].paused = true;
             streams[ofile].stream.pause();
-	  }
+          }
         } else if (streams[ofile].paused) {
           streams[ofile].paused = false;
           streams[ofile].stream.resume();
