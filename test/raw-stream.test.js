@@ -23,16 +23,18 @@ test('raw stream', function (t) {
 
   var log = new Logger({
     name: 'raw-stream-test',
-    streams: [{
-      stream: new CapturingStream(recs),
-      raw: true
-    }]
+    streams: [
+      {
+        stream: new CapturingStream(recs),
+        raw: true
+      }
+    ]
   });
   log.info('first');
   log.info({two: 'deux'}, 'second');
 
   t.equal(recs.length, 2);
-  t.equal(typeof(recs[0]), 'object', 'first rec is an object');
+  t.equal(typeof (recs[0]), 'object', 'first rec is an object');
   t.equal(recs[1].two, 'deux', '"two" field made it through');
   t.end();
 });
@@ -50,7 +52,7 @@ test('raw stream (short constructor)', function (t) {
   log.info({two: 'deux'}, 'second');
 
   t.equal(recs.length, 2);
-  t.equal(typeof(recs[0]), 'object', 'first rec is an object');
+  t.equal(typeof (recs[0]), 'object', 'first rec is an object');
   t.equal(recs[1].two, 'deux', '"two" field made it through');
   t.end();
 });
@@ -76,11 +78,11 @@ test('raw streams and regular streams can mix', function (t) {
   log.info({two: 'deux'}, 'second');
 
   t.equal(rawRecs.length, 2);
-  t.equal(typeof(rawRecs[0]), 'object', 'first rawRec is an object');
+  t.equal(typeof (rawRecs[0]), 'object', 'first rawRec is an object');
   t.equal(rawRecs[1].two, 'deux', '"two" field made it through');
 
   t.equal(nonRawRecs.length, 2);
-  t.equal(typeof(nonRawRecs[0]), 'string', 'first nonRawRec is a string');
+  t.equal(typeof (nonRawRecs[0]), 'string', 'first nonRawRec is a string');
 
   t.end();
 });
@@ -117,11 +119,11 @@ test('child adding a non-raw stream works', function (t) {
 
   t.equal(rawRecs.length, 1,
     format('rawRecs length should be 1 (is %d)', rawRecs.length));
-  t.equal(typeof(rawRecs[0]), 'object', 'rawRec entry is an object');
+  t.equal(typeof (rawRecs[0]), 'object', 'rawRec entry is an object');
   t.equal(rawRecs[0].two, 'deux', '"two" field made it through');
 
   t.equal(nonRawRecs.length, 1);
-  t.equal(typeof(nonRawRecs[0]), 'string', 'first nonRawRec is a string');
+  t.equal(typeof (nonRawRecs[0]), 'string', 'first nonRawRec is a string');
 
   t.end();
 });
