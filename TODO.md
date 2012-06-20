@@ -32,6 +32,12 @@
 
 # someday/maybe
 
+
+- More `bunyan` output formats and filtering features.
+- Think about a bunyan dashboard that supports organizing and viewing logs
+  from multiple hosts and services.
+- Syslog support.
+- Some speed comparisons with others to get a feel for Bunyan's speed.
 - remove "rm -rf tmp" when this fixed: <https://github.com/isaacs/npm/issues/2144>
 - what about promoting 'latency' field and making that easier?
 - `log.close` to close streams and shutdown and `this.closed`
