@@ -13,17 +13,19 @@
   recent, and thus hopefully relevant, log messages. (by @dapsays,
   github.com/davepacheco)
 
-  Potential uses: Live debugging
-  if a running process could inspect those messages. One could dump recent
-  log messages at a finer log level than is typically logged on
+  Potential uses: Live debugging if a running process could inspect those
+  messages. One could dump recent log messages at a finer log level than is
+  typically logged on
   [`uncaughtException`](http://nodejs.org/docs/latest/api/all.html#all_event_uncaughtexception).
 
         var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
         var log = new bunyan({
-            name: "foo",
-            raw: true,
-            stream: ringbuffer,
-            level: "debug"
+            name: 'foo',
+            streams: [{
+                type: 'raw',
+                stream: ringbuffer,
+                level: 'debug'
+            }]
         });
 
         log.info('hello world');
@@ -40,16 +42,18 @@
         }
         var log = new Logger({
             name: 'mylog',
-            stream: new Collector(),
-            raw: true
+            streams: [{
+                type: 'raw',
+                stream: new Collector()
+            }]
         });
 
   See "examples/raw-stream.js". I expect raw streams to be useful for
-  piping Bunyan logging to separate services (e.g. <http://log.ly>,
+  piping Bunyan logging to separate services (e.g. <http://www.loggly.com/>,
   <https://github.com/etsy/statsd>) or to separate in-process handling.
 
-- Add test/corpus/*.log files (accidentally excluded) so that test suite
-  works(!).
+- Add test/corpus/*.log files (accidentally excluded) so the test suite
+  actually works(!).
 
 
 ## bunyan 0.8.0

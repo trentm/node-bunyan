@@ -11,7 +11,7 @@ var log1 = new Logger({
   streams: [
     {
       stream: ringbuffer,
-      raw: true,
+      type: 'raw',
       level: 'info'
     }
   ]

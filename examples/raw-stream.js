@@ -27,7 +27,7 @@ var log = new Logger({
     {
       level: 'info',
       stream: new MyRawStream(),
-      raw: true
+      type: 'raw'
     },
   ]
 });

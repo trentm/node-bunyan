@@ -10,8 +10,8 @@ Also: log4j is way more than you need.
 
 # Current Status
 
-Basic functionality there. Still a fair amount of planned work, but I'm using
-it for some production services.
+Solid core functionality is there. Joyent is using this for a number of
+production services.
 
 Currently supports node 0.4+, but I'll probably make the jump to node 0.6+ as a
 base soonish.
@@ -420,8 +420,7 @@ In general streams are specified with the "streams" option:
     })
 
 For convenience, if there is only one stream, it can specified with the
-"stream", "level" and "raw" options (internal converted to a
-`Logger.streams`):
+"stream" and "level" options (internal converted to a `Logger.streams`):
 
     var log = new Logger({
       name: "foo",
@@ -434,19 +433,22 @@ If none are specified, the default is a stream on `process.stdout` at the
 
 `Logger.streams` is an array of stream objects with the following attributes:
 
-- `type`: Typically implied. E.g. "stream" or "file". See supported types
-  below.
+- `type`: One of "stream", "file" or "raw". See below. Often this is
+  implied from the other arguments.
+- `path`: A file path for a file stream. If `path` is given and `type` is
+  not specified, then `type` will be set to "file".
 - `stream`: This is the "Writable Stream", e.g. a std handle or an open
-  file write stream.
+  file write stream. If `stream` is given and `type` is not specified, then
+  `type` will be set to "stream".
 - `level`: The level at which logging to this stream is enabled. If not
   specified it defaults to INFO.
-- `raw`: A boolean indicating if the `write()` method of this stream should
-  be given the raw log record object instead of the JSON-stringified
-  string. See "examples/raw-stream.js".
 
 Supported stream types are:
 
-- `stream`: A "stream" argument is given.
+- `stream`: A plain ol' node.js [Writable
+  Stream](http://nodejs.org/docs/latest/api/all.html#writable_Stream).
+  A "stream" (the writeable stream) value is required.
+
 - `file`: A "path" argument is given. Bunyan will open this file for
   appending. E.g.:
 
@@ -463,6 +465,14 @@ Supported stream types are:
             // Handle stream write or create error here.
         });
 
+- `raw`: Similar to a "stream" writeable stream, except that the write method
+  is given raw log record *Object*s instead of a JSON-stringified string.
+  This can be useful for hooking on further processing to all Bunyan logging:
+  pushing to an external service, a RingBuffer (see below), etc.
+
+
+## RingBuffer Stream
+
 Bunyan comes with a special stream called a RingBuffer which keeps the last N
 records in memory and does *not* write the data anywhere else.  One common
 strategy is to log 'info' and higher to a normal log file but log all records
@@ -475,10 +485,18 @@ To use a RingBuffer:
     var bunyan = require('bunyan');
     var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
     var log = new bunyan({
-        name: "foo",
-        raw: true,
-        stream: ringbuffer,
-        level: "debug"
+        name: 'foo',
+        streams: [
+            {
+                level: 'info',
+                stream: process.stdout
+            },
+            {
+                level: 'trace',
+                type: 'raw',    // use 'raw' to get raw log record objects
+                stream: ringbuffer
+            }
+        ]
     });
 
     log.info('hello world');
@@ -495,9 +513,11 @@ This example emits:
         v: 0 } ]
 
 
+
 # License
 
 MIT.
+
 
 
 # Future

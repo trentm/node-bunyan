@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2012 Trent Mick. All rights reserved.
  *
- * Test `raw: true` option on a Logger stream.
+ * Test `type: 'raw'` Logger streams.
  */
 
 var format = require('util').format;
@@ -26,27 +26,9 @@ test('raw stream', function (t) {
     streams: [
       {
         stream: new CapturingStream(recs),
-        raw: true
+        type: 'raw'
       }
     ]
-  });
-  log.info('first');
-  log.info({two: 'deux'}, 'second');
-
-  t.equal(recs.length, 2);
-  t.equal(typeof (recs[0]), 'object', 'first rec is an object');
-  t.equal(recs[1].two, 'deux', '"two" field made it through');
-  t.end();
-});
-
-
-test('raw stream (short constructor)', function (t) {
-  var recs = [];
-
-  var log = new Logger({
-    name: 'raw-stream-test',
-    stream: new CapturingStream(recs),
-    raw: true
   });
   log.info('first');
   log.info({two: 'deux'}, 'second');
@@ -67,7 +49,7 @@ test('raw streams and regular streams can mix', function (t) {
     streams: [
       {
         stream: new CapturingStream(rawRecs),
-        raw: true
+        type: 'raw'
       },
       {
         stream: new CapturingStream(nonRawRecs)
@@ -98,7 +80,7 @@ test('child adding a non-raw stream works', function (t) {
     streams: [
       {
         stream: new CapturingStream(parentRawRecs),
-        raw: true
+        type: 'raw'
       }
     ]
   });
@@ -107,7 +89,7 @@ test('child adding a non-raw stream works', function (t) {
     streams: [
       {
         stream: new CapturingStream(rawRecs),
-        raw: true
+        type: 'raw'
       },
       {
         stream: new CapturingStream(nonRawRecs)

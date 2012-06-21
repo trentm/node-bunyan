@@ -3,9 +3,11 @@ var bunyan = require('..');
 var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
 var log = new bunyan({
     name: 'foo',
-    raw: true,
-    stream: ringbuffer,
-    level: 'debug'
+    streams: [{
+        type: 'raw',
+        stream: ringbuffer,
+        level: 'debug'
+    }]
 });
 
 log.info('hello world');
