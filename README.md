@@ -481,7 +481,7 @@ own HTTP interface, or a post-mortem facility like MDB or node-panic.
 
 To use a RingBuffer:
 
-    /* Create a ring buffer that stores the last 100 entries. */
+    /* Create a ring buffer that stores the last 100 records. */
     var bunyan = require('bunyan');
     var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
     var log = new bunyan({
@@ -500,7 +500,7 @@ To use a RingBuffer:
     });
 
     log.info('hello world');
-    console.log(ringbuffer.entries);
+    console.log(ringbuffer.records);
 
 This example emits:
 

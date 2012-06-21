@@ -1,4 +1,4 @@
-/* Create a ring buffer that stores the last 100 entries. */
+/* Create a ring buffer that stores the last 100 records. */
 var bunyan = require('..');
 var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
 var log = new bunyan({
@@ -11,4 +11,4 @@ var log = new bunyan({
 });
 
 log.info('hello world');
-console.log(ringbuffer.entries);
+console.log(ringbuffer.records);

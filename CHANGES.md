@@ -29,7 +29,7 @@
         });
 
         log.info('hello world');
-        console.log(ringbuffer.entries);
+        console.log(ringbuffer.records);
 
 - Add support for "raw" streams. This is a logging stream that is given
   raw log record objects instead of a JSON-stringified string.
