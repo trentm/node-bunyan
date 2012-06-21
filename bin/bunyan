@@ -206,7 +206,7 @@ function emitNextRecord(opts, stylize)
       }
     }
 
-    if (!ready) {
+    if (!ready || minfile === undefined) {
       for (ofile in streams) {
         if (!streams[ofile].stream || streams[ofile].done)
           continue;
@@ -703,6 +703,7 @@ function processFile(file, opts, stylize, callback) {
   streams[file].stream = stream;
 
   stream.on('error', function (err) {
+    streams[file].done = true;
     callback(err);
   });
 
@@ -726,11 +727,13 @@ function processFile(file, opts, stylize, callback) {
   });
 
   stream.on('end', function () {
+    streams[file].done = true;
     if (leftover) {
       handleLogLine(file, leftover, opts, stylize);
       leftover = '';
+    } else {
+      emitNextRecord(opts, stylize);
     }
-    streams[file].done = true;
     callback();
   });
 }
