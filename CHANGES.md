@@ -2,6 +2,33 @@
 
 ## bunyan 0.9.0 (not yet released)
 
+- [pull #15] The `bunyan` CLI will now chronologically merge multiple log
+  streams when it is given multiple file arguments. (by github.com/davepacheco)
+
+        $ bunyan foo.log bar.log
+        ... merged log records ...
+
+- [pull #15] A new `bunyan.RingBuffer` stream class that is useful for
+  keeping the last N log messages in memory. This can be a fast way to keep
+  recent, and thus hopefully relevant, log messages. (by @dapsays,
+  github.com/davepacheco)
+
+  Potential uses: Live debugging
+  if a running process could inspect those messages. One could dump recent
+  log messages at a finer log level than is typically logged on
+  [`uncaughtException`](http://nodejs.org/docs/latest/api/all.html#all_event_uncaughtexception).
+
+        var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
+        var log = new bunyan({
+            name: "foo",
+            raw: true,
+            stream: ringbuffer,
+            level: "debug"
+        });
+
+        log.info('hello world');
+        console.log(ringbuffer.entries);
+
 - Add support for "raw" streams. This is a logging stream that is given
   raw log record objects instead of a JSON-stringified string.
 
@@ -17,7 +44,9 @@
             raw: true
         });
 
-  See "examples/raw-stream.js".
+  See "examples/raw-stream.js". I expect raw streams to be useful for
+  piping Bunyan logging to separate services (e.g. <http://log.ly>,
+  <https://github.com/etsy/statsd>) or to separate in-process handling.
 
 - Add test/corpus/*.log files (accidentally excluded) so that test suite
   works(!).

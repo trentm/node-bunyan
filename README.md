@@ -488,7 +488,6 @@ This example emits:
 
     [ { name: 'foo',
         hostname: '912d2b29',
-        raw: true,
         pid: 50346,
         level: 30,
         msg: 'hello world',
