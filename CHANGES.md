@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.9.0 (not yet released)
+## bunyan 0.9.0
 
 - [pull #16] Bullet proof the `bunyan.stdSerializers` (by github.com/rlidwka).
 
