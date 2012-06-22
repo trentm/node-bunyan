@@ -1,5 +1,7 @@
-Bunyan is a simple and fast a JSON Logger for node.js services (and a `bunyan`
-CLI tool for nicely viewing those logs).
+Bunyan is **a simple and fast a JSON logging library** for node.js services and
+**a `bunyan` CLI tool** for nicely viewing those logs).
+
+![bunyan CLI screenshot](https://raw.github.com/trentm/node-bunyan/master/tools/screenshot1.png)
 
 Server logs should be structured. JSON's a good format. Let's do that: a log
 record is one line of `JSON.stringify`'d output. Let's also specify some common
