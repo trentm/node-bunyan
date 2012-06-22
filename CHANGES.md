@@ -2,6 +2,8 @@
 
 ## bunyan 0.9.0 (not yet released)
 
+- [pull #16] Bullet proof the `bunyan.stdSerializers` (by github.com/rlidwka).
+
 - [pull #15] The `bunyan` CLI will now chronologically merge multiple log
   streams when it is given multiple file arguments. (by github.com/davepacheco)
 
