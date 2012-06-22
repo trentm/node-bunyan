@@ -512,6 +512,16 @@ This example emits:
         v: 0 } ]
 
 
+# Versioning
+
+The scheme I follow is most succintly described by the bootstrap guys
+[here](https://github.com/twitter/bootstrap#versioning). 
+
+tl;dr: All versions a `<major>.<minor>.<patch>` which will be incremented for
+breaking backward compat and major reworks, new features without breaking
+change, and bug fixes, respectively.
+
+
 
 # License
 
