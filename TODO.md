@@ -1,3 +1,6 @@
+- move custom keys out to 'x' ? What about req, res? Compat issues there?
+  Bunyan CLI would have to deal with both for a while. Just a change in
+  record.v from 0 to 1.
 - [Yunong] buffered writes to increase speed:
     - I'd start with a tools/timeoutput.js for some numbers to compare
       before/after. Sustained high output to a file.
@@ -29,9 +32,7 @@
 - want `bunyan -f foo.log` a la `tail -f`
 
 
-
 # someday/maybe
-
 
 - More `bunyan` output formats and filtering features.
 - Think about a bunyan dashboard that supports organizing and viewing logs
