@@ -698,7 +698,12 @@ function processStdin(opts, stylize, callback) {
  * @param callback {Function} `function ()`
  */
 function processFile(file, opts, stylize, callback) {
-  var stream = fs.createReadStream(file, {encoding: 'utf8'});
+  var stream = fs.createReadStream(file);
+  if (/\.gz$/.test(file)) {
+    stream = stream.pipe(require('zlib').createGunzip());
+  }
+  // Manually decode streams - lazy load here as per node/lib/fs.js
+  var decoder = new (require('string_decoder').StringDecoder)('utf8');
 
   streams[file].stream = stream;
 
@@ -708,7 +713,11 @@ function processFile(file, opts, stylize, callback) {
   });
 
   var leftover = '';  // Left-over partial line from last chunk.
-  stream.on('data', function (chunk) {
+  stream.on('data', function (data) {
+    var chunk = decoder.write(data);
+    if (!chunk.length) {
+      return;
+    }
     var lines = chunk.split(/\r\n|\n/);
     var length = lines.length;
     if (length === 1) {
