@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.10.0 (not yet released)
+## bunyan 0.10.0
 
 - [pull #24] Support for gzip'ed log files in the bunyan CLI (by
   github.com/mhart):
