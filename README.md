@@ -101,7 +101,7 @@ Explicitly that looks like:
     var log = new Logger({name: "myapp", stream: process.stdout,
       level: "info"});
 
-That is an abbreviated form for a single stream. **You can defined multiple
+That is an abbreviated form for a single stream. **You can define multiple
 streams at different levels**.
 
     var log = new Logger({
