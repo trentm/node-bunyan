@@ -1,3 +1,4 @@
+- "all" or "off" levels? log4j? logging.py?
 - move custom keys out to 'x' ? What about req, res? Compat issues there?
   Bunyan CLI would have to deal with both for a while. Just a change in
   record.v from 0 to 1.
@@ -38,6 +39,8 @@
 - Think about a bunyan dashboard that supports organizing and viewing logs
   from multiple hosts and services.
 - Syslog support.
+- A vim plugin (a la http://vim.cybermirror.org/runtime/autoload/zip.vim ?) to
+  allow browsing (read-only) a bunyan log in rendered form.
 - Some speed comparisons with others to get a feel for Bunyan's speed.
 - remove "rm -rf tmp" when this fixed: <https://github.com/isaacs/npm/issues/2144>
 - what about promoting 'latency' field and making that easier?
