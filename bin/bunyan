@@ -317,14 +317,6 @@ function parseArgv(argv) {
   }
   args = newArgs;
 
-  var condDefines = [
-    "var TRACE = 10;",
-    "var DEBUG = 20;",
-    "var INFO = 30;",
-    "var WARN = 40;",
-    "var ERROR = 50;",
-    "var FATAL = 60;"
-  ].join('\n') + '\n';
   var condDefines = [];
   Object.keys(upperNameFromLevel).forEach(function (lvl) {
     condDefines.push(format("var %s = %s;", upperNameFromLevel[lvl], lvl));
