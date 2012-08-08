@@ -288,7 +288,7 @@ function parseArgv(argv) {
     color: process.stdout.isTTY,
     outputMode: OM_PAUL,
     jsonIndent: 2,
-    level: -Infinity,
+    level: null,
     conditions: null
   };
 
