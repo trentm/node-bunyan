@@ -200,3 +200,29 @@ test('mixed text and gzip logs', function (t) {
     t.end();
   });
 });
+
+test('--level 40', function (t) {
+  expect = [
+    '# levels\n',
+    '[2012-02-08T22:56:53.856Z]  WARN: myservice/123 on example.com: My message\n',
+    '[2012-02-08T22:56:54.856Z] ERROR: myservice/123 on example.com: My message\n',
+    '[2012-02-08T22:56:55.856Z] LVL55: myservice/123 on example.com: My message\n',
+    '[2012-02-08T22:56:56.856Z] FATAL: myservice/123 on example.com: My message\n',
+    '\n',
+    '# extra fields\n',
+    '\n',
+    '# bogus\n',
+    'not a JSON line\n',
+    '{"hi": "there"}\n'
+  ].join('');
+  exec(BUNYAN + ' -l 40 corpus/all.log', function (err, stdout, stderr) {
+    t.error(err);
+    t.equal(stdout, expect);
+    t.end();
+    exec(BUNYAN + ' --level 40 corpus/all.log', function (err, stdout, stderr) {
+      t.error(err);
+      t.equal(stdout, expect);
+      t.end();
+    });
+  });
+});
