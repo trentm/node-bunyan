@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.11.1 (not yet released)
+## bunyan 0.11.1
 
 - Add defines for the (uppercase) log level names (TRACE, DEBUG, etc.) in
   `bunyan -c "..."` filtering condition code. E.g.:
