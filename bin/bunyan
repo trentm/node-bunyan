@@ -58,6 +58,8 @@ Object.keys(levelFromName).forEach(function (name) {
     name.length === 4 ? ' ' : '') + name.toUpperCase();
 });
 
+
+
 //---- support functions
 
 function getVersion() {
@@ -315,6 +317,20 @@ function parseArgv(argv) {
   }
   args = newArgs;
 
+  var condDefines = [
+    "var TRACE = 10;",
+    "var DEBUG = 20;",
+    "var INFO = 30;",
+    "var WARN = 40;",
+    "var ERROR = 50;",
+    "var FATAL = 60;"
+  ].join('\n') + '\n';
+  var condDefines = [];
+  Object.keys(upperNameFromLevel).forEach(function (lvl) {
+    condDefines.push(format("var %s = %s;", upperNameFromLevel[lvl], lvl));
+  });
+  condDefines = condDefines.join('\n') + '\n';
+
   var endOfOptions = false;
   while (args.length > 0) {
     var arg = args.shift();
@@ -371,7 +387,7 @@ function parseArgv(argv) {
         var condition = args.shift();
         parsed.conditions = parsed.conditions || []
         var scriptName = 'bunyan-condition-'+parsed.conditions.length;
-        var script = vm.createScript(condition, scriptName);
+        var script = vm.createScript(condDefines + condition, scriptName);
         parsed.conditions.push(script);
         break
       default: // arguments

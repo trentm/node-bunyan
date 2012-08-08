@@ -2,7 +2,10 @@
 
 ## bunyan 0.11.1 (not yet released)
 
-(nothing yet)
+- Add defines for the (uppercase) log level names (TRACE, DEBUG, etc.) in
+  `bunyan -c "..."` filtering condition code. E.g.:
+
+        $ ... | bunyan -c 'level >= ERROR'
 
 
 ## bunyan 0.11.0
