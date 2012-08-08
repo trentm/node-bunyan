@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = "0.10.1";
+var VERSION = "0.11.0";
 
 var util = require('util');
 var pathlib = require('path');
@@ -128,7 +128,7 @@ function printHelp() {
   util.puts("  bunyan [OPTIONS] [FILE ...]");
   util.puts("");
   util.puts("Pipe in your JSON log file content (e.g. bunyan logs) for nicer ");
-  util.puts("output");
+  util.puts("output.");
   util.puts("");
   util.puts("Options:");
   util.puts("  -h, --help    print this help info and exit");
@@ -153,14 +153,14 @@ function printHelp() {
   util.puts("");
   util.puts("Log Levels:");
   util.puts("  Either numeric values or their associated strings are valid for the");
-  util.puts("  -l --level argument.  However, --condition scripts will see a numeric");
+  util.puts("  -l|--level argument.  However, -c|--condition scripts will see a numeric");
   util.puts("  'level' value, not a string.");
   util.puts("");
   Object.keys(levelFromName).forEach(function(name) {
     var n = name;
     while (n.length < 6)
       n += " ";
-    console.log("  %s %d", n, levelFromName[name]);
+    console.log("    %s %d", n, levelFromName[name]);
   });
   util.puts("");
   util.puts("See <https://github.com/trentm/node-bunyan> for more complete docs.");

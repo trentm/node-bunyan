@@ -1,8 +1,15 @@
 # bunyan Changelog
 
-## bunyan 0.10.1 (not yet released)
+## bunyan 0.11.0 (not yet released)
 
-(nothing yet)
+- [pull #29] Add -l/--level for level filtering, and -c/--condition for
+  arbitrary conditional filtering (by github.com/isaacs):
+
+        $ ... | bunyan -l error   # filter out log records below error
+        $ ... | bunyan -l 50      # numeric value works too
+        $ ... | bunyan -c 'level===50'              # equiv with -c filtering
+        $ ... | bunyan -c 'pid===123'               # filter on any field
+        $ ... | bunyan -c 'pid===123' -c '_audit'   # multiple filters
 
 
 ## bunyan 0.10.0
