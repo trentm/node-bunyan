@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.11.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.11.0
 
 - [pull #29] Add -l/--level for level filtering, and -c/--condition for
