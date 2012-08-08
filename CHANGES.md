@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.11.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.11.1
 
 - Add defines for the (uppercase) log level names (TRACE, DEBUG, etc.) in
