@@ -200,3 +200,77 @@ test('mixed text and gzip logs', function (t) {
     t.end();
   });
 });
+
+test('--level 40', function (t) {
+  expect = [
+    '# levels\n',
+    '[2012-02-08T22:56:53.856Z]  WARN: myservice/123 on example.com: My message\n',
+    '[2012-02-08T22:56:54.856Z] ERROR: myservice/123 on example.com: My message\n',
+    '[2012-02-08T22:56:55.856Z] LVL55: myservice/123 on example.com: My message\n',
+    '[2012-02-08T22:56:56.856Z] FATAL: myservice/123 on example.com: My message\n',
+    '\n',
+    '# extra fields\n',
+    '\n',
+    '# bogus\n',
+    'not a JSON line\n',
+    '{"hi": "there"}\n'
+  ].join('');
+  exec(BUNYAN + ' -l 40 corpus/all.log', function (err, stdout, stderr) {
+    t.error(err);
+    t.equal(stdout, expect);
+    t.end();
+    exec(BUNYAN + ' --level 40 corpus/all.log', function (err, stdout, stderr) {
+      t.error(err);
+      t.equal(stdout, expect);
+      t.end();
+    });
+  });
+});
+
+test('--condition "level === 10 && pid === 123"', function (t) {
+  var expect = [
+    '# levels\n',
+    '[2012-02-08T22:56:50.856Z] TRACE: myservice/123 on example.com: My message\n',
+    '\n',
+    '# extra fields\n',
+    '\n',
+    '# bogus\n',
+    'not a JSON line\n',
+    '{"hi": "there"}\n'
+  ].join('');
+  exec(BUNYAN + ' -c "level === 10 && pid === 123" corpus/all.log',
+       function (err, stdout, stderr) {
+    t.error(err);
+    t.equal(stdout, expect);
+    t.end();
+    exec(BUNYAN + ' --condition "level === 10 && pid === 123" corpus/all.log',
+         function (err, stdout, stderr) {
+      t.error(err);
+      t.equal(stdout, expect);
+      t.end();
+    });
+  });
+});
+
+// multiple
+// not sure if this is a bug or a feature.  let's call it a feature!
+test('multiple --conditions', function (t) {
+  var expect = [
+    '# levels\n',
+    '[2012-02-08T22:56:53.856Z]  WARN: myservice/1 on example.com: My message\n',
+    '\n',
+    '# extra fields\n',
+    '\n',
+    '# bogus\n',
+    'not a JSON line\n',
+    '{"hi": "there"}\n'
+  ].join('');
+  t.end();
+  exec(BUNYAN + ' test/corpus/all.log ' +
+       '-c "if (level === 40) pid = 1; true" ' +
+       '-c "pid === 1"', function (err, stdout, stderr) {
+    t.error(err);
+    t.equal(stdout, expect);
+    t.end();
+  });
+});

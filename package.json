@@ -18,5 +18,9 @@
   "devDependencies": {
     "tap": "0.2.0",
     "ben": "0.0.0"
+  },
+
+  "scripts": {
+    "test": "tap test/*.js"
   }
 }

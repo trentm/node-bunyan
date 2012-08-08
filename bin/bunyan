@@ -144,6 +144,24 @@ function printHelp() {
   util.puts("                  json-N: JSON output, N-space indent, e.g. 'json-4'");
   util.puts("                  inspect: node.js `util.inspect` output");
   util.puts("  -j            shortcut for `-o json`");
+  util.puts("  -l, --level LEVEL");
+  util.puts("                Only show messages at or above the specified level.");
+  util.puts("                (See 'Log Levels' below.)");
+  util.puts("  -c, --condition CONDITION");
+  util.puts("                Run each log message through the condition");
+  util.puts("                and only show those that resolve to a truish value.");
+  util.puts("");
+  util.puts("Log Levels:");
+  util.puts("  Either numeric values or their associated strings are valid for the");
+  util.puts("  -l --level argument.  However, --condition scripts will see a numeric");
+  util.puts("  'level' value, not a string.");
+  util.puts("");
+  Object.keys(levelFromName).forEach(function(name) {
+    var n = name;
+    while (n.length < 6)
+      n += " ";
+    console.log("  %s %d", n, levelFromName[name]);
+  });
   util.puts("");
   util.puts("See <https://github.com/trentm/node-bunyan> for more complete docs.");
 }
@@ -174,6 +192,23 @@ function gotRecord(file, line, rec, opts, stylize)
 
   streams[file]['records'].push({ line: line, rec: rec, time: time });
   emitNextRecord(opts, stylize);
+}
+
+function filterRecord(rec, opts)
+{
+  if (opts.level && rec.level < opts.level) {
+    return false;
+  }
+
+  if (opts.conditions) {
+    for (var i = 0; i < opts.conditions.length; i++) {
+      var pass = opts.conditions[i].runInNewContext(rec);
+      if (!pass)
+        return false;
+    }
+  }
+
+  return true;
 }
 
 function emitNextRecord(opts, stylize)
@@ -252,13 +287,15 @@ function parseArgv(argv) {
     help: false,
     color: process.stdout.isTTY,
     outputMode: OM_PAUL,
-    jsonIndent: 2
+    jsonIndent: 2,
+    level: -Infinity,
+    conditions: null
   };
 
   // Turn '-iH' into '-i -H', except for argument-accepting options.
   var args = argv.slice(2);  // drop ['node', 'scriptname']
   var newArgs = [];
-  var optTakesArg = {'d': true, 'o': true};
+  var optTakesArg = {'d': true, 'o': true, 'c': true, 'l': true};
   for (var i = 0; i < args.length; i++) {
     if (args[i].charAt(0) === "-" && args[i].charAt(1) !== '-' && args[i].length > 2) {
       var splitOpts = args[i].slice(1).split("");
@@ -317,6 +354,26 @@ function parseArgv(argv) {
       case "-j": // output with JSON.stringify
         parsed.outputMode = OM_JSON;
         break;
+      case "-l":
+      case "--level":
+        var levelArg = args.shift();
+        var level = +(levelArg);
+        if (isNaN(level)) {
+          level = +levelFromName[levelArg.toLowerCase()];
+        }
+        if (isNaN(level)) {
+          throw new Error("unknown level value: '"+levelArg+"'");
+        }
+        parsed.level = level;
+        break;
+      case "-c":
+      case "--condition":
+        var condition = args.shift();
+        parsed.conditions = parsed.conditions || []
+        var scriptName = 'bunyan-condition-'+parsed.conditions.length;
+        var script = vm.createScript(condition, scriptName);
+        parsed.conditions.push(script);
+        break
       default: // arguments
         if (!endOfOptions && arg.length > 0 && arg[0] === '-') {
           throw new Error("unknown option '"+arg+"'");
@@ -411,7 +468,13 @@ function handleLogLine(file, line, opts, stylize) {
     }
   }
 
-  if (file === null || !isValidRecord(rec))
+  if (!isValidRecord(rec))
+    return emitRecord(rec, line, opts, stylize);
+
+  if (!filterRecord(rec, opts))
+    return;
+
+  if (file === null)
     return emitRecord(rec, line, opts, stylize);
 
   return gotRecord(file, line, rec, opts, stylize);
