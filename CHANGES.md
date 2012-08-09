@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.11.3 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.11.2
 
 - [issue #30] Robust handling of 'req' field without a 'headers' subfield
