@@ -145,6 +145,8 @@ function printHelp() {
   console.log("                and only show those that resolve to a truish value.");
   console.log("                E.g. `-c 'pid == 123'`, `-c 'level == 50'`. You must");
   console.log("                use the numeric values for filtering by level.");
+  console.log("  --strict      Suppress all but legal Bunyan JSON log lines. By default");
+  console.log("                non-JSON, and non-Bunyan lines are passed through.");
   console.log("");
   console.log("Output options:");
   console.log("  --color       Colorize output. Defaults to try if output");
@@ -297,7 +299,8 @@ function parseArgv(argv) {
     outputMode: OM_PAUL,
     jsonIndent: 2,
     level: null,
-    conditions: null
+    conditions: null,
+    strict: false
   };
 
   // Turn '-iH' into '-i -H', except for argument-accepting options.
@@ -336,6 +339,9 @@ function parseArgv(argv) {
         break;
       case "--version":
         parsed.version = true;
+        break;
+      case "--strict":
+        parsed.strict = true;
         break;
       case "--color":
         parsed.color = true;
@@ -465,19 +471,24 @@ function handleLogLine(file, line, opts, stylize) {
   // Emit non-JSON lines immediately.
   var rec;
   if (!line) {
-    return emit(line + '\n');
+    if (!opts.strict) emit(line + '\n');
+    return;
   } else if (line[0] !== '{') {
-    return emit(line + '\n');  // not JSON
+    if (!opts.strict) emit(line + '\n');  // not JSON
+    return;
   } else {
     try {
       rec = JSON.parse(line);
     } catch(e) {
-      return emit(line + '\n');
+      if (!opts.strict) emit(line + '\n');
+      return;
     }
   }
 
-  if (!isValidRecord(rec))
-    return emitRecord(rec, line, opts, stylize);
+  if (!isValidRecord(rec)) {
+    if (!opts.strict) emitRecord(rec, line, opts, stylize);
+    return;
+  }
 
   if (!filterRecord(rec, opts))
     return;
