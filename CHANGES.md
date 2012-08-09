@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.11.3 (not yet released)
+## bunyan 0.11.3
 
 - Add '--strict' option to `bunyan` CLI to suppress all but legal Bunyan JSON
   log lines. By default non-JSON, and non-Bunyan lines are passed through.
