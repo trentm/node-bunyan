@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.11.4 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.11.3
 
 - Add '--strict' option to `bunyan` CLI to suppress all but legal Bunyan JSON
