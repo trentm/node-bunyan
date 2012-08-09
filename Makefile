@@ -6,7 +6,7 @@ TAP := ./node_modules/.bin/tap
 
 #---- Files
 
-JSSTYLE_FILES := $(shell find lib test tools examples -name "*.js")
+JSSTYLE_FILES := $(shell find lib test tools examples -name "*.js") bin/bunyan
 
 
 

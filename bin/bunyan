@@ -126,52 +126,52 @@ function objCopy(obj) {
 }
 
 function printHelp() {
-  util.puts("Usage:");
-  util.puts("  bunyan [OPTIONS] [FILE ...]");
-  util.puts("");
-  util.puts("Filter and pretty-print Bunyan log file content.");
-  util.puts("");
-  util.puts("General options:");
-  util.puts("  -h, --help    print this help info and exit");
-  util.puts("  --version     print version of this command and exit");
-  util.puts("");
-  util.puts("Filtering options:");
-  util.puts("  -l, --level LEVEL");
-  util.puts("                Only show messages at or above the specified level.");
-  util.puts("                You can specify level *names* or numeric values.");
-  util.puts("                (See 'Log Levels' below.)");
-  util.puts("  -c, --condition CONDITION");
-  util.puts("                Run each log message through the condition");
-  util.puts("                and only show those that resolve to a truish value.");
-  util.puts("                E.g. `-c 'pid == 123'`, `-c 'level == 50'`. You must");
-  util.puts("                use the numeric values for filtering by level.");
-  util.puts("");
-  util.puts("Output options:");
-  util.puts("  --color       Colorize output. Defaults to try if output");
-  util.puts("                stream is a TTY.");
-  util.puts("  --no-color    Force no coloring (e.g. terminal doesn't support it)");
-  util.puts("  -o, --output MODE");
-  util.puts("                Specify an output mode/format. One of");
-  util.puts("                  paul: (the default) pretty");
-  util.puts("                  json: JSON output, 2-space indent");
-  util.puts("                  json-N: JSON output, N-space indent, e.g. 'json-4'");
-  util.puts("                  inspect: node.js `util.inspect` output");
-  util.puts("  -j            shortcut for `-o json`");
-  util.puts("");
-  util.puts("Log Levels:");
-  util.puts("  Either numeric values or their associated strings are valid for the");
-  util.puts("  -l|--level argument.  However, -c|--condition scripts will see a numeric");
-  util.puts("  'level' value, not a string.");
-  util.puts("");
+  console.log("Usage:");
+  console.log("  bunyan [OPTIONS] [FILE ...]");
+  console.log("");
+  console.log("Filter and pretty-print Bunyan log file content.");
+  console.log("");
+  console.log("General options:");
+  console.log("  -h, --help    print this help info and exit");
+  console.log("  --version     print version of this command and exit");
+  console.log("");
+  console.log("Filtering options:");
+  console.log("  -l, --level LEVEL");
+  console.log("                Only show messages at or above the specified level.");
+  console.log("                You can specify level *names* or numeric values.");
+  console.log("                (See 'Log Levels' below.)");
+  console.log("  -c, --condition CONDITION");
+  console.log("                Run each log message through the condition");
+  console.log("                and only show those that resolve to a truish value.");
+  console.log("                E.g. `-c 'pid == 123'`, `-c 'level == 50'`. You must");
+  console.log("                use the numeric values for filtering by level.");
+  console.log("");
+  console.log("Output options:");
+  console.log("  --color       Colorize output. Defaults to try if output");
+  console.log("                stream is a TTY.");
+  console.log("  --no-color    Force no coloring (e.g. terminal doesn't support it)");
+  console.log("  -o, --output MODE");
+  console.log("                Specify an output mode/format. One of");
+  console.log("                  paul: (the default) pretty");
+  console.log("                  json: JSON output, 2-space indent");
+  console.log("                  json-N: JSON output, N-space indent, e.g. 'json-4'");
+  console.log("                  inspect: node.js `util.inspect` output");
+  console.log("  -j            shortcut for `-o json`");
+  console.log("");
+  console.log("Log Levels:");
+  console.log("  Either numeric values or their associated strings are valid for the");
+  console.log("  -l|--level argument.  However, -c|--condition scripts will see a numeric");
+  console.log("  'level' value, not a string.");
+  console.log("");
   Object.keys(levelFromName).forEach(function(name) {
     var n = name;
     while (n.length < 6)
       n += " ";
     console.log("    %s %d", n, levelFromName[name]);
   });
-  util.puts("");
-  util.puts("See <https://github.com/trentm/node-bunyan> for more complete docs.");
-  util.puts("Please report bugs to <https://github.com/trentm/node-bunyan/issues>.");
+  console.log("");
+  console.log("See <https://github.com/trentm/node-bunyan> for more complete docs.");
+  console.log("Please report bugs to <https://github.com/trentm/node-bunyan/issues>.");
 }
 
 /*
@@ -864,7 +864,7 @@ function main(argv) {
     return;
   }
   if (opts.version) {
-    util.puts("bunyan " + getVersion());
+    console.log("bunyan " + getVersion());
     return;
   }
   var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
