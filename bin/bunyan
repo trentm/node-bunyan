@@ -129,13 +129,13 @@ function printHelp() {
   util.puts("Usage:");
   util.puts("  bunyan [OPTIONS] [FILE ...]");
   util.puts("");
-  util.puts("Pipe in your JSON log file content (e.g. bunyan logs) for nicer ");
-  util.puts("output.");
+  util.puts("Filter and pretty-print Bunyan log file content.");
   util.puts("");
-  util.puts("Options:");
+  util.puts("General options:");
   util.puts("  -h, --help    print this help info and exit");
   util.puts("  --version     print version of this command and exit");
   util.puts("");
+  util.puts("Filtering options:");
   util.puts("  -l, --level LEVEL");
   util.puts("                Only show messages at or above the specified level.");
   util.puts("                You can specify level *names* or numeric values.");
@@ -146,6 +146,7 @@ function printHelp() {
   util.puts("                E.g. `-c 'pid == 123'`, `-c 'level == 50'`. You must");
   util.puts("                use the numeric values for filtering by level.");
   util.puts("");
+  util.puts("Output options:");
   util.puts("  --color       Colorize output. Defaults to try if output");
   util.puts("                stream is a TTY.");
   util.puts("  --no-color    Force no coloring (e.g. terminal doesn't support it)");
@@ -170,6 +171,7 @@ function printHelp() {
   });
   util.puts("");
   util.puts("See <https://github.com/trentm/node-bunyan> for more complete docs.");
+  util.puts("Please report bugs to <https://github.com/trentm/node-bunyan/issues>.");
 }
 
 /*
