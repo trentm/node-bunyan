@@ -218,7 +218,6 @@ test('--level 40', function (t) {
   exec(BUNYAN + ' -l 40 corpus/all.log', function (err, stdout, stderr) {
     t.error(err);
     t.equal(stdout, expect);
-    t.end();
     exec(BUNYAN + ' --level 40 corpus/all.log', function (err, stdout, stderr) {
       t.error(err);
       t.equal(stdout, expect);
@@ -242,7 +241,6 @@ test('--condition "level === 10 && pid === 123"', function (t) {
        function (err, stdout, stderr) {
     t.error(err);
     t.equal(stdout, expect);
-    t.end();
     exec(BUNYAN + ' --condition "level === 10 && pid === 123" corpus/all.log',
          function (err, stdout, stderr) {
       t.error(err);
@@ -265,8 +263,7 @@ test('multiple --conditions', function (t) {
     'not a JSON line\n',
     '{"hi": "there"}\n'
   ].join('');
-  t.end();
-  exec(BUNYAN + ' test/corpus/all.log ' +
+  exec(BUNYAN + ' corpus/all.log ' +
        '-c "if (level === 40) pid = 1; true" ' +
        '-c "pid === 1"', function (err, stdout, stderr) {
     t.error(err);
@@ -274,3 +271,20 @@ test('multiple --conditions', function (t) {
     t.end();
   });
 });
+
+// https://github.com/trentm/node-bunyan/issues/30
+//
+// One of the records in corpus/withreq.log has a 'req'
+// field with no 'headers'. Ditto for the 'res' field.
+//test('robust req handling', function (t) {
+//  XXX
+//  var expect = [
+//    '{"hi": "there"}\n'
+//  ].join('');
+//  exec(BUNYAN + ' corpus/withreq.log', function (err, stdout, stderr) {
+//    t.ok(false, "boom XXX")
+//    t.error(err);
+//    t.equal(stdout, expect);
+//    t.end();
+//  });
+//});
