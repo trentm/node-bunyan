@@ -2,7 +2,7 @@
 - move custom keys out to 'x' ? What about req, res? Compat issues there?
   Bunyan CLI would have to deal with both for a while. Just a change in
   record.v from 0 to 1.
-- [Yunong] buffered writes to increase speed:
+- buffered writes to increase speed:
     - I'd start with a tools/timeoutput.js for some numbers to compare
       before/after. Sustained high output to a file.
     - perhaps this would be a "buffered: true" option on the stream object

@@ -2,6 +2,8 @@
 
 ## bunyan 0.11.2 (not yet released)
 
+- [issue #30] Robust handling of 'req' field without a 'headers' subfield
+  in `bunyan` CLI.
 - [issue #31] Pull the TRACE, DEBUG, et al defines from `bunyan -c "..."`
   filtering code. This was added in v0.11.1, but has a significant adverse
   affect.

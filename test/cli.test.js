@@ -276,15 +276,43 @@ test('multiple --conditions', function (t) {
 //
 // One of the records in corpus/withreq.log has a 'req'
 // field with no 'headers'. Ditto for the 'res' field.
-//test('robust req handling', function (t) {
-//  XXX
-//  var expect = [
-//    '{"hi": "there"}\n'
-//  ].join('');
-//  exec(BUNYAN + ' corpus/withreq.log', function (err, stdout, stderr) {
-//    t.ok(false, "boom XXX")
-//    t.error(err);
-//    t.equal(stdout, expect);
-//    t.end();
-//  });
-//});
+test('robust req handling', function (t) {
+  var expect = [
+    '[2012-08-08T10:25:47.636Z] DEBUG: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: headAgentProbes respond (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, route=HeadAgentProbes, contentMD5=11FxOYiYfpMxmANj4kGJzg==)',
+    '[2012-08-08T10:25:47.637Z]  INFO: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: HeadAgentProbes handled: 200 (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, 3ms, audit=true, remoteAddress=10.2.207.2, remotePort=50394, secure=false, _audit=true)',
+    '    HEAD /agentprobes?agent=ccf92af9-0b24-46b6-ab60-65095fdd3037 HTTP/1.1',
+    '    accept: application/json',
+    '    content-type: application/json',
+    '    host: 10.2.207.16',
+    '    connection: keep-alive',
+    '    --',
+    '    HTTP/1.1 200 OK',
+    '    content-md5: 11FxOYiYfpMxmANj4kGJzg==',
+    '    access-control-allow-origin: *',
+    '    access-control-allow-headers: Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+    '    access-control-allow-methods: HEAD',
+    '    access-control-expose-headers: X-Api-Version, X-Request-Id, X-Response-Time',
+    '    connection: Keep-Alive',
+    '    date: Wed, 08 Aug 2012 10:25:47 GMT',
+    '    server: Amon Master/1.0.0',
+    '    x-request-id: cce79d15-ffc2-487c-a4e4-e940bdaac31e',
+    '    x-response-time: 3',
+    '    --',
+    '    route: {',
+    '      "name": "HeadAgentProbes",',
+    '      "version": false',
+    '    }',
+    '[2012-08-08T10:25:47.637Z]  INFO: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: HeadAgentProbes handled: 200 (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, 3ms, audit=true, remoteAddress=10.2.207.2, remotePort=50394, secure=false, _audit=true)',
+    '    HEAD /agentprobes?agent=ccf92af9-0b24-46b6-ab60-65095fdd3037 HTTP/1.1',
+    '    --',
+    '    route: {',
+    '      "name": "HeadAgentProbes",',
+    '      "version": false',
+    '    }'
+  ].join('\n') + '\n';
+  exec(BUNYAN + ' corpus/withreq.log', function (err, stdout, stderr) {
+    t.error(err);
+    t.equal(stdout, expect);
+    t.end();
+  });
+});

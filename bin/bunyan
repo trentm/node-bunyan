@@ -570,10 +570,13 @@ function emitRecord(rec, line, opts, stylize) {
 
     if (rec.req) {
       var headers = rec.req.headers;
-      details.push(indent(format("%s %s HTTP/1.1\n%s", rec.req.method,
+      details.push(indent(format("%s %s HTTP/1.1%s", rec.req.method,
         rec.req.url,
-        Object.keys(headers).map(
-          function (h) { return h + ': ' + headers[h]; }).join('\n'))));
+        (headers
+          ? '\n' + Object.keys(headers).map(
+              function (h) { return h + ': ' + headers[h]; }).join('\n')
+          : '')
+      )));
     }
     delete rec.req;
 
