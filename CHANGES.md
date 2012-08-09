@@ -7,6 +7,8 @@
 
 ## bunyan 0.11.1
 
+- **Bad release. The TRACE et al names are bleeding into the log records
+  when using '-c'.**
 - Add defines for the (uppercase) log level names (TRACE, DEBUG, etc.) in
   `bunyan -c "..."` filtering condition code. E.g.:
 
