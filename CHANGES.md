@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.12.0 (not yet released)
+## bunyan 0.12.0
 
 - [pull #32] `bunyan -o short` for more concise output (by Dave Pacheco). E.g.:
 
