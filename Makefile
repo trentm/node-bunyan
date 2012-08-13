@@ -17,6 +17,7 @@ all:
 # Ensure all version-carrying files have the same version.
 .PHONY: versioncheck
 versioncheck:
+	[[ `cat package.json | json version` == `grep '^## ' CHANGES.md | head -1 | awk '{print $$3}'` ]]
 	[[ `cat package.json | json version` == `grep '^var VERSION' bin/bunyan | awk -F'"' '{print $$2}'` ]]
 	[[ `cat package.json | json version` == `grep '^var VERSION' lib/bunyan.js | awk -F"'" '{print $$2}'` ]]
 	@echo Version check ok.

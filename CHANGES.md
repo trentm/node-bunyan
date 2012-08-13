@@ -1,8 +1,14 @@
 # bunyan Changelog
 
-## bunyan 0.11.4 (not yet released)
+## bunyan 0.12.0 (not yet released)
 
-(nothing yet)
+- [pull #32] `bunyan -o short` for more concise output (by Dave Pacheco). E.g.:
+
+        22:56:52.856Z  INFO myservice: My message
+
+  instead of:
+
+        [2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message
 
 
 ## bunyan 0.11.3

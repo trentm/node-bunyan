@@ -1,6 +1,6 @@
 {
   "name": "bunyan",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "description": "a JSON Logger library for node.js services",
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "main": "./lib/bunyan.js",
