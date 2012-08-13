@@ -23,11 +23,13 @@ var OM_PAUL = 1;
 var OM_JSON = 2;
 var OM_INSPECT = 3;
 var OM_SIMPLE = 4;
+var OM_SHORT = 5;
 var OM_FROM_NAME = {
   "paul": OM_PAUL,
   "json": OM_JSON,
   "inspect": OM_INSPECT,
-  "simple": OM_SIMPLE
+  "simple": OM_SIMPLE,
+  "short": OM_SHORT
 };
 
 
@@ -158,6 +160,7 @@ function printHelp() {
   console.log("                  json: JSON output, 2-space indent");
   console.log("                  json-N: JSON output, N-space indent, e.g. 'json-4'");
   console.log("                  inspect: node.js `util.inspect` output");
+  console.log("                  short: like paul, but more concise");
   console.log("  -j            shortcut for `-o json`");
   console.log("");
   console.log("Log Levels:");
@@ -503,7 +506,13 @@ function handleLogLine(file, line, opts, stylize) {
  * Print out a single result, considering input options.
  */
 function emitRecord(rec, line, opts, stylize) {
+  var short = false;
+
   switch (opts.outputMode) {
+  case OM_SHORT:
+    short = true;
+    /* jsl:fall-thru */
+
   case OM_PAUL:
     //    [time] LEVEL: name[/component]/pid on hostname (src): msg* (extras...)
     //        msg*
@@ -520,7 +529,17 @@ function emitRecord(rec, line, opts, stylize) {
 
     delete rec.v;
 
-    var time = stylize('[' + rec.time + ']', 'XXX');
+    /*
+     * We assume the Date is formatted according to ISO8601, in which case we
+     * can safely chop off the date information.
+     */
+    if (short && rec.time[10] == 'T') {
+      var time = rec.time.substr(11);
+      time = stylize(time, 'XXX');
+    } else {
+      var time = stylize('[' + rec.time + ']', 'XXX');
+    }
+
     delete rec.time;
 
     var nameStr = rec.name;
@@ -531,7 +550,8 @@ function emitRecord(rec, line, opts, stylize) {
     }
     delete rec.component;
 
-    nameStr += '/' + rec.pid;
+    if (!short)
+      nameStr += '/' + rec.pid;
     delete rec.pid;
 
     var level = (upperPaddedNameFromLevel[rec.level] || "LVL" + rec.level);
@@ -661,15 +681,24 @@ function emitRecord(rec, line, opts, stylize) {
       (extras.length ? ' (' + extras.join(', ') + ')' : ''), 'grey');
     details = stylize(
       (details.length ? details.join('\n    --\n') + '\n' : ''), 'grey');
-    emit(format("%s %s: %s on %s%s:%s%s\n%s",
-      time,
-      level,
-      nameStr,
-      hostname || "<no-hostname>",
-      src,
-      onelineMsg,
-      extras,
-      details));
+    if (!short)
+      emit(format("%s %s: %s on %s%s:%s%s\n%s",
+        time,
+        level,
+        nameStr,
+        hostname || "<no-hostname>",
+        src,
+        onelineMsg,
+        extras,
+        details));
+    else
+      emit(format("%s %s %s:%s%s\n%s",
+        time,
+        level,
+        nameStr,
+        onelineMsg,
+        extras,
+        details));
     break;
 
   case OM_INSPECT:
