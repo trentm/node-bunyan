@@ -1,8 +1,11 @@
 # bunyan Changelog
 
-## bunyan 0.12.1 (not yet released)
+## bunyan 0.13.0 (not yet released)
 
-(nothing yet)
+- [issue #31] Re-instate defines for the (uppercase) log level names (TRACE,
+  DEBUG, etc.) in `bunyan -c "..."` filtering condition code. E.g.:
+
+        $ ... | bunyan -c 'level >= ERROR'
 
 
 ## bunyan 0.12.0
