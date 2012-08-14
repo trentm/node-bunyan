@@ -1,4 +1,6 @@
 - "all" or "off" levels? log4j? logging.py?
+  logging.py has NOTSET === 0. I think that is only needed/used for
+  multi-level hierarchical effective level.
 - move custom keys out to 'x' ? What about req, res? Compat issues there?
   Bunyan CLI would have to deal with both for a while. Just a change in
   record.v from 0 to 1.
