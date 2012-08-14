@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.13.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.13.0
 
 - [issue #31] Re-instate defines for the (uppercase) log level names (TRACE,
