@@ -614,30 +614,39 @@ function emitRecord(rec, line, opts, stylize) {
 
     if (rec.req) {
       var headers = rec.req.headers;
-      details.push(indent(format("%s %s HTTP/1.1%s", rec.req.method,
+      var s = format("%s %s HTTP/1.1%s", rec.req.method,
         rec.req.url,
         (headers
           ? '\n' + Object.keys(headers).map(
               function (h) { return h + ': ' + headers[h]; }).join('\n')
           : '')
-      )));
+      );
+      if (rec.req.body) {
+        s += '\n\n' + rec.req.body
+      }
+      details.push(indent(s));
     }
     delete rec.req;
 
     if (rec.client_req) {
       var headers = rec.client_req.headers;
       var hostHeaderLine = '';
+      var s = '';
       if (rec.client_req.address) {
         hostHeaderLine = 'Host: ' + rec.client_req.address;
         if (rec.client_req.port)
           hostHeaderLine += ':' + rec.client_req.port;
         hostHeaderLine += '\n';
       }
-      details.push(indent(format("%s %s HTTP/1.1\n%s%s", rec.client_req.method,
+      s += format("%s %s HTTP/1.1\n%s%s", rec.client_req.method,
         rec.client_req.url,
         hostHeaderLine,
         Object.keys(headers).map(
-          function (h) { return h + ': ' + headers[h]; }).join('\n'))));
+          function (h) { return h + ': ' + headers[h]; }).join('\n'));
+      if (rec.client_req.body) {
+        s += '\n\n' + rec.client_req.body
+      }
+      details.push(indent(s));
     }
     delete rec.client_req;
 
@@ -653,6 +662,9 @@ function emitRecord(rec, line, opts, stylize) {
         var headers = rec.res.headers;
         s += Object.keys(headers).map(
           function (h) { return h + ': ' + headers[h]; }).join('\n');
+      }
+      if (rec.res.body) {
+        s += '\n\n' + rec.res.body
       }
       if (s) {
         details.push(indent(s));
