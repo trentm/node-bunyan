@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.13.1 (not yet released)
+## bunyan 0.13.1
 
 - [issue #34] Ensure `req.body`, `res.body` and other request/response fields
   are emitted by the `bunyan` CLI (mostly by Rob Gulewich).
