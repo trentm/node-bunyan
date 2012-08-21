@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.13.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.13.1
 
 - [issue #34] Ensure `req.body`, `res.body` and other request/response fields
