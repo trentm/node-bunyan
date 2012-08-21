@@ -33,7 +33,7 @@ test('--version', function (t) {
 test('--help', function (t) {
   exec(BUNYAN + ' --help', function (err, stdout, stderr) {
     t.error(err)
-    t.ok(stdout.indexOf('Options:') !== -1);
+    t.ok(stdout.indexOf('General options:') !== -1);
     t.end();
   });
 });
@@ -41,7 +41,7 @@ test('--help', function (t) {
 test('-h', function (t) {
   exec(BUNYAN + ' -h', function (err, stdout, stderr) {
     t.error(err)
-    t.ok(stdout.indexOf('Options:') !== -1);
+    t.ok(stdout.indexOf('General options:') !== -1);
     t.end();
   });
 });
@@ -279,7 +279,7 @@ test('multiple --conditions', function (t) {
 test('robust req handling', function (t) {
   var expect = [
     '[2012-08-08T10:25:47.636Z] DEBUG: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: headAgentProbes respond (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, route=HeadAgentProbes, contentMD5=11FxOYiYfpMxmANj4kGJzg==)',
-    '[2012-08-08T10:25:47.637Z]  INFO: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: HeadAgentProbes handled: 200 (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, 3ms, audit=true, remoteAddress=10.2.207.2, remotePort=50394, secure=false, _audit=true)',
+    '[2012-08-08T10:25:47.637Z]  INFO: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: HeadAgentProbes handled: 200 (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, 3ms, audit=true, remoteAddress=10.2.207.2, remotePort=50394, secure=false, _audit=true, req.version=*)',
     '    HEAD /agentprobes?agent=ccf92af9-0b24-46b6-ab60-65095fdd3037 HTTP/1.1',
     '    accept: application/json',
     '    content-type: application/json',
@@ -302,7 +302,7 @@ test('robust req handling', function (t) {
     '      "name": "HeadAgentProbes",',
     '      "version": false',
     '    }',
-    '[2012-08-08T10:25:47.637Z]  INFO: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: HeadAgentProbes handled: 200 (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, 3ms, audit=true, remoteAddress=10.2.207.2, remotePort=50394, secure=false, _audit=true)',
+    '[2012-08-08T10:25:47.637Z]  INFO: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: HeadAgentProbes handled: 200 (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, 3ms, audit=true, remoteAddress=10.2.207.2, remotePort=50394, secure=false, _audit=true, req.version=*)',
     '    HEAD /agentprobes?agent=ccf92af9-0b24-46b6-ab60-65095fdd3037 HTTP/1.1',
     '    --',
     '    route: {',

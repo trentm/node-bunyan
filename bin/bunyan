@@ -613,50 +613,108 @@ function emitRecord(rec, line, opts, stylize) {
     delete rec.msg;
 
     if (rec.req) {
-      var headers = rec.req.headers;
-      details.push(indent(format("%s %s HTTP/1.1%s", rec.req.method,
-        rec.req.url,
+      var req = rec.req;
+      var headers = req.headers;
+      var s = format("%s %s HTTP/%s%s", req.method,
+        req.url,
+        req.httpVersion || "1.1",
         (headers
           ? '\n' + Object.keys(headers).map(
               function (h) { return h + ': ' + headers[h]; }).join('\n')
           : '')
-      )));
+      );
+      delete req.url;
+      delete req.method;
+      delete req.httpVersion;
+      delete req.headers;
+      if (req.body) {
+        s += '\n\n' + req.body;
+        delete req.body;
+      }
+      if (req.trailers && Object.keys(req.trailers) > 0) {
+        s += '\n' + Object.keys(req.trailers).map(
+            function (t) { return t + ': ' + req.trailers[t]; }).join('\n');
+      }
+      delete req.trailers;
+      details.push(indent(s));
+      // E.g. for extra 'foo' field on 'req', add 'req.foo' at top-level.
+      // This *does* have the potential to stomp on a literal 'req.foo' key.
+      Object.keys(req).forEach(function (k) {
+        rec["req." + k] = req[k];
+      })
     }
     delete rec.req;
 
     if (rec.client_req) {
-      var headers = rec.client_req.headers;
+      var client_req = rec.client_req;
+      var headers = client_req.headers;
       var hostHeaderLine = '';
-      if (rec.client_req.address) {
-        hostHeaderLine = 'Host: ' + rec.client_req.address;
-        if (rec.client_req.port)
-          hostHeaderLine += ':' + rec.client_req.port;
+      var s = '';
+      if (client_req.address) {
+        hostHeaderLine = 'Host: ' + client_req.address;
+        if (client_req.port)
+          hostHeaderLine += ':' + client_req.port;
         hostHeaderLine += '\n';
       }
-      details.push(indent(format("%s %s HTTP/1.1\n%s%s", rec.client_req.method,
-        rec.client_req.url,
+      delete client_req.headers;
+      delete client_req.address;
+      delete client_req.port;
+      s += format("%s %s HTTP/%s\n%s%s", client_req.method,
+        client_req.url,
+        req.client_req.httpVersion || "1.1",
         hostHeaderLine,
         Object.keys(headers).map(
-          function (h) { return h + ': ' + headers[h]; }).join('\n'))));
+          function (h) { return h + ': ' + headers[h]; }).join('\n'));
+      delete client_req.method;
+      delete client_req.url;
+      delete client_req.httpVersion;
+      if (client_req.body) {
+        s += '\n\n' + client_req.body
+        delete client_req.body;
+      }
+      // E.g. for extra 'foo' field on 'client_req', add 'client_req.foo' at
+      // top-level. This *does* have the potential to stomp on a literal
+      // 'client_req.foo' key.
+      Object.keys(client_req).forEach(function (k) {
+        rec["client_req." + k] = client_req[k];
+      })
+      details.push(indent(s));
     }
     delete rec.client_req;
 
     if (rec.res) {
+      var res = rec.res;
       var s = '';
-      if (rec.res.header) {
-        s += rec.res.header.trimRight();
-      } else if (rec.res.headers) {
-        if (rec.res.statusCode) {
-          s += format("HTTP/1.1 %s %s\n", rec.res.statusCode,
-            http.STATUS_CODES[rec.res.statusCode]);
+      if (res.header) {
+        s += res.header.trimRight();
+      } else if (res.headers) {
+        if (res.statusCode) {
+          s += format("HTTP/1.1 %s %s\n", res.statusCode,
+            http.STATUS_CODES[res.statusCode]);
         }
-        var headers = rec.res.headers;
+        var headers = res.headers;
         s += Object.keys(headers).map(
           function (h) { return h + ': ' + headers[h]; }).join('\n');
       }
+      delete res.header;
+      delete res.headers;
+      delete res.statusCode;
+      if (res.body) {
+        s += '\n\n' + res.body
+        delete res.body;
+      }
+      if (res.trailer) {
+        s += '\n' + res.trailer;
+      }
+      delete res.trailer;
       if (s) {
         details.push(indent(s));
       }
+      // E.g. for extra 'foo' field on 'res', add 'res.foo' at top-level.
+      // This *does* have the potential to stomp on a literal 'res.foo' key.
+      Object.keys(res).forEach(function (k) {
+        rec["res." + k] = res[k];
+      })
     }
     delete rec.res;
 
