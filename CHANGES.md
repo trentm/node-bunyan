@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.13.2 (not yet released)
+## bunyan 0.13.2
 
 - [issue #35] Ensure that an accidental `log.info(BUFFER)`, where BUFFER is
   a node.js Buffer object, doesn't blow up.
