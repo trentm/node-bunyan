@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.13.3 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.13.2
 
 - [issue #35] Ensure that an accidental `log.info(BUFFER)`, where BUFFER is
