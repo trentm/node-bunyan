@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/trentm/node-bunyan.png)](http://travis-ci.org/trentm/node-bunyan)
 Bunyan is **a simple and fast a JSON logging library** for node.js services and
 **a `bunyan` CLI tool** for nicely viewing those logs).
 
