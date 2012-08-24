@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.13.3 (not yet released)
+## bunyan 0.13.3
 
 - Export `bunyan.resolveLevel(NAME-OR-NUM)` to resolve a level name or number
   to its log level number value:
