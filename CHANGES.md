@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.13.4 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.13.3
 
 - Export `bunyan.resolveLevel(NAME-OR-NUM)` to resolve a level name or number
