@@ -2,7 +2,16 @@
 
 ## bunyan 0.13.3 (not yet released)
 
-(nothing yet)
+- Export `bunyan.resolveLevel(NAME-OR-NUM)` to resolve a level name or number
+  to its log level number value:
+  
+        > bunyan.resolveLevel('INFO')
+        30
+        > bunyan.resolveLevel('debug')
+        20
+  
+  A side-effect of this change is that the uppercase level name is now allowed
+  in the logger constructor.
 
 
 ## bunyan 0.13.2
