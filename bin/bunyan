@@ -628,7 +628,8 @@ function emitRecord(rec, line, opts, stylize) {
       delete req.httpVersion;
       delete req.headers;
       if (req.body) {
-        s += '\n\n' + req.body;
+        s += '\n\n' + (typeof(req.body) === 'object'
+          ? JSON.stringify(req.body, null, 2) : req.body);
         delete req.body;
       }
       if (req.trailers && Object.keys(req.trailers) > 0) {
@@ -669,7 +670,8 @@ function emitRecord(rec, line, opts, stylize) {
       delete client_req.url;
       delete client_req.httpVersion;
       if (client_req.body) {
-        s += '\n\n' + client_req.body
+        s += '\n\n' + (typeof(client_req.body) === 'object'
+          ? JSON.stringify(client_req.body, null, 2) : client_req.body);
         delete client_req.body;
       }
       // E.g. for extra 'foo' field on 'client_req', add 'client_req.foo' at
