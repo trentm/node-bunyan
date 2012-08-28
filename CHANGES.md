@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.13.5 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.13.4
 
 - [issue #38] Fix the default `bunyan` CLI output of a `req.body` that is an
