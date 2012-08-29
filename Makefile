@@ -35,12 +35,8 @@ test: $(TAP)
 
 # Test will all node supported versions (presumes install locations I use on my machine).
 .PHONY: testall
-testall: test08 test06 test09 testmaster
+testall: test08 test06 test09
 
-.PHONY: testmaster
-testmaster:
-	@echo "# Test node master (with node `$(HOME)/opt/node-master/bin/node --version`)"
-	PATH="$(HOME)/opt/node-master/bin:$(PATH)" TAP=1 $(TAP) test/*.test.js
 .PHONY: test09
 test09:
 	@echo "# Test node 0.9.x (with node `$(HOME)/opt/node-0.9/bin/node --version`)"
