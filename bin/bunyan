@@ -662,7 +662,7 @@ function emitRecord(rec, line, opts, stylize) {
       delete client_req.port;
       s += format("%s %s HTTP/%s\n%s%s", client_req.method,
         client_req.url,
-        req.client_req.httpVersion || "1.1",
+        client_req.httpVersion || "1.1",
         hostHeaderLine,
         Object.keys(headers).map(
           function (h) { return h + ': ' + headers[h]; }).join('\n'));

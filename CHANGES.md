@@ -2,7 +2,8 @@
 
 ## bunyan 0.13.5 (not yet released)
 
-(nothing yet)
+- [issue #39] Fix a bug with `client_req` handling in the default output
+  of the `bunyan` CLI.
 
 
 ## bunyan 0.13.4
