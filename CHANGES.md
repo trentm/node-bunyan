@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.14.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.14.0
 
 - [pull #41] Safe `JSON.stringify`ing of emitted log records to avoid blowing
