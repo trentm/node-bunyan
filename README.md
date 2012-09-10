@@ -227,20 +227,25 @@ in production.**
 
 # Levels
 
-The log levels in bunyan are:
+The log levels in bunyan are as follows. The level descriptions are best
+practice *opinions*.
 
-- "fatal" (60): the service/app is going to stop or become unusable now
-- "error" (50): fatal for a particular request, but the service/app continues servicing other requests
-- "warn" (40): a note on something that should probably be looked at by an operator
-- "info" (30): detail on regular operation
-- "debug" (20): anything else, i.e. too verbose to be included in "info" level.
-- "trace" (10): logging from external libraries used by your app
+- "fatal" (60): The service/app is going to stop or become unusable now.
+  An operator should definitely look into this soon.
+- "error" (50): Fatal for a particular request, but the service/app continues
+  servicing other requests. An operator should look at this soon(ish).
+- "warn" (40): A note on something that should probably be looked at by an
+  operator eventually.
+- "info" (30): Detail on regular operation.
+- "debug" (20): Anything else, i.e. too verbose to be included in "info" level.
+- "trace" (10): Logging from external libraries used by your app or *very*
+  detailed application logging.
 
-General level usage suggestions: "debug" should be used sparingly.
-Information that will be useful to debug errors *post mortem* should usually
-be included in "info" messages if it's generally relevant or else with the
-corresponding "error" event. Don't rely on spewing mostly irrelevant debug
-messages all the time and sifting through them when an error occurs.
+Suggestions: Use "debug" sparingly. Information that will be useful to debug
+errors *post mortem* should usually be included in "info" messages if it's
+generally relevant or else with the corresponding "error" event. Don't rely
+on spewing mostly irrelevant debug messages all the time and sifting through
+them when an error occurs.
 
 Integers are used for the actual level values (10 for "trace", ..., 60 for
 "fatal") and constants are defined for the (Logger.TRACE ... Logger.DEBUG).
@@ -515,7 +520,7 @@ This example emits:
 # Versioning
 
 The scheme I follow is most succintly described by the bootstrap guys
-[here](https://github.com/twitter/bootstrap#versioning). 
+[here](https://github.com/twitter/bootstrap#versioning).
 
 tl;dr: All versions are `<major>.<minor>.<patch>` which will be incremented for
 breaking backward compat and major reworks, new features without breaking
