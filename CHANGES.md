@@ -1,8 +1,9 @@
 # bunyan Changelog
 
-## bunyan 0.13.6 (not yet released)
+## bunyan 0.14.0 (not yet released)
 
-(nothing yet)
+- [pull #41] Safe `JSON.stringify`ing of emitted log records to avoid blowing
+  up on circular objects (by Isaac Schlueter).
 
 
 ## bunyan 0.13.5
