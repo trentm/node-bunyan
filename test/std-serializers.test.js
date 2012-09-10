@@ -4,9 +4,18 @@
  * Test the standard serializers in Bunyan.
  */
 
-var test = require('tap').test;
 var bunyan = require('../lib/bunyan');
 var http = require('http');
+
+// node-tap API
+//var test = require('tap').test;
+if (require.cache[__dirname + '/helper.js'])
+    delete require.cache[__dirname + '/helper.js'];
+var helper = require('./helper.js');
+var after = helper.after;
+var before = helper.before;
+var test = helper.test;
+
 
 
 function CapturingStream(recs) {

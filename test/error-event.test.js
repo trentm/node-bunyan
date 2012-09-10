@@ -5,13 +5,21 @@
  * stream.
  */
 
-var test = require('tap').test;
 var Logger = require('../lib/bunyan');
+
+// node-tap API
+//var test = require('tap').test;
+if (require.cache[__dirname + '/helper.js'])
+    delete require.cache[__dirname + '/helper.js'];
+var helper = require('./helper.js');
+var after = helper.after;
+var before = helper.before;
+var test = helper.test;
+
 
 test('error event on log write', function (t) {
   LOG_PATH = '/this/path/is/bogus.log'
   var log = new Logger({name: 'error-event', streams: [{path: LOG_PATH}]});
-  t.plan(5);
   log.on('error', function (err, stream) {
     t.ok(err, 'got err in error event: ' + err);
     t.equal(err.code, 'ENOENT', 'error code is ENOENT');

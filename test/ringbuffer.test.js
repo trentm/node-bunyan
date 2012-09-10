@@ -2,9 +2,19 @@
  * Test the RingBuffer output stream.
  */
 
-var test = require('tap').test;
 var Logger = require('../lib/bunyan');
 var ringbuffer = new Logger.RingBuffer({ 'limit': 5 });
+
+// node-tap API
+//var test = require('tap').test;
+if (require.cache[__dirname + '/helper.js'])
+    delete require.cache[__dirname + '/helper.js'];
+var helper = require('./helper.js');
+var after = helper.after;
+var before = helper.before;
+var test = helper.test;
+
+
 
 var log1 = new Logger({
   name: 'log1',
