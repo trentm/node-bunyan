@@ -131,7 +131,7 @@ test('bogus.log -j', function (t) {
   exec(_('%s -j %s/corpus/bogus.log', BUNYAN, __dirname),
        function (err, stdout, stderr) {
     t.ifError(err)
-    t.equal(stdout, 'not a JSON line\n{\n  "hi": "there"\n}\n');
+    t.equal(stdout, 'not a JSON line\n{"hi": "there"}\n');
     t.end();
   });
 });

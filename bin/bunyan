@@ -419,48 +419,6 @@ function parseArgv(argv) {
 }
 
 
-function isInteger(s) {
-  return (s.search(/^-?[0-9]+$/) == 0);
-}
-
-
-// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
-// Suggested colors (some are unreadable in common cases):
-// - Good: cyan, yellow (limited use), grey, bold, green, magenta, red
-// - Bad: blue (not visible on cmd.exe)
-var colors = {
-  'bold' : [1, 22],
-  'italic' : [3, 23],
-  'underline' : [4, 24],
-  'inverse' : [7, 27],
-  'white' : [37, 39],
-  'grey' : [90, 39],
-  'black' : [30, 39],
-  'blue' : [34, 39],
-  'cyan' : [36, 39],
-  'green' : [32, 39],
-  'magenta' : [35, 39],
-  'red' : [31, 39],
-  'yellow' : [33, 39]
-};
-
-function stylizeWithColor(str, color) {
-  if (!str)
-    return '';
-  var codes = colors[color];
-  if (codes) {
-    return '\033[' + codes[0] + 'm' + str +
-           '\033[' + codes[1] + 'm';
-  } else {
-    return str;
-  }
-}
-
-function stylizeWithoutColor(str, color) {
-  return str;
-}
-
-
 /**
  * Is this a valid Bunyan log record.
  */
@@ -503,7 +461,8 @@ function handleLogLine(file, line, opts, stylize) {
   }
 
   if (!isValidRecord(rec)) {
-    if (!opts.strict) emitRecord(rec, line, opts, stylize);
+    if (!opts.strict)
+      emit(line + '\n');
     return;
   }
 
@@ -520,8 +479,6 @@ function handleLogLine(file, line, opts, stylize) {
  * Print out a single result, considering input options.
  */
 function emitRecord(rec, line, opts, stylize) {
-  //warn("XXX emitRecord: rec=%s... line=%s...", rec && JSON.stringify(rec).slice(0, 30), line && line.slice(0, 30))
-
   if (!isValidRecord(rec)) {
     return emit(line + '\n');
   }
@@ -714,13 +671,9 @@ function main(argv) {
     return;
   }
   var markup = (opts.color ? 'ansi' : 'none');
+  //XXX drop the "OM_*" things
   var stylize = formatters.createFormatter(
     {mode: NAME_FROM_OM[opts.outputMode], markup: markup});
-  warn("XXX: have stylize: function", stylize.name);
-
-  //XXX
-  //var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
-  //XXX START HERE: convert to using the new formatter
 
   var retval = 0;
   if (opts.args.length > 0) {
