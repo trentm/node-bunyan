@@ -702,7 +702,8 @@ function emitRecord(rec, line, opts, stylize) {
       delete res.headers;
       delete res.statusCode;
       if (res.body) {
-        s += '\n\n' + res.body
+        s += '\n\n' + (typeof(res.body) === 'object'
+          ? JSON.stringify(res.body, null, 2) : res.body);
         delete res.body;
       }
       if (res.trailer) {

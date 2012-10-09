@@ -2,7 +2,8 @@
 
 ## bunyan 0.14.1 (not yet released)
 
-(nothing yet)
+- [issue #44] Fix the default `bunyan` CLI output of a `res.body` that is an
+  object instead of a string. See issue#38 for the same with `req.body`.
 
 
 ## bunyan 0.14.0
