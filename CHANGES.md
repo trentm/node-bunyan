@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.14.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.14.1
 
 - [issue #44] Fix the default `bunyan` CLI output of a `res.body` that is an
