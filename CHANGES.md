@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.14.2 (not yet released)
+## bunyan 0.14.2
 
 - [issue #45] Fix bunyan CLI (default output mode) to not crash on a 'res'
   field that isn't a response object, but a string.
