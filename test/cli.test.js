@@ -316,3 +316,13 @@ test('robust req handling', function (t) {
     t.end();
   });
 });
+
+test('non-object res field', function (t) {
+  var expect = '[2012-10-10T16:14:07.610Z]  INFO: cnapi.get_existing_nics/24440 on 710c784f-6aa5-428c-9074-e046c3af884e: got existing: 02:08:20:d7:53:e0 (job_uuid=3499b13e-dbca-4331-b13a-f164c0da320a, nic=<unknown>, res="error: Unknown nic \\"020820d753e0\\"")\n';
+  exec(BUNYAN + ' corpus/non-object-res.log', function (err, stdout, stderr) {
+    t.error(err);
+    t.equal(stdout, expect);
+    t.end();
+  });
+});
+

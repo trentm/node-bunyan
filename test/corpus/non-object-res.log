@@ -1,0 +1,1 @@
+{"name":"cnapi.get_existing_nics","job_uuid":"3499b13e-dbca-4331-b13a-f164c0da320a","hostname":"710c784f-6aa5-428c-9074-e046c3af884e","pid":24440,"level":30,"nic":"<unknown>","res":"error: Unknown nic \"020820d753e0\"","msg":"got existing: 02:08:20:d7:53:e0","time":"2012-10-10T16:14:07.610Z","v":0}

@@ -612,8 +612,9 @@ function emitRecord(rec, line, opts, stylize) {
     }
     delete rec.msg;
 
-    if (rec.req) {
+    if (rec.req && typeof(rec.req) === 'object') {
       var req = rec.req;
+      delete rec.req;
       var headers = req.headers;
       var s = format("%s %s HTTP/%s%s", req.method,
         req.url,
@@ -644,10 +645,10 @@ function emitRecord(rec, line, opts, stylize) {
         rec["req." + k] = req[k];
       })
     }
-    delete rec.req;
 
-    if (rec.client_req) {
+    if (rec.client_req && typeof(rec.client_req) === 'object') {
       var client_req = rec.client_req;
+      delete rec.client_req;
       var headers = client_req.headers;
       var hostHeaderLine = '';
       var s = '';
@@ -682,10 +683,10 @@ function emitRecord(rec, line, opts, stylize) {
       })
       details.push(indent(s));
     }
-    delete rec.client_req;
 
-    if (rec.res) {
+    if (rec.res && typeof(rec.res) === 'object') {
       var res = rec.res;
+      delete rec.res;
       var s = '';
       if (res.header) {
         s += res.header.trimRight();
@@ -717,9 +718,8 @@ function emitRecord(rec, line, opts, stylize) {
       // This *does* have the potential to stomp on a literal 'res.foo' key.
       Object.keys(res).forEach(function (k) {
         rec["res." + k] = res[k];
-      })
+      });
     }
-    delete rec.res;
 
     if (rec.err && rec.err.stack) {
       details.push(indent(rec.err.stack));
@@ -978,7 +978,7 @@ process.on('uncaughtException', function (err) {
   console.error('* * *');
   console.error('* node version:', process.version);
   console.error('* bunyan version:', getVersion());
-  console.error('* argv:', process.argv);
+  console.error('* argv: %j', process.argv);
   console.error('* stack:');
   console.error(indent(err.stack));
   console.error('* * *');
