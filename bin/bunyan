@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = "0.14.2";
+var VERSION = "0.14.3";
 
 var util = require('util');
 var pathlib = require('path');

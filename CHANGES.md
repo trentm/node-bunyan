@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.14.3 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.14.2
 
 - [issue #45] Fix bunyan CLI (default output mode) to not crash on a 'res'
