@@ -959,6 +959,32 @@ function asyncForEach(arr, iterator, callback) {
 
 //---- mainline
 
+process.on('uncaughtException', function (err) {
+  function indent(s) {
+    var lines = s.split(/\r?\n/);
+    for (var i = 0; i < lines.length; i++) {
+      lines[i] = '*     ' + lines[i];
+    }
+    return lines.join('\n');
+  }
+
+  console.error('* * *');
+  console.error('* The Bunyan CLI crashed! Please report this issue:');
+  console.error('*');
+  console.error('*    https://github.com/trentm/node-bunyan/issues/new');
+  console.error('*');
+  console.error('* and include the following Bunyan details the log file');
+  console.error('* (or section of log file) on which the Bunyan CLI crashed.');
+  console.error('* * *');
+  console.error('* node version:', process.version);
+  console.error('* bunyan version:', getVersion());
+  console.error('* argv:', process.argv);
+  console.error('* stack:');
+  console.error(indent(err.stack));
+  console.error('* * *');
+  process.exit(1);
+});
+
 function main(argv) {
   var opts;
   try {
