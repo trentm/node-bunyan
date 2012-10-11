@@ -20,6 +20,7 @@
 
 ## bunyan 0.14.4
 
+- **Bad release. Use 0.14.5 instead.**
 - Improve error serialization to walk the chain of `.cause()` errors
   from the likes of `WError` or `VError` error classes from
   [verror](https://github.com/davepacheco/node-verror) and
