@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.14.4 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.14.3
 
 - Improve error serialization to walk the chain of `.cause()` errors
