@@ -2,15 +2,34 @@
 
 ## bunyan 0.14.4 (not yet released)
 
-(nothing yet)
-
-
-## bunyan 0.14.3
-
 - Improve error serialization to walk the chain of `.cause()` errors
   from the likes of `WError` or `VError` error classes from
   [verror](https://github.com/davepacheco/node-verror) and
-  [restify v2.0](https://github.com/mcavage/node-restify).
+  [restify v2.0](https://github.com/mcavage/node-restify). Example:
+
+        [2012-10-11T00:30:21.871Z] ERROR: imgapi/99612 on 0525989e-2086-4270-b960-41dd661ebd7d: my-message
+            ValidationFailedError: my-message; caused by TypeError: cause-error-message
+                at Server.apiPing (/opt/smartdc/imgapi/lib/app.js:45:23)
+                at next (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:550:50)
+                at Server.setupReq (/opt/smartdc/imgapi/lib/app.js:178:9)
+                at next (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:550:50)
+                at Server.parseBody (/opt/smartdc/imgapi/node_modules/restify/lib/plugins/body_parser.js:15:33)
+                at next (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:550:50)
+                at Server.parseQueryString (/opt/smartdc/imgapi/node_modules/restify/lib/plugins/query.js:40:25)
+                at next (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:550:50)
+                at Server._run (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:579:17)
+                at Server._handle.log.trace.req (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:480:38)
+            Caused by: TypeError: cause-error-message
+                at Server.apiPing (/opt/smartdc/imgapi/lib/app.js:40:25)
+                at next (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:550:50)
+                at Server.setupReq (/opt/smartdc/imgapi/lib/app.js:178:9)
+                at next (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:550:50)
+                at Server.parseBody (/opt/smartdc/imgapi/node_modules/restify/lib/plugins/body_parser.js:15:33)
+                at next (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:550:50)
+                at Server.parseQueryString (/opt/smartdc/imgapi/node_modules/restify/lib/plugins/query.js:40:25)
+                at next (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:550:50)
+                at Server._run (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:579:17)
+                at Server._handle.log.trace.req (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:480:38)
 
 
 ## bunyan 0.14.2
