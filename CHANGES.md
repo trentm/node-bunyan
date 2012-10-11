@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.14.6 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.14.5
 
 - Fix a bug in the long-stack-trace error serialization added in 0.14.4. The
