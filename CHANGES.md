@@ -2,7 +2,10 @@
 
 ## bunyan 0.14.3 (not yet released)
 
-(nothing yet)
+- Improve error serialization to walk the chain of `.cause()` errors
+  from the likes of `WError` or `VError` error classes from the likes of
+  [verror](https://github.com/davepacheco/node-verror) and
+  [restify v2.0](https://github.com/mcavage/node-restify).
 
 
 ## bunyan 0.14.2
