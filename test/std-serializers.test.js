@@ -5,8 +5,10 @@
  */
 
 var test = require('tap').test;
-var bunyan = require('../lib/bunyan');
 var http = require('http');
+
+var bunyan = require('../lib/bunyan');
+var verror = require('verror');
 
 
 function CapturingStream(recs) {
@@ -166,5 +168,87 @@ test('err serializer', function (t) {
   t.equal(lastRecord.err.message, theErr.message);
   t.equal(lastRecord.err.name, theErr.name);
   t.equal(lastRecord.err.stack, theErr.stack);
+  t.end();
+});
+
+
+test('err serializer: long stack', function (t) {
+  var records = [];
+  var log = bunyan.createLogger({
+    name: 'serializer-test',
+    streams: [{
+        stream: new CapturingStream(records),
+        type: 'raw'
+    }],
+    serializers: {
+      err: bunyan.stdSerializers.err
+    }
+  });
+
+  var topErr, midErr, bottomErr;
+
+  // Just a VError.
+  topErr = new verror.VError('top err');
+  log.info(topErr, 'the error');
+  var lastRecord = records[records.length-1];
+  t.equal(lastRecord.err.message, topErr.message);
+  t.equal(lastRecord.err.name, topErr.name);
+  t.equal(lastRecord.err.stack, topErr.stack);
+
+  // Just a WError.
+  topErr = new verror.WError('top err');
+  log.info(topErr, 'the error');
+  var lastRecord = records[records.length-1];
+  t.equal(lastRecord.err.message, topErr.message);
+  t.equal(lastRecord.err.name, topErr.name);
+  t.equal(lastRecord.err.stack, topErr.stack);
+
+  // WError <- TypeError
+  bottomErr = new TypeError('bottom err');
+  topErr = new verror.WError(bottomErr, 'top err');
+  log.info(topErr, 'the error');
+  var lastRecord = records[records.length-1];
+  t.equal(lastRecord.err.message, topErr.message);
+  t.equal(lastRecord.err.name, topErr.name);
+  var expectedStack = topErr.stack + '\nCaused by: ' + bottomErr.stack;
+  t.equal(lastRecord.err.stack, expectedStack);
+
+  // WError <- WError
+  bottomErr = new verror.WError('bottom err');
+  topErr = new verror.WError(bottomErr, 'top err');
+  log.info(topErr, 'the error');
+  var lastRecord = records[records.length-1];
+  t.equal(lastRecord.err.message, topErr.message);
+  t.equal(lastRecord.err.name, topErr.name);
+  var expectedStack = topErr.stack + '\nCaused by: ' + bottomErr.stack;
+  t.equal(lastRecord.err.stack, expectedStack);
+
+  // WError <- WError <- TypeError
+  bottomErr = new TypeError('bottom err');
+  midErr = new verror.WError(bottomErr, 'mid err');
+  topErr = new verror.WError(midErr, 'top err');
+  log.info(topErr, 'the error');
+  var lastRecord = records[records.length-1];
+  t.equal(lastRecord.err.message, topErr.message);
+  t.equal(lastRecord.err.name, topErr.name);
+  var expectedStack = (topErr.stack
+    + '\nCaused by: ' + midErr.stack
+    + '\nCaused by: ' + bottomErr.stack);
+  t.equal(lastRecord.err.stack, expectedStack);
+
+  // WError <- WError <- WError
+  bottomErr = new verror.WError('bottom err');
+  midErr = new verror.WError(bottomErr, 'mid err');
+  topErr = new verror.WError(midErr, 'top err');
+  log.info(topErr, 'the error');
+  var lastRecord = records[records.length-1];
+  t.equal(lastRecord.err.message, topErr.message);
+  t.equal(lastRecord.err.name, topErr.name);
+  var expectedStack = (topErr.stack
+    + '\nCaused by: ' + midErr.stack
+    + '\nCaused by: ' + bottomErr.stack);
+  t.equal(lastRecord.err.stack, expectedStack);
+
+
   t.end();
 });

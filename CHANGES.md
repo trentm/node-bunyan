@@ -2,7 +2,15 @@
 
 ## bunyan 0.14.5 (not yet released)
 
-(nothing yet)
+- Fix a bug in the long-stack-trace error serialization added in 0.14.4. The
+  symptom:
+
+        bunyan@0.14.4: .../node_modules/bunyan/lib/bunyan.js:1002
+          var ret = ex.stack || ex.toString();
+                      ^
+        TypeError: Cannot read property 'stack' of undefined
+            at getFullErrorStack (.../node_modules/bunyan/lib/bunyan.js:1002:15)
+            ...
 
 
 ## bunyan 0.14.4
