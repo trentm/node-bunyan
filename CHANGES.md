@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.14.3 (not yet released)
+## bunyan 0.14.3
 
 - Improve error serialization to walk the chain of `.cause()` errors
   from the likes of `WError` or `VError` error classes from
