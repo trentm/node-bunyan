@@ -3,7 +3,7 @@
 ## bunyan 0.14.3 (not yet released)
 
 - Improve error serialization to walk the chain of `.cause()` errors
-  from the likes of `WError` or `VError` error classes from the likes of
+  from the likes of `WError` or `VError` error classes from
   [verror](https://github.com/davepacheco/node-verror) and
   [restify v2.0](https://github.com/mcavage/node-restify).
 
@@ -42,12 +42,12 @@
 
 - Export `bunyan.resolveLevel(NAME-OR-NUM)` to resolve a level name or number
   to its log level number value:
-  
+
         > bunyan.resolveLevel('INFO')
         30
         > bunyan.resolveLevel('debug')
         20
-  
+
   A side-effect of this change is that the uppercase level name is now allowed
   in the logger constructor.
 
