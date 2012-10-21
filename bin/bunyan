@@ -61,6 +61,10 @@ Object.keys(levelFromName).forEach(function (name) {
 });
 
 
+// The current raw input line being processed. Used for `uncaughtException`.
+var currLine = null;
+
+
 
 //---- support functions
 
@@ -478,6 +482,8 @@ function isValidRecord(rec) {
  * records) or enqueues it for emitting later when it's the next line to show.
  */
 function handleLogLine(file, line, opts, stylize) {
+  currLine = line; // intentionally global
+
   // Emit non-JSON lines immediately.
   var rec;
   if (!line) {
@@ -968,17 +974,19 @@ process.on('uncaughtException', function (err) {
     return lines.join('\n');
   }
 
+  var title = encodeURIComponent(format(
+    "Bunyan %s crashed: %s", getVersion(), err.message));
   console.error('* * *');
-  console.error('* The Bunyan CLI crashed! Please report this issue:');
+  console.error('* The Bunyan CLI crashed! Please report this issue and');
+  console.error('* include the details below:');
   console.error('*');
-  console.error('*    https://github.com/trentm/node-bunyan/issues/new');
+  console.error('*    https://github.com/trentm/node-bunyan/issues/new?title=%s', title);
   console.error('*');
-  console.error('* and include the following Bunyan details the log file');
-  console.error('* (or section of log file) on which the Bunyan CLI crashed.');
   console.error('* * *');
   console.error('* node version:', process.version);
   console.error('* bunyan version:', getVersion());
   console.error('* argv: %j', process.argv);
+  console.error('* log line: %j', currLine);
   console.error('* stack:');
   console.error(indent(err.stack));
   console.error('* * *');

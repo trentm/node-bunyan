@@ -2,7 +2,8 @@
 
 ## bunyan 0.14.6 (not yet released)
 
-(nothing yet)
+- Improve the crash message to make it easier to provide relevant details in a
+  bug report.
 
 
 ## bunyan 0.14.5
