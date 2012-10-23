@@ -2,6 +2,16 @@
 
 ## bunyan 0.14.6 (not yet released)
 
+- [issue #49] Allow a `log.child()` to specify the level of inherited streams.
+  For example:
+
+        # Before
+        var childLog = log.child({...});
+        childLog.level('debug');
+
+        # After
+        var childLog = log.child({..., level: 'debug'});
+
 - Improve the crash message to make it easier to provide relevant details in a
   bug report.
 

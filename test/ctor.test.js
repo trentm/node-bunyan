@@ -26,10 +26,6 @@ test('ensure Logger creation options', function (t) {
   t.throws(function () { new Logger(options); },
     'cannot use "stream" and "streams"');
 
-  options = {name: 'foo', level: 'info', streams: []};
-  t.throws(function () { new Logger(options); },
-    'cannot use "level" and "streams"');
-
   // https://github.com/trentm/node-bunyan/issues/3
   options = {name: 'foo', streams: {}};
   t.throws(function () { new Logger(options); },
@@ -71,10 +67,6 @@ test('ensure Logger creation options (createLogger)', function (t) {
   var options = {name: 'foo', stream: process.stdout, streams: []};
   t.throws(function () { bunyan.createLogger(options); },
     'cannot use "stream" and "streams"');
-
-  options = {name: 'foo', level: 'info', streams: []};
-  t.throws(function () { bunyan.createLogger(options); },
-    'cannot use "level" and "streams"');
 
   // https://github.com/trentm/node-bunyan/issues/3
   options = {name: 'foo', streams: {}};
@@ -121,10 +113,6 @@ test('ensure Logger child() options', function (t) {
   var options = {stream: process.stdout, streams: []};
   t.throws(function () { log.child(options); },
     'cannot use "stream" and "streams"');
-
-  options = {level: 'info', streams: []};
-  t.throws(function () { log.child(options); },
-    'cannot use "level" and "streams"');
 
   // https://github.com/trentm/node-bunyan/issues/3
   options = {streams: {}};
