@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.14.7 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.14.6
 
 - Export `bunyan.safeCycles()`. This may be useful for custom `type == "raw"`
