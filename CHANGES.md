@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.14.6 (not yet released)
+## bunyan 0.14.6
 
 - Export `bunyan.safeCycles()`. This may be useful for custom `type == "raw"`
   streams that may do JSON stringification of log records themselves. Usage:
