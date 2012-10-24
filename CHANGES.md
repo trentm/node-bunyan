@@ -2,6 +2,11 @@
 
 ## bunyan 0.14.6 (not yet released)
 
+- Export `bunyan.safeCycles()`. This may be useful for custom `type == "raw"`
+  streams that may do JSON stringification of log records themselves. Usage:
+
+        var str = JSON.stringify(rec, bunyan.safeCycles());
+
 - [issue #49] Allow a `log.child()` to specify the level of inherited streams.
   For example:
 
