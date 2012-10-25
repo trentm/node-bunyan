@@ -2,7 +2,7 @@
 
 ## bunyan 0.14.7 (not yet released)
 
-(nothing yet)
+- Add a man page. See <http://trentm.com/node-bunyan/bunyan.1.html>.
 
 
 ## bunyan 0.14.6
