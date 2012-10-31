@@ -15,6 +15,9 @@
   "engines": ["node >=0.6.0"],
   "keywords": ["log", "logging", "log4j", "json"],
 
+  "dependencies": {
+    "dtrace-provider": "0.2.2"
+  },
   "devDependencies": {
     "tap": "0.2.0",
     "ben": "0.0.0",
