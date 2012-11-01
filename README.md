@@ -530,30 +530,33 @@ that makes available the following probes:
     log-error
     log-fatal
 
-Each of these probes has a single arugment: the string that would be 
+Each of these probes has a single argument: the string that would be
 written to the log.  Note that when a probe is enabled, it will
 fire whenever the corresponding function is called, even if the level of
 the log message is less than that of any stream.
 
 ## DTrace examples
 
-Trace all log messages coming from any Bunyan module on the system:
+Trace all log messages coming from any Bunyan module on the system.
+(The `-x strsize=4k` is to raise dtrace's default 256 byte buffer size
+because log messages are longer than typical dtrace probes.)
 
-    dtrace -qn 'bunyan*:::log-*{printf("%d: %s: %s", pid, probefunc, copyinstr(arg0))}'
+    dtrace -x strsize=4k -qn 'bunyan*:::log-*{printf("%d: %s: %s", pid, probefunc, copyinstr(arg0))}'
 
 Trace all log messages coming from the "wuzzle" component:
 
-    dtrace -qn 'bunyan*:::log-*/strstr(this->str = copyinstr(arg0), "\"component\":\"wuzzle\"") != NULL/{printf("%s", this->str)}'
+    dtrace -x strsize=4k -qn 'bunyan*:::log-*/strstr(this->str = copyinstr(arg0), "\"component\":\"wuzzle\"") != NULL/{printf("%s", this->str)}'
 
 Aggregate debug messages from process 1234, by message:
 
-    dtrace -n 'bunyan1234:::log-debug{@[copyinstr(arg0)] = count()}'
+    dtrace -x strsize=4k -n 'bunyan1234:::log-debug{@[copyinstr(arg0)] = count()}'
 
-On systems that support the `jstack` action via a node.js helper, get
-a stack backtrace for any debug message that includes the string 
-"danger!":
+On systems that support the
+[`jstack`](http://dtrace.org/blogs/dap/2012/04/25/profiling-node-js/) action
+via a node.js helper, get a stack backtrace for any debug message that
+includes the string "danger!":
 
-    dtrace -qn 'log-debug/strstr(copyinstr(arg0), "danger!") != NULL/{printf("\n%s", copyinstr(arg0)); jstack()}'
+    dtrace -x strsize=4k -qn 'log-debug/strstr(copyinstr(arg0), "danger!") != NULL/{printf("\n%s", copyinstr(arg0)); jstack()}'
 
 Output of the above might be:
 

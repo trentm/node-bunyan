@@ -7,12 +7,15 @@ TAP := ./node_modules/.bin/tap
 #---- Files
 
 JSSTYLE_FILES := $(shell find lib test tools examples -name "*.js") bin/bunyan
+# All test files *except* dtrace.test.js.
+TEST_FILES := $(shell ls -1 test/*.test.js | grep -v dtrace | xargs)
 
 
 
 #---- Targets
 
 all:
+	npm install
 
 # Ensure all version-carrying files have the same version.
 .PHONY: versioncheck
@@ -51,24 +54,37 @@ publish:
 
 .PHONY: test
 test: $(TAP)
-	TAP=1 $(TAP) test/*.test.js
+	TAP=1 $(TAP) $(TEST_FILES)
+	[[ -n "$(SKIP_DTRACE)" ]] || sudo TAP=1 $(TAP) test/dtrace.test.js
 
-# Test will all node supported versions (presumes install locations I use on my machine).
+# Test will all node supported versions (presumes install locations I use on
+# my machine).
+# Note: 'test08' is last so (if all is well) I end up with a binary
+# dtrace-provider build for node 0.8 (my current version).
 .PHONY: testall
-testall: test08 test06 test09
+testall: test06 test09 test08
 
 .PHONY: test09
 test09:
 	@echo "# Test node 0.9.x (with node `$(HOME)/opt/node-0.9/bin/node --version`)"
-	PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" TAP=1 $(TAP) test/*.test.js
+	[[ -n "$(SKIP_DTRACE)" ]] \
+		|| PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" npm rebuild dtrace-provider \
+		&& sudo PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" TAP=1 $(TAP) test/dtrace.test.js
+	PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" TAP=1 $(TAP) $(TEST_FILES)
 .PHONY: test08
 test08:
 	@echo "# Test node 0.8.x (with node `$(HOME)/opt/node-0.8/bin/node --version`)"
-	PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" TAP=1 $(TAP) test/*.test.js
+	[[ -n "$(SKIP_DTRACE)" ]] \
+		|| PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" npm rebuild dtrace-provider \
+		&& sudo PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" TAP=1 $(TAP) test/dtrace.test.js
+	PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" TAP=1 $(TAP) $(TEST_FILES)
 .PHONY: test06
 test06:
 	@echo "# Test node 0.6.x (with node `$(HOME)/opt/node-0.6/bin/node --version`)"
-	PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" TAP=1 $(TAP) test/*.test.js
+	[[ -n "$(SKIP_DTRACE)" ]] \
+		|| PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" npm rebuild dtrace-provider \
+		&& sudo PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" TAP=1 $(TAP) test/dtrace.test.js
+	PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" TAP=1 $(TAP) $(TEST_FILES)
 
 
 

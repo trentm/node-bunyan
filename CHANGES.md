@@ -1,8 +1,18 @@
 # bunyan Changelog
 
-## bunyan 0.14.7 (not yet released)
+## bunyan 0.15.0 (not yet released)
 
-- Add a man page. See <http://trentm.com/node-bunyan/bunyan.1.html>.
+- issue #48: Dtrace support! The elevator pitch is you can watch all logging
+  from all Bunyan-using process with this:
+
+        dtrace -x strsize=4k -qn 'bunyan*:::log-*{printf("%d: %s: %s", pid, probefunc, copyinstr(arg0))}'
+
+  Or get the bunyan CLI to render those:
+
+        dtrace -x strsize=4k -qn 'bunyan*:::log-*{printf("%s", copyinstr(arg0))}' | bunyan
+
+  See <https://github.com/trentm/node-bunyan#dtrace-support> for details. By
+  Bryan Cantrill.
 
 
 ## bunyan 0.14.6
@@ -22,8 +32,8 @@
         # After
         var childLog = log.child({..., level: 'debug'});
 
-- Improve the crash message to make it easier to provide relevant details in a
-  bug report.
+- Improve the Bunyan CLI crash message to make it easier to provide relevant
+  details in a bug report.
 
 
 ## bunyan 0.14.5
