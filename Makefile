@@ -77,7 +77,7 @@ test: $(TAP)
 # Note: 'test08' is last so (if all is well) I end up with a binary
 # dtrace-provider build for node 0.8 (my current version).
 .PHONY: testall
-testall: test06 test09 test08
+testall: test06 test08
 
 .PHONY: test09
 test09:

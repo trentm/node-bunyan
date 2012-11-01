@@ -35,51 +35,36 @@ if (!runDtraceTests) {
 if (runDtraceTests) {
 
 
-test('basic', function (t) {
-  var log = bunyan.createLogger({name: 'basic'}); // at default 'info' level
-
-  // Should be '%%s' in that `format` frankly, but node *0.6* doesn't see
-  // it that way. Node *0.8* has fixed '%%' handling.
-  var argv = ['dtrace', '-x', 'strsize=4k', '-qn',
-    format('bunyan%d:::log-*{printf("%s", copyinstr(arg0))}', process.pid)];
+test('basic dtrace', function (t) {
+  var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
+    'bunyan$target:::log-*{printf("%s", copyinstr(arg0))}',
+    '-c', format('node %s/log-some.js', __dirname)];
   var dtrace = spawn(argv[0], argv.slice(1));
   //console.error("ARGV: %j", argv);
+
   var traces = [];
   dtrace.stdout.on('data', function (data) {
-    //console.error("STDOUT:", data.toString());
+    //console.error("DTRACE STDOUT:", data.toString());
     traces.push(data.toString());
   });
   dtrace.stderr.on('data', function (data) {
-    console.error(data.toString());
+    console.error("DTRACE STDERR:", data.toString());
   });
   dtrace.on('exit', function (code) {
-    if (code) {
-      console.log("# error: dtrace exited non-zero:", code);
+    t.notOk(code, 'dtrace exited cleanly');
+    traces = traces.join('').split('\n')
+      .filter(function (t) { return t.trim().length })
+      .map(function (t) { return JSON.parse(t) });
+    t.equal(traces.length, 2, 'got 2 log records');
+    if (traces.length) {
+      t.equal(traces[0].level, bunyan.DEBUG);
+      t.equal(traces[0].foo, 'bar');
+      t.equal(traces[1].level, bunyan.TRACE);
+      t.equal(traces[1].msg, 'hi at trace');
     }
+    t.end();
   });
-
-  setTimeout(function () {
-    log.debug({basic: true}, 'hi at debug');
-    log.trace({basic: true}, 'hi at trace');
-
-    setTimeout(function () {
-      dtrace.kill('SIGTERM');
-
-      traces = traces.join('').split('\n')
-        .filter(function (t) { return t.trim().length })
-        .map(function (t) { return JSON.parse(t) });
-      t.equal(traces.length, 2,
-        "(If this fails, it is often a timing issue. Please try again.)");
-      if (traces.length) {
-        t.equal(traces[0].pid, process.pid);
-        t.equal(traces[0].level, bunyan.DEBUG);
-        t.equal(traces[1].basic, true);
-      }
-      t.end();
-    }, 1000);
-  }, 3000); // Give dtrace some time to startup. How much?
 });
-
 
 
 } /* end of `if (runDtraceTests)` */
