@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.15.0 (not yet released)
+## bunyan 0.15.0
 
 - issue #48: Dtrace support! The elevator pitch is you can watch all logging
   from all Bunyan-using process with this:
