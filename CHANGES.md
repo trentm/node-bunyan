@@ -8,11 +8,16 @@
 ## bunyan 0.15.0
 
 - issue #48: Dtrace support! The elevator pitch is you can watch all logging
-  from all Bunyan-using process with this:
+  from all Bunyan-using process with something like this:
 
         dtrace -x strsize=4k -qn 'bunyan*:::log-*{printf("%d: %s: %s", pid, probefunc, copyinstr(arg0))}'
 
-  Or get the bunyan CLI to render those:
+  And this can include log levels *below* what the service is actually configured
+  to log. E.g. if the service is only logging at INFO level and you need to see
+  DEBUG log messages, with this you can. Obviously this only works on dtrace-y
+  platforms: Illumos derivatives of SunOS (e.g. SmartOS, OmniOS), Mac, FreeBSD.
+
+  Or get the bunyan CLI to render logs nicely:
 
         dtrace -x strsize=4k -qn 'bunyan*:::log-*{printf("%s", copyinstr(arg0))}' | bunyan
 
