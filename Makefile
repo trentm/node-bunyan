@@ -2,6 +2,14 @@
 #---- Tools
 
 TAP := ./node_modules/.bin/tap
+SUDO := sudo
+ifeq ($(shell uname -s),SunOS)
+	# On SunOS (e.g. SmartOS) we expect to run the test suite as the
+	# root user -- necessary to run dtrace. Therefore `pfexec` isn't
+	# necessary.
+	SUDO :=
+endif
+
 
 
 #---- Files
@@ -50,12 +58,19 @@ publish:
 		&& git commit -a -m "publish latest docs" \
 		&& git push origin gh-pages || true)
 
+.PHONY: distclean
+distclean:
+	rm -rf node_modules
+
+
 #---- test
 
 .PHONY: test
 test: $(TAP)
-	TAP=1 $(TAP) $(TEST_FILES)
-	[[ -n "$(SKIP_DTRACE)" ]] || sudo TAP=1 $(TAP) test/dtrace.test.js
+	[[ -n "$(SKIP_DTRACE)" ]] || \
+		node -e 'require("trentm-dtrace-provider").createDTraceProvider("isthisthingon")' && \
+		$(SUDO) $(TAP) --tap test/dtrace.test.js
+	$(TAP) --tap $(TEST_FILES)
 
 # Test will all node supported versions (presumes install locations I use on
 # my machine).
@@ -67,25 +82,15 @@ testall: test06 test09 test08
 .PHONY: test09
 test09:
 	@echo "# Test node 0.9.x (with node `$(HOME)/opt/node-0.9/bin/node --version`)"
-	[[ -n "$(SKIP_DTRACE)" ]] \
-		|| PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" npm rebuild dtrace-provider \
-		&& sudo PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" TAP=1 $(TAP) test/dtrace.test.js
-	PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" TAP=1 $(TAP) $(TEST_FILES)
+	PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" make distclean all test
 .PHONY: test08
 test08:
 	@echo "# Test node 0.8.x (with node `$(HOME)/opt/node-0.8/bin/node --version`)"
-	[[ -n "$(SKIP_DTRACE)" ]] \
-		|| PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" npm rebuild dtrace-provider \
-		&& sudo PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" TAP=1 $(TAP) test/dtrace.test.js
-	PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" TAP=1 $(TAP) $(TEST_FILES)
+	PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" make distclean all test
 .PHONY: test06
 test06:
 	@echo "# Test node 0.6.x (with node `$(HOME)/opt/node-0.6/bin/node --version`)"
-	[[ -n "$(SKIP_DTRACE)" ]] \
-		|| PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" npm rebuild dtrace-provider \
-		&& sudo PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" TAP=1 $(TAP) test/dtrace.test.js
-	PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" TAP=1 $(TAP) $(TEST_FILES)
-
+	PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" make distclean all test
 
 
 #---- check

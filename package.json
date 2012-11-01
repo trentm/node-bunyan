@@ -16,7 +16,7 @@
   "keywords": ["log", "logging", "log4j", "json"],
 
   "dependencies": {
-    "dtrace-provider": "0.2.3"
+    "trentm-dtrace-provider": "0.2.4"
   },
   "devDependencies": {
     "tap": "0.2.0",
