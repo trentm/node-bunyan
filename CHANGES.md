@@ -2,7 +2,9 @@
 
 ## bunyan 0.16.2 (not yet released)
 
-(nothing yet)
+- Ensure that stderr from the dtrace child process (when using `bunyan -p PID`)
+  gets through. The `pipe` usage wasn't working on SmartOS. This is important
+  to show the user if they need to 'sudo'.
 
 
 ## bunyan 0.16.1

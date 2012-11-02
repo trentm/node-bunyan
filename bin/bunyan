@@ -910,7 +910,10 @@ function processPid(opts, stylize, callback) {
   var dtrace = spawn(argv[0], argv.slice(1));
   child = dtrace; // intentionall global
 
-  dtrace.stderr.pipe(process.stderr);
+  dtrace.stderr.setEncoding('utf8');
+  dtrace.stderr.on('data', function (chunk) {
+    process.stderr.write(chunk);
+  });
 
   dtrace.stdout.setEncoding('utf8');
   dtrace.stdout.on('data', function (chunk) {
