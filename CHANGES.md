@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.16.4 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.16.3
 
 - Drop 'trentm-dtrace-provider' fork dep now that
