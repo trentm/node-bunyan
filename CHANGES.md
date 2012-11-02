@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.16.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.16.1
 
 - Ensure that a possible dtrace child process (with using `bunyan -p PID`) is
