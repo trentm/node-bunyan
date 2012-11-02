@@ -65,6 +65,9 @@ Object.keys(levelFromName).forEach(function (name) {
 // The current raw input line being processed. Used for `uncaughtException`.
 var currLine = null;
 
+// Child dtrace process, if any. Used for signal-handling.
+var child = null;
+
 
 
 //---- support functions
@@ -905,6 +908,7 @@ function processPid(opts, stylize, callback) {
   var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
     format('bunyan%d:::log-*{printf("%s", copyinstr(arg0))}', opts.pid)];
   var dtrace = spawn(argv[0], argv.slice(1));
+  child = dtrace; // intentionall global
 
   dtrace.stderr.pipe(process.stderr);
 
@@ -1022,6 +1026,19 @@ function asyncForEach(arr, iterator, callback) {
 
 
 //---- mainline
+
+// Try to ensure we close a child 'dtrace' process on signalled exit.
+function signalCleanupAndExit(signal) {
+  if (child) {
+    child.kill(signal);
+  }
+  process.exit();
+}
+process.on('SIGINT', function () { signalCleanupAndExit('SIGINT'); });
+process.on('SIGQUIT', function () { signalCleanupAndExit('SIGQUIT'); });
+process.on('SIGTERM', function () { signalCleanupAndExit('SIGTERM'); });
+process.on('SIGHUP', function () { signalCleanupAndExit('SIGHUP'); });
+
 
 process.on('uncaughtException', function (err) {
   function indent(s) {

@@ -2,7 +2,9 @@
 
 ## bunyan 0.16.1 (not yet released)
 
-(nothing yet)
+- Ensure that a possible dtrace child process (with using `bunyan -p PID`) is
+  terminated on signal termination of the bunyan CLI (at least for SIGINT,
+  SIGQUIT, SIGTERM, SIGHUP).
 
 
 ## bunyan 0.16.0
