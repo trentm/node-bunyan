@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.16.3 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.16.2
 
 - Ensure that stderr from the dtrace child process (when using `bunyan -p PID`)
