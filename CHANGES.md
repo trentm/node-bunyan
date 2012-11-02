@@ -1,8 +1,11 @@
 # bunyan Changelog
 
-## bunyan 0.15.1 (not yet released)
+## bunyan 0.16.0 (not yet released)
 
-(nothing yet)
+- Add `bunyan -p PID` support. This is a convenience wrapper that effectively
+  calls:
+
+        dtrace -x strsize=4k -qn 'bunyan$PID:::log-*{printf("%s", copyinstr(arg0))}' | bunyan
 
 
 ## bunyan 0.15.0

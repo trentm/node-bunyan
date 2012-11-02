@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = "0.15.1";
+var VERSION = "0.16.0";
 
 var util = require('util');
 var pathlib = require('path');
@@ -13,6 +13,7 @@ var vm = require('vm');
 var http = require('http');
 var fs = require('fs');
 var warn = console.warn;
+var spawn = require('child_process').spawn;
 
 
 
@@ -134,12 +135,18 @@ function objCopy(obj) {
 function printHelp() {
   console.log("Usage:");
   console.log("  bunyan [OPTIONS] [FILE ...]");
+  console.log("  ... | bunyan [OPTIONS]");
+  console.log("  bunyan [OPTIONS] -p PID");
   console.log("");
   console.log("Filter and pretty-print Bunyan log file content.");
   console.log("");
   console.log("General options:");
   console.log("  -h, --help    print this help info and exit");
   console.log("  --version     print version of this command and exit");
+  console.log("");
+  console.log("Dtrace options (only on dtrace-supporting platforms):");
+  console.log("  -p PID        Process bunyan:log-* probes from the process");
+  console.log("                with the given PID.");
   console.log("");
   console.log("Filtering options:");
   console.log("  -l, --level LEVEL");
@@ -307,13 +314,14 @@ function parseArgv(argv) {
     jsonIndent: 2,
     level: null,
     conditions: null,
-    strict: false
+    strict: false,
+    pid: null
   };
 
   // Turn '-iH' into '-i -H', except for argument-accepting options.
   var args = argv.slice(2);  // drop ['node', 'scriptname']
   var newArgs = [];
-  var optTakesArg = {'d': true, 'o': true, 'c': true, 'l': true};
+  var optTakesArg = {'d': true, 'o': true, 'c': true, 'l': true, 'p': true};
   for (var i = 0; i < args.length; i++) {
     if (args[i].charAt(0) === "-" && args[i].charAt(1) !== '-' && args[i].length > 2) {
       var splitOpts = args[i].slice(1).split("");
@@ -381,6 +389,14 @@ function parseArgv(argv) {
         break;
       case "-j": // output with JSON.stringify
         parsed.outputMode = OM_JSON;
+        break;
+      case "-p":
+        var pidArg = args.shift();
+        var pid = +(pidArg);
+        if (isNaN(pid)) {
+          throw new Error(format('invalid pid: "%s"', pidArg));
+        }
+        parsed.pid = pid;
         break;
       case "-l":
       case "--level":
@@ -878,6 +894,48 @@ function processStdin(opts, stylize, callback) {
 
 
 /**
+ * Process bunyan:log-* probes from the given pid.
+ *
+ * @params opts {Object} Bunyan options object.
+ * @param stylize {Function} Output stylize function to use.
+ * @param callback {Function} `function (code)`
+ */
+function processPid(opts, stylize, callback) {
+  var leftover = "";  // Left-over partial line from last chunk.
+  var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
+    format('bunyan%d:::log-*{printf("%s", copyinstr(arg0))}', opts.pid)];
+  var dtrace = spawn(argv[0], argv.slice(1));
+
+  dtrace.stderr.pipe(process.stderr);
+
+  dtrace.stdout.setEncoding('utf8');
+  dtrace.stdout.on('data', function (chunk) {
+    var lines = chunk.split(/\r\n|\n/);
+    var length = lines.length;
+    if (length === 1) {
+      leftover += lines[0];
+      return;
+    }
+    if (length > 1) {
+      handleLogLine(null, leftover + lines[0], opts, stylize);
+    }
+    leftover = lines.pop();
+    length -= 1;
+    for (var i=1; i < length; i++) {
+      handleLogLine(null, lines[i], opts, stylize);
+    }
+  });
+  dtrace.on('exit', function (code) {
+    if (leftover) {
+      handleLogLine(null, leftover, opts, stylize);
+      leftover = '';
+    }
+    callback(code);
+  });
+}
+
+
+/**
  * Process all input from the given log file.
  *
  * @param file {String} Log file path to process.
@@ -1009,10 +1067,18 @@ function main(argv) {
     console.log("bunyan " + getVersion());
     return;
   }
+  if (opts.pid && opts.args.length > 0) {
+    warn("bunyan: error: can't use both '-p PID' and file args");
+    return drainStdoutAndExit(1);
+  }
   var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
 
   var retval = 0;
-  if (opts.args.length > 0) {
+  if (opts.pid) {
+    processPid(opts, stylize, function (code) {
+      process.exit(code);
+    });
+  } else if (opts.args.length > 0) {
     var files = opts.args;
     files.forEach(function (file) {
       streams[file] = { stream: null, records: [], done: false }

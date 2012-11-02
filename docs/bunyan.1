@@ -1,13 +1,13 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "BUNYAN" "1" "October 2012" "" "bunyan manual"
+.TH "BUNYAN" "1" "November 2012" "" "bunyan manual"
 .
 .SH "NAME"
 \fBbunyan\fR \- filter and pretty\-print Bunyan log file content
 .
 .SH "SYNOPSIS"
-\fBbunyan\fR [OPTIONS] [LOOKUPS\.\.\.]
+\fBbunyan\fR [OPTIONS] [LOOKUPS\.\.\.] \.\.\. | \fBbunyan\fR [OPTIONS] \fBbunyan\fR [OPTIONS] \-p PID
 .
 .SH "DESCRIPTION"
 "Bunyan" is \fBa simple and fast a JSON logging library\fR for node\.js services, a one\-JSON\-object\-per\-line log format, and \fBa \fBbunyan\fR CLI tool\fR for nicely viewing those logs\. This man page describes the latter\.
@@ -96,6 +96,13 @@ Print version of this command and exit\.
 Don\'t warn if input isn\'t valid JSON\.
 .
 .P
+Dtrace options (only on dtrace\-supporting platforms):
+.
+.TP
+\fB\-p PID\fR
+Process bunyan:log\-* probes from the process with the given PID\.
+.
+.P
 Filtering options:
 .
 .TP
@@ -165,6 +172,30 @@ json\-N              JSON output, N\-space indentation, e\.g\. "json\-0"
 inspect             Node\.js `util\.inspect` output\.
 .
 .fi
+.
+.SH "DTRACE SUPPORT"
+On systems that support DTrace (e\.g\., MacOS, FreeBSD, illumos derivatives like SmartOS and OmniOS), Bunyan will create a DTrace provider (\fBbunyan\fR) that makes available the following probes:
+.
+.IP "" 4
+.
+.nf
+
+log\-trace
+log\-debug
+log\-info
+log\-warn
+log\-error
+log\-fatal
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Each of these probes has a single argument: the string that would be written to the log\. Note that when a probe is enabled, it will fire whenever the corresponding function is called, even if the level of the log message is less than that of any stream\.
+.
+.P
+See \fIhttps://github\.com/trentm/node\-bunyan#dtrace\-support\fR for more details\.
 .
 .SH "PROJECT & BUGS"
 \fBbunyan\fR is written in JavaScript and requires node\.js (\fBnode\fR)\. The project lives at \fIhttps://github\.com/trentm/node\-bunyan\fR and is published to npm as "bunyan"\.
