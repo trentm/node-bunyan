@@ -68,7 +68,7 @@ distclean:
 .PHONY: test
 test: $(TAP)
 	[[ -n "$(SKIP_DTRACE)" ]] || \
-		node -e 'require("trentm-dtrace-provider").createDTraceProvider("isthisthingon")' && \
+		node -e 'require("dtrace-provider").createDTraceProvider("isthisthingon")' && \
 		$(SUDO) $(TAP) --tap test/dtrace.test.js
 	$(TAP) --tap $(TEST_FILES)
 

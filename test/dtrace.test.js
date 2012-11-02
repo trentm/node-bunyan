@@ -15,9 +15,9 @@ var bunyan = require('../lib/bunyan');
 var dtracePlats = ['sunos', 'darwin', 'freebsd'];
 var runDtraceTests = true;
 try {
-  require('trentm-dtrace-provider')
+  require('dtrace-provider')
 } catch (e) {
-  console.log('# skip dtrace tests: no trentm-dtrace-provider module');
+  console.log('# skip dtrace tests: no dtrace-provider module');
   runDtraceTests = false;
 }
 if (!runDtraceTests) {

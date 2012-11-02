@@ -2,7 +2,9 @@
 
 ## bunyan 0.16.3 (not yet released)
 
-(nothing yet)
+- Drop 'trentm-dtrace-provider' fork dep now that
+  <https://github.com/chrisa/node-dtrace-provider/pull/24> has been resolved.
+  Back to dtrace-provider.
 
 
 ## bunyan 0.16.2
