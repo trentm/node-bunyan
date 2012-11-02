@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.16.0 (not yet released)
+## bunyan 0.16.0
 
 - Add `bunyan -p PID` support. This is a convenience wrapper that effectively
   calls:
