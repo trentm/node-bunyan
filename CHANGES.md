@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.16.2 (not yet released)
+## bunyan 0.16.2
 
 - Ensure that stderr from the dtrace child process (when using `bunyan -p PID`)
   gets through. The `pipe` usage wasn't working on SmartOS. This is important
