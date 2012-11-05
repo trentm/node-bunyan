@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.16.4 (not yet released)
+## bunyan 0.16.4
 
 - issue #54: Ensure (again, see 0.16.2) that stderr from the dtrace child
   process (when using `bunyan -p PID`) gets through. There had been a race
