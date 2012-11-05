@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.16.5 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.16.4
 
 - issue #54: Ensure (again, see 0.16.2) that stderr from the dtrace child
