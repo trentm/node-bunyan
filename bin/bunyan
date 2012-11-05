@@ -15,6 +15,8 @@ var fs = require('fs');
 var warn = console.warn;
 var spawn = require('child_process').spawn;
 
+var nodeSpawnSupportsStdio = (Number(process.version.split('.')[1]) >= 8);
+
 
 
 //---- globals and constants
@@ -907,13 +909,19 @@ function processPid(opts, stylize, callback) {
   var leftover = "";  // Left-over partial line from last chunk.
   var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
     format('bunyan%d:::log-*{printf("%s", copyinstr(arg0))}', opts.pid)];
-  var dtrace = spawn(argv[0], argv.slice(1));
-  child = dtrace; // intentionall global
+  var dtrace = spawn(argv[0], argv.slice(1),
+    // Share the stderr handle to have error output come
+    // straight through. Only supported in v0.8+.
+    {stdio: ['pipe', 'pipe', process.stderr]});
+  child = dtrace; // intentionally global
 
-  dtrace.stderr.setEncoding('utf8');
-  dtrace.stderr.on('data', function (chunk) {
-    process.stderr.write(chunk);
-  });
+  function finish(code) {
+    if (leftover) {
+      handleLogLine(null, leftover, opts, stylize);
+      leftover = '';
+    }
+    callback(returnCode);
+  }
 
   dtrace.stdout.setEncoding('utf8');
   dtrace.stdout.on('data', function (chunk) {
@@ -932,13 +940,27 @@ function processPid(opts, stylize, callback) {
       handleLogLine(null, lines[i], opts, stylize);
     }
   });
-  dtrace.on('exit', function (code) {
-    if (leftover) {
-      handleLogLine(null, leftover, opts, stylize);
-      leftover = '';
+
+  if (nodeSpawnSupportsStdio) {
+    dtrace.on('exit', finish);
+  } else {
+    // Fallback (for < v0.8) to pipe the dtrace process' stderr to this stderr.
+    // Wait for all of (1) process 'exit', (2) stderr 'end', and (2) stdout
+    // 'end' before returning to ensure all stderr is flushed (issue #54).
+    var returnCode = null;
+    var eventsRemaining = 3;
+    function countdownToFinish(code) {
+      returnCode = code;
+      eventsRemaining--;
+      if (eventsRemaining == 0) {
+        finish(returnCode);
+      }
     }
-    callback(code);
-  });
+    dtrace.stderr.pipe(process.stderr);
+    dtrace.stderr.on('end', countdownToFinish);
+    dtrace.stderr.on('end', countdownToFinish);
+    dtrace.on('exit', countdownToFinish);
+  }
 }
 
 

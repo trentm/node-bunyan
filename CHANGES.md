@@ -2,7 +2,9 @@
 
 ## bunyan 0.16.4 (not yet released)
 
-(nothing yet)
+- issue #54: Ensure (again, see 0.16.2) that stderr from the dtrace child
+  process (when using `bunyan -p PID`) gets through. There had been a race
+  between exiting bunyan and the flushing of the dtrace process' stderr.
 
 
 ## bunyan 0.16.3
