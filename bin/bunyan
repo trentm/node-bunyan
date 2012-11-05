@@ -1110,7 +1110,8 @@ function main(argv) {
     return;
   }
   if (opts.pid && opts.args.length > 0) {
-    warn("bunyan: error: can't use both '-p PID' and file args");
+    warn("bunyan: error: can't use both '-p PID' (%s) and file (%s) args",
+      opts.pid, opts.args.join(' '));
     return drainStdoutAndExit(1);
   }
   var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
