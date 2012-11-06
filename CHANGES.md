@@ -2,7 +2,9 @@
 
 ## bunyan 0.16.5 (not yet released)
 
-(nothing yet)
+- issue #55: Add support for `BUNYAN_NO_COLOR` environment variable to
+  turn off all output coloring. This is still overridden by the `--color`
+  and `--no-color` options.
 
 
 ## bunyan 0.16.4

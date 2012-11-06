@@ -191,6 +191,10 @@ function printHelp() {
     console.log("    %s %d", n, levelFromName[name]);
   });
   console.log("");
+  console.log("Environment Variables:");
+  console.log("  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ");
+  console.log("                     coloring. See '--no-color'.");
+  console.log("");
   console.log("See <https://github.com/trentm/node-bunyan> for more complete docs.");
   console.log("Please report bugs to <https://github.com/trentm/node-bunyan/issues>.");
 }
@@ -314,7 +318,7 @@ function parseArgv(argv) {
   var parsed = {
     args: [],
     help: false,
-    color: process.stdout.isTTY,
+    color: null,
     outputMode: OM_PAUL,
     jsonIndent: 2,
     level: null,
@@ -1113,6 +1117,14 @@ function main(argv) {
     warn("bunyan: error: can't use both '-p PID' (%s) and file (%s) args",
       opts.pid, opts.args.join(' '));
     return drainStdoutAndExit(1);
+  }
+  if (opts.color === null) {
+    if (process.env.BUNYAN_NO_COLOR &&
+        process.env.BUNYAN_NO_COLOR.length > 0) {
+      opts.color = false;
+    } else {
+      opts.color = process.stdout.isTTY;
+    }
   }
   var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
 
