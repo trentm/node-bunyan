@@ -65,6 +65,8 @@
     <a href="#OPTIONS">OPTIONS</a>
     <a href="#LOG-LEVELS">LOG LEVELS</a>
     <a href="#OUTPUT-FORMATS">OUTPUT FORMATS</a>
+    <a href="#DTRACE-SUPPORT">DTRACE SUPPORT</a>
+    <a href="#ENVIRONMENT">ENVIRONMENT</a>
     <a href="#PROJECT-BUGS">PROJECT &amp; BUGS</a>
     <a href="#LICENSE">LICENSE</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
@@ -83,7 +85,9 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>bunyan</code> [OPTIONS] [LOOKUPS...]</p>
+<p><code>bunyan</code> [OPTIONS] [LOOKUPS...]
+... | <code>bunyan</code> [OPTIONS]
+<code>bunyan</code> [OPTIONS] -p PID</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -146,6 +150,13 @@ record data. In the COND code, <code>this</code> refers to the record object:</p
 </dl>
 
 
+<p>Dtrace options (only on dtrace-supporting platforms):</p>
+
+<dl>
+<dt class="flush"><code>-p PID</code></dt><dd>Process bunyan:log-* probes from the process with the given PID.</dd>
+</dl>
+
+
 <p>Filtering options:</p>
 
 <dl>
@@ -199,6 +210,34 @@ json-N              JSON output, N-space indentation, e.g. "json-0"
 inspect             Node.js `util.inspect` output.
 </code></pre>
 
+<h2 id="DTRACE-SUPPORT">DTRACE SUPPORT</h2>
+
+<p>On systems that support DTrace (e.g., MacOS, FreeBSD, illumos derivatives
+like SmartOS and OmniOS), Bunyan will create a DTrace provider (<code>bunyan</code>)
+that makes available the following probes:</p>
+
+<pre><code>log-trace
+log-debug
+log-info
+log-warn
+log-error
+log-fatal
+</code></pre>
+
+<p>Each of these probes has a single argument: the string that would be
+written to the log.  Note that when a probe is enabled, it will
+fire whenever the corresponding function is called, even if the level of
+the log message is less than that of any stream.</p>
+
+<p>See <a href="https://github.com/trentm/node-bunyan#dtrace-support" data-bare-link="true">https://github.com/trentm/node-bunyan#dtrace-support</a> for more details.</p>
+
+<h2 id="ENVIRONMENT">ENVIRONMENT</h2>
+
+<dl>
+<dt><code>BUNYAN_NO_COLOR</code></dt><dd>Set to a non-empty value to force no output coloring. See '--no-color'.</dd>
+</dl>
+
+
 <h2 id="PROJECT-BUGS">PROJECT &amp; BUGS</h2>
 
 <p><code>bunyan</code> is written in JavaScript and requires node.js (<code>node</code>). The project
@@ -224,7 +263,7 @@ All rights reserved.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>October 2012</li>
+    <li class='tc'>November 2012</li>
     <li class='tr'>bunyan(1)</li>
   </ol>
 
