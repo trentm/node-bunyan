@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.16.6 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.16.5
 
 - Allow `bunyan -p '*'` to capture bunyan dtrace probes from **all** processes.
