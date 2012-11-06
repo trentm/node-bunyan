@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.16.5 (not yet released)
+## bunyan 0.16.5
 
 - Allow `bunyan -p '*'` to capture bunyan dtrace probes from **all** processes.
 - issue #55: Add support for `BUNYAN_NO_COLOR` environment variable to
