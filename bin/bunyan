@@ -403,7 +403,11 @@ function parseArgv(argv) {
         var pidArg = args.shift();
         var pid = +(pidArg);
         if (isNaN(pid)) {
-          throw new Error(format('invalid pid: "%s"', pidArg));
+          if (pidArg === '*') {
+            pid = '*'
+          } else {
+            throw new Error(format('invalid pid: "%s"', pidArg));
+          }
         }
         parsed.pid = pid;
         break;
@@ -912,7 +916,7 @@ function processStdin(opts, stylize, callback) {
 function processPid(opts, stylize, callback) {
   var leftover = "";  // Left-over partial line from last chunk.
   var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
-    format('bunyan%d:::log-*{printf("%s", copyinstr(arg0))}', opts.pid)];
+    format('bunyan%s:::log-*{printf("%s", copyinstr(arg0))}', opts.pid)];
   var dtrace = spawn(argv[0], argv.slice(1),
     // Share the stderr handle to have error output come
     // straight through. Only supported in v0.8+.
