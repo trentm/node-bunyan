@@ -15,7 +15,7 @@
   "engines": ["node >=0.6.0"],
   "keywords": ["log", "logging", "log4j", "json"],
 
-  "dependencies": {
+  "optionalDependencies": {
     "dtrace-provider": "0.2.4"
   },
   "devDependencies": {
