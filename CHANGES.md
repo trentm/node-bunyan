@@ -1,5 +1,10 @@
 # bunyan Changelog
 
+## bunyan 0.16.7 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.16.6
 
 - [issue #56] Support `bunyan -p NAME` to dtrace all PIDs matching 'NAME' in
