@@ -551,6 +551,15 @@ Aggregate debug messages from process 1234, by message:
 
     dtrace -x strsize=4k -n 'bunyan1234:::log-debug{@[copyinstr(arg0)] = count()}'
 
+Have the bunyan CLI pretty-print the traced logs:
+
+    dtrace -x strsize=4k -qn 'bunyan1234:::log-*{printf("%s", copyinstr(arg0))}' | bunyan
+
+A convenience handle has been made for this:
+
+    bunyan -p 1234
+
+
 On systems that support the
 [`jstack`](http://dtrace.org/blogs/dap/2012/04/25/profiling-node-js/) action
 via a node.js helper, get a stack backtrace for any debug message that

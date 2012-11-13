@@ -13,7 +13,10 @@ var vm = require('vm');
 var http = require('http');
 var fs = require('fs');
 var warn = console.warn;
-var spawn = require('child_process').spawn;
+var child_process = require('child_process'),
+  spawn = child_process.spawn,
+  exec = child_process.exec,
+  execFile = child_process.execFile;
 
 var nodeSpawnSupportsStdio = (Number(process.version.split('.')[1]) >= 8);
 
@@ -151,7 +154,10 @@ function printHelp() {
   console.log("");
   console.log("Dtrace options (only on dtrace-supporting platforms):");
   console.log("  -p PID        Process bunyan:log-* probes from the process");
-  console.log("                with the given PID.");
+  console.log("                with the given PID. Can be used multiple times,");
+  console.log("                or specify all processes with '*', or a set of");
+  console.log("                processes whose command & args match a pattern");
+  console.log("                with '-p NAME'.");
   console.log("");
   console.log("Filtering options:");
   console.log("  -l, --level LEVEL");
@@ -324,7 +330,8 @@ function parseArgv(argv) {
     level: null,
     conditions: null,
     strict: false,
-    pid: null
+    pids: null,
+    pidsType: null
   };
 
   // Turn '-iH' into '-i -H', except for argument-accepting options.
@@ -400,16 +407,29 @@ function parseArgv(argv) {
         parsed.outputMode = OM_JSON;
         break;
       case "-p":
+        if (!parsed.pids) {
+          parsed.pids = [];
+        }
         var pidArg = args.shift();
         var pid = +(pidArg);
-        if (isNaN(pid)) {
-          if (pidArg === '*') {
-            pid = '*'
-          } else {
-            throw new Error(format('invalid pid: "%s"', pidArg));
+        if (!isNaN(pid) || pidArg === '*') {
+          if (parsed.pidsType && parsed.pidsType !== 'num') {
+            throw new Error(format(
+              'cannot mix PID name and number arguments: "%s"', pidArg));
           }
+          parsed.pidsType = 'num';
+          if (!parsed.pids) {
+            parsed.pids = [];
+          }
+          parsed.pids.push(isNaN(pid) ? pidArg : pid);
+        } else {
+          if (parsed.pidsType && parsed.pidsType !== 'name') {
+            throw new Error(format(
+              'cannot mix PID name and number arguments: "%s"', pidArg));
+          }
+          parsed.pidsType = 'name';
+          parsed.pids = pidArg;
         }
-        parsed.pid = pid;
         break;
       case "-l":
       case "--level":
@@ -913,62 +933,127 @@ function processStdin(opts, stylize, callback) {
  * @param stylize {Function} Output stylize function to use.
  * @param callback {Function} `function (code)`
  */
-function processPid(opts, stylize, callback) {
+function processPids(opts, stylize, callback) {
   var leftover = "";  // Left-over partial line from last chunk.
-  var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
-    format('bunyan%s:::log-*{printf("%s", copyinstr(arg0))}', opts.pid)];
-  var dtrace = spawn(argv[0], argv.slice(1),
-    // Share the stderr handle to have error output come
-    // straight through. Only supported in v0.8+.
-    {stdio: ['pipe', 'pipe', process.stderr]});
-  child = dtrace; // intentionally global
 
-  function finish(code) {
-    if (leftover) {
-      handleLogLine(null, leftover, opts, stylize);
-      leftover = '';
+  /**
+   * Get the PIDs to dtrace.
+   *
+   * @param cb {Function} `function (errCode, pids)`
+   */
+  function getPids(cb) {
+    if (opts.pidsType === 'num') {
+      return cb(null, opts.pids);
     }
-    callback(returnCode);
+    if (process.platform === 'sunos') {
+      execFile('/bin/pgrep', ['-lf', opts.pids],
+        function (pidsErr, stdout, stderr) {
+          if (pidsErr) {
+            warn('bunyan: error getting PIDs for "%s": %s\n%s\n%s',
+              opts.pids, pidsErr.message, stdout, stderr);
+            return cb(1);
+          }
+          var pids = stdout.trim().split('\n')
+            .map(function (line) { return line.trim().split(/\s+/)[0] })
+            .filter(function (pid) { return Number(pid) !== process.pid });
+          if (pids.length === 0) {
+            warn('bunyan: error: no matching PIDs found for "%s"', opts.pids);
+            return cb(2);
+          }
+          cb(null, pids);
+        }
+      );
+    } else {
+      var regex = opts.pids;
+      if (regex && /[a-zA-Z0-9_]/.test(regex[0])) {
+        // 'foo' -> '[f]oo' trick to exclude the 'grep' PID from its own
+        // search.
+        regex = '[' + regex[0] + ']' + regex.slice(1);
+      }
+      exec(format('ps -A -o pid,command | grep \'%s\'', regex),
+        function (pidsErr, stdout, stderr) {
+          if (pidsErr) {
+            warn('bunyan: error getting PIDs for "%s": %s\n%s\n%s',
+              opts.pids, pidsErr.message, stdout, stderr);
+            return cb(1);
+          }
+          var pids = stdout.trim().split('\n')
+            .map(function (line) { return line.trim().split(/\s+/)[0] })
+            .filter(function (pid) { return Number(pid) !== process.pid });
+          if (pids.length === 0) {
+            warn('bunyan: error: no matching PIDs found for "%s"', opts.pids);
+            return cb(2);
+          }
+          cb(null, pids);
+        }
+      );
+    }
   }
 
-  dtrace.stdout.setEncoding('utf8');
-  dtrace.stdout.on('data', function (chunk) {
-    var lines = chunk.split(/\r\n|\n/);
-    var length = lines.length;
-    if (length === 1) {
-      leftover += lines[0];
-      return;
+  getPids(function (errCode, pids) {
+    if (errCode) {
+      return callback(errCode);
     }
-    if (length > 1) {
-      handleLogLine(null, leftover + lines[0], opts, stylize);
+
+    var probes = pids.map(function (pid) {
+      return format('bunyan%s:::log-*', pid);
+    }).join(',');
+    var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
+      format('%s{printf("%s", copyinstr(arg0))}', probes)];
+    //console.log('dtrace argv: %s', argv);
+    var dtrace = spawn(argv[0], argv.slice(1),
+      // Share the stderr handle to have error output come
+      // straight through. Only supported in v0.8+.
+      {stdio: ['pipe', 'pipe', process.stderr]});
+    child = dtrace; // intentionally global
+
+    function finish(code) {
+      if (leftover) {
+        handleLogLine(null, leftover, opts, stylize);
+        leftover = '';
+      }
+      callback(returnCode);
     }
-    leftover = lines.pop();
-    length -= 1;
-    for (var i=1; i < length; i++) {
-      handleLogLine(null, lines[i], opts, stylize);
+
+    dtrace.stdout.setEncoding('utf8');
+    dtrace.stdout.on('data', function (chunk) {
+      var lines = chunk.split(/\r\n|\n/);
+      var length = lines.length;
+      if (length === 1) {
+        leftover += lines[0];
+        return;
+      }
+      if (length > 1) {
+        handleLogLine(null, leftover + lines[0], opts, stylize);
+      }
+      leftover = lines.pop();
+      length -= 1;
+      for (var i=1; i < length; i++) {
+        handleLogLine(null, lines[i], opts, stylize);
+      }
+    });
+
+    if (nodeSpawnSupportsStdio) {
+      dtrace.on('exit', finish);
+    } else {
+      // Fallback (for < v0.8) to pipe the dtrace process' stderr to this stderr.
+      // Wait for all of (1) process 'exit', (2) stderr 'end', and (2) stdout
+      // 'end' before returning to ensure all stderr is flushed (issue #54).
+      var returnCode = null;
+      var eventsRemaining = 3;
+      function countdownToFinish(code) {
+        returnCode = code;
+        eventsRemaining--;
+        if (eventsRemaining == 0) {
+          finish(returnCode);
+        }
+      }
+      dtrace.stderr.pipe(process.stderr);
+      dtrace.stderr.on('end', countdownToFinish);
+      dtrace.stderr.on('end', countdownToFinish);
+      dtrace.on('exit', countdownToFinish);
     }
   });
-
-  if (nodeSpawnSupportsStdio) {
-    dtrace.on('exit', finish);
-  } else {
-    // Fallback (for < v0.8) to pipe the dtrace process' stderr to this stderr.
-    // Wait for all of (1) process 'exit', (2) stderr 'end', and (2) stdout
-    // 'end' before returning to ensure all stderr is flushed (issue #54).
-    var returnCode = null;
-    var eventsRemaining = 3;
-    function countdownToFinish(code) {
-      returnCode = code;
-      eventsRemaining--;
-      if (eventsRemaining == 0) {
-        finish(returnCode);
-      }
-    }
-    dtrace.stderr.pipe(process.stderr);
-    dtrace.stderr.on('end', countdownToFinish);
-    dtrace.stderr.on('end', countdownToFinish);
-    dtrace.on('exit', countdownToFinish);
-  }
 }
 
 
@@ -1133,8 +1218,8 @@ function main(argv) {
   var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
 
   var retval = 0;
-  if (opts.pid) {
-    processPid(opts, stylize, function (code) {
+  if (opts.pids) {
+    processPids(opts, stylize, function (code) {
       process.exit(code);
     });
   } else if (opts.args.length > 0) {

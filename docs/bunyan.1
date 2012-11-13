@@ -7,7 +7,13 @@
 \fBbunyan\fR \- filter and pretty\-print Bunyan log file content
 .
 .SH "SYNOPSIS"
-\fBbunyan\fR [OPTIONS] [LOOKUPS\.\.\.] \.\.\. | \fBbunyan\fR [OPTIONS] \fBbunyan\fR [OPTIONS] \-p PID
+\fBbunyan\fR [OPTIONS]
+.
+.P
+\&\.\.\. | \fBbunyan\fR [OPTIONS]
+.
+.P
+\fBbunyan\fR [OPTIONS] \-p PID
 .
 .SH "DESCRIPTION"
 "Bunyan" is \fBa simple and fast a JSON logging library\fR for node\.js services, a one\-JSON\-object\-per\-line log format, and \fBa \fBbunyan\fR CLI tool\fR for nicely viewing those logs\. This man page describes the latter\.
@@ -99,8 +105,8 @@ Don\'t warn if input isn\'t valid JSON\.
 Dtrace options (only on dtrace\-supporting platforms):
 .
 .TP
-\fB\-p PID\fR
-Process bunyan:log\-* probes from the process with the given PID\.
+\fB\-p PID\fR, \fB\-p NAME\fR
+Process bunyan:log\-* probes from the process with the given PID\. Can be used multiple times, or specify all processes with \'*\', or a set of processes whose command & args match a pattern with \'\-p NAME\'\.
 .
 .P
 Filtering options:
@@ -195,7 +201,7 @@ log\-fatal
 Each of these probes has a single argument: the string that would be written to the log\. Note that when a probe is enabled, it will fire whenever the corresponding function is called, even if the level of the log message is less than that of any stream\.
 .
 .P
-See \fIhttps://github\.com/trentm/node\-bunyan#dtrace\-support\fR for more details\.
+See \fIhttps://github\.com/trentm/node\-bunyan#dtrace\-support\fR for more details and the \'\-p PID\' option above for convenience usage\.
 .
 .SH "ENVIRONMENT"
 .

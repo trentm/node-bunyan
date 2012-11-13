@@ -1,4 +1,3 @@
-- -p PID: proper handling of '-l level'
 - "all" or "off" levels? log4j? logging.py?
   logging.py has NOTSET === 0. I think that is only needed/used for
   multi-level hierarchical effective level.
@@ -42,6 +41,7 @@
 - Think about a bunyan dashboard that supports organizing and viewing logs
   from multiple hosts and services.
 - Syslog support.
+- doc the restify RequestCaptureStream usage of RingBuffer. Great example.
 - A vim plugin (a la http://vim.cybermirror.org/runtime/autoload/zip.vim ?) to
   allow browsing (read-only) a bunyan log in rendered form.
 - Some speed comparisons with others to get a feel for Bunyan's speed.

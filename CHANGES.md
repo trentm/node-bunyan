@@ -2,7 +2,15 @@
 
 ## bunyan 0.16.6 (not yet released)
 
-(nothing yet)
+- [issue #56] Support `bunyan -p NAME` to dtrace all PIDs matching 'NAME' in
+  their command and args (using `ps -A -o pid,command | grep NAME` or, on SunOS
+  `pgrep -lf NAME`). E.g.:
+
+        bunyan -p myappname
+
+  This is useful for usage of node's [cluster
+  module](http://nodejs.org/docs/latest/api/all.html#all_cluster) where you'll
+  have multiple worker processes.
 
 
 ## bunyan 0.16.5

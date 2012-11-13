@@ -85,9 +85,11 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>bunyan</code> [OPTIONS] [LOOKUPS...]
-... | <code>bunyan</code> [OPTIONS]
-<code>bunyan</code> [OPTIONS] -p PID</p>
+<p><code>bunyan</code> [OPTIONS]</p>
+
+<p>... | <code>bunyan</code> [OPTIONS]</p>
+
+<p><code>bunyan</code> [OPTIONS] -p PID</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -153,7 +155,10 @@ record data. In the COND code, <code>this</code> refers to the record object:</p
 <p>Dtrace options (only on dtrace-supporting platforms):</p>
 
 <dl>
-<dt class="flush"><code>-p PID</code></dt><dd>Process bunyan:log-* probes from the process with the given PID.</dd>
+<dt><code>-p PID</code>, <code>-p NAME</code></dt><dd>Process bunyan:log-* probes from the process with the given PID.
+Can be used multiple times, or specify all processes with '*',
+or a set of processes whose command &amp; args match a pattern with
+'-p NAME'.</dd>
 </dl>
 
 
@@ -229,7 +234,8 @@ written to the log.  Note that when a probe is enabled, it will
 fire whenever the corresponding function is called, even if the level of
 the log message is less than that of any stream.</p>
 
-<p>See <a href="https://github.com/trentm/node-bunyan#dtrace-support" data-bare-link="true">https://github.com/trentm/node-bunyan#dtrace-support</a> for more details.</p>
+<p>See <a href="https://github.com/trentm/node-bunyan#dtrace-support" data-bare-link="true">https://github.com/trentm/node-bunyan#dtrace-support</a> for more details
+and the '-p PID' option above for convenience usage.</p>
 
 <h2 id="ENVIRONMENT">ENVIRONMENT</h2>
 
