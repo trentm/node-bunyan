@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## bunyan 0.16.6 (not yet released)
+## bunyan 0.16.6
 
 - [issue #56] Support `bunyan -p NAME` to dtrace all PIDs matching 'NAME' in
   their command and args (using `ps -A -o pid,command | grep NAME` or, on SunOS
