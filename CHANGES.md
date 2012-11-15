@@ -1,6 +1,6 @@
 # bunyan Changelog
 
-## Known issues
+Known issues:
 
 - [issue #58] Can't install to a dir with spaces. This is [this node-gyp
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
