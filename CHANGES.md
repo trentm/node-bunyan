@@ -1,5 +1,11 @@
 # bunyan Changelog
 
+## Known issues
+
+- [issue #58] Can't install to a dir with spaces. This is [this node-gyp
+  bug](https://github.com/TooTallNate/node-gyp/issues/65).
+
+
 ## bunyan 0.16.7 (not yet released)
 
 - [issue #59] Clear a possibly interrupted ANSI color code on signal
