@@ -73,6 +73,9 @@ var currLine = null;
 // Child dtrace process, if any. Used for signal-handling.
 var child = null;
 
+// Whether ANSI codes are being used. Used for signal-handling.
+var usingAnsiCodes = false;
+
 
 
 //---- support functions
@@ -1147,6 +1150,10 @@ function asyncForEach(arr, iterator, callback) {
 
 // Try to ensure we close a child 'dtrace' process on signalled exit.
 function signalCleanupAndExit(signal) {
+  if (usingAnsiCodes) {
+    // Clear possibly interrupted ANSI code (issue #59).
+    process.stdout.write('\033[0m');
+  }
   if (child) {
     child.kill(signal);
   }
@@ -1215,6 +1222,7 @@ function main(argv) {
       opts.color = process.stdout.isTTY;
     }
   }
+  usingAnsiCodes = opts.color; // intentionally global
   var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
 
   var retval = 0;

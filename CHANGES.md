@@ -2,7 +2,8 @@
 
 ## bunyan 0.16.7 (not yet released)
 
-(nothing yet)
+- [issue #59] Clear a possibly interrupted ANSI color code on signal
+  termination.
 
 
 ## bunyan 0.16.6
