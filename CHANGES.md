@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.16.8 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.16.7
 
 - [issue #59] Clear a possibly interrupted ANSI color code on signal
