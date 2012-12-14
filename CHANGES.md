@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.16.9 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.16.8
 
 - Guards on `-c CONDITION` usage to attempt to be more user friendly.
