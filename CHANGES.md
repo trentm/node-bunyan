@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.16.8 (not yet released)
+## bunyan 0.16.8
 
 - Guards on `-c CONDITION` usage to attempt to be more user friendly.
   Bogus JS code will result in this:
