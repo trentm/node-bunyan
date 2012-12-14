@@ -73,10 +73,10 @@ collisions.
 
 ## bunyan tool
 
-A `bunyan` tool is provided **for pretty-printing bunyan logs** and, eventually,
-for filtering (e.g. `| bunyan -c 'level>3'`). This shows the default output
-(which is fluid right now) and indented-JSON output. More output formats will
-be added, including support for custom formats.
+A `bunyan` tool is provided **for pretty-printing bunyan logs** and for
+**filtering** (e.g. `| bunyan -c 'this.foo == "bar"'`). This shows the default
+output and indented-JSON output. More output formats will be added, including
+support for custom formats.
 
     $ node hi.js | ./bin/bunyan  # CLI tool to filter/pretty-print JSON logs.
     [2012-01-31T00:08:11.387Z] INFO: myapp on banana.local/123: hi

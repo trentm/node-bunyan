@@ -18,7 +18,9 @@ var child_process = require('child_process'),
   exec = child_process.exec,
   execFile = child_process.execFile;
 
-var nodeSpawnSupportsStdio = (Number(process.version.split('.')[1]) >= 8);
+var nodeSpawnSupportsStdio = (
+  Number(process.version.split('.')[0]) >= 0
+  || Number(process.version.split('.')[1]) >= 8);
 
 
 
@@ -75,6 +77,9 @@ var child = null;
 
 // Whether ANSI codes are being used. Used for signal-handling.
 var usingAnsiCodes = false;
+
+// Global ref to options used only by 'uncaughtException' handler.
+var gOptsForUncaughtException;
 
 
 
@@ -168,10 +173,14 @@ function printHelp() {
   console.log("                You can specify level *names* or numeric values.");
   console.log("                (See 'Log Levels' below.)");
   console.log("  -c, --condition CONDITION");
-  console.log("                Run each log message through the condition");
-  console.log("                and only show those that resolve to a truish value.");
-  console.log("                E.g. `-c 'pid == 123'`, `-c 'level == 50'`. You must");
-  console.log("                use the numeric values for filtering by level.");
+  console.log("                Run each log message through the condition and");
+  console.log("                only show those that return truish. E.g.:");
+  console.log("                    -c 'this.pid == 123'");
+  console.log("                    -c 'this.level == DEBUG'");
+  console.log("                    -c 'this.msg.indexOf(\"boom\") != -1'");
+  console.log("                'CONDITION' must be legal JS code. `this` holds");
+  console.log("                the log record. The TRACE, DEBUG, ... FATAL values");
+  console.log("                are defined to help with comparing `this.level`.");
   console.log("  --strict      Suppress all but legal Bunyan JSON log lines. By default");
   console.log("                non-JSON, and non-Bunyan lines are passed through.");
   console.log("");
@@ -395,9 +404,9 @@ function parseArgv(argv) {
         var name = args.shift();
         var idx = name.lastIndexOf('-');
         if (idx !== -1) {
-          var indent = Number(name.slice(idx+1));
-          if (! isNaN(indent)) {
-            parsed.jsonIndent = indent;
+          var indentation = Number(name.slice(idx+1));
+          if (! isNaN(indentation)) {
+            parsed.jsonIndent = indentation;
             name = name.slice(0, idx);
           }
         }
@@ -451,7 +460,36 @@ function parseArgv(argv) {
         var condition = args.shift();
         parsed.conditions = parsed.conditions || [];
         var scriptName = 'bunyan-condition-'+parsed.conditions.length;
-        var script = vm.createScript(condDefines + condition, scriptName);
+        var code = condDefines + condition;
+        try {
+          var script = vm.createScript(code, scriptName);
+        } catch (compileErr) {
+          throw new Error(format('illegal CONDITION code: %s\n'
+            + '  CONDITION script:\n'
+            + '%s\n'
+            + '  Error:\n'
+            + '%s',
+            compileErr, indent(code), indent(compileErr.stack)));
+        }
+
+        // Ensure this is a reasonably safe CONDITION.
+        try {
+          script.runInNewContext(minValidRecord);
+        } catch (condErr) {
+          throw new Error(format(
+            'CONDITION code cannot safely filter a minimal Bunyan log record\n'
+            + '  CONDITION script:\n'
+            + '%s\n'
+            + '  Minimal Bunyan log record:\n'
+            + '%s\n'
+            + '  Filter error:\n'
+            + '%s',
+            indent(code),
+            indent(JSON.stringify(minValidRecord, null, 2)),
+            indent(condErr.stack)
+            ));
+        }
+
         parsed.conditions.push(script);
         break;
       default: // arguments
@@ -527,6 +565,15 @@ function isValidRecord(rec) {
     return true;
   }
 }
+var minValidRecord = {
+  v: 0,   //TODO: get this from bunyan.LOG_VERSION
+  level: INFO,
+  name: 'name',
+  hostname: 'hostname',
+  pid: 123,
+  time: Date.now(),
+  msg: 'msg'
+};
 
 
 /**
@@ -1166,7 +1213,7 @@ process.on('SIGHUP', function () { signalCleanupAndExit('SIGHUP'); });
 
 
 process.on('uncaughtException', function (err) {
-  function indent(s) {
+  function _indent(s) {
     var lines = s.split(/\r?\n/);
     for (var i = 0; i < lines.length; i++) {
       lines[i] = '*     ' + lines[i];
@@ -1175,10 +1222,17 @@ process.on('uncaughtException', function (err) {
   }
 
   var title = encodeURIComponent(format(
-    "Bunyan %s crashed: %s", getVersion(), err.message));
+    "Bunyan %s crashed: %s", getVersion(), String(err)));
   console.error('* * *');
-  console.error('* The Bunyan CLI crashed! Please report this issue and');
-  console.error('* include the details below:');
+  console.error('* The Bunyan CLI crashed!');
+  console.error('*');
+  if (err.name === 'ReferenceError' && gOptsForUncaughtException.conditions) {
+    console.error('* A "ReferenceError" is often the result of given');
+    console.error('* `-c CONDITION` code that doesn\'t guard against undefined');
+    console.error('* values. If that is not the problem:');
+    console.error('*');
+  }
+  console.error('* Please report this issue and include the details below:');
   console.error('*');
   console.error('*    https://github.com/trentm/node-bunyan/issues/new?title=%s', title);
   console.error('*');
@@ -1188,19 +1242,19 @@ process.on('uncaughtException', function (err) {
   console.error('* argv: %j', process.argv);
   console.error('* log line: %j', currLine);
   console.error('* stack:');
-  console.error(indent(err.stack));
+  console.error(_indent(err.stack));
   console.error('* * *');
   process.exit(1);
 });
 
 function main(argv) {
-  var opts;
   try {
-    opts = parseArgv(argv);
+    var opts = parseArgv(argv);
   } catch (e) {
     warn("bunyan: error: %s", e.message);
     return drainStdoutAndExit(1);
   }
+  gOptsForUncaughtException = opts; // intentionally global
   if (opts.help) {
     printHelp();
     return;

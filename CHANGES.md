@@ -8,7 +8,73 @@ Known issues:
 
 ## bunyan 0.16.8 (not yet released)
 
-(nothing yet)
+- Guards on `-c CONDITION` usage to attempt to be more user friendly.
+  Bogus JS code will result in this:
+
+        $ bunyan portal.log -c 'this.req.username==boo@foo'
+        bunyan: error: illegal CONDITION code: SyntaxError: Unexpected token ILLEGAL
+          CONDITION script:
+            Object.prototype.TRACE = 10;
+            Object.prototype.DEBUG = 20;
+            Object.prototype.INFO = 30;
+            Object.prototype.WARN = 40;
+            Object.prototype.ERROR = 50;
+            Object.prototype.FATAL = 60;
+            this.req.username==boo@foo
+          Error:
+            SyntaxError: Unexpected token ILLEGAL
+                at new Script (vm.js:32:12)
+                at Function.Script.createScript (vm.js:48:10)
+                at parseArgv (/Users/trentm/tm/node-bunyan-0.x/bin/bunyan:465:27)
+                at main (/Users/trentm/tm/node-bunyan-0.x/bin/bunyan:1252:16)
+                at Object.<anonymous> (/Users/trentm/tm/node-bunyan-0.x/bin/bunyan:1330:3)
+                at Module._compile (module.js:449:26)
+                at Object.Module._extensions..js (module.js:467:10)
+                at Module.load (module.js:356:32)
+                at Function.Module._load (module.js:312:12)
+                at Module.runMain (module.js:492:10)
+
+  And all CONDITION scripts will be run against a minimal valid Bunyan
+  log record to ensure they properly guard against undefined values
+  (at least as much as can reasonably be checked). For example:
+
+        $ bunyan portal.log -c 'this.req.username=="bob"'
+        bunyan: error: CONDITION code cannot safely filter a minimal Bunyan log record
+          CONDITION script:
+            Object.prototype.TRACE = 10;
+            Object.prototype.DEBUG = 20;
+            Object.prototype.INFO = 30;
+            Object.prototype.WARN = 40;
+            Object.prototype.ERROR = 50;
+            Object.prototype.FATAL = 60;
+            this.req.username=="bob"
+          Minimal Bunyan log record:
+            {
+              "v": 0,
+              "level": 30,
+              "name": "name",
+              "hostname": "hostname",
+              "pid": 123,
+              "time": 1355514346206,
+              "msg": "msg"
+            }
+          Filter error:
+            TypeError: Cannot read property 'username' of undefined
+                at bunyan-condition-0:7:9
+                at Script.Object.keys.forEach.(anonymous function) [as runInNewContext] (vm.js:41:22)
+                at parseArgv (/Users/trentm/tm/node-bunyan-0.x/bin/bunyan:477:18)
+                at main (/Users/trentm/tm/node-bunyan-0.x/bin/bunyan:1252:16)
+                at Object.<anonymous> (/Users/trentm/tm/node-bunyan-0.x/bin/bunyan:1330:3)
+                at Module._compile (module.js:449:26)
+                at Object.Module._extensions..js (module.js:467:10)
+                at Module.load (module.js:356:32)
+                at Function.Module._load (module.js:312:12)
+                at Module.runMain (module.js:492:10)
+
+  A proper way to do that condition would be:
+
+        $ bunyan portal.log -c 'this.req && this.req.username=="bob"'
+
 
 
 ## bunyan 0.16.7
