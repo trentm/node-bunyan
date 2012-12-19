@@ -910,6 +910,7 @@ function emit(s) {
 process.stdout.on("error", function (err) {
   if (err.code === "EPIPE") {
     // Pass. See <https://github.com/trentm/json/issues/9>.
+    drainStdoutAndExit(0);
   } else {
     warn(err);
     drainStdoutAndExit(1);

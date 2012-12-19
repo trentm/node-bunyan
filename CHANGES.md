@@ -8,7 +8,8 @@ Known issues:
 
 ## bunyan 0.16.9 (not yet released)
 
-(nothing yet)
+- *Exit* on EPIPE, otherwise we sit there useless processing a huge log file
+  with, e.g.  `bunyan huge.log | head`.
 
 
 ## bunyan 0.16.8
