@@ -703,11 +703,6 @@ function emitRecord(rec, line, opts, stylize) {
     }
     delete rec.req_id;
 
-    if (rec.latency) {
-      extras.push(rec.latency + "ms");
-    }
-    delete rec.latency;
-
     var onelineMsg;
     if (rec.msg.indexOf('\n') !== -1) {
       onelineMsg = '';

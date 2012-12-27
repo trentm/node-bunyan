@@ -8,8 +8,22 @@ Known issues:
 
 ## bunyan 0.16.9 (not yet released)
 
-- *Exit* on EPIPE, otherwise we sit there useless processing a huge log file
-  with, e.g.  `bunyan huge.log | head`.
+- Tweak to CLI default pretty output: don't special case "latency" field.
+  The special casing was perhaps nice, but less self-explanatory.
+  Before:
+
+        [2012-12-27T21:17:38.218Z]  INFO: audit/45769 on myserver: handled: 200 (15ms, audit=true, bar=baz)
+          GET /foo
+          ...
+
+  After:
+
+        [2012-12-27T21:17:38.218Z]  INFO: audit/45769 on myserver: handled: 200 (audit=true, bar=baz, latency=15)
+          GET /foo
+          ...
+
+- *Exit* CLI on EPIPE, otherwise we sit there useless processing a huge log
+  file with, e.g.  `bunyan huge.log | head`.
 
 
 ## bunyan 0.16.8
