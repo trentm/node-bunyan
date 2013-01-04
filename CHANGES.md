@@ -6,7 +6,21 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.16.9 (not yet released)
+## bunyan 0.17.0 (not yet released)
+
+- Log rotation support:
+
+        var bunyan = require('bunyan');
+        var log = bunyan.createLogger({
+            name: 'myapp',
+            streams: [{
+                type: 'rotating-file',
+                path: '/var/log/myapp.log',
+                count: 7,
+                period: 'daily'
+            }]
+        });
+
 
 - Tweak to CLI default pretty output: don't special case "latency" field.
   The special casing was perhaps nice, but less self-explanatory.
