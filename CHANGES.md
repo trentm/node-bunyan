@@ -8,7 +8,7 @@ Known issues:
 
 ## bunyan 0.17.0 (not yet released)
 
-- Log rotation support:
+- [issue #33] Log rotation support:
 
         var bunyan = require('bunyan');
         var log = bunyan.createLogger({
