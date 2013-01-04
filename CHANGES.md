@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.17.0 (not yet released)
+## bunyan 0.17.0
 
 - [issue #33] Log rotation support:
 
