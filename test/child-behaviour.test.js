@@ -4,8 +4,17 @@
  * Test some `<Logger>.child(...)` behaviour.
  */
 
-var test = require('tap').test;
 var bunyan = require('../lib/bunyan');
+
+// node-tap API
+if (require.cache[__dirname + '/tap4nodeunit.js'])
+    delete require.cache[__dirname + '/tap4nodeunit.js'];
+var tap4nodeunit = require('./tap4nodeunit.js');
+var after = tap4nodeunit.after;
+var before = tap4nodeunit.before;
+var test = tap4nodeunit.test;
+
+
 
 function CapturingStream(recs) {
   this.recs = recs || [];

@@ -4,8 +4,16 @@
  * Test other parts of the exported API.
  */
 
-var test = require('tap').test;
 var bunyan = require('../lib/bunyan');
+
+// node-tap API
+if (require.cache[__dirname + '/tap4nodeunit.js'])
+    delete require.cache[__dirname + '/tap4nodeunit.js'];
+var tap4nodeunit = require('./tap4nodeunit.js');
+var after = tap4nodeunit.after;
+var before = tap4nodeunit.before;
+var test = tap4nodeunit.test;
+
 
 test('bunyan.<LEVEL>s', function (t) {
   t.ok(bunyan.TRACE, 'TRACE');
@@ -32,4 +40,3 @@ test('bunyan.resolveLevel()', function (t) {
   t.equal(bunyan.resolveLevel('FATAL'), bunyan.FATAL, 'FATAL');
   t.end();
 });
-

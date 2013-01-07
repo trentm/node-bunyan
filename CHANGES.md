@@ -8,7 +8,8 @@ Known issues:
 
 ## bunyan 0.17.1 (not yet released)
 
-(nothing yet)
+- Switch test suite to nodeunit (still using a node-tap'ish API via
+  a helper).
 
 
 ## bunyan 0.17.0

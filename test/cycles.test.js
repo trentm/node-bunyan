@@ -4,8 +4,16 @@
  * Make sure cycles are safe.
  */
 
-var test = require('tap').test;
 var Logger = require('../lib/bunyan.js');
+
+// node-tap API
+if (require.cache[__dirname + '/tap4nodeunit.js'])
+    delete require.cache[__dirname + '/tap4nodeunit.js'];
+var tap4nodeunit = require('./tap4nodeunit.js');
+var after = tap4nodeunit.after;
+var before = tap4nodeunit.before;
+var test = tap4nodeunit.test;
+
 
 var Stream = require('stream').Stream;
 var outstr = new Stream;
@@ -61,7 +69,13 @@ var log = new Logger({
 test('cycles', function (t) {
   outstr.on('end', function () {
     output.forEach(function (o, i) {
-      t.has(o, expect[i], 'log item ' + i + ' matches');
+      // Drop variable parts for comparison.
+      delete o.hostname;
+      delete o.pid;
+      delete o.time;
+      // Hack object/dict comparison: JSONify.
+      t.equal(JSON.stringify(o), JSON.stringify(expect[i]),
+        'log item ' + i + ' matches');
     });
     t.end();
   });
@@ -72,5 +86,5 @@ test('cycles', function (t) {
   log.info('kaboom', obj.KABOOM);
   log.info(obj);
   outstr.end();
-  t.pass('did not throw');
+  t.ok('did not throw');
 });

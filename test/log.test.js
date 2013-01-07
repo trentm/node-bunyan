@@ -4,10 +4,18 @@
  * Test the `log.trace(...)`, `log.debug(...)`, ..., `log.fatal(...)` API.
  */
 
-var test = require('tap').test;
-var Logger = require('../lib/bunyan');
+var bunyan = require('../lib/bunyan');
 
-var log1 = new Logger({
+// node-tap API
+if (require.cache[__dirname + '/tap4nodeunit.js'])
+    delete require.cache[__dirname + '/tap4nodeunit.js'];
+var tap4nodeunit = require('./tap4nodeunit.js');
+var after = tap4nodeunit.after;
+var before = tap4nodeunit.before;
+var test = tap4nodeunit.test;
+
+
+var log1 = bunyan.createLogger({
   name: 'log1',
   streams: [
     {
@@ -17,7 +25,7 @@ var log1 = new Logger({
   ]
 });
 
-var log2 = new Logger({
+var log2 = bunyan.createLogger({
   name: 'log2',
   streams: [
     {
@@ -32,7 +40,7 @@ var log2 = new Logger({
 })
 
 test('log.LEVEL() -> boolean', function (t) {
-  t.equal(log1.trace(), false)
+  t.equal(log1.trace(), false, 'log1.trace() is false')
   t.equal(log1.debug(), false)
   t.equal(log1.info(), true)
   t.equal(log1.warn(), true)

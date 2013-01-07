@@ -601,7 +601,7 @@ function handleLogLine(file, line, opts, stylize) {
   }
 
   if (!isValidRecord(rec)) {
-    if (!opts.strict) emitRecord(rec, line, opts, stylize);
+    if (!opts.strict) emit(line + '\n');
     return;
   }
 

@@ -1,7 +1,7 @@
 
 #---- Tools
 
-TAP := ./node_modules/.bin/tap
+NODEUNIT := ./node_modules/.bin/nodeunit
 SUDO := sudo
 ifeq ($(shell uname -s),SunOS)
 	# On SunOS (e.g. SmartOS) we expect to run the test suite as the
@@ -16,7 +16,7 @@ endif
 
 JSSTYLE_FILES := $(shell find lib test tools examples -name "*.js") bin/bunyan
 # All test files *except* dtrace.test.js.
-TEST_FILES := $(shell ls -1 test/*.test.js | grep -v dtrace | xargs)
+NON_DTRACE_TEST_FILES := $(shell ls -1 test/*.test.js | grep -v dtrace | xargs)
 
 
 
@@ -66,11 +66,11 @@ distclean:
 #---- test
 
 .PHONY: test
-test: $(TAP)
+test: $(NODEUNIT)
 	[[ -n "$(SKIP_DTRACE)" ]] || \
 		node -e 'require("dtrace-provider").createDTraceProvider("isthisthingon")' && \
-		$(SUDO) $(TAP) --tap test/dtrace.test.js
-	$(TAP) --tap $(TEST_FILES)
+		$(SUDO) $(NODEUNIT) test/dtrace.test.js
+	$(NODEUNIT) $(NON_DTRACE_TEST_FILES)
 
 # Test will all node supported versions (presumes install locations I use on
 # my machine).
