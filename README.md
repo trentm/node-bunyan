@@ -387,13 +387,13 @@ Pretty-printed:
 
 Core fields:
 
-- `v`: Required. Integer. Added by Bunion. Cannot be overriden.
+- `v`: Required. Integer. Added by Bunyan. Cannot be overriden.
   This is the Bunyan log format version (`require('bunyan').LOG_VERSION`).
   The log version is a single integer. `0` is until I release a version
   "1.0.0" of node-bunyan. Thereafter, starting with `1`, this will be
   incremented if there is any backward incompatible change to the log record
   format. Details will be in "CHANGES.md" (the change log).
-- `level`: Required. Integer. Added by Bunion. Cannot be overriden.
+- `level`: Required. Integer. Added by Bunyan. Cannot be overriden.
   See the "Levels" section.
 - `name`: Required. String. Provided at Logger creation.
   You must specify a name for your logger when creating it. Typically this
@@ -402,7 +402,7 @@ Core fields:
   You can specify your hostname at Logger creation or it will be retrieved
   vi `os.hostname()`.
 - `pid`: Required. Integer. Filled in automatically at Logger creation.
-- `time`: Required. String. Added by Bunion. Can be overriden.
+- `time`: Required. String. Added by Bunyan. Can be overriden.
   The date and time of the event in [ISO 8601
   Extended Format](http://en.wikipedia.org/wiki/ISO_8601) format and in UTC,
   as from
