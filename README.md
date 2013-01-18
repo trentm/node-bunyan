@@ -900,6 +900,7 @@ MIT. See "LICENSE.txt".
 # See Also
 
 - Bunyan syslog support: <https://github.com/mcavage/node-bunyan-syslog>.
+- Bunyan + Graylog2: <https://github.com/mhart/gelf-stream>.
 - An example of a Bunyan shim to the Winston logging system:
   <https://github.com/trentm/node-bunyan-winston>.
 - [Bunyan for Bash](https://github.com/trevoro/bash-bunyan).
