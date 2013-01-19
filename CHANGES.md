@@ -6,7 +6,22 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.17.1 (not yet released)
+## bunyan 0.18.0 (not yet released)
+
+- Automatic paging support in the `bunyan` CLI (similar to `git log` et al).
+  IOW, `bunyan` will open your pager (by default `less`) and pipe rendered
+  log output through it. A main benefit of this is getting colored logs with
+  a pager without the pain. Before you had to explicit use `--color` to tell
+  bunyan to color output when the output was not a TTY:
+
+        bunyan foo.log --color | less -R        # before
+        bunyan foo.log                          # now
+
+  Disable with the `--no-pager` option or the `BUNYAN_NO_PAGER=1` environment
+  variable.
+
+  Limitations: Only supported for node >=0.8. Windows is not supported (at
+  least not yet).
 
 - Switch test suite to nodeunit (still using a node-tap'ish API via
   a helper).

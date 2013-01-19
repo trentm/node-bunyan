@@ -90,7 +90,7 @@ test('simple.log with color', function (t) {
     t.ifError(err)
     t.equal(stdout,
       '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 '
-      + 'on example.com: \u001b[36mMy message\u001b[39m\n');
+      + 'on example.com: \u001b[36mMy message\u001b[39m\n\u001b[0m');
     t.end();
   });
 });
@@ -112,7 +112,7 @@ test('extrafield.log with color', function (t) {
     t.equal(stdout,
       '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 '
       + 'on example.com: \u001b[36mMy message\u001b[39m'
-      + '\u001b[90m (extra=field)\u001b[39m\n');
+      + '\u001b[90m (extra=field)\u001b[39m\n\u001b[0m');
     t.end();
   });
 });

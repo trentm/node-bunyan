@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = "0.17.1";
+var VERSION = "0.18.0";
 
 var util = require('util');
 var pathlib = require('path');
@@ -17,6 +17,7 @@ var child_process = require('child_process'),
   spawn = child_process.spawn,
   exec = child_process.exec,
   execFile = child_process.execFile;
+var assert = require('assert');
 
 var nodeSpawnSupportsStdio = (
   Number(process.version.split('.')[0]) >= 0
@@ -25,6 +26,9 @@ var nodeSpawnSupportsStdio = (
 
 
 //---- globals and constants
+
+// Internal debug logging via `console.warn`.
+var _DEBUG = false;
 
 // Output modes.
 var OM_PAUL = 1;
@@ -80,6 +84,10 @@ var usingAnsiCodes = false;
 
 // Global ref to options used only by 'uncaughtException' handler.
 var gOptsForUncaughtException;
+
+// Pager child process, and output stream to which to write.
+var pager = null;
+var stdout = process.stdout;
 
 
 
@@ -185,6 +193,10 @@ function printHelp() {
   console.log("                non-JSON, and non-Bunyan lines are passed through.");
   console.log("");
   console.log("Output options:");
+  console.log("  --pager       Pipe output into `less` (or $PAGER if set), if");
+  console.log("                stdout is a terminal. This overrides $BUNYAN_NO_PAGER.");
+  console.log("                Note: Paging is only supported on node >=0.8.");
+  console.log("  --no-pager    Do not pipe output into a pager.");
   console.log("  --color       Colorize output. Defaults to try if output");
   console.log("                stream is a TTY.");
   console.log("  --no-color    Force no coloring (e.g. terminal doesn't support it)");
@@ -212,6 +224,8 @@ function printHelp() {
   console.log("Environment Variables:");
   console.log("  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ");
   console.log("                     coloring. See '--no-color'.");
+  console.log("  BUNYAN_NO_PAGER    Disable piping output to a pager. ");
+  console.log("                     See '--no-pager'.");
   console.log("");
   console.log("See <https://github.com/trentm/node-bunyan> for more complete docs.");
   console.log("Please report bugs to <https://github.com/trentm/node-bunyan/issues>.");
@@ -337,6 +351,7 @@ function parseArgv(argv) {
     args: [],
     help: false,
     color: null,
+    paginate: null,
     outputMode: OM_PAUL,
     jsonIndent: 2,
     level: null,
@@ -398,6 +413,12 @@ function parseArgv(argv) {
         break;
       case "--no-color":
         parsed.color = false;
+        break;
+      case "--pager":
+        parsed.paginate = true;
+        break;
+      case "--no-pager":
+        parsed.paginate = false;
         break;
       case "-o":
       case "--output":
@@ -893,24 +914,12 @@ function emitRecord(rec, line, opts, stylize) {
 
 var stdoutFlushed = true;
 function emit(s) {
-  // TODO:PERF If this is try/catch is too slow (too granular): move up to
-  //    mainline and be sure to only catch this particular error.
   try {
-    stdoutFlushed = process.stdout.write(s);
+    stdoutFlushed = stdout.write(s);
   } catch (e) {
-    // Handle any exceptions in stdout writing in the "error" event above.
+    // Handle any exceptions in stdout writing in `stdout.on("error", ...)`.
   }
 }
-
-process.stdout.on("error", function (err) {
-  if (err.code === "EPIPE") {
-    // Pass. See <https://github.com/trentm/json/issues/9>.
-    drainStdoutAndExit(0);
-  } else {
-    warn(err);
-    drainStdoutAndExit(1);
-  }
-});
 
 
 /**
@@ -924,11 +933,12 @@ process.stdout.on("error", function (err) {
  * still be necessary in a shell pipeline.
  */
 function drainStdoutAndExit(code) {
-  process.stdout.on('drain', function () {
-    process.exit(code);
+  if (_DEBUG) warn('(drainStdoutAndExit(%d))', code);
+  stdout.on('drain', function () {
+    cleanupAndExit(code);
   });
   if (stdoutFlushed) {
-    process.exit(code);
+    cleanupAndExit(code);
   }
 }
 
@@ -1189,24 +1199,58 @@ function asyncForEach(arr, iterator, callback) {
 
 
 
-//---- mainline
-
-// Try to ensure we close a child 'dtrace' process on signalled exit.
-function signalCleanupAndExit(signal) {
-  if (usingAnsiCodes) {
-    // Clear possibly interrupted ANSI code (issue #59).
-    process.stdout.write('\033[0m');
+/**
+ * Cleanup and exit properly.
+ *
+ * Warning: this doesn't stop processing, i.e. process exit might be delayed.
+ * It is up to the caller to ensure that no subsequent bunyan processing
+ * is done after calling this.
+ *
+ * @param code {Number} exit code.
+ * @param signal {String} Optional signal name, if this was exitting because
+ *    of a signal.
+ */
+var cleanedUp = false;
+function cleanupAndExit(code, signal) {
+  // Guard one call.
+  if (cleanedUp) {
+    return;
   }
+  cleanedUp = true;
+  if (_DEBUG) warn('(bunyan: cleanupAndExit)');
+
+  // Clear possibly interrupted ANSI code (issue #59).
+  if (usingAnsiCodes) {
+    stdout.write('\033[0m');
+  }
+
+  // Kill possible dtrace child.
   if (child) {
     child.kill(signal);
   }
-  process.exit();
-}
-process.on('SIGINT', function () { signalCleanupAndExit('SIGINT'); });
-process.on('SIGQUIT', function () { signalCleanupAndExit('SIGQUIT'); });
-process.on('SIGTERM', function () { signalCleanupAndExit('SIGTERM'); });
-process.on('SIGHUP', function () { signalCleanupAndExit('SIGHUP'); });
 
+  if (pager) {
+    // Let pager know that output is done, then wait for pager to exit.
+    stdout.end();
+    pager.on('exit', function (pagerCode) {
+      if (_DEBUG)
+        warn('(bunyan: pager exit -> process.exit(%s))', pagerCode || code);
+      process.exit(pagerCode || code);
+    });
+  } else {
+    if (_DEBUG) warn('(bunyan: process.exit(%s))', code);
+    process.exit(code);
+  }
+}
+
+
+
+//---- mainline
+
+process.on('SIGINT', function () { cleanupAndExit(1, 'SIGINT'); });
+process.on('SIGQUIT', function () { cleanupAndExit(1, 'SIGQUIT'); });
+process.on('SIGTERM', function () { cleanupAndExit(1, 'SIGTERM'); });
+process.on('SIGHUP', function () { cleanupAndExit(1, 'SIGHUP'); });
 
 process.on('uncaughtException', function (err) {
   function _indent(s) {
@@ -1243,6 +1287,7 @@ process.on('uncaughtException', function (err) {
   process.exit(1);
 });
 
+
 function main(argv) {
   try {
     var opts = parseArgv(argv);
@@ -1275,10 +1320,65 @@ function main(argv) {
   usingAnsiCodes = opts.color; // intentionally global
   var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
 
+  // Pager.
+  var nodeVer = process.versions.node.split('.').map(Number);
+  var paginate = (process.stdout.isTTY
+                  && process.platform !== 'win32'
+                  && nodeVer >= [0,8,0]
+                  && (opts.paginate === true
+                      || (opts.paginate !== false
+                          && (!process.env.BUNYAN_NO_PAGER
+                              || process.env.BUNYAN_NO_PAGER.length === 0))));
+  if (paginate) {
+    var pagerCmd = process.env.PAGER || 'less';
+    assert.ok(pagerCmd.indexOf('"') === -1 && pagerCmd.indexOf("'") === -1,
+      'cannot parse PAGER quotes yet');
+    var argv = pagerCmd.split(/\s+/g);
+    var env = objCopy(process.env);
+    if (env.LESS === undefined) {
+      // git's default is LESS=FRSX. I don't like the 'S' here because lines
+      // are *typically* wide with bunyan output and scrolling horizontally
+      // is a royal pain.
+      // Note a bug in Mac's `less -F`, such that SIGWINCH can kill it.
+      // If that rears too much then I'll remove 'F' from here.
+      env.LESS = 'FRX';
+    }
+    if (_DEBUG) warn("(pager: argv=%j, env.LESS=%j)", argv, env.LESS);
+    // `pager` and `stdout` intentionally global.
+    pager = spawn(argv[0], argv.slice(1),
+      // Share the stderr handle to have error output come
+      // straight through. Only supported in v0.8+.
+      {env: env, stdio: ['pipe',1,2]});
+    stdout = pager.stdin;
+
+    // Early termination of the pager: just stop.
+    pager.on('exit', function (pagerCode) {
+      if (_DEBUG) warn('(bunyan: pager exit)');
+      pager = null;
+      stdout.end()
+      stdout = process.stdout;
+      cleanupAndExit(pagerCode);
+    });
+  }
+
+  // Stdout error handling. (Couldn't setup until `stdout` was determined.)
+  stdout.on("error", function (err) {
+    if (_DEBUG) warn('(stdout error event: %s)', err);
+    if (err.code === "EPIPE") {
+      drainStdoutAndExit(0);
+    } else if (err.toString() === 'Error: This socket is closed.') {
+      // Could get this if the pager closes its stdin, but hasn't exited yet.
+      drainStdoutAndExit(1);
+    } else {
+      warn(err);
+      drainStdoutAndExit(1);
+    }
+  });
+
   var retval = 0;
   if (opts.pids) {
     processPids(opts, stylize, function (code) {
-      process.exit(code);
+      cleanupAndExit(code);
     });
   } else if (opts.args.length > 0) {
     var files = opts.args;
@@ -1300,12 +1400,12 @@ function main(argv) {
           warn("bunyan: unexpected error: %s", err.stack || err);
           return drainStdoutAndExit(1);
         }
-        process.exit(retval);
+        cleanupAndExit(retval);
       }
     );
   } else {
     processStdin(opts, stylize, function () {
-      process.exit(retval);
+      cleanupAndExit(retval);
     });
   }
 }

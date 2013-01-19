@@ -1,12 +1,16 @@
 - man page for the bunyan CLI (refer to it in the readme)
-- full-on docs. The readme is too clunky now.
-- paging
+- coloring bug: in less the indented extra info lines only have the first
+  line colored. Do we need the ANSI char on *each* line? That'll be
+  slower.
 - `tail -f`-like support
 - 1.0 with `v: 1` in log records. Fwd/bwd compat in `bunyan` CLI
 
 
 # someday/maybe
 
+- full-on docs
+- better examples/
+- better coloring
 - "template" support for 'rotating-file' stream to get dated rolled files
 - "all" or "off" levels? log4j? logging.py?
   logging.py has NOTSET === 0. I think that is only needed/used for
