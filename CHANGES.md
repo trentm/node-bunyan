@@ -8,7 +8,9 @@ Known issues:
 
 ## bunyan 0.18.1 (not yet released)
 
-(nothing yet)
+- Get the `bunyan` CLI to **not** automatically page (i.e. pipe to `less`)
+  if stdin isn't a TTY, or if following dtrace probe output (via `-p PID`),
+  or if not given log file arguments.
 
 
 ## bunyan 0.18.0

@@ -194,7 +194,7 @@ function printHelp() {
   console.log("");
   console.log("Output options:");
   console.log("  --pager       Pipe output into `less` (or $PAGER if set), if");
-  console.log("                stdout is a terminal. This overrides $BUNYAN_NO_PAGER.");
+  console.log("                stdout is a TTY. This overrides $BUNYAN_NO_PAGER.");
   console.log("                Note: Paging is only supported on node >=0.8.");
   console.log("  --no-pager    Do not pipe output into a pager.");
   console.log("  --color       Colorize output. Defaults to try if output");
@@ -1322,13 +1322,17 @@ function main(argv) {
 
   // Pager.
   var nodeVer = process.versions.node.split('.').map(Number);
-  var paginate = (process.stdout.isTTY
-                  && process.platform !== 'win32'
-                  && nodeVer >= [0,8,0]
-                  && (opts.paginate === true
-                      || (opts.paginate !== false
-                          && (!process.env.BUNYAN_NO_PAGER
-                              || process.env.BUNYAN_NO_PAGER.length === 0))));
+  var paginate = (
+    process.stdout.isTTY
+    && process.stdin.isTTY
+    && !opts.pids   // Don't page if following process output.
+    && opts.args.length > 0  // Don't page if no file args to process.
+    && process.platform !== 'win32'
+    && nodeVer >= [0,8,0]
+    && (opts.paginate === true
+        || (opts.paginate !== false
+            && (!process.env.BUNYAN_NO_PAGER
+                || process.env.BUNYAN_NO_PAGER.length === 0))));
   if (paginate) {
     var pagerCmd = process.env.PAGER || 'less';
     assert.ok(pagerCmd.indexOf('"') === -1 && pagerCmd.indexOf("'") === -1,
