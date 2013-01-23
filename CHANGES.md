@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.18.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.18.0
 
 - Automatic paging support in the `bunyan` CLI (similar to `git log` et al).
