@@ -9,6 +9,14 @@ ifeq ($(shell uname -s),SunOS)
 	# necessary.
 	SUDO :=
 endif
+DTRACE_UP_IN_HERE=
+ifeq ($(shell uname -s),SunOS)
+    DTRACE_UP_IN_HERE=1
+endif
+ifeq ($(shell uname -s),Darwin)
+    DTRACE_UP_IN_HERE=1
+endif
+NODEOPT ?= $(HOME)/opt
 
 
 
@@ -67,9 +75,9 @@ distclean:
 
 .PHONY: test
 test: $(NODEUNIT)
-	[[ -n "$(SKIP_DTRACE)" ]] || \
-		node -e 'require("dtrace-provider").createDTraceProvider("isthisthingon")' && \
-		$(SUDO) $(NODEUNIT) test/dtrace.test.js
+	test -z "$(DTRACE_UP_IN_HERE)" || test -n "$(SKIP_DTRACE)" || \
+		(node -e 'require("dtrace-provider").createDTraceProvider("isthisthingon")' && \
+		$(SUDO) $(NODEUNIT) test/dtrace.test.js)
 	$(NODEUNIT) $(NON_DTRACE_TEST_FILES)
 
 # Test will all node supported versions (presumes install locations I use on
@@ -81,16 +89,19 @@ testall: test06 test08
 
 .PHONY: test09
 test09:
-	@echo "# Test node 0.9.x (with node `$(HOME)/opt/node-0.9/bin/node --version`)"
-	PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" make distclean all test
+	@echo "# Test node 0.9.x (with node `$(NODEOPT)/node-0.9/bin/node --version`)"
+	@$(NODEOPT)/node-0.9/bin/node --version
+	PATH="$(NODEOPT)/node-0.9/bin:$(PATH)" make distclean all test
 .PHONY: test08
 test08:
-	@echo "# Test node 0.8.x (with node `$(HOME)/opt/node-0.8/bin/node --version`)"
-	PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" make distclean all test
+	@echo "# Test node 0.8.x (with node `$(NODEOPT)/node-0.8/bin/node --version`)"
+	@$(NODEOPT)/node-0.8/bin/node --version
+	PATH="$(NODEOPT)/node-0.8/bin:$(PATH)" make distclean all test
 .PHONY: test06
 test06:
-	@echo "# Test node 0.6.x (with node `$(HOME)/opt/node-0.6/bin/node --version`)"
-	PATH="$(HOME)/opt/node-0.6/bin:$(PATH)" make distclean all test
+	@echo "# Test node 0.6.x (with node `$(NODEOPT)/node-0.6/bin/node --version`)"
+	@$(NODEOPT)/node-0.6/bin/node --version
+	PATH="$(NODEOPT)/node-0.6/bin:$(PATH)" make distclean all test
 
 
 #---- check
