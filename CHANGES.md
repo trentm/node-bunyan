@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.18.1 (not yet released)
+## bunyan 0.18.1
 
 - Get the `bunyan` CLI to **not** automatically page (i.e. pipe to `less`)
   if stdin isn't a TTY, or if following dtrace probe output (via `-p PID`),
