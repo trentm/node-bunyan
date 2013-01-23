@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.18.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.18.1
 
 - Get the `bunyan` CLI to **not** automatically page (i.e. pipe to `less`)
