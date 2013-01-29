@@ -1,7 +1,4 @@
 - man page for the bunyan CLI (refer to it in the readme)
-- coloring bug: in less the indented extra info lines only have the first
-  line colored. Do we need the ANSI char on *each* line? That'll be
-  slower.
 - `tail -f`-like support
 - 1.0 with `v: 1` in log records. Fwd/bwd compat in `bunyan` CLI
 
@@ -38,9 +35,10 @@
         node-bunyan-reader
             .createReadStream(path, [options]) ?
 
+- coloring bug: in less the indented extra info lines only have the first
+  line colored. Do we need the ANSI char on *each* line? That'll be
+  slower.
 - document "well-known" keys from bunyan CLI p.o.v.. Add "client_req".
-- bunyan tool: built in less usage (a la git?) so that I don't have to
-  go through this: `bunyan --color master.log  | less -R`
 - More `bunyan` output formats and filtering features.
 - Think about a bunyan dashboard that supports organizing and viewing logs
   from multiple hosts and services.
