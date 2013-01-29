@@ -8,7 +8,9 @@ Known issues:
 
 ## bunyan 0.18.2 (not yet released)
 
-(nothing yet)
+- [pull #67] Remove debugging prints in rotating-file support.
+  (by github.com/chad3814).
+- Update to dtrace-provider@0.2.7.
 
 
 ## bunyan 0.18.1
