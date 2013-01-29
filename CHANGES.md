@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.18.2 (not yet released)
+## bunyan 0.18.2
 
 - [pull #67] Remove debugging prints in rotating-file support.
   (by github.com/chad3814).
