@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.18.4 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.18.3
 
 - Change the `bunyan.stdSerializers.err` serializer for errors to *exclude*
