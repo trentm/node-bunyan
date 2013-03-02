@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.18.3 (not yet released)
+## bunyan 0.18.3
 
 - Change the `bunyan.stdSerializers.err` serializer for errors to *exclude*
   [the "domain*" keys](http://nodejs.org/docs/latest/api/all.html#all_additions_to_error_objects).
