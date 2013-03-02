@@ -786,8 +786,10 @@ function emitRecord(rec, line, opts, stylize) {
         client_req.url,
         client_req.httpVersion || "1.1",
         hostHeaderLine,
-        Object.keys(headers).map(
-          function (h) { return h + ': ' + headers[h]; }).join('\n'));
+        (headers
+            ? Object.keys(headers).map(
+                  function (h) { return h + ': ' + headers[h]; }).join('\n')
+            : ''));
       delete client_req.method;
       delete client_req.url;
       delete client_req.httpVersion;

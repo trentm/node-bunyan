@@ -8,7 +8,15 @@ Known issues:
 
 ## bunyan 0.18.3 (not yet released)
 
-(nothing yet)
+- Change the `bunyan.stdSerializers.err` serializer for errors to *exclude*
+  [the "domain*" keys](http://nodejs.org/docs/latest/api/all.html#all_additions_to_error_objects).
+  `err.domain` will include its assigned members which can arbitrarily large
+  objects that are not intended for logging.
+
+- Make the "dtrace-provider" dependency optional. I hate to do this, but
+  installing bunyan on Windows is made very difficult with this as a required
+  dep.  Even though "dtrace-provider" stubs out for non-dtrace-y platforms,
+  without a compiler and Python around, node-gyp just falls over.
 
 
 ## bunyan 0.18.2

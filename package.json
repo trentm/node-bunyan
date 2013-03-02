@@ -16,11 +16,11 @@
   "keywords": ["log", "logging", "log4j", "json"],
 
   "dependencies": {
-    "dtrace-provider": "0.2.7"
   },
   "// comment": "'mv' required for RotatingFileStream",
   "optionalDependencies": {
-    "mv": "0.0.4"
+    "mv": "0.0.4",
+    "dtrace-provider": "0.2.8"
   },
   "devDependencies": {
     "nodeunit": "0.7.4",
