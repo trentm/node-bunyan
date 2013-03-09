@@ -31,17 +31,20 @@ var nodeSpawnSupportsStdio = (
 var _DEBUG = false;
 
 // Output modes.
-var OM_PAUL = 1;
+var OM_LONG = 1;
 var OM_JSON = 2;
 var OM_INSPECT = 3;
 var OM_SIMPLE = 4;
 var OM_SHORT = 5;
+var OM_BUNYAN = 6;
 var OM_FROM_NAME = {
-  "paul": OM_PAUL,
+  "long": OM_LONG,
+  "paul": OM_LONG,  /* backward compat */
   "json": OM_JSON,
   "inspect": OM_INSPECT,
   "simple": OM_SIMPLE,
-  "short": OM_SHORT
+  "short": OM_SHORT,
+  "bunyan": OM_BUNYAN
 };
 
 
@@ -202,11 +205,12 @@ function printHelp() {
   console.log("  --no-color    Force no coloring (e.g. terminal doesn't support it)");
   console.log("  -o, --output MODE");
   console.log("                Specify an output mode/format. One of");
-  console.log("                  paul: (the default) pretty");
+  console.log("                  long: (the default) pretty");
   console.log("                  json: JSON output, 2-space indent");
   console.log("                  json-N: JSON output, N-space indent, e.g. 'json-4'");
+  console.log("                  bunyan: 0 indented JSON, bunyan's native format");
   console.log("                  inspect: node.js `util.inspect` output");
-  console.log("                  short: like paul, but more concise");
+  console.log("                  short: like 'long', but more concise");
   console.log("  -j            shortcut for `-o json`");
   console.log("");
   console.log("Log Levels:");
@@ -352,7 +356,7 @@ function parseArgv(argv) {
     help: false,
     color: null,
     paginate: null,
-    outputMode: OM_PAUL,
+    outputMode: OM_LONG,
     jsonIndent: 2,
     level: null,
     conditions: null,
@@ -646,7 +650,7 @@ function emitRecord(rec, line, opts, stylize) {
     short = true;
     /* jsl:fall-thru */
 
-  case OM_PAUL:
+  case OM_LONG:
     //    [time] LEVEL: name[/component]/pid on hostname (src): msg* (extras...)
     //        msg*
     //        --
@@ -894,6 +898,10 @@ function emitRecord(rec, line, opts, stylize) {
 
   case OM_INSPECT:
     emit(util.inspect(rec, false, Infinity, true) + '\n');
+    break;
+
+  case OM_BUNYAN:
+    emit(JSON.stringify(rec, null, 0) + '\n');
     break;
 
   case OM_JSON:

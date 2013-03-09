@@ -8,7 +8,10 @@ Known issues:
 
 ## bunyan 0.18.4 (not yet released)
 
-(nothing yet)
+- "long" and "bunyan" output formats for the CLI. `bunyan -o long` is the default
+  format, the same as before, just called "long" now instead of the cheesy "paul"
+  name. The "bunyan" output format is the same as "json-0", just with a more 
+  convenient name.
 
 
 ## bunyan 0.18.3

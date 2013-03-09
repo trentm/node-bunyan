@@ -103,8 +103,8 @@ Output options:
     Force no coloring (e.g. terminal doesn't support it)
 
   * `-o FORMAT`, `--output FORMAT`:
-    Specify an output format. One of `paul` (the default), `short`, `json`,
-    `json-N`, or `inspect`.
+    Specify an output format. One of `long` (the default), `short`, `json`,
+    `json-N`, `bunyan` (the native bunyan 0-indent JSON output) or `inspect`.
 
   * `-j`:
     Shortcut for `-o json`.
@@ -128,15 +128,16 @@ scripts, uppercase symbols like "DEBUG" are defined for convenience.
 ## OUTPUT FORMATS
 
     FORMAT NAME         DESCRIPTION
-    paul (default)      The default output. Long form. Colored and "pretty".
+    long (default)      The default output. Long form. Colored and "pretty".
                         'req' and 'res' and 'err' fields are rendered specially
                         as an HTTP request, HTTP response and exception
-                        stack trace, respectively. Note: the "paul" name
-                        is deprecated and will be changed to "long".
+                        stack trace, respectively. For backward compat, the
+                        name "paul" also works for this.
     short               Like the default output, but more concise. Some
                         typically redundant fields are ellided.
     json                JSON output, 2-space indentation.
-    json-N              JSON output, N-space indentation, e.g. "json-0"
+    json-N              JSON output, N-space indentation, e.g. "json-4"
+    bunyan              Alias for "json-0", the Bunyan "native" format.
     inspect             Node.js `util.inspect` output.
 
 
