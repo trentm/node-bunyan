@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.19.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.19.0
 
 - [Slight backward incompatibility] Change the default error serialization
