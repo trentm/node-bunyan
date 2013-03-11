@@ -66,6 +66,7 @@ test('req serializer', function (t) {
   })
   server.listen(8765, function () {
     http.get({host: '127.0.0.1', port: 8765, path: '/'}, function(res) {
+      res.resume();
       log.info({req: theReq}, 'the request');
       var lastRecord = records[records.length-1];
       t.equal(lastRecord.req.method, 'GET');
@@ -123,6 +124,7 @@ test('res serializer', function (t) {
   })
   server.listen(8765, function () {
     http.get({host: '127.0.0.1', port: 8765, path: '/'}, function(res) {
+      res.resume();
       log.info({res: theRes}, 'the response');
       var lastRecord = records[records.length-1];
       t.equal(lastRecord.res.statusCode, theRes.statusCode);

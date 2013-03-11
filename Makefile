@@ -85,13 +85,13 @@ test: $(NODEUNIT)
 # Note: 'test08' is last so (if all is well) I end up with a binary
 # dtrace-provider build for node 0.8 (my current version).
 .PHONY: testall
-testall: test06 test08
+testall: test06 test10 test08
 
-.PHONY: test09
-test09:
-	@echo "# Test node 0.9.x (with node `$(NODEOPT)/node-0.9/bin/node --version`)"
-	@$(NODEOPT)/node-0.9/bin/node --version
-	PATH="$(NODEOPT)/node-0.9/bin:$(PATH)" make distclean all test
+.PHONY: test10
+test10:
+	@echo "# Test node 0.10.x (with node `$(NODEOPT)/node-0.10/bin/node --version`)"
+	@$(NODEOPT)/node-0.10/bin/node --version
+	PATH="$(NODEOPT)/node-0.10/bin:$(PATH)" make distclean all test
 .PHONY: test08
 test08:
 	@echo "# Test node 0.8.x (with node `$(NODEOPT)/node-0.8/bin/node --version`)"
