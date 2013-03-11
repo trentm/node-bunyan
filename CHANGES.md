@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.19.0 (not yet released)
+## bunyan 0.19.0
 
 - [Slight backward incompatibility] Change the default error serialization
   (a.k.a. `bunyan.stdSerializers.err`) to *not* serialize all additional
