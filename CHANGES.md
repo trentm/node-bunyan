@@ -6,11 +6,55 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.18.4 (not yet released)
+## bunyan 0.19.0 (not yet released)
+
+- [Slight backward incompatibility] Change the default error serialization
+  (a.k.a. `bunyan.stdSerializers.err`) to *not* serialize all additional
+  attributes of the given error object. This is an open door to unsafe logging
+  and logging should always be safe. With this change, error serialization
+  will log these attributes: message, name, stack, code, signal. The latter
+  two are added because some core node APIs include those fields (e.g.
+  `child_process.exec`).
+
+  Concrete examples where this has hurt have been the "domain" change
+  necessitating 0.18.3 and a case where
+  [node-restify](https://github.com/mcavage/node-restify) uses an error object
+  as the response object. When logging the `err` and `res` in the same log
+  statement (common for restify audit logging), the `res.body` would be JSON
+  stringified as '[Circular]' as it had already been emitted for the `err` key.
+  This results in a WTF with the bunyan CLI because the `err.body` is not
+  rendered.
+
+  If you need the old behaviour back you will need to do this:
+
+        var bunyan = require('bunyan');
+        var errSkips = {
+            // Skip domain keys. `domain` especially can have huge objects that can
+            // OOM your app when trying to JSON.stringify.
+            domain: true,
+            domain_emitter: true,
+            domain_bound: true,
+            domain_thrown: true
+        };
+        bunyan.stdSerializers.err = function err(err) {
+           if (!err || !err.stack)
+               return err;
+           var obj = {
+               message: err.message,
+               name: err.name,
+               stack: getFullErrorStack(err)
+           }
+           Object.keys(err).forEach(function (k) {
+               if (err[k] !== undefined && !errSkips[k]) {
+                   obj[k] = err[k];
+               }
+           });
+           return obj;
+         };
 
 - "long" and "bunyan" output formats for the CLI. `bunyan -o long` is the default
   format, the same as before, just called "long" now instead of the cheesy "paul"
-  name. The "bunyan" output format is the same as "json-0", just with a more 
+  name. The "bunyan" output format is the same as "json-0", just with a more
   convenient name.
 
 
