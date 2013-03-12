@@ -8,7 +8,8 @@ Known issues:
 
 ## bunyan 0.19.1 (not yet released)
 
-(nothing yet)
+- Update to latest 'mv' dep (required for rotating-file support) to support
+  node v0.10.0.
 
 
 ## bunyan 0.19.0
