@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.20.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.20.0
 
 - [Slight backward incompatibility] Fix serializer bug introduced in 0.18.3
