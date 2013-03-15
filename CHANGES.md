@@ -6,13 +6,25 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.19.1 (not yet released)
+## bunyan 0.20.0 (not yet released)
+
+- [Slight backward incompatibility] Fix serializer bug introduced in 0.18.3
+  (see below) to only apply serializers to log records when appropriate.
+
+  This also makes a semantic change to custom serializers. Before this change
+  a serializer function was called for a log record key when that value was
+  truth-y. The semantic change is to call the serializer function as long
+  as the value is not `undefined`. That means that a serializer function
+  should handle falsey values such as `false` and `null`.
 
 - Update to latest 'mv' dep (required for rotating-file support) to support
   node v0.10.0.
 
 
 ## bunyan 0.19.0
+
+**WARNING**: This release includes a bug introduced in bunyan 0.18.3 (see
+below). Please upgrade to bunyan 0.20.0.
 
 - [Slight backward incompatibility] Change the default error serialization
   (a.k.a. `bunyan.stdSerializers.err`) to *not* serialize all additional
@@ -65,6 +77,25 @@ Known issues:
 
 
 ## bunyan 0.18.3
+
+**WARNING**: This release introduced a bug such that all serializers are
+applied to all log records even if the log record did not contain the key
+for that serializer. If a logger serializer function does not handle
+being given `undefined`, then you'll get warnings like this on stderr:
+
+    bunyan: ERROR: This should never happen. This is a bug in <https://github.com/trentm/node-bunyan> or in this application. Exception from "foo" Logger serializer: Error: ...
+        at Object.bunyan.createLogger.serializers.foo (.../myapp.js:20:15)
+        at Logger._applySerializers (.../lib/bunyan.js:644:46)
+        at Array.forEach (native)
+        at Logger._applySerializers (.../lib/bunyan.js:640:33)
+        ...
+
+and the following junk in written log records:
+
+    "foo":"(Error in Bunyan log "foo" serializer broke field. See stderr for details.)"
+
+Please upgrade to bunyan 0.20.0.
+
 
 - Change the `bunyan.stdSerializers.err` serializer for errors to *exclude*
   [the "domain*" keys](http://nodejs.org/docs/latest/api/all.html#all_additions_to_error_objects).

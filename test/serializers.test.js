@@ -258,6 +258,36 @@ test('err serializer: long stack', function (t) {
     + '\nCaused by: ' + bottomErr.stack);
   t.equal(lastRecord.err.stack, expectedStack, 'WError <- WError <- WError');
 
+  t.end();
+});
+
+
+// Bunyan 0.18.3 introduced a bug where *all* serializers are applied
+// even if the log record doesn't have the associated key. That means
+// serializers that don't handle an `undefined` value will blow up.
+test('do not apply serializers if no record key', function (t) {
+  var records = [];
+  var log = bunyan.createLogger({
+    name: 'serializer-test',
+    streams: [{
+        stream: new CapturingStream(records),
+        type: 'raw'
+    }],
+    serializers: {
+      err: bunyan.stdSerializers.err,
+      boom: function (value) {
+        throw new Error('boom');
+      }
+    }
+  });
+
+  log.info({foo: 'bar'}, 'record one');
+  log.info({err: new Error('record two err')}, 'record two');
+
+  t.equal(records[0].boom, undefined);
+  t.equal(records[0].foo, 'bar');
+  t.equal(records[1].boom, undefined);
+  t.equal(records[1].err.message, 'record two err');
 
   t.end();
 });
