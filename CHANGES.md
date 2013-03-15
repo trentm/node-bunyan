@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.20.0 (not yet released)
+## bunyan 0.20.0
 
 - [Slight backward incompatibility] Fix serializer bug introduced in 0.18.3
   (see below) to only apply serializers to log records when appropriate.
