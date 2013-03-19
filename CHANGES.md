@@ -8,7 +8,8 @@ Known issues:
 
 ## bunyan 0.20.1 (not yet released)
 
-(nothing yet)
+- [issue #80, #82] Drop assert that broke using 'rotating-file' with
+  a default `period` (by github.com/ricardograca).
 
 
 ## bunyan 0.20.0
