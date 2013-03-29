@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = "0.20.1";
+var VERSION = '0.20.1';
 
 var util = require('util');
 var pathlib = require('path');
@@ -38,13 +38,13 @@ var OM_SIMPLE = 4;
 var OM_SHORT = 5;
 var OM_BUNYAN = 6;
 var OM_FROM_NAME = {
-  "long": OM_LONG,
-  "paul": OM_LONG,  /* backward compat */
-  "json": OM_JSON,
-  "inspect": OM_INSPECT,
-  "simple": OM_SIMPLE,
-  "short": OM_SHORT,
-  "bunyan": OM_BUNYAN
+  'long': OM_LONG,
+  'paul': OM_LONG,  /* backward compat */
+  'json': OM_JSON,
+  'inspect': OM_INSPECT,
+  'simple': OM_SIMPLE,
+  'short': OM_SHORT,
+  'bunyan': OM_BUNYAN
 };
 
 
@@ -119,8 +119,9 @@ if (!format) {
     var i = 1;
     var args = arguments;
     var len = args.length;
-    var str = String(f).replace(formatRegExp, function(x) {
-      if (i >= len) return x;
+    var str = String(f).replace(formatRegExp, function (x) {
+      if (i >= len)
+        return x;
       switch (x) {
         case '%s': return String(args[i++]);
         case '%d': return Number(args[i++]);
@@ -160,79 +161,79 @@ function objCopy(obj) {
 }
 
 function printHelp() {
-  console.log("Usage:");
-  console.log("  bunyan [OPTIONS] [FILE ...]");
-  console.log("  ... | bunyan [OPTIONS]");
-  console.log("  bunyan [OPTIONS] -p PID");
-  console.log("");
-  console.log("Filter and pretty-print Bunyan log file content.");
-  console.log("");
-  console.log("General options:");
-  console.log("  -h, --help    print this help info and exit");
-  console.log("  --version     print version of this command and exit");
-  console.log("");
-  console.log("Dtrace options (only on dtrace-supporting platforms):");
-  console.log("  -p PID        Process bunyan:log-* probes from the process");
-  console.log("                with the given PID. Can be used multiple times,");
-  console.log("                or specify all processes with '*', or a set of");
-  console.log("                processes whose command & args match a pattern");
-  console.log("                with '-p NAME'.");
-  console.log("");
-  console.log("Filtering options:");
-  console.log("  -l, --level LEVEL");
-  console.log("                Only show messages at or above the specified level.");
-  console.log("                You can specify level *names* or numeric values.");
-  console.log("                (See 'Log Levels' below.)");
-  console.log("  -c, --condition CONDITION");
-  console.log("                Run each log message through the condition and");
-  console.log("                only show those that return truish. E.g.:");
-  console.log("                    -c 'this.pid == 123'");
-  console.log("                    -c 'this.level == DEBUG'");
-  console.log("                    -c 'this.msg.indexOf(\"boom\") != -1'");
-  console.log("                'CONDITION' must be legal JS code. `this` holds");
-  console.log("                the log record. The TRACE, DEBUG, ... FATAL values");
-  console.log("                are defined to help with comparing `this.level`.");
-  console.log("  --strict      Suppress all but legal Bunyan JSON log lines. By default");
-  console.log("                non-JSON, and non-Bunyan lines are passed through.");
-  console.log("");
-  console.log("Output options:");
-  console.log("  --pager       Pipe output into `less` (or $PAGER if set), if");
-  console.log("                stdout is a TTY. This overrides $BUNYAN_NO_PAGER.");
-  console.log("                Note: Paging is only supported on node >=0.8.");
-  console.log("  --no-pager    Do not pipe output into a pager.");
-  console.log("  --color       Colorize output. Defaults to try if output");
-  console.log("                stream is a TTY.");
-  console.log("  --no-color    Force no coloring (e.g. terminal doesn't support it)");
-  console.log("  -o, --output MODE");
-  console.log("                Specify an output mode/format. One of");
-  console.log("                  long: (the default) pretty");
-  console.log("                  json: JSON output, 2-space indent");
-  console.log("                  json-N: JSON output, N-space indent, e.g. 'json-4'");
-  console.log("                  bunyan: 0 indented JSON, bunyan's native format");
-  console.log("                  inspect: node.js `util.inspect` output");
-  console.log("                  short: like 'long', but more concise");
-  console.log("  -j            shortcut for `-o json`");
-  console.log("");
-  console.log("Log Levels:");
-  console.log("  Either numeric values or their associated strings are valid for the");
-  console.log("  -l|--level argument.  However, -c|--condition scripts will see a numeric");
-  console.log("  'level' value, not a string.");
-  console.log("");
-  Object.keys(levelFromName).forEach(function(name) {
+  console.log('Usage:');
+  console.log('  bunyan [OPTIONS] [FILE ...]');
+  console.log('  ... | bunyan [OPTIONS]');
+  console.log('  bunyan [OPTIONS] -p PID');
+  console.log('');
+  console.log('Filter and pretty-print Bunyan log file content.');
+  console.log('');
+  console.log('General options:');
+  console.log('  -h, --help    print this help info and exit');
+  console.log('  --version     print version of this command and exit');
+  console.log('');
+  console.log('Dtrace options (only on dtrace-supporting platforms):');
+  console.log('  -p PID        Process bunyan:log-* probes from the process');
+  console.log('                with the given PID. Can be used multiple times,');
+  console.log('                or specify all processes with "*", or a set of');
+  console.log('                processes whose command & args match a pattern');
+  console.log('                with "-p NAME".');
+  console.log('');
+  console.log('Filtering options:');
+  console.log('  -l, --level LEVEL');
+  console.log('                Only show messages at or above the specified level.');
+  console.log('                You can specify level *names* or numeric values.');
+  console.log('                (See "Log Levels" below.)');
+  console.log('  -c, --condition CONDITION');
+  console.log('                Run each log message through the condition and');
+  console.log('                only show those that return truish. E.g.:');
+  console.log('                    -c \'this.pid == 123\'');
+  console.log('                    -c \'this.level == DEBUG\'');
+  console.log('                    -c \'this.msg.indexOf("boom") != -1\'');
+  console.log('                "CONDITION" must be legal JS code. `this` holds');
+  console.log('                the log record. The TRACE, DEBUG, ... FATAL values');
+  console.log('                are defined to help with comparing `this.level`.');
+  console.log('  --strict      Suppress all but legal Bunyan JSON log lines. By default');
+  console.log('                non-JSON, and non-Bunyan lines are passed through.');
+  console.log('');
+  console.log('Output options:');
+  console.log('  --pager       Pipe output into `less` (or $PAGER if set), if');
+  console.log('                stdout is a TTY. This overrides $BUNYAN_NO_PAGER.');
+  console.log('                Note: Paging is only supported on node >=0.8.');
+  console.log('  --no-pager    Do not pipe output into a pager.');
+  console.log('  --color       Colorize output. Defaults to try if output');
+  console.log('                stream is a TTY.');
+  console.log('  --no-color    Force no coloring (e.g. terminal doesn\'t support it)');
+  console.log('  -o, --output MODE');
+  console.log('                Specify an output mode/format. One of');
+  console.log('                  long: (the default) pretty');
+  console.log('                  json: JSON output, 2-space indent');
+  console.log('                  json-N: JSON output, N-space indent, e.g. "json-4"');
+  console.log('                  bunyan: 0 indented JSON, bunyan\'s native format');
+  console.log('                  inspect: node.js `util.inspect` output');
+  console.log('                  short: like "long", but more concise');
+  console.log('  -j            shortcut for `-o json`');
+  console.log('');
+  console.log('Log Levels:');
+  console.log('  Either numeric values or their associated strings are valid for the');
+  console.log('  -l|--level argument.  However, -c|--condition scripts will see a numeric');
+  console.log('  "level" value, not a string.');
+  console.log('');
+  Object.keys(levelFromName).forEach(function (name) {
     var n = name;
     while (n.length < 6)
-      n += " ";
-    console.log("    %s %d", n, levelFromName[name]);
+      n += ' ';
+    console.log('    %s %d', n, levelFromName[name]);
   });
-  console.log("");
-  console.log("Environment Variables:");
-  console.log("  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ");
-  console.log("                     coloring. See '--no-color'.");
-  console.log("  BUNYAN_NO_PAGER    Disable piping output to a pager. ");
-  console.log("                     See '--no-pager'.");
-  console.log("");
-  console.log("See <https://github.com/trentm/node-bunyan> for more complete docs.");
-  console.log("Please report bugs to <https://github.com/trentm/node-bunyan/issues>.");
+  console.log('');
+  console.log('Environment Variables:');
+  console.log('  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ');
+  console.log('                     coloring. See "--no-color".');
+  console.log('  BUNYAN_NO_PAGER    Disable piping output to a pager. ');
+  console.log('                     See "--no-pager".');
+  console.log('');
+  console.log('See <https://github.com/trentm/node-bunyan> for more complete docs.');
+  console.log('Please report bugs to <https://github.com/trentm/node-bunyan/issues>.');
 }
 
 /*
@@ -243,13 +244,13 @@ function printHelp() {
  * the time of the last record emitted.  To avoid excess memory usage, we
  * pause() streams that are ahead of others.
  *
- * "streams" is an object indexed by source name (file name) which specifies:
+ * 'streams' is an object indexed by source name (file name) which specifies:
  *
  *    stream        Actual stream object, so that we can pause and resume it.
  *
  *    records       Array of log records we've read, but not yet emitted.  Each
- *                  record includes "line" (the raw line), "rec" (the JSON
- *                  record), and "time" (the parsed time value).
+ *                  record includes 'line' (the raw line), 'rec' (the JSON
+ *                  record), and 'time' (the parsed time value).
  *
  *    done          Whether the stream has any more records to emit.
  */
@@ -330,7 +331,7 @@ function emitNextRecord(opts, stylize)
     }
 
     /*
-     * Emit the next record for "minfile", and invoke ourselves again to make
+     * Emit the next record for 'minfile', and invoke ourselves again to make
      * sure we emit as many records as we can right now.
      */
     rec = streams[minfile].records.shift();
@@ -370,12 +371,12 @@ function parseArgv(argv) {
   var newArgs = [];
   var optTakesArg = {'d': true, 'o': true, 'c': true, 'l': true, 'p': true};
   for (var i = 0; i < args.length; i++) {
-    if (args[i].charAt(0) === "-" && args[i].charAt(1) !== '-' && args[i].length > 2) {
-      var splitOpts = args[i].slice(1).split("");
+    if (args[i].charAt(0) === '-' && args[i].charAt(1) !== '-' && args[i].length > 2) {
+      var splitOpts = args[i].slice(1).split('');
       for (var j = 0; j < splitOpts.length; j++) {
         newArgs.push('-' + splitOpts[j]);
         if (optTakesArg[splitOpts[j]]) {
-          var optArg = splitOpts.slice(j+1).join("");
+          var optArg = splitOpts.slice(j+1).join('');
           if (optArg.length) {
             newArgs.push(optArg);
           }
@@ -391,7 +392,7 @@ function parseArgv(argv) {
   var condDefines = [];
   Object.keys(upperNameFromLevel).forEach(function (lvl) {
     condDefines.push(
-      format("Object.prototype.%s = %s;", upperNameFromLevel[lvl], lvl));
+      format('Object.prototype.%s = %s;', upperNameFromLevel[lvl], lvl));
   });
   condDefines = condDefines.join('\n') + '\n';
 
@@ -399,33 +400,33 @@ function parseArgv(argv) {
   while (args.length > 0) {
     var arg = args.shift();
     switch(arg) {
-      case "--":
+      case '--':
         endOfOptions = true;
         break;
-      case "-h": // display help and exit
-      case "--help":
+      case '-h': // display help and exit
+      case '--help':
         parsed.help = true;
         break;
-      case "--version":
+      case '--version':
         parsed.version = true;
         break;
-      case "--strict":
+      case '--strict':
         parsed.strict = true;
         break;
-      case "--color":
+      case '--color':
         parsed.color = true;
         break;
-      case "--no-color":
+      case '--no-color':
         parsed.color = false;
         break;
-      case "--pager":
+      case '--pager':
         parsed.paginate = true;
         break;
-      case "--no-pager":
+      case '--no-pager':
         parsed.paginate = false;
         break;
-      case "-o":
-      case "--output":
+      case '-o':
+      case '--output':
         var name = args.shift();
         var idx = name.lastIndexOf('-');
         if (idx !== -1) {
@@ -437,13 +438,13 @@ function parseArgv(argv) {
         }
         parsed.outputMode = OM_FROM_NAME[name];
         if (parsed.outputMode === undefined) {
-          throw new Error("unknown output mode: '"+name+"'");
+          throw new Error('unknown output mode: \''+name+"'");
         }
         break;
-      case "-j": // output with JSON.stringify
+      case '-j': // output with JSON.stringify
         parsed.outputMode = OM_JSON;
         break;
-      case "-p":
+      case '-p':
         if (!parsed.pids) {
           parsed.pids = [];
         }
@@ -468,20 +469,20 @@ function parseArgv(argv) {
           parsed.pids = pidArg;
         }
         break;
-      case "-l":
-      case "--level":
+      case '-l':
+      case '--level':
         var levelArg = args.shift();
         var level = +(levelArg);
         if (isNaN(level)) {
           level = +levelFromName[levelArg.toLowerCase()];
         }
         if (isNaN(level)) {
-          throw new Error("unknown level value: '"+levelArg+"'");
+          throw new Error('unknown level value: "'+levelArg+'"');
         }
         parsed.level = level;
         break;
-      case "-c":
-      case "--condition":
+      case '-c':
+      case '--condition':
         var condition = args.shift();
         parsed.conditions = parsed.conditions || [];
         var scriptName = 'bunyan-condition-'+parsed.conditions.length;
@@ -519,7 +520,7 @@ function parseArgv(argv) {
         break;
       default: // arguments
         if (!endOfOptions && arg.length > 0 && arg[0] === '-') {
-          throw new Error("unknown option '"+arg+"'");
+          throw new Error('unknown option "'+arg+'"');
         }
         parsed.args.push(arg);
         break;
@@ -619,7 +620,7 @@ function handleLogLine(file, line, opts, stylize) {
   } else {
     try {
       rec = JSON.parse(line);
-    } catch(e) {
+    } catch (e) {
       if (!opts.strict) emit(line + '\n');
       return;
     }
@@ -691,7 +692,7 @@ function emitRecord(rec, line, opts, stylize) {
       nameStr += '/' + rec.pid;
     delete rec.pid;
 
-    var level = (upperPaddedNameFromLevel[rec.level] || "LVL" + rec.level);
+    var level = (upperPaddedNameFromLevel[rec.level] || 'LVL' + rec.level);
     if (opts.color) {
       var colorFromLevel = {
         10: 'grey',     // TRACE
@@ -705,13 +706,13 @@ function emitRecord(rec, line, opts, stylize) {
     }
     delete rec.level;
 
-    var src = "";
+    var src = '';
     if (rec.src && rec.src.file) {
       var s = rec.src;
       if (s.func) {
-        src = format(" (%s:%d in %s)", s.file, s.line, s.func);
+        src = format(' (%s:%d in %s)', s.file, s.line, s.func);
       } else {
-        src = format(" (%s:%d)", s.file, s.line);
+        src = format(' (%s:%d)', s.file, s.line);
       }
       src = stylize(src, 'green');
     }
@@ -724,7 +725,7 @@ function emitRecord(rec, line, opts, stylize) {
     var details = [];
 
     if (rec.req_id) {
-      extras.push("req_id=" + rec.req_id);
+      extras.push('req_id=' + rec.req_id);
     }
     delete rec.req_id;
 
@@ -737,13 +738,13 @@ function emitRecord(rec, line, opts, stylize) {
     }
     delete rec.msg;
 
-    if (rec.req && typeof(rec.req) === 'object') {
+    if (rec.req && typeof (rec.req) === 'object') {
       var req = rec.req;
       delete rec.req;
       var headers = req.headers;
-      var s = format("%s %s HTTP/%s%s", req.method,
+      var s = format('%s %s HTTP/%s%s', req.method,
         req.url,
-        req.httpVersion || "1.1",
+        req.httpVersion || '1.1',
         (headers
           ? '\n' + Object.keys(headers).map(
               function (h) { return h + ': ' + headers[h]; }).join('\n')
@@ -754,7 +755,7 @@ function emitRecord(rec, line, opts, stylize) {
       delete req.httpVersion;
       delete req.headers;
       if (req.body) {
-        s += '\n\n' + (typeof(req.body) === 'object'
+        s += '\n\n' + (typeof (req.body) === 'object'
           ? JSON.stringify(req.body, null, 2) : req.body);
         delete req.body;
       }
@@ -767,11 +768,11 @@ function emitRecord(rec, line, opts, stylize) {
       // E.g. for extra 'foo' field on 'req', add 'req.foo' at top-level.
       // This *does* have the potential to stomp on a literal 'req.foo' key.
       Object.keys(req).forEach(function (k) {
-        rec["req." + k] = req[k];
+        rec['req.' + k] = req[k];
       })
     }
 
-    if (rec.client_req && typeof(rec.client_req) === 'object') {
+    if (rec.client_req && typeof (rec.client_req) === 'object') {
       var client_req = rec.client_req;
       delete rec.client_req;
       var headers = client_req.headers;
@@ -786,9 +787,9 @@ function emitRecord(rec, line, opts, stylize) {
       delete client_req.headers;
       delete client_req.address;
       delete client_req.port;
-      s += format("%s %s HTTP/%s\n%s%s", client_req.method,
+      s += format('%s %s HTTP/%s\n%s%s', client_req.method,
         client_req.url,
-        client_req.httpVersion || "1.1",
+        client_req.httpVersion || '1.1',
         hostHeaderLine,
         (headers
             ? Object.keys(headers).map(
@@ -798,7 +799,7 @@ function emitRecord(rec, line, opts, stylize) {
       delete client_req.url;
       delete client_req.httpVersion;
       if (client_req.body) {
-        s += '\n\n' + (typeof(client_req.body) === 'object'
+        s += '\n\n' + (typeof (client_req.body) === 'object'
           ? JSON.stringify(client_req.body, null, 2) : client_req.body);
         delete client_req.body;
       }
@@ -806,12 +807,12 @@ function emitRecord(rec, line, opts, stylize) {
       // top-level. This *does* have the potential to stomp on a literal
       // 'client_req.foo' key.
       Object.keys(client_req).forEach(function (k) {
-        rec["client_req." + k] = client_req[k];
+        rec['client_req.' + k] = client_req[k];
       })
       details.push(indent(s));
     }
 
-    if (rec.res && typeof(rec.res) === 'object') {
+    if (rec.res && typeof (rec.res) === 'object') {
       var res = rec.res;
       delete rec.res;
       var s = '';
@@ -819,7 +820,7 @@ function emitRecord(rec, line, opts, stylize) {
         s += res.header.trimRight();
       } else if (res.headers) {
         if (res.statusCode) {
-          s += format("HTTP/1.1 %s %s\n", res.statusCode,
+          s += format('HTTP/1.1 %s %s\n', res.statusCode,
             http.STATUS_CODES[res.statusCode]);
         }
         var headers = res.headers;
@@ -830,7 +831,7 @@ function emitRecord(rec, line, opts, stylize) {
       delete res.headers;
       delete res.statusCode;
       if (res.body) {
-        s += '\n\n' + (typeof(res.body) === 'object'
+        s += '\n\n' + (typeof (res.body) === 'object'
           ? JSON.stringify(res.body, null, 2) : res.body);
         delete res.body;
       }
@@ -844,7 +845,7 @@ function emitRecord(rec, line, opts, stylize) {
       // E.g. for extra 'foo' field on 'res', add 'res.foo' at top-level.
       // This *does* have the potential to stomp on a literal 'res.foo' key.
       Object.keys(res).forEach(function (k) {
-        rec["res." + k] = res[k];
+        rec['res.' + k] = res[k];
       });
     }
 
@@ -858,7 +859,7 @@ function emitRecord(rec, line, opts, stylize) {
       var key = leftover[i];
       var value = rec[key];
       var stringified = false;
-      if (typeof(value) !== 'string') {
+      if (typeof (value) !== 'string') {
         value = JSON.stringify(value, null, 2);
         stringified = true;
       }
@@ -877,17 +878,17 @@ function emitRecord(rec, line, opts, stylize) {
     details = stylize(
       (details.length ? details.join('\n    --\n') + '\n' : ''), 'grey');
     if (!short)
-      emit(format("%s %s: %s on %s%s:%s%s\n%s",
+      emit(format('%s %s: %s on %s%s:%s%s\n%s',
         time,
         level,
         nameStr,
-        hostname || "<no-hostname>",
+        hostname || '<no-hostname>',
         src,
         onelineMsg,
         extras,
         details));
     else
-      emit(format("%s %s %s:%s%s\n%s",
+      emit(format('%s %s %s:%s%s\n%s',
         time,
         level,
         nameStr,
@@ -913,11 +914,11 @@ function emitRecord(rec, line, opts, stylize) {
     if (!isValidRecord(rec)) {
       return emit(line + '\n');
     }
-    emit(format("%s - %s\n", upperNameFromLevel[rec.level] || "LVL" + rec.level,
+    emit(format('%s - %s\n', upperNameFromLevel[rec.level] || 'LVL' + rec.level,
       rec.msg));
     break;
   default:
-    throw new Error("unknown output mode: "+opts.outputMode);
+    throw new Error('unknown output mode: '+opts.outputMode);
   }
 }
 
@@ -927,13 +928,13 @@ function emit(s) {
   try {
     stdoutFlushed = stdout.write(s);
   } catch (e) {
-    // Handle any exceptions in stdout writing in `stdout.on("error", ...)`.
+    // Handle any exceptions in stdout writing in `stdout.on('error', ...)`.
   }
 }
 
 
 /**
- * A hacked up version of "process.exit" that will first drain stdout
+ * A hacked up version of 'process.exit' that will first drain stdout
  * before exiting. *WARNING: This doesn't stop event processing.* IOW,
  * callers have to be careful that code following this call isn't
  * accidentally executed.
@@ -961,7 +962,7 @@ function drainStdoutAndExit(code) {
  * @param callback {Function} `function ()`
  */
 function processStdin(opts, stylize, callback) {
-  var leftover = "";  // Left-over partial line from last chunk.
+  var leftover = '';  // Left-over partial line from last chunk.
   var stdin = process.stdin;
   stdin.resume();
   stdin.setEncoding('utf8');
@@ -1000,7 +1001,7 @@ function processStdin(opts, stylize, callback) {
  * @param callback {Function} `function (code)`
  */
 function processPids(opts, stylize, callback) {
-  var leftover = "";  // Left-over partial line from last chunk.
+  var leftover = '';  // Left-over partial line from last chunk.
 
   /**
    * Get the PIDs to dtrace.
@@ -1272,7 +1273,7 @@ process.on('uncaughtException', function (err) {
   }
 
   var title = encodeURIComponent(format(
-    "Bunyan %s crashed: %s", getVersion(), String(err)));
+    'Bunyan %s crashed: %s', getVersion(), String(err)));
   console.error('* * *');
   console.error('* The Bunyan CLI crashed!');
   console.error('*');
@@ -1302,7 +1303,7 @@ function main(argv) {
   try {
     var opts = parseArgv(argv);
   } catch (e) {
-    warn("bunyan: error: %s", e.message);
+    warn('bunyan: error: %s', e.message);
     return drainStdoutAndExit(1);
   }
   gOptsForUncaughtException = opts; // intentionally global
@@ -1311,7 +1312,7 @@ function main(argv) {
     return;
   }
   if (opts.version) {
-    console.log("bunyan " + getVersion());
+    console.log('bunyan ' + getVersion());
     return;
   }
   if (opts.pid && opts.args.length > 0) {
@@ -1357,7 +1358,7 @@ function main(argv) {
       // If that rears too much then I'll remove 'F' from here.
       env.LESS = 'FRX';
     }
-    if (_DEBUG) warn("(pager: argv=%j, env.LESS=%j)", argv, env.LESS);
+    if (_DEBUG) warn('(pager: argv=%j, env.LESS=%j)', argv, env.LESS);
     // `pager` and `stdout` intentionally global.
     pager = spawn(argv[0], argv.slice(1),
       // Share the stderr handle to have error output come
@@ -1376,9 +1377,9 @@ function main(argv) {
   }
 
   // Stdout error handling. (Couldn't setup until `stdout` was determined.)
-  stdout.on("error", function (err) {
+  stdout.on('error', function (err) {
     if (_DEBUG) warn('(stdout error event: %s)', err);
-    if (err.code === "EPIPE") {
+    if (err.code === 'EPIPE') {
       drainStdoutAndExit(0);
     } else if (err.toString() === 'Error: This socket is closed.') {
       // Could get this if the pager closes its stdin, but hasn't exited yet.
@@ -1411,7 +1412,7 @@ function main(argv) {
       },
       function (err) {
         if (err) {
-          warn("bunyan: unexpected error: %s", err.stack || err);
+          warn('bunyan: unexpected error: %s', err.stack || err);
           return drainStdoutAndExit(1);
         }
         cleanupAndExit(retval);
@@ -1432,7 +1433,7 @@ if (require.main === module) {
   var nodeVer = process.versions.node.split('.').map(Number);
   if ([0,6,0] <= nodeVer && nodeVer <= [0,6,8]) {
     var stdout = process.stdout;
-    stdout.end = stdout.destroy = stdout.destroySoon = function() {
+    stdout.end = stdout.destroy = stdout.destroySoon = function () {
       /* pass */
     };
   }

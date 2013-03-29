@@ -6,8 +6,10 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.20.1 (not yet released)
+## bunyan 0.21.0 (not yet released)
 
+- 'make check' clean, 4-space indenting. No functional change here, just
+  lots of code change.
 - [issue #80, #82] Drop assert that broke using 'rotating-file' with
   a default `period` (by github.com/ricardograca).
 
