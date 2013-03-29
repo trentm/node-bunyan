@@ -29,21 +29,21 @@ test('child can add stream', function (t) {
   var dadStream = new CapturingStream();
   var dad = bunyan.createLogger({
     name: 'surname',
-    streams: [{
+    streams: [ {
       type: 'raw',
       stream: dadStream,
       level: 'info'
-    }]
+    } ]
   });
 
   var sonStream = new CapturingStream();
   var son = dad.child({
     component: 'son',
-    streams: [{
+    streams: [ {
       type: 'raw',
       stream: sonStream,
       level: 'debug'
-    }]
+    } ]
   });
 
   dad.info('info from dad');
@@ -66,11 +66,11 @@ test('child can set level of inherited streams', function (t) {
   var dadStream = new CapturingStream();
   var dad = bunyan.createLogger({
     name: 'surname',
-    streams: [{
+    streams: [ {
       type: 'raw',
       stream: dadStream,
       level: 'info'
-    }]
+    } ]
   });
 
   // Intention here is that the inherited `dadStream` logs at 'debug' level
@@ -99,11 +99,11 @@ test('child can set level of inherited streams and add streams', function (t) {
   var dadStream = new CapturingStream();
   var dad = bunyan.createLogger({
     name: 'surname',
-    streams: [{
+    streams: [ {
       type: 'raw',
       stream: dadStream,
       level: 'info'
-    }]
+    } ]
   });
 
   // Intention here is that the inherited `dadStream` logs at 'debug' level
@@ -112,11 +112,11 @@ test('child can set level of inherited streams and add streams', function (t) {
   var son = dad.child({
     component: 'son',
     level: 'trace',
-    streams: [{
+    streams: [ {
       type: 'raw',
       stream: sonStream,
       level: 'debug'
-    }]
+    } ]
   });
 
   dad.info('info from dad');

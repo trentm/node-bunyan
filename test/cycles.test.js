@@ -31,27 +31,27 @@ outstr.end = function (c) {
 var expect =
     [
       {
-        "name": "blammo",
-        "level": 30,
-        "msg": "bango { bang: 'boom', KABOOM: [Circular] }",
-        "v": 0
+        'name': 'blammo',
+        'level': 30,
+        'msg': 'bango { bang: \'boom\', KABOOM: [Circular] }',
+        'v': 0
       },
       {
-        "name": "blammo",
-        "level": 30,
-        "msg": "kaboom { bang: 'boom', KABOOM: [Circular] }",
-        "v": 0
+        'name': 'blammo',
+        'level': 30,
+        'msg': 'kaboom { bang: \'boom\', KABOOM: [Circular] }',
+        'v': 0
       },
       {
-        "name": "blammo",
-        "level": 30,
-        "bang": "boom",
-        "KABOOM": {
-          "bang": "boom",
-          "KABOOM": "[Circular]"
+        'name': 'blammo',
+        'level': 30,
+        'bang': 'boom',
+        'KABOOM': {
+          'bang': 'boom',
+          'KABOOM': '[Circular]'
         },
-        "msg": "",
-        "v": 0
+        'msg': '',
+        'v': 0
       }
     ];
 

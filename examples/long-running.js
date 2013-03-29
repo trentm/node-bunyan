@@ -50,7 +50,7 @@ function logOne() {
   var msg = [randchoice(words), randchoice(words)].join(' ');
   var delay = randint(300);
   //console.warn('long-running about to log.%s(..., "%s")', level, msg)
-  log[level]({"word": randchoice(words), "delay": delay}, msg);
+  log[level]({'word': randchoice(words), 'delay': delay}, msg);
   timeout = setTimeout(logOne, delay);
 }
 

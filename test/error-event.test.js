@@ -19,7 +19,7 @@ var test = tap4nodeunit.test;
 test('error event on log write', function (t) {
   LOG_PATH = '/this/path/is/bogus.log'
   var log = bunyan.createLogger(
-    {name: 'error-event', streams: [{path: LOG_PATH}]});
+    {name: 'error-event', streams: [ {path: LOG_PATH} ]});
   log.on('error', function (err, stream) {
     t.ok(err, 'got err in error event: ' + err);
     t.equal(err.code, 'ENOENT', 'error code is ENOENT');

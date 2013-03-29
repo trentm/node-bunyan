@@ -20,8 +20,8 @@ var child_process = require('child_process'),
 var assert = require('assert');
 
 var nodeSpawnSupportsStdio = (
-  Number(process.version.split('.')[0]) >= 0
-  || Number(process.version.split('.')[1]) >= 8);
+  Number(process.version.split('.')[0]) >= 0 ||
+  Number(process.version.split('.')[1]) >= 8);
 
 
 
@@ -103,6 +103,7 @@ function getVersion() {
 
 var format = util.format;
 if (!format) {
+  /* BEGIN JSSTYLED */
   // If not node 0.6, then use its `util.format`:
   // <https://github.com/joyent/node/blob/master/lib/util.js#L22>:
   var inspect = util.inspect;
@@ -140,6 +141,7 @@ if (!format) {
     }
     return str;
   };
+  /* END JSSTYLED */
 }
 
 function indent(s) {
@@ -399,7 +401,7 @@ function parseArgv(argv) {
   var endOfOptions = false;
   while (args.length > 0) {
     var arg = args.shift();
-    switch(arg) {
+    switch (arg) {
       case '--':
         endOfOptions = true;
         break;
@@ -438,7 +440,7 @@ function parseArgv(argv) {
         }
         parsed.outputMode = OM_FROM_NAME[name];
         if (parsed.outputMode === undefined) {
-          throw new Error('unknown output mode: \''+name+"'");
+          throw new Error('unknown output mode: "'+name+'"');
         }
         break;
       case '-j': // output with JSON.stringify
@@ -979,7 +981,7 @@ function processStdin(opts, stylize, callback) {
     }
     leftover = lines.pop();
     length -= 1;
-    for (var i=1; i < length; i++) {
+    for (var i = 1; i < length; i++) {
       handleLogLine(null, lines[i], opts, stylize);
     }
   });
@@ -1095,7 +1097,7 @@ function processPids(opts, stylize, callback) {
       }
       leftover = lines.pop();
       length -= 1;
-      for (var i=1; i < length; i++) {
+      for (var i = 1; i < length; i++) {
         handleLogLine(null, lines[i], opts, stylize);
       }
     });
@@ -1165,7 +1167,7 @@ function processFile(file, opts, stylize, callback) {
     }
     leftover = lines.pop();
     length -= 1;
-    for (var i=1; i < length; i++) {
+    for (var i = 1; i < length; i++) {
       handleLogLine(file, lines[i], opts, stylize);
     }
   });
@@ -1186,6 +1188,7 @@ function processFile(file, opts, stylize, callback) {
 /**
  * From node async module.
  */
+/* BEGIN JSSTYLED */
 function asyncForEach(arr, iterator, callback) {
     callback = callback || function () {};
     if (!arr.length) {
@@ -1207,6 +1210,7 @@ function asyncForEach(arr, iterator, callback) {
         });
     });
 };
+/* END JSSTYLED */
 
 
 
@@ -1316,7 +1320,7 @@ function main(argv) {
     return;
   }
   if (opts.pid && opts.args.length > 0) {
-    warn("bunyan: error: can't use both '-p PID' (%s) and file (%s) args",
+    warn('bunyan: error: can\'t use both "-p PID" (%s) and file (%s) args',
       opts.pid, opts.args.join(' '));
     return drainStdoutAndExit(1);
   }
@@ -1334,18 +1338,19 @@ function main(argv) {
   // Pager.
   var nodeVer = process.versions.node.split('.').map(Number);
   var paginate = (
-    process.stdout.isTTY
-    && process.stdin.isTTY
-    && !opts.pids   // Don't page if following process output.
-    && opts.args.length > 0  // Don't page if no file args to process.
-    && process.platform !== 'win32'
-    && nodeVer >= [0,8,0]
-    && (opts.paginate === true
-        || (opts.paginate !== false
-            && (!process.env.BUNYAN_NO_PAGER
-                || process.env.BUNYAN_NO_PAGER.length === 0))));
+    process.stdout.isTTY &&
+    process.stdin.isTTY &&
+    !opts.pids && // Don't page if following process output.
+    opts.args.length > 0 && // Don't page if no file args to process.
+    process.platform !== 'win32' &&
+    nodeVer >= [0, 8, 0] &&
+    (opts.paginate === true ||
+      (opts.paginate !== false &&
+        (!process.env.BUNYAN_NO_PAGER ||
+          process.env.BUNYAN_NO_PAGER.length === 0))));
   if (paginate) {
     var pagerCmd = process.env.PAGER || 'less';
+    /* JSSTYLED */
     assert.ok(pagerCmd.indexOf('"') === -1 && pagerCmd.indexOf("'") === -1,
       'cannot parse PAGER quotes yet');
     var argv = pagerCmd.split(/\s+/g);
@@ -1363,7 +1368,7 @@ function main(argv) {
     pager = spawn(argv[0], argv.slice(1),
       // Share the stderr handle to have error output come
       // straight through. Only supported in v0.8+.
-      {env: env, stdio: ['pipe',1,2]});
+      {env: env, stdio: ['pipe', 1, 2]});
     stdout = pager.stdin;
 
     // Early termination of the pager: just stop.
@@ -1431,7 +1436,7 @@ if (require.main === module) {
   // place. The real fix is that `.end()` shouldn't be called on stdout
   // in node core. Node v0.6.9 fixes that. Only guard for v0.6.0..v0.6.8.
   var nodeVer = process.versions.node.split('.').map(Number);
-  if ([0,6,0] <= nodeVer && nodeVer <= [0,6,8]) {
+  if ([0, 6, 0] <= nodeVer && nodeVer <= [0, 6, 8]) {
     var stdout = process.stdout;
     stdout.end = stdout.destroy = stdout.destroySoon = function () {
       /* pass */

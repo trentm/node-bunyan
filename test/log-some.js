@@ -10,4 +10,3 @@ var log = bunyan.createLogger({
 });
 log.debug({foo: 'bar'}, 'hi at debug')
 log.trace('hi at trace')
-

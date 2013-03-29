@@ -48,10 +48,10 @@ test('log.info(BUFFER)', function (t) {
     var rec = catcher.records[catcher.records.length - 1];
     t.equal(rec.msg, inspect(b),
       format('log.%s msg is inspect(BUFFER)', lvl));
-    t.ok(rec["0"] === undefined,
-      'no "0" array index key in record: ' + inspect(rec["0"]));
-    t.ok(rec["parent"] === undefined,
-      'no "parent" array index key in record: ' + inspect(rec["parent"]));
+    t.ok(rec['0'] === undefined,
+      'no "0" array index key in record: ' + inspect(rec['0']));
+    t.ok(rec['parent'] === undefined,
+      'no "parent" array index key in record: ' + inspect(rec['parent']));
 
     log[lvl].call(log, b, 'bar');
     var rec = catcher.records[catcher.records.length - 1];

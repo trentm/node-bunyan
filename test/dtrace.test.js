@@ -47,15 +47,15 @@ test('basic dtrace', function (t) {
     'bunyan$target:::log-*{printf("%s", copyinstr(arg0))}',
     '-c', format('node %s/log-some.js', __dirname)];
   var dtrace = spawn(argv[0], argv.slice(1));
-  //console.error("ARGV: %j", argv);
+  //console.error('ARGV: %j', argv);
 
   var traces = [];
   dtrace.stdout.on('data', function (data) {
-    //console.error("DTRACE STDOUT:", data.toString());
+    //console.error('DTRACE STDOUT:', data.toString());
     traces.push(data.toString());
   });
   dtrace.stderr.on('data', function (data) {
-    console.error("DTRACE STDERR:", data.toString());
+    console.error('DTRACE STDERR:', data.toString());
   });
   dtrace.on('exit', function (code) {
     t.notOk(code, 'dtrace exited cleanly');
