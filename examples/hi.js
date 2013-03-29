@@ -19,12 +19,12 @@ log.info({foo:'bar', multiline:'one\ntwo\nthree'}, 'hi %d', 1, 'two', 3);
 console.log('\n')
 
 function Wuzzle(options) {
-  this.log = options.log;
-  this.log.info('creating a wuzzle')
+    this.log = options.log;
+    this.log.info('creating a wuzzle')
 }
 
 Wuzzle.prototype.woos = function () {
-  this.log.warn('This wuzzle is woosey.')
+    this.log.warn('This wuzzle is woosey.')
 }
 
 var wuzzle = new Wuzzle({log: log.child({component: 'wuzzle'})});

@@ -1,16 +1,16 @@
 var Logger = require('../lib/bunyan');
 log = new Logger({
-  name: 'amon',
-  streams: [
-    {
-      level: 'info',
-      stream: process.stdout,
-    },
-    {
-      level: 'error',
-      path: 'multi.log'
-    }
-  ]
+    name: 'amon',
+    streams: [
+        {
+            level: 'info',
+            stream: process.stdout,
+        },
+        {
+            level: 'error',
+            path: 'multi.log'
+        }
+    ]
 });
 
 

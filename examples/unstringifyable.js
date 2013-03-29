@@ -5,7 +5,7 @@ var log = new Logger({src: true, name: 'foo'});
 
 // Make a circular object (cannot be JSON-ified).
 var myobj = {
-  foo: 'bar'
+    foo: 'bar'
 };
 myobj.myobj = myobj;
 

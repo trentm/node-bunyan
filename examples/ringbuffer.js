@@ -2,12 +2,12 @@
 var bunyan = require('..');
 var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
 var log = new bunyan({
-    name: 'foo',
-    streams: [ {
-        type: 'raw',
-        stream: ringbuffer,
-        level: 'debug'
-    } ]
+        name: 'foo',
+        streams: [ {
+                type: 'raw',
+                stream: ringbuffer,
+                level: 'debug'
+        } ]
 });
 
 log.info('hello world');

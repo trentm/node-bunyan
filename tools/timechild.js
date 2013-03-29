@@ -17,68 +17,68 @@ var ben = require('ben');  // npm install ben
 var Logger = require('../lib/bunyan');
 
 var log = new Logger({
-  name: 'svc',
-  streams: [
-    {
-      path: __dirname + '/timechild.log'
-    },
-    {
-      stream: process.stdout
+    name: 'svc',
+    streams: [
+        {
+            path: __dirname + '/timechild.log'
+        },
+        {
+            stream: process.stdout
+        }
+    ],
+    serializers: {
+        err: Logger.stdSerializers.err
     }
-  ],
-  serializers: {
-    err: Logger.stdSerializers.err
-  }
 });
 
 console.log('Time `log.child`:');
 
 var ms = ben(1e5, function () {
-  var child = log.child();
+    var child = log.child();
 });
 console.log(' - adding no fields:  %dms per iteration', ms);
 
 var ms = ben(1e5, function () {
-  var child = log.child({a:1});
+    var child = log.child({a:1});
 });
 console.log(' - adding one field:  %dms per iteration', ms);
 
 var ms = ben(1e5, function () {
-  var child = log.child({a:1, b:2});
+    var child = log.child({a:1, b:2});
 });
 console.log(' - adding two fields: %dms per iteration', ms);
 
 function fooSerializer(obj) {
-  return {bar: obj.bar};
+    return {bar: obj.bar};
 }
 var ms = ben(1e5, function () {
-  var child = log.child({
-    a: 1,
-    serializers: {foo: fooSerializer}
-  });
+    var child = log.child({
+        a: 1,
+        serializers: {foo: fooSerializer}
+    });
 });
 console.log(' - adding serializer and one field: %dms per iteration', ms);
 
 var ms = ben(1e5, function () {
-  var child = log.child({
-    a: 1,
-    streams: [ {stream: process.stderr} ]
-  });
+    var child = log.child({
+        a: 1,
+        streams: [ {stream: process.stderr} ]
+    });
 });
 console.log(' - adding a (stderr) stream and one field: %dms per iteration',
-  ms);
+    ms);
 
 var ms = ben(1e6, function () {
-  var child = log.child({}, true);
+    var child = log.child({}, true);
 });
 console.log(' - [fast] adding no fields:  %dms per iteration', ms);
 
 var ms = ben(1e6, function () {
-  var child = log.child({a:1}, true);
+    var child = log.child({a:1}, true);
 });
 console.log(' - [fast] adding one field:  %dms per iteration', ms);
 
 var ms = ben(1e6, function () {
-  var child = log.child({a:1, b:2}, true);
+    var child = log.child({a:1, b:2}, true);
 });
 console.log(' - [fast] adding two fields: %dms per iteration', ms);

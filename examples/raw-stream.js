@@ -11,25 +11,25 @@ var Logger = require('../lib/bunyan');
  */
 function MyRawStream() {}
 MyRawStream.prototype.write = function (rec) {
-  if (typeof (rec) !== 'object') {
-    console.error('error: raw stream got a non-object record: %j', rec)
-  } else {
-    rec.yo = 'yo';
-    process.stdout.write(JSON.stringify(rec) + '\n');
-  }
+    if (typeof (rec) !== 'object') {
+        console.error('error: raw stream got a non-object record: %j', rec)
+    } else {
+        rec.yo = 'yo';
+        process.stdout.write(JSON.stringify(rec) + '\n');
+    }
 }
 
 
 // A Logger using the raw stream.
 var log = new Logger({
-  name: 'raw-example',
-  streams: [
-    {
-      level: 'info',
-      stream: new MyRawStream(),
-      type: 'raw'
-    },
-  ]
+    name: 'raw-example',
+    streams: [
+        {
+            level: 'info',
+            stream: new MyRawStream(),
+            type: 'raw'
+        },
+    ]
 });
 
 

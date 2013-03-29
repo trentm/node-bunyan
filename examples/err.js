@@ -5,25 +5,25 @@ var Logger = require('../lib/bunyan');
 var util = require('util');
 
 var log = new Logger({
-  name: 'myserver',
-  serializers: {
-    err: Logger.stdSerializers.err,   // <--- use this
-  }
+    name: 'myserver',
+    serializers: {
+        err: Logger.stdSerializers.err,   // <--- use this
+    }
 });
 
 try {
-  throw new TypeError('boom');
+    throw new TypeError('boom');
 } catch (err) {
-  log.warn({err: err}, 'operation went boom: %s', err)   // <--- here
+    log.warn({err: err}, 'operation went boom: %s', err)   // <--- here
 }
 
 log.info(new TypeError('how about this?'))  // <--- alternatively this
 
 
 try {
-  throw 'boom string';
+    throw 'boom string';
 } catch (err) {
-  log.error(err)
+    log.error(err)
 }
 
 /* BEGIN JSSTYLED */

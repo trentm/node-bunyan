@@ -21,11 +21,11 @@ var bunyan = require('../lib/bunyan');
 
 
 function randint(n) {
-  return Math.floor(Math.random() * n);
+    return Math.floor(Math.random() * n);
 }
 
 function randchoice(array) {
-  return array[randint(array.length)];
+    return array[randint(array.length)];
 }
 
 
@@ -40,18 +40,18 @@ var log = bunyan.createLogger({name: 'lr', level: 'debug'});
 // We're logging to stdout. Let's exit gracefully on EPIPE. E.g. if piped
 // to `head` which will close after N lines.
 process.stdout.on('error', function (err) {
-  if (err.code === 'EPIPE') {
-    process.exit(0);
-  }
+    if (err.code === 'EPIPE') {
+        process.exit(0);
+    }
 })
 
 function logOne() {
-  var level = randchoice(levels);
-  var msg = [randchoice(words), randchoice(words)].join(' ');
-  var delay = randint(300);
-  //console.warn('long-running about to log.%s(..., "%s")', level, msg)
-  log[level]({'word': randchoice(words), 'delay': delay}, msg);
-  timeout = setTimeout(logOne, delay);
+    var level = randchoice(levels);
+    var msg = [randchoice(words), randchoice(words)].join(' ');
+    var delay = randint(300);
+    //console.warn('long-running about to log.%s(..., "%s")', level, msg)
+    log[level]({'word': randchoice(words), 'delay': delay}, msg);
+    timeout = setTimeout(logOne, delay);
 }
 
 log.info('hi, this is the start');

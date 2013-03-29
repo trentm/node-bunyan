@@ -12,26 +12,26 @@ var records = [];
 function Collector() {
 }
 Collector.prototype.write = function (s) {
-  //records.push(s);
+    //records.push(s);
 }
 var collector = new Collector();
 
 var logwith = new Logger({
-  name: 'with-src',
-  src: true,
-  stream: collector
+    name: 'with-src',
+    src: true,
+    stream: collector
 });
 
 var ms = ben(1e5, function () {
-  logwith.info('hi');
+    logwith.info('hi');
 });
 console.log(' - log.info with    src:  %dms per iteration', ms);
 
 var logwithout = new Logger({
-  name: 'without-src',
-  stream: collector
+    name: 'without-src',
+    stream: collector
 });
 var ms = ben(1e5, function () {
-  logwithout.info('hi');
+    logwithout.info('hi');
 });
 console.log(' - log.info without src:  %dms per iteration', ms);

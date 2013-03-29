@@ -12,17 +12,17 @@ var records = [];
 function Collector() {
 }
 Collector.prototype.write = function (s) {
-  //records.push(s);
+    //records.push(s);
 }
 var collector = new Collector();
 
 var log = new Logger({
-  name: 'timeguard',
-  src: true,
-  stream: collector
+    name: 'timeguard',
+    src: true,
+    stream: collector
 });
 
 var ms = ben(1e5, function () {
-  log.info('hi');
+    log.info('hi');
 });
 console.log(' - log.info:  %dms per iteration', ms);

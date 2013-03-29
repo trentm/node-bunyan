@@ -4,37 +4,37 @@ var http = require('http');
 var Logger = require('../lib/bunyan');
 
 var log = new Logger({
-  name: 'myserver',
-  serializers: {
-    req: Logger.stdSerializers.req,
-    res: Logger.stdSerializers.res
-  }
+    name: 'myserver',
+    serializers: {
+        req: Logger.stdSerializers.req,
+        res: Logger.stdSerializers.res
+    }
 });
 
 var server = http.createServer(function (req, res) {
-  log.info({req: req}, 'start request');  // <-- this is the guy we're testing
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
-  log.info({res: res}, 'done response');  // <-- this is the guy we're testing
+    log.info({req: req}, 'start request');  // <-- this is the guy we're testing
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello World\n');
+    log.info({res: res}, 'done response');  // <-- this is the guy we're testing
 });
 server.listen(1337, '127.0.0.1', function () {
-  log.info('server listening');
-  var options = {
-    port: 1337,
-    hostname: '127.0.0.1',
-    path: '/path?q=1#anchor',
-    headers: {
-      'X-Hi': 'Mom'
-    }
-  };
-  var req = http.request(options);
-  req.on('response', function (res) {
-    res.on('end', function () {
-      process.exit();
-    })
-  });
-  req.write('hi from the client');
-  req.end();
+    log.info('server listening');
+    var options = {
+        port: 1337,
+        hostname: '127.0.0.1',
+        path: '/path?q=1#anchor',
+        headers: {
+            'X-Hi': 'Mom'
+        }
+    };
+    var req = http.request(options);
+    req.on('response', function (res) {
+        res.on('end', function () {
+            process.exit();
+        })
+    });
+    req.write('hi from the client');
+    req.end();
 });
 
 
