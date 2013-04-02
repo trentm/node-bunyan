@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.21.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.21.0
 
 - 'make check' clean, 4-space indenting. No functional change here, just
