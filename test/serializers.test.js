@@ -71,7 +71,8 @@ test('req serializer', function (t) {
             var lastRecord = records[records.length-1];
             t.equal(lastRecord.req.method, 'GET');
             t.equal(lastRecord.req.url, theReq.url);
-            t.equal(lastRecord.req.remoteAddress, theReq.connection.remoteAddress);
+            t.equal(lastRecord.req.remoteAddress,
+                theReq.connection.remoteAddress);
             t.equal(lastRecord.req.remotePort, theReq.connection.remotePort);
             server.close();
             t.end();
@@ -238,12 +239,14 @@ test('err serializer: long stack', function (t) {
     topErr = new verror.WError(midErr, 'top err');
     log.info(topErr, 'the error');
     var lastRecord = records[records.length-1];
-    t.equal(lastRecord.err.message, topErr.message, 'WError <- WError <- TypeError');
+    t.equal(lastRecord.err.message, topErr.message,
+        'WError <- WError <- TypeError');
     t.equal(lastRecord.err.name, topErr.name, 'WError <- WError <- TypeError');
     var expectedStack = (topErr.stack
         + '\nCaused by: ' + midErr.stack
         + '\nCaused by: ' + bottomErr.stack);
-    t.equal(lastRecord.err.stack, expectedStack, 'WError <- WError <- TypeError');
+    t.equal(lastRecord.err.stack, expectedStack,
+            'WError <- WError <- TypeError');
 
     // WError <- WError <- WError
     bottomErr = new verror.WError('bottom err');
@@ -251,7 +254,8 @@ test('err serializer: long stack', function (t) {
     topErr = new verror.WError(midErr, 'top err');
     log.info(topErr, 'the error');
     var lastRecord = records[records.length-1];
-    t.equal(lastRecord.err.message, topErr.message, 'WError <- WError <- WError');
+    t.equal(lastRecord.err.message, topErr.message,
+        'WError <- WError <- WError');
     t.equal(lastRecord.err.name, topErr.name, 'WError <- WError <- WError');
     var expectedStack = (topErr.stack
         + '\nCaused by: ' + midErr.stack

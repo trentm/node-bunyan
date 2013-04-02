@@ -31,7 +31,8 @@ function randchoice(array) {
 
 //---- mainline
 
-var words = fs.readFileSync(__dirname + '/long-running.js', 'utf8').split(/\s+/);
+var words = fs.readFileSync(
+    __dirname + '/long-running.js', 'utf8').split(/\s+/);
 var levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 var timeout;
 

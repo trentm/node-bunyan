@@ -78,8 +78,8 @@ test('cat simple.log', function (t) {
         function (err, stdout, stderr) {
             t.ifError(err)
             t.equal(stdout,
-                '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
-                + 'My message\n');
+                /* JSSTYLED */
+                '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message\n');
             t.end();
         }
     );
@@ -89,8 +89,8 @@ test('simple.log with color', function (t) {
         function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout,
-            '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 '
-            + 'on example.com: \u001b[36mMy message\u001b[39m\n\u001b[0m');
+            /* JSSTYLED */
+            '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 on example.com: \u001b[36mMy message\u001b[39m\n\u001b[0m');
         t.end();
     });
 });
@@ -110,7 +110,8 @@ test('extrafield.log with color', function (t) {
              function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout,
-            '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: myservice/123 '
+            '[2012-02-08T22:56:52.856Z] \u001b[36m INFO\u001b[39m: '
+            + 'myservice/123 '
             + 'on example.com: \u001b[36mMy message\u001b[39m'
             + '\u001b[90m (extra=field)\u001b[39m\n\u001b[0m');
         t.end();
@@ -151,8 +152,8 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
             t.ok(err)
             t.equal(err.code, 2)
             t.equal(stdout,
-                '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
-                + 'My message\n');
+                /* JSSTYLED */
+                '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message\n');
             // Note: node v0.6.10:
             //   ENOENT, no such file or directory 'asdf.log'
             // but node v0.6.14:
@@ -167,10 +168,12 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
 });
 
 test('multiple logs', function (t) {
-    exec(_('%s %s/corpus/log1.log %s/corpus/log2.log', BUNYAN, __dirname, __dirname),
-            function (err, stdout, stderr) {
+    var cmd = _('%s %s/corpus/log1.log %s/corpus/log2.log',
+        BUNYAN, __dirname, __dirname);
+    exec(cmd, function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, [
+            /* BEGIN JSSTYLED */
             '[2012-05-08T16:57:55.586Z]  INFO: agent1/73267 on headnode: message\n',
             '[2012-05-08T16:58:55.586Z]  INFO: agent2/73267 on headnode: message\n',
             '[2012-05-08T17:01:49.339Z]  INFO: agent2/73267 on headnode: message\n',
@@ -180,16 +183,19 @@ test('multiple logs', function (t) {
             '[2012-05-08T17:02:49.404Z]  INFO: agent1/73267 on headnode: message\n',
             '[2012-05-08T17:02:57.404Z]  INFO: agent2/73267 on headnode: message\n',
             '[2012-05-08T17:08:01.105Z]  INFO: agent2/76156 on headnode: message\n',
+            /* END JSSTYLED */
         ].join(''));
         t.end();
     });
 });
 
 test('multiple logs, bunyan format', function (t) {
-    exec(_('%s -o bunyan %s/corpus/log1.log %s/corpus/log2.log', BUNYAN, __dirname, __dirname),
-            function (err, stdout, stderr) {
+    var cmd = _('%s -o bunyan %s/corpus/log1.log %s/corpus/log2.log',
+        BUNYAN, __dirname, __dirname);
+    exec(cmd, function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, [
+            /* BEGIN JSSTYLED */
             '{"name":"agent1","pid":73267,"hostname":"headnode","level":30,"msg":"message","time":"2012-05-08T16:57:55.586Z","v":0}',
             '{"name":"agent2","pid":73267,"hostname":"headnode","level":30,"msg":"message","time":"2012-05-08T16:58:55.586Z","v":0}',
             '{"name":"agent2","pid":73267,"hostname":"headnode","level":30,"msg":"message","time":"2012-05-08T17:01:49.339Z","v":0}',
@@ -200,6 +206,7 @@ test('multiple logs, bunyan format', function (t) {
             '{"name":"agent2","pid":73267,"hostname":"headnode","level":30,"msg":"message","time":"2012-05-08T17:02:57.404Z","v":0}',
             '{"name":"agent2","pid":76156,"hostname":"headnode","level":30,"msg":"message","time":"2012-05-08T17:08:01.105Z","v":0}',
             ''
+            /* END JSSTYLED */
         ].join('\n'));
         t.end();
     });
@@ -210,20 +217,24 @@ test('log1.log.gz', function (t) {
              function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, [
+            /* BEGIN JSSTYLED */
             '[2012-05-08T16:57:55.586Z]  INFO: agent1/73267 on headnode: message\n',
             '[2012-05-08T17:02:49.339Z]  INFO: agent1/73267 on headnode: message\n',
             '[2012-05-08T17:02:49.404Z]  INFO: agent1/73267 on headnode: message\n',
             '[2012-05-08T17:02:49.404Z]  INFO: agent1/73267 on headnode: message\n',
+            /* END JSSTYLED */
         ].join(''));
         t.end();
     });
 });
 
 test('mixed text and gzip logs', function (t) {
-    exec(_('%s %s/corpus/log1.log.gz %s/corpus/log2.log', BUNYAN, __dirname, __dirname),
-            function (err, stdout, stderr) {
+    var cmd = _('%s %s/corpus/log1.log.gz %s/corpus/log2.log',
+        BUNYAN, __dirname, __dirname);
+    exec(cmd, function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, [
+            /* BEGIN JSSTYLED */
             '[2012-05-08T16:57:55.586Z]  INFO: agent1/73267 on headnode: message\n',
             '[2012-05-08T16:58:55.586Z]  INFO: agent2/73267 on headnode: message\n',
             '[2012-05-08T17:01:49.339Z]  INFO: agent2/73267 on headnode: message\n',
@@ -233,6 +244,7 @@ test('mixed text and gzip logs', function (t) {
             '[2012-05-08T17:02:49.404Z]  INFO: agent1/73267 on headnode: message\n',
             '[2012-05-08T17:02:57.404Z]  INFO: agent2/73267 on headnode: message\n',
             '[2012-05-08T17:08:01.105Z]  INFO: agent2/76156 on headnode: message\n',
+            /* END JSSTYLED */
         ].join(''));
         t.end();
     });
@@ -240,6 +252,7 @@ test('mixed text and gzip logs', function (t) {
 
 test('--level 40', function (t) {
     expect = [
+        /* BEGIN JSSTYLED */
         '# levels\n',
         '[2012-02-08T22:56:53.856Z]  WARN: myservice/123 on example.com: My message\n',
         '[2012-02-08T22:56:54.856Z] ERROR: myservice/123 on example.com: My message\n',
@@ -251,6 +264,7 @@ test('--level 40', function (t) {
         '# bogus\n',
         'not a JSON line\n',
         '{"hi": "there"}\n'
+        /* END JSSTYLED */
     ].join('');
     exec(_('%s -l 40 %s/corpus/all.log', BUNYAN, __dirname),
              function (err, stdout, stderr) {
@@ -268,6 +282,7 @@ test('--level 40', function (t) {
 test('--condition "level === 10 && pid === 123"', function (t) {
     var expect = [
         '# levels\n',
+        /* JSSTYLED */
         '[2012-02-08T22:56:50.856Z] TRACE: myservice/123 on example.com: My message\n',
         '\n',
         '# extra fields\n',
@@ -276,12 +291,15 @@ test('--condition "level === 10 && pid === 123"', function (t) {
         'not a JSON line\n',
         '{"hi": "there"}\n'
     ].join('');
-    exec(_('%s -c "level === 10 && pid === 123" %s/corpus/all.log', BUNYAN, __dirname),
-             function (err, stdout, stderr) {
+    var cmd = _('%s -c "level === 10 && pid === 123" %s/corpus/all.log',
+        BUNYAN, __dirname);
+    exec(cmd, function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, expect);
-        exec(_('%s --condition "level === 10 && pid === 123" %s/corpus/all.log', BUNYAN, __dirname),
-                 function (err, stdout, stderr) {
+        var cmd = _(
+            '%s --condition "level === 10 && pid === 123" %s/corpus/all.log',
+            BUNYAN, __dirname);
+        exec(cmd, function (err, stdout, stderr) {
             t.ifError(err);
             t.equal(stdout, expect);
             t.end();
@@ -294,6 +312,7 @@ test('--condition "level === 10 && pid === 123"', function (t) {
 test('multiple --conditions', function (t) {
     var expect = [
         '# levels\n',
+        /* JSSTYLED */
         '[2012-02-08T22:56:53.856Z]  WARN: myservice/1 on example.com: My message\n',
         '\n',
         '# extra fields\n',
@@ -318,6 +337,7 @@ test('multiple --conditions', function (t) {
 // field with no 'headers'. Ditto for the 'res' field.
 test('robust req handling', function (t) {
     var expect = [
+        /* BEGIN JSSTYLED */
         '[2012-08-08T10:25:47.636Z] DEBUG: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: headAgentProbes respond (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, route=HeadAgentProbes, contentMD5=11FxOYiYfpMxmANj4kGJzg==)',
         '[2012-08-08T10:25:47.637Z]  INFO: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: HeadAgentProbes handled: 200 (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, audit=true, remoteAddress=10.2.207.2, remotePort=50394, latency=3, secure=false, _audit=true, req.version=*)',
         '    HEAD /agentprobes?agent=ccf92af9-0b24-46b6-ab60-65095fdd3037 HTTP/1.1',
@@ -349,6 +369,7 @@ test('robust req handling', function (t) {
         '      "name": "HeadAgentProbes",',
         '      "version": false',
         '    }'
+        /* END JSSTYLED */
     ].join('\n') + '\n';
     exec(_('%s %s/corpus/withreq.log', BUNYAN, __dirname),
              function (err, stdout, stderr) {

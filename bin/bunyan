@@ -163,79 +163,82 @@ function objCopy(obj) {
 }
 
 function printHelp() {
-    console.log('Usage:');
-    console.log('  bunyan [OPTIONS] [FILE ...]');
-    console.log('  ... | bunyan [OPTIONS]');
-    console.log('  bunyan [OPTIONS] -p PID');
-    console.log('');
-    console.log('Filter and pretty-print Bunyan log file content.');
-    console.log('');
-    console.log('General options:');
-    console.log('  -h, --help    print this help info and exit');
-    console.log('  --version     print version of this command and exit');
-    console.log('');
-    console.log('Dtrace options (only on dtrace-supporting platforms):');
-    console.log('  -p PID        Process bunyan:log-* probes from the process');
-    console.log('                with the given PID. Can be used multiple times,');
-    console.log('                or specify all processes with "*", or a set of');
-    console.log('                processes whose command & args match a pattern');
-    console.log('                with "-p NAME".');
-    console.log('');
-    console.log('Filtering options:');
-    console.log('  -l, --level LEVEL');
-    console.log('                Only show messages at or above the specified level.');
-    console.log('                You can specify level *names* or numeric values.');
-    console.log('                (See "Log Levels" below.)');
-    console.log('  -c, --condition CONDITION');
-    console.log('                Run each log message through the condition and');
-    console.log('                only show those that return truish. E.g.:');
-    console.log('                    -c \'this.pid == 123\'');
-    console.log('                    -c \'this.level == DEBUG\'');
-    console.log('                    -c \'this.msg.indexOf("boom") != -1\'');
-    console.log('                "CONDITION" must be legal JS code. `this` holds');
-    console.log('                the log record. The TRACE, DEBUG, ... FATAL values');
-    console.log('                are defined to help with comparing `this.level`.');
-    console.log('  --strict      Suppress all but legal Bunyan JSON log lines. By default');
-    console.log('                non-JSON, and non-Bunyan lines are passed through.');
-    console.log('');
-    console.log('Output options:');
-    console.log('  --pager       Pipe output into `less` (or $PAGER if set), if');
-    console.log('                stdout is a TTY. This overrides $BUNYAN_NO_PAGER.');
-    console.log('                Note: Paging is only supported on node >=0.8.');
-    console.log('  --no-pager    Do not pipe output into a pager.');
-    console.log('  --color       Colorize output. Defaults to try if output');
-    console.log('                stream is a TTY.');
-    console.log('  --no-color    Force no coloring (e.g. terminal doesn\'t support it)');
-    console.log('  -o, --output MODE');
-    console.log('                Specify an output mode/format. One of');
-    console.log('                  long: (the default) pretty');
-    console.log('                  json: JSON output, 2-space indent');
-    console.log('                  json-N: JSON output, N-space indent, e.g. "json-4"');
-    console.log('                  bunyan: 0 indented JSON, bunyan\'s native format');
-    console.log('                  inspect: node.js `util.inspect` output');
-    console.log('                  short: like "long", but more concise');
-    console.log('  -j            shortcut for `-o json`');
-    console.log('');
-    console.log('Log Levels:');
-    console.log('  Either numeric values or their associated strings are valid for the');
-    console.log('  -l|--level argument.  However, -c|--condition scripts will see a numeric');
-    console.log('  "level" value, not a string.');
-    console.log('');
+    /* BEGIN JSSTYLED */
+    var p = console.log;
+    p('Usage:');
+    p('  bunyan [OPTIONS] [FILE ...]');
+    p('  ... | bunyan [OPTIONS]');
+    p('  bunyan [OPTIONS] -p PID');
+    p('');
+    p('Filter and pretty-print Bunyan log file content.');
+    p('');
+    p('General options:');
+    p('  -h, --help    print this help info and exit');
+    p('  --version     print version of this command and exit');
+    p('');
+    p('Dtrace options (only on dtrace-supporting platforms):');
+    p('  -p PID        Process bunyan:log-* probes from the process');
+    p('                with the given PID. Can be used multiple times,');
+    p('                or specify all processes with "*", or a set of');
+    p('                processes whose command & args match a pattern');
+    p('                with "-p NAME".');
+    p('');
+    p('Filtering options:');
+    p('  -l, --level LEVEL');
+    p('                Only show messages at or above the specified level.');
+    p('                You can specify level *names* or numeric values.');
+    p('                (See "Log Levels" below.)');
+    p('  -c, --condition CONDITION');
+    p('                Run each log message through the condition and');
+    p('                only show those that return truish. E.g.:');
+    p('                    -c \'this.pid == 123\'');
+    p('                    -c \'this.level == DEBUG\'');
+    p('                    -c \'this.msg.indexOf("boom") != -1\'');
+    p('                "CONDITION" must be legal JS code. `this` holds');
+    p('                the log record. The TRACE, DEBUG, ... FATAL values');
+    p('                are defined to help with comparing `this.level`.');
+    p('  --strict      Suppress all but legal Bunyan JSON log lines. By default');
+    p('                non-JSON, and non-Bunyan lines are passed through.');
+    p('');
+    p('Output options:');
+    p('  --pager       Pipe output into `less` (or $PAGER if set), if');
+    p('                stdout is a TTY. This overrides $BUNYAN_NO_PAGER.');
+    p('                Note: Paging is only supported on node >=0.8.');
+    p('  --no-pager    Do not pipe output into a pager.');
+    p('  --color       Colorize output. Defaults to try if output');
+    p('                stream is a TTY.');
+    p('  --no-color    Force no coloring (e.g. terminal doesn\'t support it)');
+    p('  -o, --output MODE');
+    p('                Specify an output mode/format. One of');
+    p('                  long: (the default) pretty');
+    p('                  json: JSON output, 2-space indent');
+    p('                  json-N: JSON output, N-space indent, e.g. "json-4"');
+    p('                  bunyan: 0 indented JSON, bunyan\'s native format');
+    p('                  inspect: node.js `util.inspect` output');
+    p('                  short: like "long", but more concise');
+    p('  -j            shortcut for `-o json`');
+    p('');
+    p('Log Levels:');
+    p('  Either numeric values or their associated strings are valid for the');
+    p('  -l|--level argument.  However, -c|--condition scripts will see a numeric');
+    p('  "level" value, not a string.');
+    p('');
     Object.keys(levelFromName).forEach(function (name) {
         var n = name;
         while (n.length < 6)
             n += ' ';
-        console.log('    %s %d', n, levelFromName[name]);
+        p('    %s %d', n, levelFromName[name]);
     });
-    console.log('');
-    console.log('Environment Variables:');
-    console.log('  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ');
-    console.log('                     coloring. See "--no-color".');
-    console.log('  BUNYAN_NO_PAGER    Disable piping output to a pager. ');
-    console.log('                     See "--no-pager".');
-    console.log('');
-    console.log('See <https://github.com/trentm/node-bunyan> for more complete docs.');
-    console.log('Please report bugs to <https://github.com/trentm/node-bunyan/issues>.');
+    p('');
+    p('Environment Variables:');
+    p('  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ');
+    p('                     coloring. See "--no-color".');
+    p('  BUNYAN_NO_PAGER    Disable piping output to a pager. ');
+    p('                     See "--no-pager".');
+    p('');
+    p('See <https://github.com/trentm/node-bunyan> for more complete docs.');
+    p('Please report bugs to <https://github.com/trentm/node-bunyan/issues>.');
+    /* END JSSTYLED */
 }
 
 /*
@@ -289,13 +292,14 @@ function emitNextRecord(opts, stylize)
 
     for (;;) {
         /*
-         * Take a first pass through the input streams to see if we have a record
-         * from all of them.  If not, we'll pause any streams for which we do
-         * already have a record (to avoid consuming excess memory) and then wait
-         * until we have records from the others before emitting the next record.
+         * Take a first pass through the input streams to see if we have a
+         * record from all of them.  If not, we'll pause any streams for
+         * which we do already have a record (to avoid consuming excess
+         * memory) and then wait until we have records from the others
+         * before emitting the next record.
          *
-         * As part of the same pass, we look for the earliest record we have not yet
-         * emitted.
+         * As part of the same pass, we look for the earliest record
+         * we have not yet emitted.
          */
         minfile = undefined;
         ready = true;
@@ -307,8 +311,10 @@ function emitNextRecord(opts, stylize)
                 break;
             }
 
-            if (streams[ofile].records.length > 0 && (minfile === undefined ||
-                    streams[minfile].records[0].time > streams[ofile].records[0].time)) {
+            if (streams[ofile].records.length > 0 &&
+                (minfile === undefined ||
+                    streams[minfile].records[0].time >
+                        streams[ofile].records[0].time)) {
                 minfile = ofile;
             }
         }
@@ -333,8 +339,8 @@ function emitNextRecord(opts, stylize)
         }
 
         /*
-         * Emit the next record for 'minfile', and invoke ourselves again to make
-         * sure we emit as many records as we can right now.
+         * Emit the next record for 'minfile', and invoke ourselves again to
+         * make sure we emit as many records as we can right now.
          */
         rec = streams[minfile].records.shift();
         emitRecord(rec.rec, rec.line, opts, stylize);
@@ -373,7 +379,9 @@ function parseArgv(argv) {
     var newArgs = [];
     var optTakesArg = {'d': true, 'o': true, 'c': true, 'l': true, 'p': true};
     for (var i = 0; i < args.length; i++) {
-        if (args[i].charAt(0) === '-' && args[i].charAt(1) !== '-' && args[i].length > 2) {
+        if (args[i].charAt(0) === '-' && args[i].charAt(1) !== '-' &&
+            args[i].length > 2)
+        {
             var splitOpts = args[i].slice(1).split('');
             for (var j = 0; j < splitOpts.length; j++) {
                 newArgs.push('-' + splitOpts[j]);
@@ -454,8 +462,8 @@ function parseArgv(argv) {
                 var pid = +(pidArg);
                 if (!isNaN(pid) || pidArg === '*') {
                     if (parsed.pidsType && parsed.pidsType !== 'num') {
-                        throw new Error(format(
-                            'cannot mix PID name and number arguments: "%s"', pidArg));
+                        throw new Error(format('cannot mix PID name and '
+                            + 'number arguments: "%s"', pidArg));
                     }
                     parsed.pidsType = 'num';
                     if (!parsed.pids) {
@@ -464,8 +472,8 @@ function parseArgv(argv) {
                     parsed.pids.push(isNaN(pid) ? pidArg : pid);
                 } else {
                     if (parsed.pidsType && parsed.pidsType !== 'name') {
-                        throw new Error(format(
-                            'cannot mix PID name and number arguments: "%s"', pidArg));
+                        throw new Error(format('cannot mix PID name and '
+                            + 'number arguments: "%s"', pidArg));
                     }
                     parsed.pidsType = 'name';
                     parsed.pids = pidArg;
@@ -505,6 +513,7 @@ function parseArgv(argv) {
                     script.runInNewContext(minValidRecord);
                 } catch (condErr) {
                     throw new Error(format(
+                        /* JSSTYLED */
                         'CONDITION code cannot safely filter a minimal Bunyan log record\n'
                         + '  CONDITION script:\n'
                         + '%s\n'
@@ -654,7 +663,7 @@ function emitRecord(rec, line, opts, stylize) {
         /* jsl:fall-thru */
 
     case OM_LONG:
-        //    [time] LEVEL: name[/component]/pid on hostname (src): msg* (extras...)
+        //    [time] LEVEL: name[/comp]/pid on hostname (src): msg* (extras...)
         //        msg*
         //        --
         //        long and multi-line extras
@@ -670,8 +679,8 @@ function emitRecord(rec, line, opts, stylize) {
         delete rec.v;
 
         /*
-         * We assume the Date is formatted according to ISO8601, in which case we
-         * can safely chop off the date information.
+         * We assume the Date is formatted according to ISO8601, in which
+         * case we can safely chop off the date information.
          */
         if (short && rec.time[10] == 'T') {
             var time = rec.time.substr(11);
@@ -747,10 +756,11 @@ function emitRecord(rec, line, opts, stylize) {
             var s = format('%s %s HTTP/%s%s', req.method,
                 req.url,
                 req.httpVersion || '1.1',
-                (headers
-                    ? '\n' + Object.keys(headers).map(
-                            function (h) { return h + ': ' + headers[h]; }).join('\n')
-                    : '')
+                (headers ?
+                    '\n' + Object.keys(headers).map(function (h) {
+                        return h + ': ' + headers[h];
+                    }).join('\n') :
+                    '')
             );
             delete req.url;
             delete req.method;
@@ -762,13 +772,15 @@ function emitRecord(rec, line, opts, stylize) {
                 delete req.body;
             }
             if (req.trailers && Object.keys(req.trailers) > 0) {
-                s += '\n' + Object.keys(req.trailers).map(
-                        function (t) { return t + ': ' + req.trailers[t]; }).join('\n');
+                s += '\n' + Object.keys(req.trailers).map(function (t) {
+                    return t + ': ' + req.trailers[t];
+                }).join('\n');
             }
             delete req.trailers;
             details.push(indent(s));
-            // E.g. for extra 'foo' field on 'req', add 'req.foo' at top-level.
-            // This *does* have the potential to stomp on a literal 'req.foo' key.
+            // E.g. for extra 'foo' field on 'req', add 'req.foo' at
+            // top-level. This *does* have the potential to stomp on a
+            // literal 'req.foo' key.
             Object.keys(req).forEach(function (k) {
                 rec['req.' + k] = req[k];
             })
@@ -793,21 +805,24 @@ function emitRecord(rec, line, opts, stylize) {
                 client_req.url,
                 client_req.httpVersion || '1.1',
                 hostHeaderLine,
-                (headers
-                        ? Object.keys(headers).map(
-                                    function (h) { return h + ': ' + headers[h]; }).join('\n')
-                        : ''));
+                (headers ?
+                    Object.keys(headers).map(
+                        function (h) {
+                            return h + ': ' + headers[h];
+                        }).join('\n') :
+                    ''));
             delete client_req.method;
             delete client_req.url;
             delete client_req.httpVersion;
             if (client_req.body) {
-                s += '\n\n' + (typeof (client_req.body) === 'object'
-                    ? JSON.stringify(client_req.body, null, 2) : client_req.body);
+                s += '\n\n' + (typeof (client_req.body) === 'object' ?
+                    JSON.stringify(client_req.body, null, 2) :
+                    client_req.body);
                 delete client_req.body;
             }
-            // E.g. for extra 'foo' field on 'client_req', add 'client_req.foo' at
-            // top-level. This *does* have the potential to stomp on a literal
-            // 'client_req.foo' key.
+            // E.g. for extra 'foo' field on 'client_req', add
+            // 'client_req.foo' at top-level. This *does* have the potential
+            // to stomp on a literal 'client_req.foo' key.
             Object.keys(client_req).forEach(function (k) {
                 rec['client_req.' + k] = client_req[k];
             })
@@ -844,8 +859,9 @@ function emitRecord(rec, line, opts, stylize) {
             if (s) {
                 details.push(indent(s));
             }
-            // E.g. for extra 'foo' field on 'res', add 'res.foo' at top-level.
-            // This *does* have the potential to stomp on a literal 'res.foo' key.
+            // E.g. for extra 'foo' field on 'res', add 'res.foo' at
+            // top-level. This *does* have the potential to stomp on a
+            // literal 'res.foo' key.
             Object.keys(res).forEach(function (k) {
                 rec['res.' + k] = res[k];
             });
@@ -868,7 +884,8 @@ function emitRecord(rec, line, opts, stylize) {
             if (value.indexOf('\n') !== -1 || value.length > 50) {
                 details.push(indent(key + ': ' + value));
             } else if (!stringified && (value.indexOf(' ') != -1 ||
-                                                                    value.length === 0)) {
+                value.length === 0))
+            {
                 extras.push(key + '=' + JSON.stringify(value));
             } else {
                 extras.push(key + '=' + value);
@@ -912,11 +929,13 @@ function emitRecord(rec, line, opts, stylize) {
         break;
 
     case OM_SIMPLE:
+        /* JSSTYLED */
         // <http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/SimpleLayout.html>
         if (!isValidRecord(rec)) {
             return emit(line + '\n');
         }
-        emit(format('%s - %s\n', upperNameFromLevel[rec.level] || 'LVL' + rec.level,
+        emit(format('%s - %s\n',
+            upperNameFromLevel[rec.level] || 'LVL' + rec.level,
             rec.msg));
         break;
     default:
@@ -1023,10 +1042,15 @@ function processPids(opts, stylize, callback) {
                         return cb(1);
                     }
                     var pids = stdout.trim().split('\n')
-                        .map(function (line) { return line.trim().split(/\s+/)[0] })
-                        .filter(function (pid) { return Number(pid) !== process.pid });
+                        .map(function (line) {
+                            return line.trim().split(/\s+/)[0]
+                        })
+                        .filter(function (pid) {
+                            return Number(pid) !== process.pid
+                        });
                     if (pids.length === 0) {
-                        warn('bunyan: error: no matching PIDs found for "%s"', opts.pids);
+                        warn('bunyan: error: no matching PIDs found for "%s"',
+                            opts.pids);
                         return cb(2);
                     }
                     cb(null, pids);
@@ -1035,8 +1059,8 @@ function processPids(opts, stylize, callback) {
         } else {
             var regex = opts.pids;
             if (regex && /[a-zA-Z0-9_]/.test(regex[0])) {
-                // 'foo' -> '[f]oo' trick to exclude the 'grep' PID from its own
-                // search.
+                // 'foo' -> '[f]oo' trick to exclude the 'grep' PID from its
+                // own search.
                 regex = '[' + regex[0] + ']' + regex.slice(1);
             }
             exec(format('ps -A -o pid,command | grep \'%s\'', regex),
@@ -1047,10 +1071,15 @@ function processPids(opts, stylize, callback) {
                         return cb(1);
                     }
                     var pids = stdout.trim().split('\n')
-                        .map(function (line) { return line.trim().split(/\s+/)[0] })
-                        .filter(function (pid) { return Number(pid) !== process.pid });
+                        .map(function (line) {
+                            return line.trim().split(/\s+/)[0];
+                        })
+                        .filter(function (pid) {
+                            return Number(pid) !== process.pid;
+                        });
                     if (pids.length === 0) {
-                        warn('bunyan: error: no matching PIDs found for "%s"', opts.pids);
+                        warn('bunyan: error: no matching PIDs found for "%s"',
+                            opts.pids);
                         return cb(2);
                     }
                     cb(null, pids);
@@ -1105,9 +1134,10 @@ function processPids(opts, stylize, callback) {
         if (nodeSpawnSupportsStdio) {
             dtrace.on('exit', finish);
         } else {
-            // Fallback (for < v0.8) to pipe the dtrace process' stderr to this stderr.
-            // Wait for all of (1) process 'exit', (2) stderr 'end', and (2) stdout
-            // 'end' before returning to ensure all stderr is flushed (issue #54).
+            // Fallback (for < v0.8) to pipe the dtrace process' stderr to
+            // this stderr. Wait for all of (1) process 'exit', (2) stderr
+            // 'end', and (2) stdout 'end' before returning to ensure all
+            // stderr is flushed (issue #54).
             var returnCode = null;
             var eventsRemaining = 3;
             function countdownToFinish(code) {
@@ -1249,7 +1279,8 @@ function cleanupAndExit(code, signal) {
         stdout.end();
         pager.on('exit', function (pagerCode) {
             if (_DEBUG)
-                warn('(bunyan: pager exit -> process.exit(%s))', pagerCode || code);
+                warn('(bunyan: pager exit -> process.exit(%s))',
+                    pagerCode || code);
             process.exit(pagerCode || code);
         });
     } else {
@@ -1278,27 +1309,28 @@ process.on('uncaughtException', function (err) {
 
     var title = encodeURIComponent(format(
         'Bunyan %s crashed: %s', getVersion(), String(err)));
-    console.error('* * *');
-    console.error('* The Bunyan CLI crashed!');
-    console.error('*');
+    var e = console.error;
+    e('* * *');
+    e('* The Bunyan CLI crashed!');
+    e('*');
     if (err.name === 'ReferenceError' && gOptsForUncaughtException.conditions) {
-        console.error('* A "ReferenceError" is often the result of given');
-        console.error('* `-c CONDITION` code that doesn\'t guard against undefined');
-        console.error('* values. If that is not the problem:');
-        console.error('*');
+        e('* A "ReferenceError" is often the result of given');
+        e('* `-c CONDITION` code that doesn\'t guard against undefined');
+        e('* values. If that is not the problem:');
+        e('*');
     }
-    console.error('* Please report this issue and include the details below:');
-    console.error('*');
-    console.error('*    https://github.com/trentm/node-bunyan/issues/new?title=%s', title);
-    console.error('*');
-    console.error('* * *');
-    console.error('* node version:', process.version);
-    console.error('* bunyan version:', getVersion());
-    console.error('* argv: %j', process.argv);
-    console.error('* log line: %j', currLine);
-    console.error('* stack:');
-    console.error(_indent(err.stack));
-    console.error('* * *');
+    e('* Please report this issue and include the details below:');
+    e('*');
+    e('*    https://github.com/trentm/node-bunyan/issues/new?title=%s', title);
+    e('*');
+    e('* * *');
+    e('* node version:', process.version);
+    e('* bunyan version:', getVersion());
+    e('* argv: %j', process.argv);
+    e('* log line: %j', currLine);
+    e('* stack:');
+    e(_indent(err.stack));
+    e('* * *');
     process.exit(1);
 });
 
@@ -1356,11 +1388,11 @@ function main(argv) {
         var argv = pagerCmd.split(/\s+/g);
         var env = objCopy(process.env);
         if (env.LESS === undefined) {
-            // git's default is LESS=FRSX. I don't like the 'S' here because lines
-            // are *typically* wide with bunyan output and scrolling horizontally
-            // is a royal pain.
-            // Note a bug in Mac's `less -F`, such that SIGWINCH can kill it.
-            // If that rears too much then I'll remove 'F' from here.
+            // git's default is LESS=FRSX. I don't like the 'S' here because
+            // lines are *typically* wide with bunyan output and scrolling
+            // horizontally is a royal pain. Note a bug in Mac's `less -F`,
+            // such that SIGWINCH can kill it. If that rears too much then
+            // I'll remove 'F' from here.
             env.LESS = 'FRX';
         }
         if (_DEBUG) warn('(pager: argv=%j, env.LESS=%j)', argv, env.LESS);
@@ -1387,7 +1419,8 @@ function main(argv) {
         if (err.code === 'EPIPE') {
             drainStdoutAndExit(0);
         } else if (err.toString() === 'Error: This socket is closed.') {
-            // Could get this if the pager closes its stdin, but hasn't exited yet.
+            // Could get this if the pager closes its stdin, but hasn't
+            // exited yet.
             drainStdoutAndExit(1);
         } else {
             warn(err);

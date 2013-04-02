@@ -43,7 +43,12 @@ var log = new bunyan.createLogger({
 test('log.info(BUFFER)', function (t) {
     var b = new Buffer('foo');
 
-    ['trace', 'debug', 'info', 'warn', 'error', 'fatal'].forEach(function (lvl) {
+    ['trace',
+     'debug',
+     'info',
+     'warn',
+     'error',
+     'fatal'].forEach(function (lvl) {
         log[lvl].call(log, b);
         var rec = catcher.records[catcher.records.length - 1];
         t.equal(rec.msg, inspect(b),
@@ -55,8 +60,8 @@ test('log.info(BUFFER)', function (t) {
 
         log[lvl].call(log, b, 'bar');
         var rec = catcher.records[catcher.records.length - 1];
-        t.equal(rec.msg, inspect(b) + ' bar',
-            format('log.%s(BUFFER, "bar") msg is inspect(BUFFER) + " bar"', lvl));
+        t.equal(rec.msg, inspect(b) + ' bar', format(
+            'log.%s(BUFFER, "bar") msg is inspect(BUFFER) + " bar"', lvl));
     });
 
     t.end();
