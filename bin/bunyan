@@ -830,13 +830,7 @@ function emitRecord(rec, line, opts, stylize) {
             details.push(indent(s));
         }
 
-        if ((rec.res && typeof (rec.res) === 'object') ||
-            (rec.client_res && typeof (rec.client_res) === 'object')) {
-            var res = rec.res || rec.client_res;
-            if (rec.res)
-                delete rec.res;
-            if (rec.client_res)
-                delete rec.client_res;
+        function _res(res) {
             var s = '';
             if (res.header) {
                 s += res.header.trimRight();
@@ -870,6 +864,15 @@ function emitRecord(rec, line, opts, stylize) {
             Object.keys(res).forEach(function (k) {
                 rec['res.' + k] = res[k];
             });
+        }
+
+        if (rec.res && typeof (rec.res) === 'object') {
+            _res(rec.res);
+            delete rec.res;
+        }
+        if (rec.client_res && typeof (rec.client_res) === 'object') {
+            _res(rec.client_res);
+            delete rec.res;
         }
 
         if (rec.err && rec.err.stack) {
