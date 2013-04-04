@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// -*- mode: js -*-
 //
 // bunyan -- filter and pretty-print JSON logs, like Bunyan logs.
 //
@@ -829,9 +830,13 @@ function emitRecord(rec, line, opts, stylize) {
             details.push(indent(s));
         }
 
-        if (rec.res && typeof (rec.res) === 'object') {
-            var res = rec.res;
-            delete rec.res;
+        if ((rec.res && typeof (rec.res) === 'object') ||
+            (rec.client_res && typeof (rec.client_res) === 'object')) {
+            var res = rec.res || rec.client_res;
+            if (rec.res)
+                delete rec.res;
+            if (rec.client_res)
+                delete rec.client_res;
             var s = '';
             if (res.header) {
                 s += res.header.trimRight();
