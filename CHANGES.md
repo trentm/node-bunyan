@@ -8,7 +8,8 @@ Known issues:
 
 ## bunyan 0.21.1 (not yet released)
 
-(nothing yet)
+- [pull #83] Support rendering 'client_res' key in bunyan CLI (by
+  github.com/mcavage).
 
 
 ## bunyan 0.21.0
