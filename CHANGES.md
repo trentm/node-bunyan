@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.21.1 (not yet released)
+## bunyan 0.21.1
 
 - [pull #83] Support rendering 'client_res' key in bunyan CLI (by
   github.com/mcavage).
