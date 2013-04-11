@@ -23,8 +23,10 @@ production services. Bunyan supports node 0.6 and greater. Follow
 <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
 for updates to Bunyan.
 
-There is an email discussion list:
-[bunyan-logging@googlegroups.com](mailto:bunyan-logging@googlegroups.com)
+There is an email discussion list
+[bunyan-logging@googlegroups.com](mailto:bunyan-logging@googlegroups.com),
+also [as a forum in the
+browser](https://groups.google.com/forum/?fromgroups#!forum/bunyan-logging).
 
 
 # Installation
