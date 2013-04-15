@@ -46,10 +46,10 @@ test('log.info(undefined)', function (t) {
      'warn',
      'error',
      'fatal'].forEach(function (lvl) {
-        log[lvl].call(log, undef);
+        log[lvl].call(log, undef, 'some message');
         var rec = catcher.records[catcher.records.length - 1];
-        t.equal(rec.msg, 'undefined',
-            format('log.%s msg is "undefined"', lvl));
+        t.equal(rec.msg, 'some message',
+            format('log.%s msg is "some message"', lvl));
         t.ok(rec['0'] === undefined,
             'no "0" array index key in record: ' + inspect(rec['0']));
         t.ok(rec['parent'] === undefined,
@@ -68,10 +68,10 @@ test('log.info(null)', function (t) {
      'warn',
      'error',
      'fatal'].forEach(function (lvl) {
-        log[lvl].call(log, nullObj);
+        log[lvl].call(log, nullObj, 'some message');
         var rec = catcher.records[catcher.records.length - 1];
-        t.equal(rec.msg, 'null',
-            format('log.%s msg is "null"', lvl));
+        t.equal(rec.msg, 'some message',
+            format('log.%s msg is "some message"', lvl));
         t.ok(rec['0'] === undefined,
             'no "0" array index key in record: ' + inspect(rec['0']));
         t.ok(rec['parent'] === undefined,
