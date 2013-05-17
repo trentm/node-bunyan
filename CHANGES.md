@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.21.3 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.21.2
 
 - [issue #88] Should be able to efficiently combine "-l" with "-p *".
