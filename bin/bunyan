@@ -1105,6 +1105,7 @@ function processPids(opts, stylize, callback) {
             return format('bunyan%s:::log-*', pid);
         }).join(',');
         var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
+            '-x', 'switchrate=10hz',
             format('%s{printf("%s", copyinstr(arg0))}', probes)];
         //console.log('dtrace argv: %s', argv);
         var dtrace = spawn(argv[0], argv.slice(1),

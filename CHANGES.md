@@ -8,7 +8,17 @@ Known issues:
 
 ## bunyan 0.21.2 (not yet released)
 
-(nothing yet)
+- Avoid Dtrace buffer filling up, e.g. like this:
+
+        $ bunyan -p 42241 > /tmp/all.log
+        dtrace: error on enabled probe ID 3 (ID 75795: bunyan42241:mod-87ea640:log-trace:log-trace): out of scratch space in action #1 at DIF offset 12
+        dtrace: error on enabled probe ID 3 (ID 75795: bunyan42241:mod-87ea640:log-trace:log-trace): out of scratch space in action #1 at DIF offset 12
+        dtrace: 138 drops on CPU 4
+        ...
+
+  From Bryan: "the DTrace buffer is filling up because the string size is so
+  large... by increasing the switchrate, you're increasing the rate at
+  which that buffer is emptied."
 
 
 ## bunyan 0.21.1
