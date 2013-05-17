@@ -177,7 +177,7 @@ function printHelp() {
     p('  -h, --help    print this help info and exit');
     p('  --version     print version of this command and exit');
     p('');
-    p('Dtrace options (only on dtrace-supporting platforms):');
+    p('DTrace options (only on dtrace-supporting platforms):');
     p('  -p PID        Process bunyan:log-* probes from the process');
     p('                with the given PID. Can be used multiple times,');
     p('                or specify all processes with "*", or a set of');
@@ -1102,7 +1102,22 @@ function processPids(opts, stylize, callback) {
         }
 
         var probes = pids.map(function (pid) {
-            return format('bunyan%s:::log-*', pid);
+            if (!opts.level)
+                return format('bunyan%s:::log-*', pid);
+
+            var rval = [], l;
+
+            for (l in levelFromName) {
+                if (levelFromName[l] >= opts.level)
+                    rval.push(format('bunyan%s:::log-%s', pid, l));
+            }
+
+            if (rval.length != 0)
+                return rval.join(',');
+
+            warn('bunyan: error: level (%d) exceeds maximum logging level',
+                opts.level);
+            return drainStdoutAndExit(1);
         }).join(',');
         var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
             '-x', 'switchrate=10hz',
