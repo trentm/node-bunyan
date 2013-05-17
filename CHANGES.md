@@ -8,7 +8,9 @@ Known issues:
 
 ## bunyan 0.21.2 (not yet released)
 
-- Avoid Dtrace buffer filling up, e.g. like this:
+- [issue #88] Should be able to efficiently combine "-l" with "-p *".
+
+- Avoid DTrace buffer filling up, e.g. like this:
 
         $ bunyan -p 42241 > /tmp/all.log
         dtrace: error on enabled probe ID 3 (ID 75795: bunyan42241:mod-87ea640:log-trace:log-trace): out of scratch space in action #1 at DIF offset 12
