@@ -8,10 +8,13 @@ Known issues:
 
 ## bunyan 0.21.3 (not yet released)
 
-(nothing yet)
+- [issue #90] Fix `bunyan -p '*'` breakage in version 0.21.2.
 
 
 ## bunyan 0.21.2
+
+**Note: Bad release. The switchrate change below broke `bunyan -p '*'` usage
+(see issue #90). Use 0.21.3 or later.**
 
 - [issue #88] Should be able to efficiently combine "-l" with "-p *".
 
