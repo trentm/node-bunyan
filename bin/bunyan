@@ -1119,8 +1119,8 @@ function processPids(opts, stylize, callback) {
                 opts.level);
             return drainStdoutAndExit(1);
         }).join(',');
-        var argv = ['dtrace', '-Z', '-x', 'strsize=4k', '-qn',
-            '-x', 'switchrate=10hz',
+        var argv = ['dtrace', '-Z', '-x', 'strsize=4k',
+            '-x', 'switchrate=10hz', '-qn',
             format('%s{printf("%s", copyinstr(arg0))}', probes)];
         //console.log('dtrace argv: %s', argv);
         var dtrace = spawn(argv[0], argv.slice(1),
