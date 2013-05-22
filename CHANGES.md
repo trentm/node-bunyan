@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.21.4 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.21.3
 
 - [issue #90] Fix `bunyan -p '*'` breakage in version 0.21.2.
