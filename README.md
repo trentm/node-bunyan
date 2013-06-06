@@ -224,12 +224,13 @@ And with the `bunyan` CLI (using the "short" output mode):
 A more practical example is in the
 [node-restify](https://github.com/mcavage/node-restify) web framework.
 Restify uses Bunyan for its logging. One feature of its integration, is that
-each restify request handler includes a `req.log` logger that is:
+if `server.use(restify.requestLogger())` is used, each restify request handler
+includes a `req.log` logger that is:
 
     log.child({req_id: <unique request id>}, true)
 
 Apps using restify can then use `req.log` and have all such log records
-include the unique request id (as "req_id"). Handy.
+include the unique request id (as "req\_id"). Handy.
 
 
 ## Serializers
@@ -447,7 +448,7 @@ Recommended/Best Practice Fields:
   for a request. This really shines when you have a SOA with multiple services
   and you carry a single request ID from the top API down through all APIs
   (as [node-restify](https://github.com/mcavage/node-restify) facilitates
-  with its 'X-Request-Id' header).
+  with its 'Request-Id' header).
 
 - `req`: An HTTP server request. Bunyan provides `bunyan.stdSerializers.req`
   to serialize a request with a suggested set of keys. Example:
