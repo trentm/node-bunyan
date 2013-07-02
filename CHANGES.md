@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.21.5 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.21.4
 
 - [issue #96] Fix `bunyan` to default to paging (with `less`) by default in
