@@ -8,7 +8,9 @@ Known issues:
 
 ## bunyan 0.21.4 (not yet released)
 
-(nothing yet)
+- [issue #96] Fix `bunyan` to default to paging (with `less`) by default in
+  node 0.10.0. The intention has always been to default to paging for node
+  >=0.8.
 
 
 ## bunyan 0.21.3

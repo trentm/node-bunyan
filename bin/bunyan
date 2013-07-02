@@ -8,6 +8,7 @@
 
 var VERSION = '0.21.4';
 
+var p = console.log;
 var util = require('util');
 var pathlib = require('path');
 var vm = require('vm');
@@ -165,7 +166,6 @@ function objCopy(obj) {
 
 function printHelp() {
     /* BEGIN JSSTYLED */
-    var p = console.log;
     p('Usage:');
     p('  bunyan [OPTIONS] [FILE ...]');
     p('  ... | bunyan [OPTIONS]');
@@ -1399,7 +1399,7 @@ function main(argv) {
         !opts.pids && // Don't page if following process output.
         opts.args.length > 0 && // Don't page if no file args to process.
         process.platform !== 'win32' &&
-        nodeVer >= [0, 8, 0] &&
+        (nodeVer[0] > 0 || nodeVer[1] >= 8) &&
         (opts.paginate === true ||
             (opts.paginate !== false &&
                 (!process.env.BUNYAN_NO_PAGER ||
