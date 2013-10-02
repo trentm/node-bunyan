@@ -50,7 +50,7 @@ node.js library usage of bunyan in your apps.
   [`src: true`](#src)
 - light-weight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
-- [Dtrace support](#dtrace-support)
+- [Runtime log snooping via Dtrace support](#dtrace-support)
 
 
 # Introduction
@@ -782,7 +782,7 @@ This example emits:
 
 
 
-# DTrace support
+# Runtime log snooping via DTrace
 
 On systems that support DTrace (e.g., MacOS, FreeBSD, illumos derivatives
 like SmartOS and OmniOS), Bunyan will create a DTrace provider (`bunyan`)

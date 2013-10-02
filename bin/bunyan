@@ -177,7 +177,7 @@ function printHelp() {
     p('  -h, --help    print this help info and exit');
     p('  --version     print version of this command and exit');
     p('');
-    p('DTrace options (only on dtrace-supporting platforms):');
+    p('Runtime log snooping (via DTrace, only on supported platforms):');
     p('  -p PID        Process bunyan:log-* probes from the process');
     p('                with the given PID. Can be used multiple times,');
     p('                or specify all processes with "*", or a set of');
