@@ -50,16 +50,7 @@ var OM_FROM_NAME = {
 
 // Levels
 var levelFromName = common.levelFromName;
-var nameFromLevel = {};
-var upperNameFromLevel = {};
-var upperPaddedNameFromLevel = {};
-Object.keys(levelFromName).forEach(function (name) {
-    var lvl = levelFromName[name];
-    nameFromLevel[lvl] = name;
-    upperNameFromLevel[lvl] = name.toUpperCase();
-    upperPaddedNameFromLevel[lvl] = (
-        name.length === 4 ? ' ' : '') + name.toUpperCase();
-});
+var upperNameFromLevel = common.upperNameFromLevel;
 
 
 // The current raw input line being processed. Used for `uncaughtException`.
