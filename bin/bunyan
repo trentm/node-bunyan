@@ -32,12 +32,12 @@ var nodeSpawnSupportsStdio = (
 var _DEBUG = false;
 
 // Output modes.
-var OM_LONG = 1;
-var OM_JSON = 2;
-var OM_INSPECT = 3;
-var OM_SIMPLE = 4;
-var OM_SHORT = 5;
-var OM_BUNYAN = 6;
+var OM_LONG    = common.OM_LONG;
+var OM_JSON    = common.OM_JSON;
+var OM_INSPECT = common.OM_INSPECT;
+var OM_SIMPLE  = common.OM_SIMPLE;
+var OM_SHORT   = common.OM_SHORT;
+var OM_BUNYAN  = common.OM_BUNYAN;
 var OM_FROM_NAME = {
     'long': OM_LONG,
     'paul': OM_LONG,  /* backward compat */
@@ -47,7 +47,6 @@ var OM_FROM_NAME = {
     'short': OM_SHORT,
     'bunyan': OM_BUNYAN
 };
-
 
 // Levels
 var levelFromName = common.levelFromName;
