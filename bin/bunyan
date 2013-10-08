@@ -10,7 +10,6 @@ var p = console.log;
 var util = require('util');
 var pathlib = require('path');
 var vm = require('vm');
-var http = require('http');
 var fs = require('fs');
 var warn = console.warn;
 var child_process = require('child_process'),
@@ -193,12 +192,12 @@ function printHelp() {
  */
 var streams = {};
 
-function gotRecord(file, line, rec, opts, stylize)
+function gotRecord(file, line, rec, opts)
 {
     var time = new Date(rec.time);
 
     streams[file]['records'].push({ line: line, rec: rec, time: time });
-    emitNextRecord(opts, stylize);
+    emitNextRecord(opts);
 }
 
 function filterRecord(rec, opts)
@@ -218,7 +217,7 @@ function filterRecord(rec, opts)
     return true;
 }
 
-function emitNextRecord(opts, stylize)
+function emitNextRecord(opts)
 {
     var ofile, ready, minfile, rec;
 
@@ -275,7 +274,7 @@ function emitNextRecord(opts, stylize)
          * make sure we emit as many records as we can right now.
          */
         rec = streams[minfile].records.shift();
-        emitRecord(rec.rec, rec.line, opts, stylize);
+        emitRecord(rec.rec, rec.line, opts);
     }
 }
 
@@ -480,43 +479,6 @@ function isInteger(s) {
 }
 
 
-// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
-// Suggested colors (some are unreadable in common cases):
-// - Good: cyan, yellow (limited use), grey, bold, green, magenta, red
-// - Bad: blue (not visible on cmd.exe)
-var colors = {
-    'bold' : [1, 22],
-    'italic' : [3, 23],
-    'underline' : [4, 24],
-    'inverse' : [7, 27],
-    'white' : [37, 39],
-    'grey' : [90, 39],
-    'black' : [30, 39],
-    'blue' : [34, 39],
-    'cyan' : [36, 39],
-    'green' : [32, 39],
-    'magenta' : [35, 39],
-    'red' : [31, 39],
-    'yellow' : [33, 39]
-};
-
-function stylizeWithColor(str, color) {
-    if (!str)
-        return '';
-    var codes = colors[color];
-    if (codes) {
-        return '\033[' + codes[0] + 'm' + str +
-                     '\033[' + codes[1] + 'm';
-    } else {
-        return str;
-    }
-}
-
-function stylizeWithoutColor(str, color) {
-    return str;
-}
-
-
 /**
  * Is this a valid Bunyan log record.
  */
@@ -549,7 +511,7 @@ var minValidRecord = {
  * Parses the given log line and either emits it right away (for invalid
  * records) or enqueues it for emitting later when it's the next line to show.
  */
-function handleLogLine(file, line, opts, stylize) {
+function handleLogLine(file, line, opts) {
     currLine = line; // intentionally global
 
     // Emit non-JSON lines immediately.
@@ -578,15 +540,15 @@ function handleLogLine(file, line, opts, stylize) {
         return;
 
     if (file === null)
-        return emitRecord(rec, line, opts, stylize);
+        return emitRecord(rec, line, opts);
 
-    return gotRecord(file, line, rec, opts, stylize);
+    return gotRecord(file, line, rec, opts);
 }
 
 /**
  * Print out a single result, considering input options.
  */
-function emitRecord(rec, line, opts, stylize) {
+function emitRecord(rec, line, opts) {
     if (opts.type === OM_SHORT ||
             opts.type === OM_LONG ||
             opts.type === OM_SIMPLE) {
@@ -595,7 +557,7 @@ function emitRecord(rec, line, opts, stylize) {
         }
     }
 
-    emit(common.formatRecord(rec, line, opts, stylize));
+    emit(common.formatRecord(rec, line, opts));
 }
 
 
@@ -634,10 +596,9 @@ function drainStdoutAndExit(code) {
  * Process all input from stdin.
  *
  * @params opts {Object} Bunyan options object.
- * @param stylize {Function} Output stylize function to use.
  * @param callback {Function} `function ()`
  */
-function processStdin(opts, stylize, callback) {
+function processStdin(opts, callback) {
     var leftover = '';  // Left-over partial line from last chunk.
     var stdin = process.stdin;
     stdin.resume();
@@ -651,17 +612,17 @@ function processStdin(opts, stylize, callback) {
         }
 
         if (length > 1) {
-            handleLogLine(null, leftover + lines[0], opts, stylize);
+            handleLogLine(null, leftover + lines[0], opts);
         }
         leftover = lines.pop();
         length -= 1;
         for (var i = 1; i < length; i++) {
-            handleLogLine(null, lines[i], opts, stylize);
+            handleLogLine(null, lines[i], opts);
         }
     });
     stdin.on('end', function () {
         if (leftover) {
-            handleLogLine(null, leftover, opts, stylize);
+            handleLogLine(null, leftover, opts);
             leftover = '';
         }
         callback();
@@ -673,10 +634,9 @@ function processStdin(opts, stylize, callback) {
  * Process bunyan:log-* probes from the given pid.
  *
  * @params opts {Object} Bunyan options object.
- * @param stylize {Function} Output stylize function to use.
  * @param callback {Function} `function (code)`
  */
-function processPids(opts, stylize, callback) {
+function processPids(opts, callback) {
     var leftover = '';  // Left-over partial line from last chunk.
 
     /**
@@ -778,7 +738,7 @@ function processPids(opts, stylize, callback) {
 
         function finish(code) {
             if (leftover) {
-                handleLogLine(null, leftover, opts, stylize);
+                handleLogLine(null, leftover, opts);
                 leftover = '';
             }
             callback(returnCode);
@@ -793,12 +753,12 @@ function processPids(opts, stylize, callback) {
                 return;
             }
             if (length > 1) {
-                handleLogLine(null, leftover + lines[0], opts, stylize);
+                handleLogLine(null, leftover + lines[0], opts);
             }
             leftover = lines.pop();
             length -= 1;
             for (var i = 1; i < length; i++) {
-                handleLogLine(null, lines[i], opts, stylize);
+                handleLogLine(null, lines[i], opts);
             }
         });
 
@@ -832,10 +792,9 @@ function processPids(opts, stylize, callback) {
  *
  * @param file {String} Log file path to process.
  * @params opts {Object} Bunyan options object.
- * @param stylize {Function} Output stylize function to use.
  * @param callback {Function} `function ()`
  */
-function processFile(file, opts, stylize, callback) {
+function processFile(file, opts, callback) {
     var stream = fs.createReadStream(file);
     if (/\.gz$/.test(file)) {
         stream = stream.pipe(require('zlib').createGunzip());
@@ -864,22 +823,22 @@ function processFile(file, opts, stylize, callback) {
         }
 
         if (length > 1) {
-            handleLogLine(file, leftover + lines[0], opts, stylize);
+            handleLogLine(file, leftover + lines[0], opts);
         }
         leftover = lines.pop();
         length -= 1;
         for (var i = 1; i < length; i++) {
-            handleLogLine(file, lines[i], opts, stylize);
+            handleLogLine(file, lines[i], opts);
         }
     });
 
     stream.on('end', function () {
         streams[file].done = true;
         if (leftover) {
-            handleLogLine(file, leftover, opts, stylize);
+            handleLogLine(file, leftover, opts);
             leftover = '';
         } else {
-            emitNextRecord(opts, stylize);
+            emitNextRecord(opts);
         }
         callback();
     });
@@ -1036,7 +995,6 @@ function main(argv) {
         }
     }
     usingAnsiCodes = opts.color; // intentionally global
-    var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
 
     // Pager.
     var nodeVer = process.versions.node.split('.').map(Number);
@@ -1101,7 +1059,7 @@ function main(argv) {
 
     var retval = 0;
     if (opts.pids) {
-        processPids(opts, stylize, function (code) {
+        processPids(opts, function (code) {
             cleanupAndExit(code);
         });
     } else if (opts.args.length > 0) {
@@ -1111,7 +1069,7 @@ function main(argv) {
         });
         asyncForEach(files,
             function (file, next) {
-                processFile(file, opts, stylize, function (err) {
+                processFile(file, opts, function (err) {
                     if (err) {
                         warn('bunyan: %s', err.message);
                         retval += 1;
@@ -1128,7 +1086,7 @@ function main(argv) {
             }
         );
     } else {
-        processStdin(opts, stylize, function () {
+        processStdin(opts, function () {
             cleanupAndExit(retval);
         });
     }
