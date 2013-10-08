@@ -18,7 +18,7 @@ var child_process = require('child_process'),
     exec = child_process.exec,
     execFile = child_process.execFile;
 var assert = require('assert');
-var common = require('./lib/common');
+var common = require('../lib/common');
 
 var nodeSpawnSupportsStdio = (
     Number(process.version.split('.')[0]) >= 0 ||
@@ -614,6 +614,15 @@ function handleLogLine(file, line, opts, stylize) {
  * Print out a single result, considering input options.
  */
 function emitRecord(rec, line, opts, stylize) {
+    if (opts.type === OM_SHORT ||
+            opts.type === OM_LONG ||
+            opts.type === OM_SIMPLE) {
+        if (!isValidRecord(rec)) {
+            return line + '\n';
+        }
+    }
+
+    return common.formatRecord(rec, line, opts, stylize);
 }
 
 
