@@ -6,8 +6,6 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = '0.21.5';
-
 var p = console.log;
 var util = require('util');
 var pathlib = require('path');
@@ -20,6 +18,7 @@ var child_process = require('child_process'),
     exec = child_process.exec,
     execFile = child_process.execFile;
 var assert = require('assert');
+var common = require('./lib/common');
 
 var nodeSpawnSupportsStdio = (
     Number(process.version.split('.')[0]) >= 0 ||
@@ -99,7 +98,7 @@ var stdout = process.stdout;
 //---- support functions
 
 function getVersion() {
-    return VERSION;
+    return common.VERSION;
 }
 
 
@@ -604,7 +603,7 @@ function isValidRecord(rec) {
     }
 }
 var minValidRecord = {
-    v: 0,   //TODO: get this from bunyan.LOG_VERSION
+    v: common.LOG_VERSION,
     level: INFO,
     name: 'name',
     hostname: 'hostname',
