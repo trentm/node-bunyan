@@ -37,15 +37,7 @@ var OM_INSPECT = common.OM_INSPECT;
 var OM_SIMPLE  = common.OM_SIMPLE;
 var OM_SHORT   = common.OM_SHORT;
 var OM_BUNYAN  = common.OM_BUNYAN;
-var OM_FROM_NAME = {
-    'long': OM_LONG,
-    'paul': OM_LONG,  /* backward compat */
-    'json': OM_JSON,
-    'inspect': OM_INSPECT,
-    'simple': OM_SIMPLE,
-    'short': OM_SHORT,
-    'bunyan': OM_BUNYAN
-};
+var OM_FROM_NAME = common.OM_FROM_NAME;
 
 // Levels
 var levelFromName = common.levelFromName;
@@ -479,23 +471,7 @@ function isInteger(s) {
 }
 
 
-/**
- * Is this a valid Bunyan log record.
- */
-function isValidRecord(rec) {
-    if (rec.v == null ||
-            rec.level == null ||
-            rec.name == null ||
-            rec.hostname == null ||
-            rec.pid == null ||
-            rec.time == null ||
-            rec.msg == null) {
-        // Not valid Bunyan log.
-        return false;
-    } else {
-        return true;
-    }
-}
+var isValidRecord = common.isValidRecord;
 var minValidRecord = {
     v: common.LOG_VERSION,
     level: levelFromName.info,
@@ -549,15 +525,12 @@ function handleLogLine(file, line, opts) {
  * Print out a single result, considering input options.
  */
 function emitRecord(rec, line, opts) {
-    if (opts.type === OM_SHORT ||
-            opts.type === OM_LONG ||
-            opts.type === OM_SIMPLE) {
-        if (!isValidRecord(rec)) {
-            emit(line + '\n');
-        }
+    var formatted = common.formatRecord(rec, opts);
+    if (formatted != null) {
+        emit(formatted);
+    } else {
+        emit(line + '\n');
     }
-
-    emit(common.formatRecord(rec, opts));
 }
 
 
