@@ -79,10 +79,7 @@ function getVersion() {
 
 
 var format = common.format;
-
-function indent(s) {
-    return '    ' + s.split(/\r?\n/).join('\n    ');
-}
+var indent = common.indent;
 
 function objCopy(obj) {
     if (obj === null) {
@@ -594,11 +591,11 @@ function emitRecord(rec, line, opts, stylize) {
             opts.type === OM_LONG ||
             opts.type === OM_SIMPLE) {
         if (!isValidRecord(rec)) {
-            return line + '\n';
+            emit(line + '\n');
         }
     }
 
-    return common.formatRecord(rec, line, opts, stylize);
+    emit(common.formatRecord(rec, line, opts, stylize));
 }
 
 
