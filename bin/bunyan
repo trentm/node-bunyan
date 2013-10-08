@@ -50,21 +50,7 @@ var OM_FROM_NAME = {
 
 
 // Levels
-var TRACE = 10;
-var DEBUG = 20;
-var INFO = 30;
-var WARN = 40;
-var ERROR = 50;
-var FATAL = 60;
-
-var levelFromName = {
-    'trace': TRACE,
-    'debug': DEBUG,
-    'info': INFO,
-    'warn': WARN,
-    'error': ERROR,
-    'fatal': FATAL
-};
+var levelFromName = common.levelFromName;
 var nameFromLevel = {};
 var upperNameFromLevel = {};
 var upperPaddedNameFromLevel = {};
@@ -563,7 +549,7 @@ function isValidRecord(rec) {
 }
 var minValidRecord = {
     v: common.LOG_VERSION,
-    level: INFO,
+    level: levelFromName.info,
     name: 'name',
     hostname: 'hostname',
     pid: 123,
