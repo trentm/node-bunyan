@@ -102,48 +102,7 @@ function getVersion() {
 }
 
 
-var format = util.format;
-if (!format) {
-    /* BEGIN JSSTYLED */
-    // If not node 0.6, then use its `util.format`:
-    // <https://github.com/joyent/node/blob/master/lib/util.js#L22>:
-    var inspect = util.inspect;
-    var formatRegExp = /%[sdj%]/g;
-    format = function format(f) {
-        if (typeof f !== 'string') {
-            var objects = [];
-            for (var i = 0; i < arguments.length; i++) {
-                objects.push(inspect(arguments[i]));
-            }
-            return objects.join(' ');
-        }
-
-        var i = 1;
-        var args = arguments;
-        var len = args.length;
-        var str = String(f).replace(formatRegExp, function (x) {
-            if (i >= len)
-                return x;
-            switch (x) {
-                case '%s': return String(args[i++]);
-                case '%d': return Number(args[i++]);
-                case '%j': return JSON.stringify(args[i++]);
-                case '%%': return '%';
-                default:
-                    return x;
-            }
-        });
-        for (var x = args[i]; i < len; x = args[++i]) {
-            if (x === null || typeof x !== 'object') {
-                str += ' ' + x;
-            } else {
-                str += ' ' + inspect(x);
-            }
-        }
-        return str;
-    };
-    /* END JSSTYLED */
-}
+var format = common.format;
 
 function indent(s) {
     return '    ' + s.split(/\r?\n/).join('\n    ');
