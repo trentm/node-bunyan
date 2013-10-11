@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.22.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.22.0
 
 - [issue #104] `log.reopenFileStreams()` convenience method to be used with
