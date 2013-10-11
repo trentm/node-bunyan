@@ -720,6 +720,23 @@ used for anything else.</td>
 </table>
 
 
+**Note on log rotation**: Often you may be using external log rotation utilities
+like `logrotate` on Linux or `logadm` on SmartOS/Illumos. In those cases, unless
+your are ensuring "copy and truncate" sematics (via `copytruncate` with
+logrotate or `-c` with logadm) then the fd for your 'file' stream will change.
+You can tell bunyan to reopen the file stream with code like this in your
+app:
+
+    var log = bunyan.createLogger(...);
+    ...
+    process.on('SIGUSR2', function () {
+        log.reopenFileStreams();
+    });
+
+where you'd configure your log rotation to send SIGUSR2 (or some other signal)
+to your process. Any other mechanism to signal your app to run
+`log.reopenFileStreams()` would work as well.
+
 
 ## stream type: `raw`
 
