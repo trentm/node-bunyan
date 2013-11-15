@@ -1,11 +1,51 @@
-# curr
+# curr: formatters
 
-cat all.log  | by
+- docs for inline formatter usage: START: NODE_DEBUG=1 node for.js
+
+        var log = bunyan.createLogger({
+            name: 'foo',
+            level: 'info',
+            stream: process.stdout,
+            // Default writer is `JSON.stringify`.
+            formatter: (process.env.NODE_DEBUG && createFormatter({format: 'short'}))
+        })
+
+  shortcut for formatter can be just the format string. Then also get the
+  stream.isTTY() magic for coloring.
+
+  TODO: s/ansi/color/?
+
+        createFormatter({format: 'wide', color: true})   # no
+        createFormatter({format: 'wide', markup: 'ansi'}) # curr
+        createFormatter({format: 'wide', markup: 'color'}) # maybe instead
+        createFormatter({format: 'wide', markup: 'html'})
+
+- plan for bunyan CLI and read stream:
+
+        fs.createReadStream('foo.log')
+            .pipe(bunyanReader)     // bunyan recs as data
+            .pipe(bunyanWriter)     // formatted bunyan recs as data
+            .pipe(process.stdout)
+
+    shortened to this as a convenience:
+
+        bunyan.createReadStream('foo.log')
+            .pipe(bunyanWriter)
+            .pipe(process.stdout)
+
+  A bunyan read stream emits bunyan records as its 'data' events, where this is
+  either a bunyan record object or a string (not a JSON bunyan record).
+
+- rebase on latest master
+- think about plugins for other bunyan formatters
+
+
 
 
 
 # todo
 
+- mention https://github.com/kusor/node-sigyan in the docs
 - "all" or "off" levels? log4j? logging.py?
   logging.py has NOTSET === 0. I think that is only needed/used for
   multi-level hierarchical effective level.
