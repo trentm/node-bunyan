@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.22.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.22.1
 
 - #111 Fix a crash when attempting to use `bunyan -p` on a platform without
