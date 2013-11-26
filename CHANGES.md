@@ -8,7 +8,7 @@ Known issues:
 
 ## bunyan 0.22.1 (not yet released)
 
-- #101 Fix a crash in `bunyan` rendering a record with unexpected "res.headers".s
+- #101 Fix a crash in `bunyan` rendering a record with unexpected "res.headers".
 
 
 ## bunyan 0.22.0
