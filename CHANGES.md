@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.22.1 (not yet released)
+## bunyan 0.22.1
 
 - #111 Fix a crash when attempting to use `bunyan -p` on a platform without
   dtrace.
