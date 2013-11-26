@@ -8,6 +8,9 @@ Known issues:
 
 ## bunyan 0.22.1 (not yet released)
 
+- #111 Fix a crash when attempting to use `bunyan -p` on a platform without
+  dtrace.
+
 - #101 Fix a crash in `bunyan` rendering a record with unexpected "res.headers".
 
 

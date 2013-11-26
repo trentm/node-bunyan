@@ -1129,6 +1129,15 @@ function processPids(opts, stylize, callback) {
             // Share the stderr handle to have error output come
             // straight through. Only supported in v0.8+.
             {stdio: ['pipe', 'pipe', process.stderr]});
+        dtrace.on('error', function (e) {
+            if (e.syscall === 'spawn' && e.errno === 'ENOENT') {
+                console.error('bunyan: error: could not spawn "dtrace" ' +
+                    '("bunyan -p" is only supported on platforms with dtrace)');
+            } else {
+                console.error('bunyan: error: unexpected dtrace error: %s', e);
+            }
+            callback(1);
+        })
         child = dtrace; // intentionally global
 
         function finish(code) {
@@ -1136,7 +1145,7 @@ function processPids(opts, stylize, callback) {
                 handleLogLine(null, leftover, opts, stylize);
                 leftover = '';
             }
-            callback(returnCode);
+            callback(code);
         }
 
         dtrace.stdout.setEncoding('utf8');
@@ -1350,6 +1359,7 @@ process.on('uncaughtException', function (err) {
     e('*    https://github.com/trentm/node-bunyan/issues/new?title=%s', title);
     e('*');
     e('* * *');
+    e('* platform:', process.platform);
     e('* node version:', process.version);
     e('* bunyan version:', getVersion());
     e('* argv: %j', process.argv);
