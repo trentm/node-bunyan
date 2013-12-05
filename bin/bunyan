@@ -834,7 +834,7 @@ function emitRecord(rec, line, opts, stylize) {
             var s = '';
             if (res.header) {
                 s += res.header.trimRight();
-            } else if (typeof(res.headers) === 'string') {
+            } else if (typeof (res.headers) === 'string') {
                 s += res.headers.trimRight();
             } else if (res.headers) {
                 if (res.statusCode) {
