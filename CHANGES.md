@@ -8,7 +8,7 @@ Known issues:
 
 ## bunyan 0.22.2 (not yet released)
 
-(nothing yet)
+- #97 Unref rotating-file timeout which was preventing processes from exiting
 
 
 ## bunyan 0.22.1
