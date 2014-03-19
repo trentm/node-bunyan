@@ -8,7 +8,7 @@ Known issues:
 
 ## bunyan 0.22.2 (not yet released)
 
-(nothing yet)
+- Update 'mv' optional dep to latest.
 
 
 ## bunyan 0.22.1

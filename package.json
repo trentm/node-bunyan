@@ -19,7 +19,7 @@
   },
   "// comment": "'mv' required for RotatingFileStream",
   "optionalDependencies": {
-    "mv": "0.0.5",
+    "mv": "~2",
     "dtrace-provider": "0.2.8"
   },
   "devDependencies": {
