@@ -6,7 +6,7 @@
 // See <https://github.com/trentm/node-bunyan>.
 //
 
-var VERSION = '0.22.2';
+var VERSION = '0.22.3';
 
 var p = console.log;
 var util = require('util');
