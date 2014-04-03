@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.22.2 (not yet released)
+## bunyan 0.22.2
 
 - #131 Allow `log.info(<number>)` and, most importantly, don't crash on that.
 
