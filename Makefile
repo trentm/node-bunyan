@@ -43,7 +43,7 @@ versioncheck:
 
 .PHONY: cutarelease
 cutarelease: versioncheck
-	[[ `git status | tail -n1` == "nothing to commit (working directory clean)" ]]
+	[[ `git status | tail -n1 | cut -c1-17` == "nothing to commit" ]]
 	./tools/cutarelease.py -p bunyan -f package.json -f lib/bunyan.js -f bin/bunyan
 
 .PHONY: docs
