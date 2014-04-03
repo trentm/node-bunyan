@@ -8,6 +8,8 @@ Known issues:
 
 ## bunyan 0.22.2 (not yet released)
 
+- #131 Allow `log.info(<number>)` and, most importantly, don't crash on that.
+
 - Update 'mv' optional dep to latest.
 
 

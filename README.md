@@ -84,7 +84,7 @@ full API is:
                     // This is equivalent to `log.isInfoEnabled()` or
                     // `log.isEnabledFor(INFO)` in log4j.
 
-    log.info('hi');                     // Log a simple string message.
+    log.info('hi');                     // Log a simple string message (or number).
     log.info('hi %s', bob, anotherVar); // Uses `util.format` for msg formatting.
 
     log.info({foo: 'bar'}, 'hi');
