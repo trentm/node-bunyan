@@ -110,7 +110,7 @@ This will dove-tail with [Bunyan serializer support](#serializers), discussed
 later.
 
 The same goes for all of Bunyan's log levels: `log.trace`, `log.debug`,
-`log.info`, `log.warn`, and `log.fatal`. See the [levels section](#levels)
+`log.info`, `log.warn`, `log.error`, and `log.fatal`. See the [levels section](#levels)
 below for details and suggestions.
 
 
