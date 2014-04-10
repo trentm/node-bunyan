@@ -63,3 +63,4 @@
     - differential HTTP *client* req/res with *server* req/res.
 - statsd stream? http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/
   Think about it.
+- web ui. Ideas: http://googlecloudplatform.blogspot.ca/2014/04/a-new-logs-viewer-for-google-cloud.html
