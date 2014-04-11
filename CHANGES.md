@@ -8,10 +8,12 @@ Known issues:
 
 ## bunyan 0.22.3 (not yet released)
 
-(nothing yet)
+- Republish the same code to npm.
 
 
 ## bunyan 0.22.2
+
+Note: Bad release. The published package in the npm registry got corrupted. Use 0.22.3 or later.
 
 - #131 Allow `log.info(<number>)` and, most importantly, don't crash on that.
 
