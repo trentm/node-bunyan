@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.22.3 (not yet released)
+## bunyan 0.22.3
 
 - Republish the same code to npm.
 
