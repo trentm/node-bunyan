@@ -165,7 +165,7 @@ streams at different levels**.
       streams: [
         {
           level: 'info',
-          stream: process.stdout,           // log INFO and above to stdout
+          stream: process.stdout            // log INFO and above to stdout
         },
         {
           level: 'error',
