@@ -44,6 +44,7 @@ var OM_INSPECT = 3;
 var OM_SIMPLE = 4;
 var OM_SHORT = 5;
 var OM_BUNYAN = 6;
+var OM_QUIET = 7;
 var OM_FROM_NAME = {
     'long': OM_LONG,
     'paul': OM_LONG,  /* backward compat */
@@ -51,7 +52,8 @@ var OM_FROM_NAME = {
     'inspect': OM_INSPECT,
     'simple': OM_SIMPLE,
     'short': OM_SHORT,
-    'bunyan': OM_BUNYAN
+    'bunyan': OM_BUNYAN,
+    'quiet': OM_QUIET
 };
 
 
@@ -232,6 +234,7 @@ function printHelp() {
     p('                  bunyan: 0 indented JSON, bunyan\'s native format');
     p('                  inspect: node.js `util.inspect` output');
     p('                  short: like "long", but more concise');
+    p('                  quiet: like "short", but only outputs details if level >= WARN');
     p('  -j            shortcut for `-o json`');
     p('  -0            shortcut for `-o bunyan`');
     p('  -L, --time local');
@@ -730,8 +733,13 @@ function handleLogLine(file, line, opts, stylize) {
  */
 function emitRecord(rec, line, opts, stylize) {
     var short = false;
+    var quiet = false;
 
     switch (opts.outputMode) {
+    case OM_QUIET:
+        quiet = true;
+        /* jsl:fall-thru */
+
     case OM_SHORT:
         short = true;
         /* jsl:fall-thru */
@@ -786,6 +794,7 @@ function emitRecord(rec, line, opts, stylize) {
         delete rec.pid;
 
         var level = (upperPaddedNameFromLevel[rec.level] || 'LVL' + rec.level);
+        var rawLevel = rec.level;
         if (opts.color) {
             var colorFromLevel = {
                 10: 'white',    // TRACE
@@ -1028,7 +1037,7 @@ function emitRecord(rec, line, opts, stylize) {
                 onelineMsg,
                 extras,
                 details));
-        else
+        else if (!quiet || (rawLevel > INFO)) {
             emit(format('%s %s %s:%s%s\n%s',
                 time,
                 level,
@@ -1036,6 +1045,14 @@ function emitRecord(rec, line, opts, stylize) {
                 onelineMsg,
                 extras,
                 details));
+        }
+        else
+            emit(format('%s %s %s:%s%s\n',
+                time,
+                level,
+                nameStr,
+                onelineMsg,
+                extras));
         break;
 
     case OM_INSPECT:
