@@ -917,13 +917,12 @@ function emitRecord(rec, line, opts, stylize) {
                 extras,
                 details));
         else
-            emit(format('%s %s %s:%s%s\n%s',
+            emit(format('%s %s %s:%s%s\n',
                 time,
                 level,
                 nameStr,
                 onelineMsg,
-                extras,
-                details));
+                extras));
         break;
 
     case OM_INSPECT:
