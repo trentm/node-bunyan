@@ -8,6 +8,9 @@ Known issues:
 
 ## bunyan 0.23.0 (not yet released)
 
+- [pull #42] Fix `bunyan` crash on a log record with `req.headers` that is a *string*
+  (by https://github.com/aexmachina).
+
 - Drop node 0.6 support. I can't effectively `npm install` with a node 0.6
   anymore.
 

@@ -756,11 +756,9 @@ function emitRecord(rec, line, opts, stylize) {
             var headers = req.headers;
             if (!headers) {
                 headers = '';
-            }
-            else if (typeof headers === 'string') {
+            } else if (typeof (headers) === 'string') {
                 headers = '\n' + headers;
-            }
-            else if (typeof headers === 'object') {
+            } else if (typeof (headers) === 'object') {
                 headers = '\n' + Object.keys(headers).map(function (h) {
                     return h + ': ' + headers[h];
                 }).join('\n');
