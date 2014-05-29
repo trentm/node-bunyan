@@ -8,6 +8,17 @@ Known issues:
 
 ## bunyan 0.23.0 (not yet released)
 
+- [issue #139] Fix `bunyan` crash on a log record with `res.header` that is an
+  object. A side effect of this improvement is that a record with `res.statusCode`
+  but no header info will render a response block, for example:
+
+        [2012-08-08T10:25:47.637Z]  INFO: my-service/12859 on my-host: some message (...)
+            ...
+            --
+            HTTP/1.1 200 OK
+            --
+            ...
+
 - [pull #42] Fix `bunyan` crash on a log record with `req.headers` that is a *string*
   (by https://github.com/aexmachina).
 

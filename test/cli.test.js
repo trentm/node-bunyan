@@ -4,10 +4,11 @@
  * Test the `bunyan` CLI.
  */
 
+var p = console.warn;
 var path = require('path');
 var exec = require('child_process').exec;
 var _ = require('util').format;
-var debug = console.warn;
+var vasync = require('vasync');
 
 // node-tap API
 if (require.cache[__dirname + '/tap4nodeunit.js'])
@@ -365,6 +366,8 @@ test('robust req handling', function (t) {
         '[2012-08-08T10:25:47.637Z]  INFO: amon-master/12859 on 9724a190-27b6-4fd8-830b-a574f839c67d: HeadAgentProbes handled: 200 (req_id=cce79d15-ffc2-487c-a4e4-e940bdaac31e, audit=true, remoteAddress=10.2.207.2, remotePort=50394, latency=3, secure=false, _audit=true, req.version=*)',
         '    HEAD /agentprobes?agent=ccf92af9-0b24-46b6-ab60-65095fdd3037 HTTP/1.1',
         '    --',
+        '    HTTP/1.1 200 OK',
+        '    --',
         '    route: {',
         '      "name": "HeadAgentProbes",',
         '      "version": false',
@@ -375,6 +378,22 @@ test('robust req handling', function (t) {
              function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, expect);
+        t.end();
+    });
+});
+
+// Some past crashes from issues.
+test('should not crash on these', function (t) {
+    vasync.forEachPipeline({
+        inputs: ['139.log', '144.log'],
+        func: function (logName, next) {
+            exec(_('%s %s/corpus/%s', BUNYAN, __dirname, logName),
+                    function (err, stdout, stderr) {
+                next(err);
+            });
+        }
+    }, function (err, results) {
+        t.ifError(err);
         t.end();
     });
 });

@@ -837,26 +837,37 @@ function emitRecord(rec, line, opts, stylize) {
 
         function _res(res) {
             var s = '';
-            if (res.header) {
-                s += res.header.trimRight();
-            } else if (typeof (res.headers) === 'string') {
-                s += res.headers.trimRight();
-            } else if (res.headers) {
-                if (res.statusCode) {
-                    s += format('HTTP/1.1 %s %s\n', res.statusCode,
-                        http.STATUS_CODES[res.statusCode]);
-                }
-                var headers = res.headers;
+            if (res.statusCode !== undefined) {
+                s += format('HTTP/1.1 %s %s\n', res.statusCode,
+                    http.STATUS_CODES[res.statusCode]);
+                delete res.statusCode;
+            }
+            // Handle `res.header` or `res.headers` as either a string or
+            // and object of header key/value pairs. Prefer `res.header` if set
+            // (TODO: Why? I don't recall. Typical of restify serializer?
+            // Typical JSON.stringify of a core node HttpResponse?)
+            var headers;
+            if (res.header !== undefined) {
+                headers = res.header;
+                delete res.header;
+            } else if (res.headers !== undefined) {
+                headers = res.headers;
+                delete res.headers;
+            }
+            if (!headers) {
+                /* pass through */
+            } else if (typeof(headers) === 'string') {
+                s += headers.trimRight();
+            } else {
                 s += Object.keys(headers).map(
                     function (h) { return h + ': ' + headers[h]; }).join('\n');
             }
-            delete res.header;
-            delete res.headers;
-            delete res.statusCode;
-            if (res.body) {
+            if (res.body !== undefined) {
                 s += '\n\n' + (typeof (res.body) === 'object'
                     ? JSON.stringify(res.body, null, 2) : res.body);
                 delete res.body;
+            } else {
+                s = s.trimRight();
             }
             if (res.trailer) {
                 s += '\n' + res.trailer;
