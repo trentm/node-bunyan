@@ -82,10 +82,10 @@ test: $(NODEUNIT)
 
 # Test will all node supported versions (presumes install locations I use on
 # my machine).
-# Note: 'test08' is last so (if all is well) I end up with a binary
-# dtrace-provider build for node 0.8 (my current version).
+# Note: 'test10' is last so (if all is well) I end up with a binary
+# dtrace-provider build for node 0.10 (my current version).
 .PHONY: testall
-testall: test06 test10 test08
+testall: test08 test10
 
 .PHONY: test10
 test10:
@@ -97,11 +97,6 @@ test08:
 	@echo "# Test node 0.8.x (with node `$(NODEOPT)/node-0.8/bin/node --version`)"
 	@$(NODEOPT)/node-0.8/bin/node --version
 	PATH="$(NODEOPT)/node-0.8/bin:$(PATH)" make distclean all test
-.PHONY: test06
-test06:
-	@echo "# Test node 0.6.x (with node `$(NODEOPT)/node-0.6/bin/node --version`)"
-	@$(NODEOPT)/node-0.6/bin/node --version
-	PATH="$(NODEOPT)/node-0.6/bin:$(PATH)" make distclean all test
 
 
 #---- check

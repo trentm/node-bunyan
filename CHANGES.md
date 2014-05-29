@@ -6,9 +6,17 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.22.4 (not yet released)
+## bunyan 0.23.0 (not yet released)
 
-(nothing yet)
+- Drop node 0.6 support. I can't effectively `npm install` with a node 0.6
+  anymore.
+
+- [issue #85] Ensure logging a non-object/non-string doesn't throw (by
+  https://github.com/mhart). This changes fixes:
+
+        log.info(<bool>)     # TypeError: Object.keys called on non-object
+        log.info(<function>) # "msg":"" (instead of wanted "msg":"[Function]")
+        log.info(<array>)    # "msg":"" (instead of wanted "msg":util.format(<array>))
 
 
 ## bunyan 0.22.3
@@ -20,28 +28,28 @@ Known issues:
 
 Note: Bad release. The published package in the npm registry got corrupted. Use 0.22.3 or later.
 
-- #131 Allow `log.info(<number>)` and, most importantly, don't crash on that.
+- [issue #131] Allow `log.info(<number>)` and, most importantly, don't crash on that.
 
 - Update 'mv' optional dep to latest.
 
 
 ## bunyan 0.22.1
 
-- #111 Fix a crash when attempting to use `bunyan -p` on a platform without
+- [issue #111] Fix a crash when attempting to use `bunyan -p` on a platform without
   dtrace.
 
-- #101 Fix a crash in `bunyan` rendering a record with unexpected "res.headers".
+- [issue #101] Fix a crash in `bunyan` rendering a record with unexpected "res.headers".
 
 
 ## bunyan 0.22.0
 
-- #104 `log.reopenFileStreams()` convenience method to be used with external log
+- [issue #104] `log.reopenFileStreams()` convenience method to be used with external log
   rotation.
 
 
 ## bunyan 0.21.4
 
-- #96 Fix `bunyan` to default to paging (with `less`) by default in node 0.10.0.
+- [issue #96] Fix `bunyan` to default to paging (with `less`) by default in node 0.10.0.
   The intention has always been to default to paging for node >=0.8.
 
 
