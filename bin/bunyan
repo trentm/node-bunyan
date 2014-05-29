@@ -754,14 +754,21 @@ function emitRecord(rec, line, opts, stylize) {
             var req = rec.req;
             delete rec.req;
             var headers = req.headers;
+            if (!headers) {
+                headers = '';
+            }
+            else if (typeof headers === 'string') {
+                headers = '\n' + headers;
+            }
+            else if (typeof headers === 'object') {
+                headers = '\n' + Object.keys(headers).map(function (h) {
+                    return h + ': ' + headers[h];
+                }).join('\n');
+            }
             var s = format('%s %s HTTP/%s%s', req.method,
                 req.url,
                 req.httpVersion || '1.1',
-                (headers ?
-                    '\n' + Object.keys(headers).map(function (h) {
-                        return h + ': ' + headers[h];
-                    }).join('\n') :
-                    '')
+                headers
             );
             delete req.url;
             delete req.method;
