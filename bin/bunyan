@@ -856,7 +856,7 @@ function emitRecord(rec, line, opts, stylize) {
             }
             if (!headers) {
                 /* pass through */
-            } else if (typeof(headers) === 'string') {
+            } else if (typeof (headers) === 'string') {
                 s += headers.trimRight();
             } else {
                 s += Object.keys(headers).map(
