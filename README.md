@@ -924,6 +924,7 @@ MIT. See "LICENSE.txt".
 
 - Bunyan syslog support: <https://github.com/mcavage/node-bunyan-syslog>.
 - Bunyan + Graylog2: <https://github.com/mhart/gelf-stream>.
+- Bunyan middleware for Express: <https://github.com/villadora/express-bunyan-logger>
 - An example of a Bunyan shim to the Winston logging system:
   <https://github.com/trentm/node-bunyan-winston>.
 - [Bunyan for Bash](https://github.com/trevoro/bash-bunyan).
