@@ -42,7 +42,7 @@ versioncheck:
 	@echo Version check ok.
 
 .PHONY: cutarelease
-cutarelease: versioncheck
+cutarelease: versioncheck check
 	[[ `git status | tail -n1 | cut -c1-17` == "nothing to commit" ]]
 	./tools/cutarelease.py -p bunyan -f package.json -f lib/bunyan.js -f bin/bunyan
 
