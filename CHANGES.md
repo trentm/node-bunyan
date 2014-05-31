@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.23.0 (not yet released)
+## bunyan 0.23.0
 
 - [issue #139] Fix `bunyan` crash on a log record with `res.header` that is an
   object. A side effect of this improvement is that a record with `res.statusCode`
