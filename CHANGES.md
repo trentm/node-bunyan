@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 0.23.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 0.23.0
 
 - [issue #139] Fix `bunyan` crash on a log record with `res.header` that is an
