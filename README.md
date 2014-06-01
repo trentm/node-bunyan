@@ -531,6 +531,9 @@ do this:
         // Handle stream write or create error here.
     });
 
+Note: This is **not** that same as a log record at the "error" level as
+produced by `log.error(...)`.
+
 
 ## stream type: `stream`
 
