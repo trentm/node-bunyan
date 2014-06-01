@@ -10,7 +10,8 @@ Known issues:
 
 - [pull #125, pull #97, issue #73] Unref rotating-file timeout which was
   preventing processes from exiting (by https://github.com/chakrit and
-  https://github.com/glenn-murray-bse).
+  https://github.com/glenn-murray-bse). Note: this only fixes the issue
+  for node 0.10 and above.
 
 
 ## bunyan 0.23.0

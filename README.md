@@ -643,6 +643,14 @@ used for anything else.</td>
 
 ## stream type: `rotating-file`
 
+**WARNING:** Users of Bunyan's `rotating-file` should (a) be using at least
+bunyan 0.23.1 (with the fix for [this
+issue](https://github.com/trentm/node-bunyan/pull/97)), and (b) should use at
+least node 0.10 (node 0.8 does not support the `unref()` method on
+`setTimeout(...)` needed for the mentioned fix). The symptom is that process
+termination will hang for up to a full rotation period.
+
+
 A `type === 'rotating-file'` is a file stream that handles file automatic
 rotation.
 
