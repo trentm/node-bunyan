@@ -8,7 +8,8 @@ Known issues:
 
 ## bunyan 0.23.1 (not yet released)
 
-- #97 Unref rotating-file timeout which was preventing processes from exiting
+- [issue #97] Unref rotating-file timeout which was preventing processes from
+  exiting.
 
 
 ## bunyan 0.23.0

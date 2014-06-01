@@ -35,19 +35,19 @@ SpecificLevelStream.prototype.write = function (rec) {
 
 var log1 = bunyan.createLogger({
     name: 'use-case-1',
-    streams: [{
+    streams: [ {
         level: 'trace',
         type: 'raw',
         stream: new SpecificLevelStream(
             ['trace', 'debug', 'info', 'warn'],
             process.stdout)
-    },{
+    }, {
         level: 'error',
         type: 'raw',
         stream: new SpecificLevelStream(
             ['error'],
             process.stderr)
-    }]
+    } ]
 });
 
 log1.info('hi at info level (this should be on stdout)');
@@ -59,18 +59,17 @@ log1.error('alert alert (this should be on stderr)');
  */
 var log2 = bunyan.createLogger({
     name: 'use-case-2',
-    streams: [{
+    streams: [ {
         level: 'info',
         type: 'raw',
         stream: new SpecificLevelStream(
             ['info'],
-            fs.createWriteStream('specific-level-stream-http.log',
+            fs.createWriteStream('specific-level-streams-http.log',
                 {flags: 'a', encoding: 'utf8'}))
-    },{
+    }, {
         level: 'warn',
-        path: 'specific-level-stream-http.err.log'
-    }
-  ]
+        path: 'specific-level-streams-http.err.log'
+    } ]
 });
 
 log2.info('200 GET /blah');
