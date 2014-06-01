@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.23.1 (not yet released)
+## bunyan 0.23.1
 
 - [pull #125, pull #97, issue #73] Unref rotating-file timeout which was
   preventing processes from exiting (by https://github.com/chakrit and
