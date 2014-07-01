@@ -946,6 +946,7 @@ MIT. See "LICENSE.txt".
 - Bunyan + Graylog2: <https://github.com/mhart/gelf-stream>.
 - Bunyan middleware for Express: <https://github.com/villadora/express-bunyan-logger>
 - An example of a Bunyan shim to the Winston logging system:
-  <https://github.com/trentm/node-bunyan-winston>.
+  <https://github.com/trentm/node-bunyan-winston>. Also a [comparison of
+  Winston and Bunyan](http://strongloop.com/strongblog/compare-node-js-logging-winston-bunyan/).
 - [Bunyan for Bash](https://github.com/trevoro/bash-bunyan).
 - TODO: `RequestCaptureStream` example from restify.
