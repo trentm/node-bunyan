@@ -50,7 +50,7 @@ node.js library usage of bunyan in your apps.
   [`src: true`](#src)
 - light-weight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
-- [Runtime log snooping via Dtrace support](#dtrace-support)
+- [Runtime log snooping via Dtrace support](#runtime-log-snooping-via-dtrace)
 
 
 # Introduction
