@@ -2,14 +2,14 @@
 //
 // TODO: put this in a damn test suite
 
-var Logger = require('../lib/bunyan'),
-    DEBUG = Logger.DEBUG,
-    INFO = Logger.INFO,
-    WARN = Logger.WARN;
+var bunyan = require('../lib/bunyan'),
+    DEBUG = bunyan.DEBUG,
+    INFO = bunyan.INFO,
+    WARN = bunyan.WARN;
 var assert = require('assert');
 
 // Basic usage.
-var log = new Logger({
+var log = bunyan.createLogger({
     name: 'example-level',
     streams: [
         {

@@ -1,5 +1,5 @@
-var Logger = require('../lib/bunyan');
-log = new Logger({
+var bunyan = require('../lib/bunyan');
+log = bunyan.createLogger({
     name: 'amon',
     streams: [
         {

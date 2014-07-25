@@ -2,7 +2,7 @@
 // which log record *objects* are written instead of the JSON-serialized
 // string.
 
-var Logger = require('../lib/bunyan');
+var bunyan = require('../lib/bunyan');
 
 
 /**
@@ -21,7 +21,7 @@ MyRawStream.prototype.write = function (rec) {
 
 
 // A Logger using the raw stream.
-var log = new Logger({
+var log = bunyan.createLogger({
     name: 'raw-example',
     streams: [
         {

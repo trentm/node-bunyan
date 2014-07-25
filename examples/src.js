@@ -1,9 +1,9 @@
 // Show the usage of `src: true` config option to get log call source info in
 // log records (the `src` field).
 
-var Logger = require('../lib/bunyan');
+var bunyan = require('../lib/bunyan');
 
-var log = new Logger({name: 'src-example', src: true});
+var log = bunyan.createLogger({name: 'src-example', src: true});
 
 log.info('one');
 log.info('two');

@@ -1,13 +1,13 @@
 // Example logging an error:
 
 var http = require('http');
-var Logger = require('../lib/bunyan');
+var bunyan = require('../lib/bunyan');
 var util = require('util');
 
-var log = new Logger({
+var log = bunyan.createLogger({
     name: 'myserver',
     serializers: {
-        err: Logger.stdSerializers.err,   // <--- use this
+        err: bunyan.stdSerializers.err,   // <--- use this
     }
 });
 

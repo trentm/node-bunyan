@@ -3,7 +3,7 @@
 
 var fs = require('fs');
 var path = require('path');
-var Logger = require('../lib/bunyan');
+var bunyan = require('../lib/bunyan');
 
 var FILENAME = 'handle-fs-error.log';
 var S_IWUSR = 00200; // mask for owner write permission in stat mode
@@ -19,7 +19,7 @@ if (fs.statSync(FILENAME).mode & S_IWUSR) {
 }
 
 console.warn('- Create logger.')
-var log = new Logger({name: 'handle-fs-error', streams: [{path: FILENAME}]});
+var log = bunyan.createLogger({name: 'handle-fs-error', streams: [{path: FILENAME}]});
 
 log.on('error', function (err) {
         console.warn('- The logger emitted an error:', err);

@@ -1,13 +1,13 @@
 // Example logging HTTP server request and response objects.
 
 var http = require('http');
-var Logger = require('../lib/bunyan');
+var bunyan = require('../lib/bunyan');
 
-var log = new Logger({
+var log = bunyan.createLogger({
     name: 'myserver',
     serializers: {
-        req: Logger.stdSerializers.req,
-        res: Logger.stdSerializers.res
+        req: bunyan.stdSerializers.req,
+        res: bunyan.stdSerializers.res
     }
 });
 
