@@ -280,7 +280,7 @@ test('--level 40', function (t) {
     });
 });
 
-test('--condition "level === 10 && pid === 123"', function (t) {
+test('--condition "this.level === 10 && this.pid === 123"', function (t) {
     var expect = [
         '# levels\n',
         /* JSSTYLED */
@@ -292,19 +292,40 @@ test('--condition "level === 10 && pid === 123"', function (t) {
         'not a JSON line\n',
         '{"hi": "there"}\n'
     ].join('');
-    var cmd = _('%s -c "level === 10 && pid === 123" %s/corpus/all.log',
-        BUNYAN, __dirname);
+    var cmd = _('%s -c "this.level === 10 && this.pid === 123"'
+                + ' %s/corpus/all.log', BUNYAN, __dirname);
     exec(cmd, function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, expect);
         var cmd = _(
-            '%s --condition "level === 10 && pid === 123" %s/corpus/all.log',
-            BUNYAN, __dirname);
+            '%s --condition "this.level === 10 && this.pid === 123"'
+            + ' %s/corpus/all.log', BUNYAN, __dirname);
         exec(cmd, function (err, stdout, stderr) {
             t.ifError(err);
             t.equal(stdout, expect);
             t.end();
         });
+    });
+});
+
+test('--condition "this.level === TRACE', function (t) {
+    var expect = [
+        '# levels\n',
+        /* JSSTYLED */
+        '[2012-02-08T22:56:50.856Z] TRACE: myservice/123 on example.com: My message\n',
+        '\n',
+        '# extra fields\n',
+        '\n',
+        '# bogus\n',
+        'not a JSON line\n',
+        '{"hi": "there"}\n'
+    ].join('');
+    var cmd = _('%s -c "this.level === TRACE" %s/corpus/all.log',
+        BUNYAN, __dirname);
+    exec(cmd, function (err, stdout, stderr) {
+        t.ifError(err);
+        t.equal(stdout, expect);
+        t.done();
     });
 });
 
@@ -314,7 +335,7 @@ test('multiple --conditions', function (t) {
     var expect = [
         '# levels\n',
         /* JSSTYLED */
-        '[2012-02-08T22:56:53.856Z]  WARN: myservice/1 on example.com: My message\n',
+        '[2012-02-08T22:56:53.856Z]  WARN: myservice/123 on example.com: My message\n',
         '\n',
         '# extra fields\n',
         '\n',
@@ -322,10 +343,8 @@ test('multiple --conditions', function (t) {
         'not a JSON line\n',
         '{"hi": "there"}\n'
     ].join('');
-    exec(_('%s %s/corpus/all.log ' +
-                 '-c "if (level === 40) pid = 1; true" ' +
-                 '-c "pid === 1"', BUNYAN, __dirname),
-             function (err, stdout, stderr) {
+    exec(_('%s %s/corpus/all.log -c "this.level === 40" -c "this.pid === 123"',
+            BUNYAN, __dirname), function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, expect);
         t.end();
