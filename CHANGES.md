@@ -61,8 +61,8 @@ Known issues:
   installing bunyan, because it is a binary dep. Even as an *optional* dep it
   still caused confusion and install noise.
 
-  Users of Bunyan on dtrace-y platforms (SmartOS, Mac, Solaris) will need to
-  manually `npm install dtrace-provider` themselves to get [Bunyan's
+  Users of Bunyan on dtrace-y platforms (SmartOS, Mac, Illumos, Solaris) will
+  need to manually `npm install dtrace-provider` themselves to get [Bunyan's
   dtrace support](https://github.com/trentm/node-bunyan#runtime-log-snooping-via-dtrace)
   to work. If not installed, bunyan should stub it out properly.
 
