@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.0.0 (not yet released)
+## bunyan 1.0.0
 
 - [issue #87] **Backward incompatible change to `-c CODE`** improving
   performance by over 10x (good!), with a backward incompatible change to
