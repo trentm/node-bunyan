@@ -276,9 +276,16 @@ function filterRecord(rec, opts)
         return false;
     }
 
-    if (opts.conditions) {
-        for (var i = 0; i < opts.conditions.length; i++) {
-            var pass = opts.conditions[i].runInNewContext(rec);
+    if (opts.condFuncs) {
+        var recCopy = objCopy(rec);
+        for (var i = 0; i < opts.condFuncs.length; i++) {
+            var pass = opts.condFuncs[i].call(recCopy);
+            if (!pass)
+                return false;
+        }
+    } else if (opts.condVm) {
+        for (var i = 0; i < opts.condVm.length; i++) {
+            var pass = opts.condVm[i].runInNewContext(rec);
             if (!pass)
                 return false;
         }
@@ -349,6 +356,33 @@ function emitNextRecord(opts, stylize)
 }
 
 /**
+ * Return a function for the given JS code that returns.
+ *
+ * If no 'return' in the given javascript snippet, then assume we are a single
+ * statement and wrap in 'return (...)'. This is for convenience for short
+ * '-c ...' snippets.
+ */
+function funcWithReturnFromSnippet(js) {
+    // auto-"return"
+    if (js.indexOf('return') === -1) {
+        if (js.substring(js.length - 1) === ';') {
+            js = js.substring(0, js.length - 1);
+        }
+        js = 'return (' + js + ')';
+    }
+
+    // Expose level definitions to condition func context
+    var varDefs = [];
+    Object.keys(upperNameFromLevel).forEach(function (lvl) {
+        varDefs.push(format('var %s = %d;',
+                upperNameFromLevel[lvl], lvl));
+    });
+    varDefs = varDefs.join('\n') + '\n';
+
+    return (new Function(varDefs + js));
+}
+
+/**
  * Parse the command-line options and arguments into an object.
  *
  *    {
@@ -400,6 +434,7 @@ function parseArgv(argv) {
     }
     args = newArgs;
 
+    // Expose level definitions to condition vm context
     var condDefines = [];
     Object.keys(upperNameFromLevel).forEach(function (lvl) {
         condDefines.push(
@@ -495,40 +530,46 @@ function parseArgv(argv) {
             case '-c':
             case '--condition':
                 var condition = args.shift();
-                parsed.conditions = parsed.conditions || [];
-                var scriptName = 'bunyan-condition-'+parsed.conditions.length;
-                var code = condDefines + condition;
-                try {
-                    var script = vm.createScript(code, scriptName);
-                } catch (compileErr) {
-                    throw new Error(format('illegal CONDITION code: %s\n'
-                        + '  CONDITION script:\n'
-                        + '%s\n'
-                        + '  Error:\n'
-                        + '%s',
-                        compileErr, indent(code), indent(compileErr.stack)));
-                }
+                if (Boolean(process.env.JSON_EXEC &&
+                    process.env.JSON_EXEC === 'vm')) {
+                    parsed.condVm = parsed.condVm || [];
+                    var scriptName = 'bunyan-condition-'+parsed.condVm.length;
+                    var code = condDefines + condition;
+                    var script;
+                    try {
+                        script = vm.createScript(code, scriptName);
+                    } catch (complErr) {
+                        throw new Error(format('illegal CONDITION code: %s\n'
+                            + '  CONDITION script:\n'
+                            + '%s\n'
+                            + '  Error:\n'
+                            + '%s',
+                            complErr, indent(code), indent(complErr.stack)));
+                    }
 
-                // Ensure this is a reasonably safe CONDITION.
-                try {
-                    script.runInNewContext(minValidRecord);
-                } catch (condErr) {
-                    throw new Error(format(
-                        /* JSSTYLED */
-                        'CONDITION code cannot safely filter a minimal Bunyan log record\n'
-                        + '  CONDITION script:\n'
-                        + '%s\n'
-                        + '  Minimal Bunyan log record:\n'
-                        + '%s\n'
-                        + '  Filter error:\n'
-                        + '%s',
-                        indent(code),
-                        indent(JSON.stringify(minValidRecord, null, 2)),
-                        indent(condErr.stack)
-                        ));
+                    // Ensure this is a reasonably safe CONDITION.
+                    try {
+                        script.runInNewContext(minValidRecord);
+                    } catch (condErr) {
+                        throw new Error(format(
+                            /* JSSTYLED */
+                            'CONDITION code cannot safely filter a minimal Bunyan log record\n'
+                            + '  CONDITION script:\n'
+                            + '%s\n'
+                            + '  Minimal Bunyan log record:\n'
+                            + '%s\n'
+                            + '  Filter error:\n'
+                            + '%s',
+                            indent(code),
+                            indent(JSON.stringify(minValidRecord, null, 2)),
+                            indent(condErr.stack)
+                            ));
+                    }
+                    parsed.condVm.push(script);
+                } else  {
+                    parsed.condFuncs = parsed.condFuncs || [];
+                    parsed.condFuncs.push(funcWithReturnFromSnippet(condition));
                 }
-
-                parsed.conditions.push(script);
                 break;
             default: // arguments
                 if (!endOfOptions && arg.length > 0 && arg[0] === '-') {
