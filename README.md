@@ -39,6 +39,17 @@ to get the bunyan CLI on your PATH, then use local bunyan installs for
 node.js library usage of bunyan in your apps.
 
 
+To use the DTrace features (on platforms that support dtrace) you need
+to manually install the dtrace-provider library separately:
+
+    npm install dtrace-provider
+
+Yes, this sucks. This used to be in "optionalDependencies" but
+[this](https://github.com/trentm/node-bunyan/issues/135) and other issues showed
+burden and confusion for users. I'm looking forward to coming *core* tracing
+facilities in node 0.12 to which bunyan can switch.
+
+
 # Features
 
 - elegant [log method API](#log-method-api)
@@ -50,7 +61,7 @@ node.js library usage of bunyan in your apps.
   [`src: true`](#src)
 - light-weight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
-- [Runtime log snooping via Dtrace support](#dtrace-support)
+- [Runtime log snooping via DTrace support](#dtrace-support)
 
 
 # Introduction
@@ -820,6 +831,9 @@ This example emits:
 
 
 # Runtime log snooping via DTrace
+
+**Note**: To use Bunyan's DTrace facilities you need to manually install
+the "dtrace-provider" lib separately via `npm install dtrace-provider`.
 
 On systems that support DTrace (e.g., MacOS, FreeBSD, illumos derivatives
 like SmartOS and OmniOS), Bunyan will create a DTrace provider (`bunyan`)
