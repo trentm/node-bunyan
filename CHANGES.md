@@ -6,9 +6,66 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 0.23.2 (not yet released)
+## bunyan 1.0.0 (not yet released)
 
-(nothing yet)
+- [issue #87] **Backward incompatible change to `-c CODE`** improving
+  performance by over 10x (good!), with a backward incompatible change to
+  semantics (unfortunate), and adding some sugar (good!).
+
+  The `-c CODE` implementation was changed to use a JS function for processing
+  rather than `vm.runInNewContext`. The latter was specatularly slow, so
+  won't be missed. Unfortunately this does mean a few semantic differences in
+  the `CODE`, the most noticeable of which is that **`this` is required to
+  access the object fields:**
+
+        # Bad. Works with bunyan 0.x but not 1.x.
+        $ bunyan -c 'pid === 123' foo.log
+        ...
+
+        # Good. Works with all versions of bunyan
+        $ bunyan -c 'this.pid === 123' foo.log
+        ...
+
+  The old behaviour of `-c` can be restored with the `BUNYAN_EXEC=vm`
+  environment variable:
+
+        $ BUNYAN_EXEC=vm bunyan -c 'pid === 123' foo.log
+        ...
+
+  Some sugar was also added: the TRACE, DEBUG, ... constants are defined, so
+  one can:
+
+        $ bunyan -c 'this.level >= ERROR && this.component === "http"' foo.log
+        ...
+
+  And example of the speed improvement on a 10 MiB log example:
+
+        $ time BUNYAN_EXEC=vm bunyan -c 'this.level === ERROR' big.log | cat >slow
+
+        real    0m6.349s
+        user    0m6.292s
+        sys    0m0.110s
+
+        $ time bunyan -c 'this.level === ERROR' big.log | cat >fast
+
+        real    0m0.333s
+        user    0m0.303s
+        sys    0m0.028s
+
+  The change was courtesy Patrick Mooney (https://github.com/pfmooney). Thanks!
+
+- Add `bunyan -0 ...` shortcut for `bunyan -o bunyan ...`.
+
+- [issue #135] **Backward incompatible.** Drop dtrace-provider even from
+  `optionalDependencies`. Dtrace-provider has proven a consistent barrier to
+  installing bunyan, because it is a binary dep. Even as an *optional* dep it
+  still caused confusion and install noise.
+
+  Users of Bunyan on dtrace-y platforms (SmartOS, Mac, Solaris) will need to
+  manually `npm install dtrace-provider` themselves to get [Bunyan's
+  dtrace support](https://github.com/trentm/node-bunyan#runtime-log-snooping-via-dtrace)
+  to work. If not installed, bunyan should stub it out properly.
+
 
 
 ## bunyan 0.23.1

@@ -1,12 +1,17 @@
 #!/usr/bin/env node
-// -*- mode: js -*-
-//
-// bunyan -- filter and pretty-print JSON logs, like Bunyan logs.
-//
-// See <https://github.com/trentm/node-bunyan>.
-//
+/**
+ * Copyright (c) 2014 Trent Mick. All rights reserved.
+ * Copyright (c) 2014 Joyent Inc. All rights reserved.
+ *
+ * bunyan -- filter and pretty-print Bunyan log files (line-delimited JSON)
+ *
+ * See <https://github.com/trentm/node-bunyan>.
+ *
+ * -*- mode: js -*-
+ * vim: expandtab:ts=4:sw=4
+ */
 
-var VERSION = '0.23.2';
+var VERSION = '1.0.0';
 
 var p = console.log;
 var util = require('util');
@@ -187,8 +192,8 @@ function printHelp() {
     p('Filtering options:');
     p('  -l, --level LEVEL');
     p('                Only show messages at or above the specified level.');
-    p('                You can specify level *names* or numeric values.');
-    p('                (See "Log Levels" below.)');
+    p('                You can specify level *names* or the internal numeric');
+    p('                values.');
     p('  -c, --condition CONDITION');
     p('                Run each log message through the condition and');
     p('                only show those that return truish. E.g.:');
@@ -218,18 +223,7 @@ function printHelp() {
     p('                  inspect: node.js `util.inspect` output');
     p('                  short: like "long", but more concise');
     p('  -j            shortcut for `-o json`');
-    p('');
-    p('Log Levels:');
-    p('  Either numeric values or their associated strings are valid for the');
-    p('  -l|--level argument.  However, -c|--condition scripts will see a numeric');
-    p('  "level" value, not a string.');
-    p('');
-    Object.keys(levelFromName).forEach(function (name) {
-        var n = name;
-        while (n.length < 6)
-            n += ' ';
-        p('    %s %d', n, levelFromName[name]);
-    });
+    p('  -0            shortcut for `-o bunyan`');
     p('');
     p('Environment Variables:');
     p('  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ');
@@ -490,6 +484,9 @@ function parseArgv(argv) {
             case '-j': // output with JSON.stringify
                 parsed.outputMode = OM_JSON;
                 break;
+            case '-0':
+                parsed.outputMode = OM_BUNYAN;
+                break;
             case '-p':
                 if (!parsed.pids) {
                     parsed.pids = [];
@@ -530,8 +527,9 @@ function parseArgv(argv) {
             case '-c':
             case '--condition':
                 var condition = args.shift();
-                if (Boolean(process.env.JSON_EXEC &&
-                    process.env.JSON_EXEC === 'vm')) {
+                if (Boolean(process.env.BUNYAN_EXEC &&
+                    process.env.BUNYAN_EXEC === 'vm'))
+                {
                     parsed.condVm = parsed.condVm || [];
                     var scriptName = 'bunyan-condition-'+parsed.condVm.length;
                     var code = condDefines + condition;

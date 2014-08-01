@@ -330,7 +330,6 @@ test('--condition "this.level === TRACE', function (t) {
 });
 
 // multiple
-// not sure if this is a bug or a feature.  let's call it a feature!
 test('multiple --conditions', function (t) {
     var expect = [
         '# levels\n',

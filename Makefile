@@ -30,8 +30,9 @@ NON_DTRACE_TEST_FILES := $(shell ls -1 test/*.test.js | grep -v dtrace | xargs)
 
 #---- Targets
 
-all:
+all $(NODEUNIT):
 	npm install
+	npm install dtrace-provider
 
 # Ensure all version-carrying files have the same version.
 .PHONY: versioncheck
