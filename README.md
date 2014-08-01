@@ -950,3 +950,4 @@ MIT. See "LICENSE.txt".
   Winston and Bunyan](http://strongloop.com/strongblog/compare-node-js-logging-winston-bunyan/).
 - [Bunyan for Bash](https://github.com/trevoro/bash-bunyan).
 - TODO: `RequestCaptureStream` example from restify.
+- [Bunyan integration for https://logentries.com](https://www.npmjs.org/package/logentries-stream)
