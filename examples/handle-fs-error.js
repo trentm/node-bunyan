@@ -18,19 +18,24 @@ if (fs.statSync(FILENAME).mode & S_IWUSR) {
         fs.chmodSync(FILENAME, 0444);
 }
 
-console.warn('- Create logger.')
-var log = bunyan.createLogger({name: 'handle-fs-error', streams: [{path: FILENAME}]});
+console.warn('- Create logger.');
+var log = bunyan.createLogger({
+        name: 'handle-fs-error',
+        streams: [
+                  {path: FILENAME}
+        ]
+});
 
 log.on('error', function (err) {
         console.warn('- The logger emitted an error:', err);
 });
 
-console.warn('- Call log.info(...).')
+console.warn('- Call log.info(...).');
 log.info('info log message');
-console.warn('- Called log.info(...).')
+console.warn('- Called log.info(...).');
 
 setTimeout(function () {
-        console.warn('- Call log.warn(...).')
+        console.warn('- Call log.warn(...).');
         log.warn('warn log message');
-        console.warn('- Called log.warn(...).')
+        console.warn('- Called log.warn(...).');
 }, 1000);
