@@ -53,6 +53,14 @@ test('ensure Logger creation options', function (t) {
 });
 
 
+test('ensure Logger constructor is safe without new', function (t) {
+    t.doesNotThrow(function () { Logger({name: 'foo'}); },
+        'constructor should call self with new if necessary');
+
+    t.end();
+});
+
+
 test('ensure Logger creation options (createLogger)', function (t) {
     t.throws(function () { bunyan.createLogger(); },
         'options (object) is required',
