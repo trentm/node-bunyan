@@ -132,3 +132,17 @@ test('ensure Logger child() options', function (t) {
 
     t.end();
 });
+
+
+test('ensure Logger() rejects non-Logger parents', function (t) {
+    var dad = new Logger({name: 'dad', streams: []});
+
+    t.throws(function () { new Logger({}, {}); },
+        /invalid Logger creation: do not pass a second arg/,
+        'Logger arguments must be valid');
+
+    t.doesNotThrow(function () { new Logger(dad, {}); },
+        'Logger allows Logger instance as parent');
+
+    t.end();
+});
