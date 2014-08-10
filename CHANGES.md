@@ -8,7 +8,9 @@ Known issues:
 
 ## bunyan 1.0.1 (not yet released)
 
-(nothing yet)
+- [issue #160] Stop using ANSI 'grey' in `bunyan` CLI output, because of the
+  problems that causes with Solarized Dark themes (see
+  <https://github.com/altercation/solarized/issues/220>).
 
 
 ## bunyan 1.0.0

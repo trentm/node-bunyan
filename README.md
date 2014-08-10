@@ -59,7 +59,7 @@ facilities in node 0.12 to which bunyan can switch.
 - [`bunyan` CLI](#cli-usage) for pretty-printing and filtering of Bunyan logs
 - simple include of log call source location (file, line, function) with
   [`src: true`](#src)
-- light-weight specialization of Logger instances with [`log.child`](#logchild)
+- lightweight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
 - [Runtime log snooping via DTrace support](#dtrace-support)
 

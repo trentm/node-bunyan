@@ -590,8 +590,10 @@ function isInteger(s) {
 
 // http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
 // Suggested colors (some are unreadable in common cases):
-// - Good: cyan, yellow (limited use), grey, bold, green, magenta, red
-// - Bad: blue (not visible on cmd.exe)
+// - Good: cyan, yellow (limited use), bold, green, magenta, red
+// - Bad: blue (not visible on cmd.exe), grey (same color as background on
+//   Solarized Dark theme from <https://github.com/altercation/solarized>, see
+//   issue #160)
 var colors = {
     'bold' : [1, 22],
     'italic' : [3, 23],
@@ -746,8 +748,8 @@ function emitRecord(rec, line, opts, stylize) {
         var level = (upperPaddedNameFromLevel[rec.level] || 'LVL' + rec.level);
         if (opts.color) {
             var colorFromLevel = {
-                10: 'grey',     // TRACE
-                20: 'grey',     // DEBUG
+                10: 'white',    // TRACE
+                20: 'yellow',   // DEBUG
                 30: 'cyan',     // INFO
                 40: 'magenta',  // WARN
                 50: 'red',      // ERROR
@@ -958,9 +960,9 @@ function emitRecord(rec, line, opts, stylize) {
         }
 
         extras = stylize(
-            (extras.length ? ' (' + extras.join(', ') + ')' : ''), 'grey');
+            (extras.length ? ' (' + extras.join(', ') + ')' : ''), 'XXX');
         details = stylize(
-            (details.length ? details.join('\n    --\n') + '\n' : ''), 'grey');
+            (details.length ? details.join('\n    --\n') + '\n' : ''), 'XXX');
         if (!short)
             emit(format('%s %s: %s on %s%s:%s%s\n%s',
                 time,
