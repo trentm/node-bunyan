@@ -99,6 +99,8 @@ var gOptsForUncaughtException;
 var pager = null;
 var stdout = process.stdout;
 
+// Whether we are reading from stdin.
+var readingStdin = false;
 
 
 //---- support functions
@@ -1050,6 +1052,7 @@ function drainStdoutAndExit(code) {
  * @param callback {Function} `function ()`
  */
 function processStdin(opts, stylize, callback) {
+    readingStdin = true
     var leftover = '';  // Left-over partial line from last chunk.
     var stdin = process.stdin;
     stdin.resume();
@@ -1349,6 +1352,10 @@ function asyncForEach(arr, iterator, callback) {
  */
 var cleanedUp = false;
 function cleanupAndExit(code, signal) {
+    // Do not exit if reading form stdin and we get a SIGINT (ctrl-c)
+    if (readingStdin && signal === 'SIGINT') {
+        return;
+    }
     // Guard one call.
     if (cleanedUp) {
         return;
