@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.0.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.0.1
 
 - [issues #105, #138, #151] Export `<Logger>.addStream(...)` and
