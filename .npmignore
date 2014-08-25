@@ -1,5 +1,7 @@
 /tmp
 /node_modules
 *.log
-!/test/corpus/*.log
+/examples
+/test
 /*.tgz
+/tools
