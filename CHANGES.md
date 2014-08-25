@@ -8,6 +8,8 @@ Known issues:
 
 ## bunyan 1.0.1 (not yet released)
 
+- [issue #156] Smaller install size via .npmignore file.
+
 - [issue #126, #161] Ignore SIGINT (Ctrl+C) when processing stdin. `...| bunyan`
   should expect the preceding process in the pipeline to handle SIGINT. While
   it is doing so, `bunyan` should continue to process any remaining output.
