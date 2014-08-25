@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.0.1 (not yet released)
+## bunyan 1.0.1
 
 - [issues #105, #138, #151] Export `<Logger>.addStream(...)` and
   `<Logger>.addSerializers(...)` to be able to add them after Logger creation.
