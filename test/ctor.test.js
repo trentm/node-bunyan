@@ -31,6 +31,7 @@ test('ensure Logger creation options', function (t) {
 
     var options = {name: 'foo', stream: process.stdout, streams: []};
     t.throws(function () { new Logger(options); },
+        /* JSSTYLED */
         /cannot mix "streams" and "stream" options/,
         'cannot use "stream" and "streams"');
 
@@ -76,6 +77,7 @@ test('ensure Logger creation options (createLogger)', function (t) {
 
     var options = {name: 'foo', stream: process.stdout, streams: []};
     t.throws(function () { bunyan.createLogger(options); },
+        /* JSSTYLED */
         /cannot mix "streams" and "stream" options/,
         'cannot use "stream" and "streams"');
 
@@ -114,6 +116,7 @@ test('ensure Logger child() options', function (t) {
 
     var options = {stream: process.stdout, streams: []};
     t.throws(function () { log.child(options); },
+        /* JSSTYLED */
         /cannot mix "streams" and "stream" options/,
         'cannot use "stream" and "streams"');
 
