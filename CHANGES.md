@@ -8,6 +8,11 @@ Known issues:
 
 ## bunyan 1.0.1 (not yet released)
 
+- [issue #126, #161] Ignore SIGINT (Ctrl+C) when processing stdin. `...| bunyan`
+  should expect the preceding process in the pipeline to handle SIGINT. While
+  it is doing so, `bunyan` should continue to process any remaining output.
+  Thanks @timborodin and @jnordberg!
+
 - [issue #160] Stop using ANSI 'grey' in `bunyan` CLI output, because of the
   problems that causes with Solarized Dark themes (see
   <https://github.com/altercation/solarized/issues/220>).

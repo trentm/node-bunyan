@@ -103,6 +103,7 @@ var stdout = process.stdout;
 var readingStdin = false;
 
 
+
 //---- support functions
 
 function getVersion() {
@@ -1052,7 +1053,7 @@ function drainStdoutAndExit(code) {
  * @param callback {Function} `function ()`
  */
 function processStdin(opts, stylize, callback) {
-    readingStdin = true
+    readingStdin = true;
     var leftover = '';  // Left-over partial line from last chunk.
     var stdin = process.stdin;
     stdin.resume();
@@ -1352,10 +1353,6 @@ function asyncForEach(arr, iterator, callback) {
  */
 var cleanedUp = false;
 function cleanupAndExit(code, signal) {
-    // Do not exit if reading form stdin and we get a SIGINT (ctrl-c)
-    if (readingStdin && signal === 'SIGINT') {
-        return;
-    }
     // Guard one call.
     if (cleanedUp) {
         return;
@@ -1392,7 +1389,16 @@ function cleanupAndExit(code, signal) {
 
 //---- mainline
 
-process.on('SIGINT', function () { cleanupAndExit(1, 'SIGINT'); });
+process.on('SIGINT', function () {
+    /**
+     * Ignore SIGINT (Ctrl+C) if processing stdin -- we should process
+     * remaining output from preceding process in the pipeline and
+     * except *it* to close.
+     */
+    if (!readingStdin) {
+        cleanupAndExit(1, 'SIGINT');
+    }
+});
 process.on('SIGQUIT', function () { cleanupAndExit(1, 'SIGQUIT'); });
 process.on('SIGTERM', function () { cleanupAndExit(1, 'SIGTERM'); });
 process.on('SIGHUP', function () { cleanupAndExit(1, 'SIGHUP'); });
