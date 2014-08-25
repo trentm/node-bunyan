@@ -8,6 +8,9 @@ Known issues:
 
 ## bunyan 1.0.1 (not yet released)
 
+- [issue #159] Fix bad handling in construtor guard intending to allow
+  creation without "new": `var log = Logger(...)`. Thanks @rmg!
+
 - [issue #156] Smaller install size via .npmignore file.
 
 - [issue #126, #161] Ignore SIGINT (Ctrl+C) when processing stdin. `...| bunyan`
