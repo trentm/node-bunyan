@@ -61,7 +61,7 @@ facilities in node 0.12 to which bunyan can switch.
   [`src: true`](#src)
 - lightweight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
-- [Runtime log snooping via DTrace support](#dtrace-support)
+- [Runtime log snooping via Dtrace support](#runtime-log-snooping-via-dtrace)
 
 
 # Introduction
