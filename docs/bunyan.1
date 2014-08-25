@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "BUNYAN" "1" "November 2012" "" "bunyan manual"
+.TH "BUNYAN" "1" "August 2014" "" "bunyan manual"
 .
 .SH "NAME"
 \fBbunyan\fR \- filter and pretty\-print Bunyan log file content
@@ -136,7 +136,7 @@ Force no coloring (e\.g\. terminal doesn\'t support it)
 .
 .TP
 \fB\-o FORMAT\fR, \fB\-\-output FORMAT\fR
-Specify an output format\. One of \fBpaul\fR (the default), \fBshort\fR, \fBjson\fR, \fBjson\-N\fR, or \fBinspect\fR\.
+Specify an output format\. One of \fBlong\fR (the default), \fBshort\fR, \fBjson\fR, \fBjson\-N\fR, \fBbunyan\fR (the native bunyan 0\-indent JSON output) or \fBinspect\fR\.
 .
 .TP
 \fB\-j\fR
@@ -166,15 +166,16 @@ fatal           60              FATAL
 .nf
 
 FORMAT NAME         DESCRIPTION
-paul (default)      The default output\. Long form\. Colored and "pretty"\.
+long (default)      The default output\. Long form\. Colored and "pretty"\.
                     \'req\' and \'res\' and \'err\' fields are rendered specially
                     as an HTTP request, HTTP response and exception
-                    stack trace, respectively\. Note: the "paul" name
-                    is deprecated and will be changed to "long"\.
+                    stack trace, respectively\. For backward compat, the
+                    name "paul" also works for this\.
 short               Like the default output, but more concise\. Some
                     typically redundant fields are ellided\.
 json                JSON output, 2\-space indentation\.
-json\-N              JSON output, N\-space indentation, e\.g\. "json\-0"
+json\-N              JSON output, N\-space indentation, e\.g\. "json\-4"
+bunyan              Alias for "json\-0", the Bunyan "native" format\.
 inspect             Node\.js `util\.inspect` output\.
 .
 .fi
