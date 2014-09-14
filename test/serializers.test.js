@@ -211,8 +211,6 @@ test('err serializer: custom serializer', function (t) {
     var e2 = new Error('message2');    
     var errs = [e1, e2];
 
-    
-
     for (var i = 0; i < errs.length; i++) {
         log.info(errs[i]);
         t.equal(records[i].err.message, errs[i].message);
