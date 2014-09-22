@@ -943,15 +943,13 @@ Output of the above might be:
 
 # Browserify
 
-XXX explain
-
 As the [Browserify](http://browserify.org/) site says it "lets you
 `require('modules')` in the browser by bundling up all of your dependencies."
 It is a build tool to run on your node.js script to bundle up your script and
 all its node.js dependencies into a single file that is runnable in the
 browser via:
 
-    <script src="foo.browser.js"></script>
+    <script src="play.browser.js"></script>
 
 As of version 1.1.0, node-bunyan supports being run via Browserify. The
 default [stream](#streams) when running in the browser is one that emits
@@ -965,69 +963,75 @@ script.
 
         $ npm install browserify bunyan
 
-2. An example script using Bunyan, "foo.js":
+2. An example script using Bunyan, "play.js":
 
-        var bunyan = require('bunyan');
-        var log = bunyan.createLogger({name: 'play', level: 'debug'});
-        log.trace('this one does not emit');
-        log.debug('hi on debug');   // console.log
-        log.info('hi on info');     // console.info
-        log.warn('hi on warn');     // console.warn
-        log.error('hi on error');   // console.error
+    ```javascript
+    var bunyan = require('bunyan');
+    var log = bunyan.createLogger({name: 'play', level: 'debug'});
+    log.trace('this one does not emit');
+    log.debug('hi on debug');   // console.log
+    log.info('hi on info');     // console.info
+    log.warn('hi on warn');     // console.warn
+    log.error('hi on error');   // console.error
+    ```
 
-3. Build this into a bundle to run in the browser, "foo.browser.js":
+3. Build this into a bundle to run in the browser, "play.browser.js":
 
-        $ ./node_modules/.bin/browserify foo.js -o foo.browser.js
+        $ ./node_modules/.bin/browserify play.js -o play.browser.js
 
-4. Put that into an HTML file, "foo.html":
+4. Put that into an HTML file, "play.html":
 
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <script src="foo.browser.js"></script>
-        </head>
-        <body>
-          <div>hi</div>
-        </body>
-        </html>
+    ```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <script src="play.browser.js"></script>
+    </head>
+    <body>
+      <div>hi</div>
+    </body>
+    </html>
+    ```
 
 5. Open that in your browser and open your browser console:
 
-        $ open foo.html
+        $ open play.html
 
 
 Here is what it looks like in Firefox's console: ![Bunyan + Browserify in the
 Firefox console](./docs/img/bunyan.browserify.png)
 
-For some the raw log records might not be desired, to have a rendered log line
+For some, the raw log records might not be desired. To have a rendered log line
 you'll want to add your own stream, starting with something like this:
 
-    function MyRawStream() {}
-    MyRawStream.prototype.write = function (rec) {
-        var nameFromLevel = {
-            TRACE: 'TRACE'
-            DEBUG: 'DEBUG',
-            INFO: 'INFO',
-            WARN: 'WARN',
-            ERROR: 'ERROR',
-            FATAL: 'FATAL'
-        };
-        console.log('[%s] %s: %s', rec.time, nameFromLevel[rec.level], rec.msg);
-    }
+```javascript
+function MyRawStream() {}
+MyRawStream.prototype.write = function (rec) {
+    var nameFromLevel = {
+        TRACE: 'TRACE'
+        DEBUG: 'DEBUG',
+        INFO: 'INFO',
+        WARN: 'WARN',
+        ERROR: 'ERROR',
+        FATAL: 'FATAL'
+    };
+    console.log('[%s] %s: %s', rec.time, nameFromLevel[rec.level], rec.msg);
+}
 
-    var log = bunyan.createLogger({
-        name: 'foo',
-        streams: [
-            {
-                level: 'info',
-                stream: new MyRawStream(),
-                type: 'raw'
-            },
-        ]
-    });
+var log = bunyan.createLogger({
+    name: 'play',
+    streams: [
+        {
+            level: 'info',
+            stream: new MyRawStream(),
+            type: 'raw'
+        },
+    ]
+});
 
-    log.info('hi on info');
+log.info('hi on info');
+```
 
 
 
