@@ -1,4 +1,3 @@
-- need .npmignore? tools dir, etc.
 - man page for the bunyan CLI (refer to it in the readme)
 - `tail -f`-like support
 - 1.0 with `v: 1` in log records. Fwd/bwd compat in `bunyan` CLI
