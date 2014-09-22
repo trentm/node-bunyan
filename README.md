@@ -1000,6 +1000,36 @@ script.
 Here is what it looks like in Firefox's console: ![Bunyan + Browserify in the
 Firefox console](./docs/img/bunyan.browserify.png)
 
+For some the raw log records might not be desired, to have a rendered log line
+you'll want to add your own stream, starting with something like this:
+
+    function MyRawStream() {}
+    MyRawStream.prototype.write = function (rec) {
+        var nameFromLevel = {
+            TRACE: 'TRACE'
+            DEBUG: 'DEBUG',
+            INFO: 'INFO',
+            WARN: 'WARN',
+            ERROR: 'ERROR',
+            FATAL: 'FATAL'
+        };
+        console.log('[%s] %s: %s', rec.time, nameFromLevel[rec.level], rec.msg);
+    }
+
+    var log = bunyan.createLogger({
+        name: 'foo',
+        streams: [
+            {
+                level: 'info',
+                stream: new MyRawStream(),
+                type: 'raw'
+            },
+        ]
+    });
+
+    log.info('hi on info');
+
+
 
 
 # Versioning
