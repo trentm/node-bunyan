@@ -62,6 +62,8 @@ facilities in node 0.12 to which bunyan can switch.
 - lightweight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
 - [Runtime log snooping via Dtrace support](#runtime-log-snooping-via-dtrace)
+- Support for [browserify](http://browserify.org/). See [Browserify
+  section](#browserify) below.
 
 
 # Introduction
@@ -937,6 +939,67 @@ Output of the above might be:
               node`_ZN4node5StartEiPPc+0x1d0
               node`main+0x1b
               node`_start+0x83
+
+
+# Browserify
+
+XXX explain
+
+As the [Browserify](http://browserify.org/) site says it "lets you
+`require('modules')` in the browser by bundling up all of your dependencies."
+It is a build tool to run on your node.js script to bundle up your script and
+all its node.js dependencies into a single file that is runnable in the
+browser via:
+
+    <script src="foo.browser.js"></script>
+
+As of version 1.1.0, node-bunyan supports being run via Browserify. The
+default [stream](#streams) when running in the browser is one that emits
+raw log records to `console.log/info/warn/error`.
+
+Here is a quick example showing you how you can get this working for your
+script.
+
+1. Get browserify and bunyan installed in your module:
+
+
+        $ npm install browserify bunyan
+
+2. An example script using Bunyan, "foo.js":
+
+        var bunyan = require('bunyan');
+        var log = bunyan.createLogger({name: 'play', level: 'debug'});
+        log.trace('this one does not emit');
+        log.debug('hi on debug');   // console.log
+        log.info('hi on info');     // console.info
+        log.warn('hi on warn');     // console.warn
+        log.error('hi on error');   // console.error
+
+3. Build this into a bundle to run in the browser, "foo.browser.js":
+
+        $ ./node_modules/.bin/browserify foo.js -o foo.browser.js
+
+4. Put that into an HTML file, "foo.html":
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <script src="foo.browser.js"></script>
+        </head>
+        <body>
+          <div>hi</div>
+        </body>
+        </html>
+
+5. Open that in your browser and open your browser console:
+
+        $ open foo.html
+
+
+Here is what it looks like in Firefox's console: ![Bunyan + Browserify in the
+Firefox console](./docs/img/bunyan.browserify.png)
+
 
 
 # Versioning
