@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.1.0 (not yet released)
+## bunyan 1.1.0
 
 - [issue #162] Preliminary support for [browserify](http://browserify.org/).
   See [the section in the README](../README.md#browserify).
