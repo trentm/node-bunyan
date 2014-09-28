@@ -938,7 +938,17 @@ function emitRecord(rec, line, opts, stylize) {
         }
 
         if (rec.err && rec.err.stack) {
-            details.push(indent(rec.err.stack));
+            var err = rec.err
+            details.push(indent(err.stack));
+            delete err.message;
+            delete err.name;
+            delete err.stack;
+            // E.g. for extra 'foo' field on 'err', add 'err.foo' at
+            // top-level. This *does* have the potential to stomp on a
+            // literal 'err.foo' key.
+            Object.keys(err).forEach(function (k) {
+                rec['err.' + k] = err[k];
+            })
             delete rec.err;
         }
 
