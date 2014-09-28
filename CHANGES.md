@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.1.1 (not yet released)
+## bunyan 1.1.1
 
 - [pull #168] Fix handling of `log.info(err)` to use the `log` Logger's `err`
   serializer if it has one, instead of always using the core Bunyan err
