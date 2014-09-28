@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.1.3 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.1.2
 
 - Fix a breakage in `log.info(err)` on a logger with no serializers.
