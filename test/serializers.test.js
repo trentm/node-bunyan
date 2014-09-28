@@ -181,6 +181,43 @@ test('err serializer', function (t) {
     t.end();
 });
 
+test('err serializer: custom serializer', function (t) {
+    var records = [];
+
+    function customSerializer(err) {
+        return {
+            message: err.message,
+            name: err.name,
+            stack: err.stack,
+            beep: err.beep
+        };
+    }
+
+    var log = bunyan.createLogger({
+        name: 'serializer-test',
+        streams: [
+            {
+                stream: new CapturingStream(records),
+                type: 'raw'
+            }
+        ],
+        serializers: {
+            err: customSerializer
+        }
+    });
+
+    var e1 = new Error('message1');
+    e1.beep = 'bop';
+    var e2 = new Error('message2');    
+    var errs = [e1, e2];
+
+    for (var i = 0; i < errs.length; i++) {
+        log.info(errs[i]);
+        t.equal(records[i].err.message, errs[i].message);
+        t.equal(records[i].err.beep, errs[i].beep);
+    }
+    t.end();
+});
 
 test('err serializer: long stack', function (t) {
     var records = [];
