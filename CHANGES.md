@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.1.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.1.1
 
 - [pull #168] Fix handling of `log.info(err)` to use the `log` Logger's `err`
