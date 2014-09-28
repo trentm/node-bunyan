@@ -208,7 +208,7 @@ test('err serializer: custom serializer', function (t) {
 
     var e1 = new Error('message1');
     e1.beep = 'bop';
-    var e2 = new Error('message2');    
+    var e2 = new Error('message2');
     var errs = [e1, e2];
 
     for (var i = 0; i < errs.length; i++) {
