@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.1.3 (not yet released)
+## bunyan 1.1.3
 
 - [issue #165] Include extra `err` fields in `bunyan` CLI output. Before
   this change only the fields part of the typical node.js error stack
