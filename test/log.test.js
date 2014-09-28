@@ -238,3 +238,14 @@ test('log.info(<fields>, <array>)', function (t) {
     });
     t.end();
 });
+
+test('log.info(<err>)', function (t) {
+    var e = new Error('boom');
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, e);
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.err.message, 'boom',
+            format('log.%s err.message: got %j', lvl, rec.err.message));
+    });
+    t.end();
+});

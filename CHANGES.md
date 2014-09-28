@@ -8,10 +8,13 @@ Known issues:
 
 ## bunyan 1.1.2 (not yet released)
 
-(nothing yet)
+- Fix a breakage in `log.info(err)` on a logger with no serializers.
 
 
 ## bunyan 1.1.1
+
+Note: *Bad release.* It breaks `log.info(err)` on a logger with no serializers.
+Use version 1.1.2.
 
 - [pull #168] Fix handling of `log.info(err)` to use the `log` Logger's `err`
   serializer if it has one, instead of always using the core Bunyan err
