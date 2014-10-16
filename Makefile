@@ -32,7 +32,6 @@ NON_DTRACE_TEST_FILES := $(shell ls -1 test/*.test.js | grep -v dtrace | xargs)
 
 all $(NODEUNIT):
 	npm install
-	npm install dtrace-provider
 
 # Ensure all version-carrying files have the same version.
 .PHONY: versioncheck
@@ -87,8 +86,13 @@ test: $(NODEUNIT)
 # Note: 'test10' is last so (if all is well) I end up with a binary
 # dtrace-provider build for node 0.10 (my current version).
 .PHONY: testall
-testall: test08 test10
+testall: test11 test08 test10
 
+.PHONY: test11
+test11:
+	@echo "# Test node 0.11.x (with node `$(NODEOPT)/node-0.11/bin/node --version`)"
+	@$(NODEOPT)/node-0.11/bin/node --version
+	PATH="$(NODEOPT)/node-0.11/bin:$(PATH)" make distclean all test
 .PHONY: test10
 test10:
 	@echo "# Test node 0.10.x (with node `$(NODEOPT)/node-0.10/bin/node --version`)"

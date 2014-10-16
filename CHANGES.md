@@ -6,9 +6,19 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.1.4 (not yet released)
+## bunyan 1.2.0 (not yet released)
 
-(nothing yet)
+- [issue #157] Restore dtrace-provider as a dependency (in
+  "optionalDependencies").
+
+  Dtrace-provider version 0.3.0 add build sugar that should eliminate the
+  problems from older versions:
+  The build is not attempted on Linux and Windows. The build spew is
+  *not* emitted by default (use `V=1 npm install` to see it); instead a
+  short warning is emitted if the build fails. 
+  
+  Also, importantly, the new dtrace-provider fixes working with node
+  v0.11/0.12.
 
 
 ## bunyan 1.1.3

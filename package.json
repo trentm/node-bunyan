@@ -1,6 +1,6 @@
 {
   "name": "bunyan",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "a JSON logging library for node.js services",
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "main": "./lib/bunyan.js",
@@ -13,17 +13,16 @@
     "url": "git://github.com/trentm/node-bunyan.git"
   },
   "engines": ["node >=0.8.0"],
-  "keywords": ["log", "logging", "log4j", "json"],
+  "keywords": ["log", "logging", "log4j", "json", "bunyan"],
 
-  "dependencies": {
-  },
-  "// comment: mv": "'mv' required for RotatingFileStream",
-  "// comment: dtrace": "dtrace-provider required for Bunyan dtrace features, but install is notoriously problematic on some plats (#135)",
+  "// comment1": "'dtrace-provider' required for dtrace features",
+  "// comment2": "'mv' required for RotatingFileStream",
   "optionalDependencies": {
+    "dtrace-provider": "0.3.0",
     "mv": "~2"
   },
   "devDependencies": {
-    "nodeunit": "0.7.4",
+    "nodeunit": "0.9.*",
     "ben": "0.0.0",
     "verror": "1.3.3",
     "vasync": "1.4.3"
