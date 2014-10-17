@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.2.0 (not yet released)
+## bunyan 1.2.0
 
 - [issue #157] Restore dtrace-provider as a dependency (in
   "optionalDependencies").
