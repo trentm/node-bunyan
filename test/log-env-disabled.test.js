@@ -5,6 +5,7 @@
 
 // Records that has this name will NOT be emitted.
 process.env.BUNYAN_REC_DISABLE_name = "to-be-disabled";
+process.env["BUNYAN_REC_DISABLE_fullName.first"] = "Marcello";
 
 var util = require('util'),
     format = util.format,
@@ -73,6 +74,24 @@ var names = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 test('log.info(null, disabled by "name")', function (t) {
     names.forEach(function (lvl) {
         log3[lvl].call(log3, null, 'some message');
+        var rec = catcher.records[catcher.records.length - 1];
+        t.notEqual(rec, 'undefined');
+    });
+    delete process.env.BUNYAN_REC_DISABLE_name;
+    t.end();
+});
+
+test('log.info(null, disabled by "object value")', function (t) {
+
+    var myObj = {
+        fullName: {
+            first: "Marcello",
+            last: "deSales"
+        }
+    };
+
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, myObj, 'some message');
         var rec = catcher.records[catcher.records.length - 1];
         t.notEqual(rec, 'undefined');
     });
