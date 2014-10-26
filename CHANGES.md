@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.2.1 (not yet released)
+## bunyan 1.2.1
 
 - [issue #178, #181] Get at least dtrace-provider 0.3.1 for
   optionalDependencies to get a fix for install with decoupled npm (e.g. with
