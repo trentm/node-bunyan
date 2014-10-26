@@ -8,7 +8,9 @@ Known issues:
 
 ## bunyan 1.2.1 (not yet released)
 
-(nothing yet)
+- [issue #178, #181] Get at least dtrace-provider 0.3.1 for
+  optionalDependencies to get a fix for install with decoupled npm (e.g. with
+  homebrew's node and npm).
 
 
 ## bunyan 1.2.0
