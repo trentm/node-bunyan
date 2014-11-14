@@ -8,7 +8,11 @@ Known issues:
 
 ## bunyan 1.2.2 (not yet released)
 
-(nothing yet)
+- Drop the guard that a bunyan Logger level must be between TRACE (10)
+  and FATAL (60), inclusive. This allows a trick of setting the level
+  to `FATAL + 1` to turn logging off. While the standard named log levels are
+  the golden path, then intention was not to get in the way of using
+  other level numbers.
 
 
 ## bunyan 1.2.1
