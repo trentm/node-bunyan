@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.2.3 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.2.2
 
 - Drop the guard that a bunyan Logger level must be between TRACE (10)
