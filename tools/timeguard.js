@@ -6,23 +6,21 @@
 console.log('Time try/catch-guard on JSON.stringify:');
 
 var ben = require('ben');  // npm install ben
-var Logger = require('../lib/bunyan');
+var bunyan = require('../lib/bunyan');
 
-var records = [];
-function Collector() {
-}
-Collector.prototype.write = function (s) {
-    //records.push(s);
-}
-var collector = new Collector();
+function Collector() {}
+Collector.prototype.write = function (s) {};
 
-var log = new Logger({
+var log = bunyan.createLogger({
     name: 'timeguard',
-    src: true,
-    stream: collector
+    stream: new Collector()
 });
 
 var ms = ben(1e5, function () {
     log.info('hi');
 });
 console.log(' - log.info:  %dms per iteration', ms);
+
+console.log('\nNow you need to manually change `Logger.prototype._emit` in\n'
+    + '"../lib/bunyan.js" to (not) have a try/catch around `JSON.stringify`.\n'
+    + 'Then re-run this a few times to compare speed.');
