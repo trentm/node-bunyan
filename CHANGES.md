@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.2.3 (not yet released)
+## bunyan 1.2.3
 
 - [issue #184] Fix log rotation for rotation periods > ~25 days. Before this
   change, a rotation period longer than this could hit [the maximum setTimeout
