@@ -39,17 +39,6 @@ to get the bunyan CLI on your PATH, then use local bunyan installs for
 node.js library usage of bunyan in your apps.
 
 
-To use the DTrace features (on platforms that support dtrace) you need
-to manually install the dtrace-provider library separately:
-
-    npm install dtrace-provider
-
-Yes, this sucks. This used to be in "optionalDependencies" but
-[this](https://github.com/trentm/node-bunyan/issues/135) and other issues showed
-burden and confusion for users. I'm looking forward to coming *core* tracing
-facilities in node 0.12 to which bunyan can switch.
-
-
 # Features
 
 - elegant [log method API](#log-method-api)
