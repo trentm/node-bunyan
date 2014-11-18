@@ -8,7 +8,9 @@ Known issues:
 
 ## bunyan 1.2.3 (not yet released)
 
-(nothing yet)
+- [issue #184] Fix log rotation for rotation periods > ~25 days. Before this
+  change, a rotation period longer than this could hit [the maximum setTimeout
+  delay in node.js](https://github.com/joyent/node/issues/8656). By Daniel Juhl.
 
 
 ## bunyan 1.2.2
@@ -36,8 +38,8 @@ Known issues:
   problems from older versions:
   The build is not attempted on Linux and Windows. The build spew is
   *not* emitted by default (use `V=1 npm install` to see it); instead a
-  short warning is emitted if the build fails. 
-  
+  short warning is emitted if the build fails.
+
   Also, importantly, the new dtrace-provider fixes working with node
   v0.11/0.12.
 
