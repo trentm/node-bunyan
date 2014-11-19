@@ -12,9 +12,7 @@
     "type": "git",
     "url": "git://github.com/trentm/node-bunyan.git"
   },
-  "engines": [
-    "node >=0.8.0"
-  ],
+  "engines": ["node >=0.8.0"],
   "keywords": ["log", "logging", "log4j", "json", "bunyan"],
 
   "// comment1": "'dtrace-provider' required for dtrace features",
