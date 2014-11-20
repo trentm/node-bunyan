@@ -25,6 +25,7 @@ var child_process = require('child_process'),
     exec = child_process.exec,
     execFile = child_process.execFile;
 var assert = require('assert');
+var _ = null;
 
 var nodeSpawnSupportsStdio = (
     Number(process.version.split('.')[0]) >= 0 ||
@@ -44,6 +45,7 @@ var OM_INSPECT = 3;
 var OM_SIMPLE = 4;
 var OM_SHORT = 5;
 var OM_BUNYAN = 6;
+var OM_CUSTOM = 7;
 var OM_FROM_NAME = {
     'long': OM_LONG,
     'paul': OM_LONG,  /* backward compat */
@@ -51,7 +53,8 @@ var OM_FROM_NAME = {
     'inspect': OM_INSPECT,
     'simple': OM_SIMPLE,
     'short': OM_SHORT,
-    'bunyan': OM_BUNYAN
+    'bunyan': OM_BUNYAN,
+    'custom': OM_CUSTOM
 };
 
 
@@ -484,6 +487,20 @@ function parseArgv(argv) {
                     throw new Error('unknown output mode: "'+name+'"');
                 }
                 break;
+            case '-t':
+            case '--template':
+                try {
+                    _ = require('underscore');
+                } catch(e) {
+                    throw new Error("you need to install 'underscore' to use the custom template.");
+                }
+                // Who want ERB? (not me)
+                // Let's go for mustache style parsing!
+                _.templateSettings = {
+                  interpolate: /\{\{(.+?)\}\}/g
+                };
+                parsed.template = _.template(args.shift());
+                break;
             case '-j': // output with JSON.stringify
                 parsed.outputMode = OM_JSON;
                 break;
@@ -618,16 +635,32 @@ function stylizeWithColor(str, color) {
         return '';
     var codes = colors[color];
     if (codes) {
-        return '\033[' + codes[0] + 'm' + str +
-                     '\033[' + codes[1] + 'm';
+        return stylizeWithColor.start(color) + str + stylizeWithColor.end(color);
     } else {
         return str;
     }
 }
 
+stylizeWithColor.start = function(color) {
+    var codes = colors[color];
+    if (codes) {
+        return '\033[' + codes[0] + 'm';
+    }
+};
+
+stylizeWithColor.end = function(color) {
+    var codes = colors[color];
+    if (codes) {
+        return '\033[' + codes[1] + 'm';
+    }
+};
+
+
 function stylizeWithoutColor(str, color) {
     return str;
 }
+
+stylizeWithoutColor.start = stylizeWithoutColor.end = function() {};
 
 
 /**
@@ -1017,6 +1050,18 @@ function emitRecord(rec, line, opts, stylize) {
         emit(format('%s - %s\n',
             upperNameFromLevel[rec.level] || 'LVL' + rec.level,
             rec.msg));
+        break;
+
+    case OM_CUSTOM:
+        if (!isValidRecord(rec)) {
+            return emit(line + '\n');
+        }
+
+        // Shortcut for "colorStart"
+        rec._cS = stylize.start;
+        // Shortcut for "colorEnd"
+        rec._cE = stylize.end;
+        emit(opts.template ? opts.template(rec) : 'No template defined. Use --template.' +'\n');
         break;
     default:
         throw new Error('unknown output mode: '+opts.outputMode);
