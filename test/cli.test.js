@@ -64,6 +64,25 @@ test('--bogus', function (t) {
     });
 });
 
+test('--formatter', function (t) {
+    exec(_('%s --formatter %s %s/corpus/simple.log', BUNYAN, __dirname + '/custom-formatter', __dirname),
+        function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout, 'bork\n');
+            t.end();
+        }
+    );
+});
+
+test('--formatter (invalid)', function (t) {
+    exec(_('%s --formatter %s %s/corpus/simple.log', BUNYAN, 'die', __dirname),
+        function (err, stdout, stderr) {
+            t.ok(/unknown formatter: "die"/.test(stderr));
+            t.end();
+        }
+    );
+});
+
 test('simple.log', function (t) {
     exec(_('%s %s/corpus/simple.log', BUNYAN, __dirname),
              function (err, stdout, stderr) {
