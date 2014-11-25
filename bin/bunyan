@@ -1069,7 +1069,16 @@ function emitRecord(rec, line, opts, stylize) {
         rec._cS = stylize.start;
         // Shortcut for "colorEnd"
         rec._cE = stylize.end;
-        emit(opts.template ? opts.template(rec) : 'No template defined. Use --template.' +'\n');
+
+        var out;
+        try {
+            out = opts.template ? opts.template(rec) : 'No template defined. Use --template.';
+        }
+        catch(e) {
+            // Unprocessable line, display default
+            return emit(line + '\n');
+        }
+        emit(out + '\n');
         break;
     default:
         throw new Error('unknown output mode: '+opts.outputMode);
