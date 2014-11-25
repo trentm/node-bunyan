@@ -228,6 +228,14 @@ function printHelp() {
     p('                  bunyan: 0 indented JSON, bunyan\'s native format');
     p('                  inspect: node.js `util.inspect` output');
     p('                  short: like "long", but more concise');
+    p('                  custom: use custom template defined with --template');
+    p('  -t, --template TEMPLATE');
+    p('                Custom template (you need to set -o custom)');
+    p('                Let you define your own templates, using mustache-like syntax.');
+    p('                Keys from the current object will be the template free variable.');
+    p('                You can put arbitrary code between {{ }}.');
+    p('                Use _cS to start a color, and _cE to stop a color.');
+    p('                Example: {{ _cS(\'grey\') }}{{ req.username }}{{ _cE(\'grey\') }}');
     p('  -j            shortcut for `-o json`');
     p('  -0            shortcut for `-o bunyan`');
     p('');
