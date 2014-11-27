@@ -1069,6 +1069,8 @@ function emitRecord(rec, line, opts, stylize) {
         rec._cS = stylize.start;
         // Shortcut for "colorEnd"
         rec._cE = stylize.end;
+        // Shortcut for easy date access
+        rec._time = new Date(rec.time);
 
         var out;
         try {
