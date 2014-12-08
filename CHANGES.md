@@ -8,7 +8,15 @@ Known issues:
 
 ## bunyan 1.2.4 (not yet released)
 
-(nothing yet)
+- [issue #100] Gracefully handle the case of an unbound
+  `Logger.{info,debug,...}` being used for logging, e.g.:
+
+        myEmittingThing.on('data', log.info)
+
+  Before this change, bunyan would throw. Now it emits a warning to stderr
+  *once*, and then silently ignores those log attempts, e.g.:
+
+        bunyan usage error: /Users/trentm/tm/node-bunyan/foo.js:12: attempt to log with an unbound log method: `this` is: { _events: { data: [Function] } }
 
 
 ## bunyan 1.2.3
