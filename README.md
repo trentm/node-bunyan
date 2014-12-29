@@ -266,7 +266,7 @@ Or this:
         serializers: {req: bunyan.stdSerializers.req}
     });
 
-because Buyan includes a small set of standard serializers. To use all the
+because Bunyan includes a small set of standard serializers. To use all the
 standard serializers you can use:
 
     var log = bunyan.createLogger({
