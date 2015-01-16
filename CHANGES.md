@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.2.5 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.2.4
 
 - [issue #210] Export `bunyan.nameFromLevel` and `bunyan.levelFromName`. It can
