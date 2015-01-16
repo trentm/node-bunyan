@@ -995,17 +995,14 @@ For some, the raw log records might not be desired. To have a rendered log line
 you'll want to add your own stream, starting with something like this:
 
 ```javascript
+var bunyan = require('./lib/bunyan');
+
 function MyRawStream() {}
 MyRawStream.prototype.write = function (rec) {
-    var nameFromLevel = {
-        TRACE: 'TRACE'
-        DEBUG: 'DEBUG',
-        INFO: 'INFO',
-        WARN: 'WARN',
-        ERROR: 'ERROR',
-        FATAL: 'FATAL'
-    };
-    console.log('[%s] %s: %s', rec.time, nameFromLevel[rec.level], rec.msg);
+    console.log('[%s] %s: %s',
+        rec.time.toISOString(),
+        bunyan.nameFromLevel[rec.level],
+        rec.msg);
 }
 
 var log = bunyan.createLogger({
@@ -1015,7 +1012,7 @@ var log = bunyan.createLogger({
             level: 'info',
             stream: new MyRawStream(),
             type: 'raw'
-        },
+        }
     ]
 });
 

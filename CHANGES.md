@@ -8,6 +8,9 @@ Known issues:
 
 ## bunyan 1.2.4 (not yet released)
 
+- [issue #210] Export `bunyan.nameFromLevel` and `bunyan.levelFromName`. It can
+  be a pain for custom streams to have to reproduce that.
+
 - [issue #100] Gracefully handle the case of an unbound
   `Logger.{info,debug,...}` being used for logging, e.g.:
 
