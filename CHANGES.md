@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.3.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.3.0
 
 - [issue #103] `bunyan -L` (or `bunyan --time local`) to show local time.
