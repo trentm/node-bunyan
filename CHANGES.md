@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.2.5 (not yet released)
+## bunyan 1.3.0 (not yet released)
 
 - [issue #103] `bunyan -L` (or `bunyan --time local`) to show local time.
   Bunyan log records store `time` in UTC time. Sometimes it is convenient
