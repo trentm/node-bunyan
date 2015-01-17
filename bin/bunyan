@@ -234,6 +234,8 @@ function printHelp() {
     p('                  short: like "long", but more concise');
     p('  -j            shortcut for `-o json`');
     p('  -0            shortcut for `-o bunyan`');
+    p('  -L, --time local');
+    p('                Display time field in local time, rather than UTC.');
     p('');
     p('Environment Variables:');
     p('  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ');

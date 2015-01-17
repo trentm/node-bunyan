@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "BUNYAN" "1" "August 2014" "" "bunyan manual"
+.TH "BUNYAN" "1" "January 2015" "" "bunyan manual"
 .
 .SH "NAME"
 \fBbunyan\fR \- filter and pretty\-print Bunyan log file content
@@ -141,6 +141,10 @@ Specify an output format\. One of \fBlong\fR (the default), \fBshort\fR, \fBjson
 .TP
 \fB\-j\fR
 Shortcut for \fB\-o json\fR\.
+.
+.TP
+\fB\-L\fR, \fB\-\-time local\fR
+Display the time field in \fIlocal\fR time, rather than the default UTC time\.
 .
 .SH "LOG LEVELS"
 In Bunyan log records, then \fBlevel\fR field is a number\. For the \fB\-l|\-\-level\fR argument the level \fBnames\fR are supported as shortcuts\. In \fB\-c|\-\-condition\fR scripts, uppercase symbols like "DEBUG" are defined for convenience\.

@@ -109,6 +109,10 @@ Output options:
   * `-j`:
     Shortcut for `-o json`.
 
+  * `-L`, `--time local`:
+    Display the time field in *local* time, rather than the default UTC
+    time.
+
 
 ## LOG LEVELS
 
