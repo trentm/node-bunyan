@@ -14,11 +14,12 @@
   },
   "engines": ["node >=0.8.0"],
   "keywords": ["log", "logging", "log4j", "json", "bunyan"],
-
   "// comment1": "'dtrace-provider' required for dtrace features",
-  "// comment2": "'mv' required for RotatingFileStream",
+  "// comment2": "'underscore' required for custom templating in Bunyan CLI",
+  "// comment3": "'mv' required for RotatingFileStream",
   "optionalDependencies": {
     "dtrace-provider": "~0.3 >0.3.0",
+    "underscore": "^1.7.0",
     "mv": "~2"
   },
   "devDependencies": {
