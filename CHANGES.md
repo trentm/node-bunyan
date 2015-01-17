@@ -8,7 +8,8 @@ Known issues:
 
 ## bunyan 1.2.5 (not yet released)
 
-(nothing yet)
+- [issue #205] Fix the "The Bunyan CLI crashed!" checking to properly warn of
+  the common failure case when `-c CONDITION` is being used.
 
 
 ## bunyan 1.2.4

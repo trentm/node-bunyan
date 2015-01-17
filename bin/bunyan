@@ -92,8 +92,8 @@ var child = null;
 // Whether ANSI codes are being used. Used for signal-handling.
 var usingAnsiCodes = false;
 
-// Global ref to options used only by 'uncaughtException' handler.
-var gOptsForUncaughtException;
+// Used to tell the 'uncaughtException' handler that '-c CODE' is being used.
+var gUsingConditionOpts = false;
 
 // Pager child process, and output stream to which to write.
 var pager = null;
@@ -400,7 +400,6 @@ function parseArgv(argv) {
         outputMode: OM_LONG,
         jsonIndent: 2,
         level: null,
-        conditions: null,
         strict: false,
         pids: null,
         pidsType: null
@@ -529,6 +528,7 @@ function parseArgv(argv) {
                 break;
             case '-c':
             case '--condition':
+                gUsingConditionOpts = true;
                 var condition = args.shift();
                 if (Boolean(process.env.BUNYAN_EXEC &&
                     process.env.BUNYAN_EXEC === 'vm'))
@@ -1425,13 +1425,13 @@ process.on('uncaughtException', function (err) {
     var title = encodeURIComponent(format(
         'Bunyan %s crashed: %s', getVersion(), String(err)));
     var e = console.error;
-    e('* * *');
+    e('```');
     e('* The Bunyan CLI crashed!');
     e('*');
-    if (err.name === 'ReferenceError' && gOptsForUncaughtException.conditions) {
-        e('* A "ReferenceError" is often the result of given');
-        e('* `-c CONDITION` code that doesn\'t guard against undefined');
-        e('* values. If that is not the problem:');
+    if (err.name === 'ReferenceError' && gUsingConditionOpts) {
+        e('* This crash was due to a "ReferenceError", which is often the result of given');
+        e('* `-c CONDITION` code that doesn\'t guard against undefined values. If that is');
+        e('* not the problem:');
         e('*');
     }
     e('* Please report this issue and include the details below:');
@@ -1446,7 +1446,7 @@ process.on('uncaughtException', function (err) {
     e('* log line: %j', currLine);
     e('* stack:');
     e(_indent(err.stack));
-    e('* * *');
+    e('```');
     process.exit(1);
 });
 
@@ -1458,7 +1458,6 @@ function main(argv) {
         warn('bunyan: error: %s', e.message);
         return drainStdoutAndExit(1);
     }
-    gOptsForUncaughtException = opts; // intentionally global
     if (opts.help) {
         printHelp();
         return;
