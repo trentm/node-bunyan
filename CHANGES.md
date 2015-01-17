@@ -8,6 +8,10 @@ Known issues:
 
 ## bunyan 1.2.5 (not yet released)
 
+- [issue #103] `bunyan -L` (or `bunyan --time local`) to show local time.
+  Bunyan log records store `time` in UTC time. Sometimes it is convenient
+  to display in local time.
+
 - [issue #205] Fix the "The Bunyan CLI crashed!" checking to properly warn of
   the common failure case when `-c CONDITION` is being used.
 

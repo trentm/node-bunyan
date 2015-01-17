@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Copyright (c) 2014 Trent Mick. All rights reserved.
- * Copyright (c) 2014 Joyent Inc. All rights reserved.
+ * Copyright (c) 2015 Trent Mick. All rights reserved.
+ * Copyright (c) 2015 Joyent Inc. All rights reserved.
  *
  * bunyan -- filter and pretty-print Bunyan log files (line-delimited JSON)
  *
@@ -81,6 +81,13 @@ Object.keys(levelFromName).forEach(function (name) {
     upperPaddedNameFromLevel[lvl] = (
         name.length === 4 ? ' ' : '') + name.toUpperCase();
 });
+
+
+// Display time formats.
+TIME_UTC = 1;  // the default, bunyan's native format
+TIME_LOCAL = 2;
+
+var timezoneOffsetMs; // used for TIME_LOCAL display
 
 
 // The current raw input line being processed. Used for `uncaughtException`.
@@ -402,7 +409,8 @@ function parseArgv(argv) {
         level: null,
         strict: false,
         pids: null,
-        pidsType: null
+        pidsType: null,
+        timeFormat: null  // one of the TIME_ constants
     };
 
     // Turn '-iH' into '-i -H', except for argument-accepting options.
@@ -488,6 +496,25 @@ function parseArgv(argv) {
                 break;
             case '-0':
                 parsed.outputMode = OM_BUNYAN;
+                break;
+            case '-L':
+                parsed.timeFormat = TIME_LOCAL;
+                break;
+            case '--time':
+                var timeArg = args.shift();
+                switch (timeArg) {
+                case 'utc':
+                    parsed.timeFormat = TIME_UTC;
+                    break
+                case 'local':
+                    parsed.timeFormat = TIME_LOCAL;
+                    break
+                case undefined:
+                    throw new Error('missing argument to "--time"');
+                default:
+                    throw new Error(format('invalid time format: "%s"',
+                        timeArg));
+                }
                 break;
             case '-p':
                 if (!parsed.pids) {
@@ -723,17 +750,25 @@ function emitRecord(rec, line, opts, stylize) {
 
         delete rec.v;
 
-        /*
-         * We assume the Date is formatted according to ISO8601, in which
-         * case we can safely chop off the date information.
-         */
-        if (short && rec.time[10] == 'T') {
-            var time = rec.time.substr(11);
-            time = stylize(time, 'XXX');
-        } else {
-            var time = stylize('[' + rec.time + ']', 'XXX');
+        var time = rec.time;
+        switch (opts.timeFormat) {
+        case TIME_UTC:
+            break;
+        case TIME_LOCAL:
+            if (!timezoneOffsetMs) {
+                timezoneOffsetMs
+                    = (new Date(time)).getTimezoneOffset() * 60 * 1000;
+            }
+            time = new Date(
+                (new Date(time)).getTime() - timezoneOffsetMs).toISOString()
+            break;
         }
-
+        if (short && rec.time[10] === 'T') {
+            // Presuming `time` is ISO8601 formatted, i.e. safe to drop date.
+            time = stylize(time.substr(11), 'XXX');
+        } else {
+            time = stylize('[' + time + ']', 'XXX');
+        }
         delete rec.time;
 
         var nameStr = rec.name;
