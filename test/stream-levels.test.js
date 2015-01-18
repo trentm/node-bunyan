@@ -75,9 +75,11 @@ test('stream & level="trace" specified', function (t) {
 test('one stream, default level', function (t) {
     var log = bunyan.createLogger({
         name: 'foo',
-        streams: [{
-            stream: process.stderr
-        }]
+        streams: [
+            {
+                stream: process.stderr
+            }
+        ]
     });
     t.equal(log.level(), bunyan.INFO);
     t.equal(log.streams[0].level, bunyan.INFO);
@@ -88,9 +90,11 @@ test('one stream, top-"level" specified', function (t) {
     var log = bunyan.createLogger({
         name: 'foo',
         level: 'error',
-        streams: [{
-            stream: process.stderr
-        }]
+        streams: [
+            {
+                stream: process.stderr
+            }
+        ]
     });
     t.equal(log.level(), bunyan.ERROR);
     t.equal(log.streams[0].level, bunyan.ERROR);
@@ -100,10 +104,12 @@ test('one stream, top-"level" specified', function (t) {
 test('one stream, stream-"level" specified', function (t) {
     var log = bunyan.createLogger({
         name: 'foo',
-        streams: [{
-            stream: process.stderr,
-            level: 'error'
-        }]
+        streams: [
+            {
+                stream: process.stderr,
+                level: 'error'
+            }
+        ]
     });
     t.equal(log.level(), bunyan.ERROR);
     t.equal(log.streams[0].level, bunyan.ERROR);
@@ -114,10 +120,12 @@ test('one stream, both-"level" specified', function (t) {
     var log = bunyan.createLogger({
         name: 'foo',
         level: 'debug',
-        streams: [{
-            stream: process.stderr,
-            level: 'error'
-        }]
+        streams: [
+            {
+                stream: process.stderr,
+                level: 'error'
+            }
+        ]
     });
     t.equal(log.level(), bunyan.ERROR);
     t.equal(log.streams[0].level, bunyan.ERROR);
@@ -163,4 +171,3 @@ test('two streams, one with "level" specified', function (t) {
     t.equal(log.streams[1].level, bunyan.FATAL);
     t.end();
 });
-
