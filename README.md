@@ -171,7 +171,7 @@ streams at different levels**.
         },
         {
           level: 'error',
-          path: '/var/log/myapp-error.log'  // log ERROR and above to a file
+          path: '/var/tmp/myapp-error.log'  // log ERROR and above to a file
         }
       ]
     });

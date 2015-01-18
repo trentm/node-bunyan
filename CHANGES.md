@@ -8,7 +8,23 @@ Known issues:
 
 ## bunyan 1.3.1 (not yet released)
 
-(nothing yet)
+- [issue #164] Ensure a top-level `level` given in `bunyan.createLogger`
+  is *used* for given `streams`. For example, ensure that the following
+  results in the stream having a DEBUG level:
+
+        var log = bunyan.createLogger({
+            name: 'foo',
+            level: 'debug',
+            streams: [
+                {
+                    path: '/var/tmp/foo.log'
+                }
+            ]
+        });
+
+  This was broken in the 1.0.1 release. Between that release and 1.3.0
+  the "/var/tmp/foo.log" stream would be at the INFO level (Bunyan's
+  default level).
 
 
 ## bunyan 1.3.0
