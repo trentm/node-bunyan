@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.3.2 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.3.1
 
 - Export `bunyan.RotatingFileStream` which is needed if one wants to
