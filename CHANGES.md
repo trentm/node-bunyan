@@ -8,6 +8,11 @@ Known issues:
 
 ## bunyan 1.3.1 (not yet released)
 
+- [pull #122] Source Map support for caller line position for [the "src"
+  field](https://github.com/trentm/node-bunyan#src). This could be interesting
+  for [CoffeeScript](http://coffeescript.org/documentation/docs/sourcemap.html)
+  users of Bunyan. By Manuel Schneider.
+
 - [issue #164] Ensure a top-level `level` given in `bunyan.createLogger`
   is *used* for given `streams`. For example, ensure that the following
   results in the stream having a DEBUG level:
