@@ -8,6 +8,9 @@ Known issues:
 
 ## bunyan 1.3.1 (not yet released)
 
+- Export `bunyan.RotatingFileStream` which is needed if one wants to
+  customize it. E.g. see issue #194.
+
 - [pull #122] Source Map support for caller line position for [the "src"
   field](https://github.com/trentm/node-bunyan#src). This could be interesting
   for [CoffeeScript](http://coffeescript.org/documentation/docs/sourcemap.html)
