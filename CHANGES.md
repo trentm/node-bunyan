@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.3.3 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.3.2
 
 - [pull #182] Fallback to using the optional 'safe-json-stringify' module
