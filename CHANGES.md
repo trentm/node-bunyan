@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.3.2 (not yet released)
+## bunyan 1.3.2
 
 - [pull #182] Fallback to using the optional 'safe-json-stringify' module
   if `JSON.stringify` throws -- possibly with an enumerable property
