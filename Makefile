@@ -78,6 +78,7 @@ distclean:
 test: $(NODEUNIT)
 	test -z "$(DTRACE_UP_IN_HERE)" || test -n "$(SKIP_DTRACE)" || \
 		(node -e 'require("dtrace-provider").createDTraceProvider("isthisthingon")' && \
+		echo "\nNote: Use 'SKIP_DTRACE=1 make test' to skip parts of the test suite that require root." && \
 		$(SUDO) $(NODEUNIT) test/dtrace.test.js)
 	$(NODEUNIT) $(NON_DTRACE_TEST_FILES)
 
