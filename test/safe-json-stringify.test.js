@@ -62,6 +62,7 @@ test('defineProperty boom, without safe-json-stringify', function (t) {
         t.ok(stderr.indexOf(
             'You can install the "safe-json-stringify" module') !== -1);
         t.equal(stderr.match(
+            /* JSSTYLED */
             /You can install the "safe-json-stringify" module/g).length, 1);
         t.end();
     });

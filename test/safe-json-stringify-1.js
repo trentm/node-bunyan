@@ -6,6 +6,5 @@ var log = bunyan.createLogger({
 
 var obj = {};
 obj.__defineGetter__('boom',
-    function() { throw new Error('__defineGetter__ ouch!'); });
+    function () { throw new Error('__defineGetter__ ouch!'); });
 log.info({obj: obj}, 'using __defineGetter__');
-

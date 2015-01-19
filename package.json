@@ -20,7 +20,7 @@
   "optionalDependencies": {
     "dtrace-provider": "~0.3 >0.3.0",
     "mv": "~2",
-    "safe-json-stringify": "1.0.1"
+    "safe-json-stringify": "~1"
   },
   "devDependencies": {
     "nodeunit": "0.9.*",

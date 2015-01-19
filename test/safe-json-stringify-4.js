@@ -8,7 +8,7 @@ var log = bunyan.createLogger({
 // And using `Object.defineProperty`.
 var obj = {};
 Object.defineProperty(obj, 'boom', {
-    get: function() { throw new Error('defineProperty ouch!'); },
+    get: function () { throw new Error('defineProperty ouch!'); },
     enumerable: true // enumerable is false by default
 });
 // Twice to test the 'warnKey' usage.
