@@ -1,6 +1,7 @@
+- `bunyan` (without redir) ^C should stop, doesn't since recent change
 - man page for the bunyan CLI (refer to it in the readme)
 - `tail -f`-like support
-- 1.0 with `v: 1` in log records. Fwd/bwd compat in `bunyan` CLI
+- 2.0 (?) with `v: 1` in log records. Fwd/bwd compat in `bunyan` CLI
 
 # docs
 
