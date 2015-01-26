@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.3.4 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.3.3
 
 - [pull #127] Update to dtrace-provider 0.4.0, which gives io.js 1.x support
