@@ -817,6 +817,9 @@ This example emits:
   [mcavage/node-bunyan-syslog](https://github.com/mcavage/node-bunyan-syslog)
   provides support for directing bunyan logging to a syslog server.
 
+- bunyan-slack:
+[qualitybath/bunyan-slack](https://github.com/qualitybath/bunyan-slack) Bunyan stream for Slack chat integration.
+
 - TODO: eventually https://github.com/trentm/node-bunyan-winston
 
 
