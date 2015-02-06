@@ -8,7 +8,7 @@ Known issues:
 
 ## bunyan 1.3.4 (not yet released)
 
-(nothing yet)
+- [issue #218] Reset `haveNonRawStreams` on `<logger>.addStream`.
 
 
 ## bunyan 1.3.3
