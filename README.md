@@ -820,6 +820,9 @@ This example emits:
 - bunyan-slack:
 [qualitybath/bunyan-slack](https://github.com/qualitybath/bunyan-slack) Bunyan stream for Slack chat integration.
 
+- bunyan-fogbugz
+[qualitybath/bunyan-fogbugz](https://github.com/qualitybath/bunyan-fogbugz) Bunyan stream for sending automated crash reports to FogBugz
+
 - TODO: eventually https://github.com/trentm/node-bunyan-winston
 
 
