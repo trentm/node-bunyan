@@ -767,17 +767,13 @@ using at least bunyan 0.23.1 (with the fix for [this
 issue](https://github.com/trentm/node-bunyan/pull/97)), and (b) should use at
 least node 0.10 (node 0.8 does not support the `unref()` method on
 `setTimeout(...)` needed for the mentioned fix). The symptom is that process
-termination will hang for up to a full rotation period.
+termination will hang for up to a full period.
 
 **WARNING on [cluster](http://nodejs.org/docs/latest/api/all.html#all_cluster)
 usage:** Using Bunyan's `periodic-file` stream with node.js's "cluster" module
-can result in unexpected file rotation. You must not have multiple processes
+can result in unexpected file management. You must not have multiple processes
 in the cluster logging to the same file path. In other words, you must have
 a separate log file path for the master and each worker in the cluster.
-Alternatively, consider using a system file rotation facility such as
-`logrotate` on Linux or `logadm` on SmartOS/Illumos. See
-[this comment on issue #117](https://github.com/trentm/node-bunyan/issues/117#issuecomment-44804938)
-for details.
 
 A `type === 'periodic-file'` is a file stream that creates files with date/time stamps.
 
@@ -790,7 +786,9 @@ A `type === 'periodic-file'` is a file stream that creates files with date/time 
         }]
     });
 
-This will create a log file as /var/log/foo.yyyy-mm-dd.log and each night at midnight localtime a new file will be created.  It also supports hourly log files with the format like /var/log/foo.yyyy-mm-dd_hh.log. Older log files are not managed so you should have some other process in place to purge older files, <code>find /var/log -mtime +7 -exec rm {};</code>.
+This will create a log file as <code>/var/log/foo.YYYY-MM-DD.log</code> and each night at midnight localtime a new file will be created.  It also supports hourly log files with the format like <code>/var/log/foo.YYYY-MM-DD_HH.log</code>. 
+
+Older log files are not managed so you should have some other process in place to purge older files, for example <code>find /var/log -mtime +7 -exec rm {};</code>.
 
 <table>
 <tr>
