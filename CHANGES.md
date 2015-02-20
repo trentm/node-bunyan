@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.3.4 (not yet released)
+## bunyan 1.3.4
 
 - Allow `log.child(...)` to work even if the logger is a *sub-class*
   of Bunyan's Logger class.
