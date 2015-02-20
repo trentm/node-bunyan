@@ -8,6 +8,7 @@ Known issues:
 
 ## bunyan 1.3.4 (not yet released)
 
+- [issue #219] Hide 'source-map-support' require from browserify.
 - [issue #218] Reset `haveNonRawStreams` on `<logger>.addStream`.
 
 
