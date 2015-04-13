@@ -8,7 +8,7 @@ Known issues:
 
 ## bunyan 1.3.5 (not yet released)
 
-(nothing yet)
+- [issue #242] Be defensive on err.stack not being a string.
 
 
 ## bunyan 1.3.4

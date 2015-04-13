@@ -976,7 +976,11 @@ function emitRecord(rec, line, opts, stylize) {
 
         if (rec.err && rec.err.stack) {
             var err = rec.err
-            details.push(indent(err.stack));
+            if (typeof (err.stack) !== 'string') {
+                details.push(indent(err.stack.toString()));
+            } else {
+                details.push(indent(err.stack));
+            }
             delete err.message;
             delete err.name;
             delete err.stack;
