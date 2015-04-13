@@ -13,6 +13,8 @@
 - full-on docs
 - better examples/
 - better coloring
+- would be exciting to have bunyan support in http://lnav.org/ if that
+  made sense
 - "template" support for 'rotating-file' stream to get dated rolled files
 - "all" or "off" levels? log4j? logging.py?
   logging.py has NOTSET === 0. I think that is only needed/used for
