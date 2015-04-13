@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.3.6 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.3.5
 
 - [issue #233] Make `bunyan` defensive on res.header as a boolean.
