@@ -927,15 +927,18 @@ function emitRecord(rec, line, opts, stylize) {
             // and object of header key/value pairs. Prefer `res.header` if set
             // (TODO: Why? I don't recall. Typical of restify serializer?
             // Typical JSON.stringify of a core node HttpResponse?)
+            var headerTypes = {string: true, object: true};
             var headers;
-            if (res.header !== undefined) {
+            if (res.header !== undefined && headerTypes[typeof (res.header)]) {
                 headers = res.header;
                 delete res.header;
-            } else if (res.headers !== undefined) {
+            } else if (res.headers !== undefined &&
+                headerTypes[typeof (res.headers)])
+            {
                 headers = res.headers;
                 delete res.headers;
             }
-            if (!headers) {
+            if (headers === undefined) {
                 /* pass through */
             } else if (typeof (headers) === 'string') {
                 s += headers.trimRight();

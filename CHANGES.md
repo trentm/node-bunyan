@@ -8,7 +8,8 @@ Known issues:
 
 ## bunyan 1.3.5 (not yet released)
 
-- [issue #242] Be defensive on err.stack not being a string.
+- [issue #233] Make `bunyan` defensive on res.header as a boolean.
+- [issue #242] Make `bunyan` defensive on err.stack not being a string.
 
 
 ## bunyan 1.3.4
