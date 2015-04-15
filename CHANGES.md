@@ -8,7 +8,7 @@ Known issues:
 
 ## bunyan 1.3.6 (not yet released)
 
-(nothing yet)
+- [issue #244] Make `bunyan` defensive on `res.header=null`.
 
 
 ## bunyan 1.3.5

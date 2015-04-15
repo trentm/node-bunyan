@@ -1,0 +1,1 @@
+{"name":"AKP48","module":"Server","hostname":"AKP48.akpwebdesign.com","pid":32421,"level":60,"err":{"message":"Function.prototype.apply: Arguments list has wrong type","name":"TypeError","stack":[{},{},{},{},{},{}]},"msg":"Exception caught: TypeError: Function.prototype.apply: Arguments list has wrong type","time":"2015-04-13T04:03:46.206Z","v":0}

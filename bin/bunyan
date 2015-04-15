@@ -929,12 +929,10 @@ function emitRecord(rec, line, opts, stylize) {
             // Typical JSON.stringify of a core node HttpResponse?)
             var headerTypes = {string: true, object: true};
             var headers;
-            if (res.header !== undefined && headerTypes[typeof (res.header)]) {
+            if (res.header && headerTypes[typeof (res.header)]) {
                 headers = res.header;
                 delete res.header;
-            } else if (res.headers !== undefined &&
-                headerTypes[typeof (res.headers)])
-            {
+            } else if (res.headers && headerTypes[typeof (res.headers)]) {
                 headers = res.headers;
                 delete res.headers;
             }

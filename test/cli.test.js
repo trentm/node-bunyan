@@ -1,12 +1,13 @@
 /*
- * Copyright (c) 2012 Trent Mick. All rights reserved.
+ * Copyright (c) 2015 Trent Mick. All rights reserved.
  *
  * Test the `bunyan` CLI.
  */
 
 var p = console.warn;
-var path = require('path');
 var exec = require('child_process').exec;
+var fs = require('fs');
+var path = require('path');
 var _ = require('util').format;
 var vasync = require('vasync');
 
@@ -401,11 +402,14 @@ test('robust req handling', function (t) {
 });
 
 // Some past crashes from issues.
-test('should not crash on these', function (t) {
+test('should not crash on corpus/old-crashers/*.log', function (t) {
+    var oldCrashers = fs.readdirSync(
+        path.resolve(__dirname, 'corpus/old-crashers'))
+        .filter(function (f) { return f.slice(-4) === '.log'; });
     vasync.forEachPipeline({
-        inputs: ['139.log', '144.log'],
+        inputs: oldCrashers,
         func: function (logName, next) {
-            exec(_('%s %s/corpus/%s', BUNYAN, __dirname, logName),
+            exec(_('%s %s/corpus/old-crashers/%s', BUNYAN, __dirname, logName),
                     function (err, stdout, stderr) {
                 next(err);
             });
