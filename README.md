@@ -709,12 +709,12 @@ files, or for rotating when the log reaches a threshold size.
 <td>No</td>
 <td>1d</td>
 <td>The period at which to rotate. This is a string of the format
-"$number$scope" where "$scope" is one of "ms" (milliseconds), "h" (hours), "d" (days), "w" (weeks),
-"m" (months), "y" (years). Or one of the following names can be used
-"hourly" (means 1h), "daily" (1d), "weekly" (1w), "monthly" (1m),
-"yearly" (1y). Rotation is done at the start of the scope: top of the hour (h),
-midnight (d), start of Sunday (w), start of the 1st of the month (m),
-start of Jan 1st (y).</td>
+"$number$scope" where "$scope" is one of "ms" (milliseconds -- only useful for
+testing), "h" (hours), "d" (days), "w" (weeks), "m" (months), "y" (years). Or
+one of the following names can be used "hourly" (means 1h), "daily" (1d),
+"weekly" (1w), "monthly" (1m), "yearly" (1y). Rotation is done at the start of
+the scope: top of the hour (h), midnight (d), start of Sunday (w), start of the
+1st of the month (m), start of Jan 1st (y).</td>
 </tr>
 <tr>
 <td>count</td>
