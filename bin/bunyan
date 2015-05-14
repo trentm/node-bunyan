@@ -880,20 +880,19 @@ function emitRecord(rec, line, opts, stylize) {
             var hostHeaderLine = '';
             var s = '';
             if (client_req.address) {
-                hostHeaderLine = 'Host: ' + client_req.address;
+                hostHeaderLine = '\nHost: ' + client_req.address;
                 if (client_req.port)
                     hostHeaderLine += ':' + client_req.port;
-                hostHeaderLine += '\n';
             }
             delete client_req.headers;
             delete client_req.address;
             delete client_req.port;
-            s += format('%s %s HTTP/%s\n%s%s', client_req.method,
+            s += format('%s %s HTTP/%s%s%s', client_req.method,
                 client_req.url,
                 client_req.httpVersion || '1.1',
                 hostHeaderLine,
                 (headers ?
-                    Object.keys(headers).map(
+                    '\n' + Object.keys(headers).map(
                         function (h) {
                             return h + ': ' + headers[h];
                         }).join('\n') :
@@ -972,7 +971,7 @@ function emitRecord(rec, line, opts, stylize) {
         }
         if (rec.client_res && typeof (rec.client_res) === 'object') {
             _res(rec.client_res);
-            delete rec.res;
+            delete rec.client_res;
         }
 
         if (rec.err && rec.err.stack) {
