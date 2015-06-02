@@ -23,7 +23,135 @@ CapturingStream.prototype.write = function (rec) {
     this.recs.push(rec);
 }
 
+test('child inherits parent serializers', function (t) {
+    var stream = new CapturingStream();
+    var dad = bunyan.createLogger({
+        name: 'surname',
+        streams: [ {
+            type: 'raw',
+            stream: stream,
+            level: 'info'
+        } ],
+        serializers: {
+            thing: function (value) {
+              return {
+                A: value.a
+              };
+            }
+        }
+    });
 
+    var son = dad.child({
+        component: 'son'
+    });
+
+    dad.info({ thing: { a: 'A' } }, 'info from dad');
+    son.info({ thing: { a: 'a' } }, 'info from son');
+
+    var rec;
+    t.equal(stream.recs.length, 2);
+    rec = stream.recs[0];
+    t.equal(rec.msg, 'info from dad');
+    t.equal(rec.thing.A, 'A');
+    rec = stream.recs[1];
+    t.equal(rec.msg, 'info from son');
+    t.equal(rec.component, 'son');
+    t.equal(rec.thing.A, 'a');
+
+    t.end();
+});
+
+test('child extend parent serializers with new key', function (t) {
+    var stream = new CapturingStream();
+    var dad = bunyan.createLogger({
+        name: 'surname',
+        streams: [ {
+            type: 'raw',
+            stream: stream,
+            level: 'info'
+        } ],
+        serializers: {
+            thing: function (value) {
+              return {
+                A: value.a
+              };
+            }
+        }
+    });
+
+    var son = dad.child({
+        component: 'son',
+        serializers: {
+            stuff: function (value) {
+              return {
+                Z: value.z
+              };
+            }
+        }
+    });
+
+    dad.info({ thing: { a: 'A' }, stuff: { z: 'Z' } }, 'info from dad');
+    son.info({ thing: { a: 'a' }, stuff: { z: 'z' } }, 'info from son');
+
+    var rec;
+    t.equal(stream.recs.length, 2);
+    rec = stream.recs[0];
+    t.equal(rec.msg, 'info from dad');
+    t.equal(rec.thing.A, 'A');
+    t.equal(rec.stuff.Z, undefined);
+    rec = stream.recs[1];
+    t.equal(rec.msg, 'info from son');
+    t.equal(rec.thing.A, 'a');
+    t.equal(rec.stuff.Z, 'z');
+
+    t.end();
+});
+
+test('child merge serializers with same key', function (t) {
+    var stream = new CapturingStream();
+    var dad = bunyan.createLogger({
+        name: 'surname',
+        streams: [ {
+            type: 'raw',
+            stream: stream,
+            level: 'info'
+        } ],
+        serializers: {
+            thing: function (value) {
+              return {
+                A: value.a
+              };
+            }
+        }
+    });
+
+    var son = dad.child({
+        component: 'son',
+        serializers: {
+            thing: function (value) {
+              return {
+                Z: value.z
+              };
+            }
+        }
+    });
+
+    dad.info({ thing: { a: 'A', z: 'Z' } }, 'info from dad');
+    son.info({ thing: { a: 'a', z: 'z' } }, 'info from son');
+
+    var rec;
+    t.equal(stream.recs.length, 2);
+    rec = stream.recs[0];
+    t.equal(rec.msg, 'info from dad');
+    t.equal(rec.thing.A, 'A');
+    t.equal(rec.thing.Z, undefined);
+    rec = stream.recs[1];
+    t.equal(rec.msg, 'info from son');
+    t.equal(rec.thing.A, 'a');
+    t.equal(rec.thing.Z, 'z');
+
+    t.end();
+});
 
 test('child can add stream', function (t) {
     var dadStream = new CapturingStream();
