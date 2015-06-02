@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.3.7 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.3.6
 
 - [issue #244] Make `bunyan` defensive on `res.header=null`.
