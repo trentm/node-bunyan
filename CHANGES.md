@@ -8,7 +8,7 @@ Known issues:
 
 ## bunyan 1.3.7 (not yet released)
 
-(nothing yet)
+- safe-json-stringify@1.0.3 changed output, breaking some tests. Fix those.
 
 
 ## bunyan 1.3.6

@@ -25,7 +25,7 @@ test('__defineGetter__ boom', function (t) {
     exec(cmd, function (err, stdout, stderr) {
         t.ifError(err, err);
         var rec = JSON.parse(stdout.trim());
-        t.equal(rec.obj.boom, '[Throws]');
+        t.equal(rec.obj.boom, '[Throws: __defineGetter__ ouch!]');
         t.end();
     });
 });
@@ -48,7 +48,7 @@ test('defineProperty boom', function (t) {
         var recs = stdout.trim().split(/\n/g);
         t.equal(recs.length, 2);
         var rec = JSON.parse(recs[0]);
-        t.equal(rec.obj.boom, '[Throws]');
+        t.equal(rec.obj.boom, '[Throws: defineProperty ouch!]');
         t.end();
     });
 });
