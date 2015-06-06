@@ -826,6 +826,9 @@ place to start.)
 - bunyan-fogbugz
 [qualitybath/bunyan-fogbugz](https://github.com/qualitybath/bunyan-fogbugz) Bunyan stream for sending automated crash reports to FogBugz
 
+- bunyan-cloudwatch:
+[mirkokiefer/bunyan-cloudwatch](https://github.com/mirkokiefer/bunyan-cloudwatch) Bunyan stream for sending logs to AWS CloudWatch.
+
 - TODO: eventually https://github.com/trentm/node-bunyan-winston
 
 
