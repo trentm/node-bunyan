@@ -6,8 +6,12 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.3.7 (not yet released)
+## bunyan 1.4.0 (not yet released)
 
+(Bumping minor ver b/c I'm wary of dtrace-provider changes. :)
+
+- [issue #258, pull #259] Update to dtrace-provider 0.5 to fix
+  install and tests on recent io.js versions.
 - safe-json-stringify@1.0.3 changed output, breaking some tests. Fix those.
 
 

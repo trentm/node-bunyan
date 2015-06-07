@@ -160,10 +160,15 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
             //   ENOENT, no such file or directory 'asdf.log'
             // but node v0.6.14:
             //   ENOENT, open 'asdf.log'
-            // Somewhat annoying change.
-            t.equal(stderr,
-                'bunyan: ENOENT, open \'doesnotexist1.log\'\nbunyan: ENOENT, '
-                + 'open \'doesnotexist2.log\'\n');
+            // io.js 2.2 (at least):
+            //   ENOENT: no such file or directory, open 'doesnotexist1.log'
+            var matches = [
+                /^bunyan: ENOENT.*?, open 'doesnotexist1.log'/m,
+                /^bunyan: ENOENT.*?, open 'doesnotexist2.log'/m,
+            ];
+            matches.forEach(function (match) {
+                t.ok(match.test(stderr), 'stderr matches ' + match.toString());
+            });
             t.end();
         }
     );
