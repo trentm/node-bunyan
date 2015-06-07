@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.4.0 (not yet released)
+## bunyan 1.4.0
 
 (Bumping minor ver b/c I'm wary of dtrace-provider changes. :)
 
