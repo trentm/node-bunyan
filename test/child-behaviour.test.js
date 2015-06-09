@@ -134,3 +134,38 @@ test('child can set level of inherited streams and add streams', function (t) {
 
     t.end();
 });
+
+test('simple child should serialize its options', function (t) {
+    var dadStream = new CapturingStream();
+    var dad = bunyan.createLogger({
+        name: 'surname',
+        streams: [ {
+            type: 'raw',
+            stream: dadStream,
+            level: 'info'
+        } ],
+        serializers: {
+            foo: function (foo) {
+                return {
+                    important: foo.important
+                }
+            }
+        }
+    });
+
+    var sonStream = new CapturingStream();
+    var son = dad.child({
+        foo: {
+            important: 'should be logged',
+            otherStuff: 'should not be logged'
+        }
+    }, true);
+
+    son.info('some message');
+
+    t.equal(dadStream.recs.length, 1);
+    t.equal(dadStream.recs[0].msg, 'some message');
+    t.deepEqual(dadStream.recs[0].foo, { important: 'should be logged' });
+
+    t.end();
+});
