@@ -813,6 +813,9 @@ This example emits:
 
 ## third-party streams
 
+(There are a lot that aren't listed here. `npm search bunyan` is a good
+place to start.)
+
 - syslog:
   [mcavage/node-bunyan-syslog](https://github.com/mcavage/node-bunyan-syslog)
   provides support for directing bunyan logging to a syslog server.
