@@ -393,7 +393,7 @@ Pretty-printed:
     }
 
 
-Core fields:
+## Core fields
 
 - `v`: Required. Integer. Added by Bunyan. Cannot be overriden.
   This is the Bunyan log format version (`require('bunyan').LOG_VERSION`).
@@ -427,7 +427,7 @@ well. This is why we're using JSON. Some suggestions and best practices
 follow (feedback from actual users welcome).
 
 
-Recommended/Best Practice Fields:
+## Recommended/Best Practice Fields
 
 - `err`: Object. A caught JS exception. Log that thing with `log.info(err)`
     to get:
@@ -475,7 +475,7 @@ Recommended/Best Practice Fields:
         }
 
 
-Other fields to consider:
+## Other fields to consider
 
 - `req.username`: Authenticated user (or for a 401, the user attempting to
   auth).
