@@ -1145,7 +1145,7 @@ change, and bug fixes, respectively.
 
 # License
 
-MIT. See "LICENSE.txt".
+[MIT](./LICENSE.txt).
 
 # See Also
 
