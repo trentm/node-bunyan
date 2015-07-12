@@ -70,7 +70,7 @@ test('req serializer', function (t) {
             log.info({req: theReq}, 'the request');
             var lastRecord = records[records.length-1];
             t.equal(lastRecord.req.method, 'GET');
-            t.equal(lastRecord.req.url, theReq.url);
+            t.equal(lastRecord.req.url, theReq.originalUrl);
             t.equal(lastRecord.req.remoteAddress,
                 theReq.connection.remoteAddress);
             t.equal(lastRecord.req.remotePort, theReq.connection.remotePort);
