@@ -32,6 +32,8 @@ test('ringbuffer', function (t) {
     t.equal(ringbuffer.size(), 2);
     t.equal(ringbuffer.get(0).msg, 'hello');
     t.equal(ringbuffer.get(1).msg, 'android');
+    t.equal(ringbuffer.getLatest(0).msg, 'android');
+    t.equal(ringbuffer.getLatest(1).msg, 'hello');
     log1.error('one');
     log1.error('two');
     log1.error('three');
@@ -43,5 +45,10 @@ test('ringbuffer', function (t) {
     t.equal(ringbuffer.get(2).msg, 'two');
     t.equal(ringbuffer.get(3).msg, 'three');
     t.equal(ringbuffer.get(4).msg, 'four');
+    t.equal(ringbuffer.getLatest(0).msg, 'four');
+    t.equal(ringbuffer.getLatest(1).msg, 'three');
+    t.equal(ringbuffer.getLatest(2).msg, 'two');
+    t.equal(ringbuffer.getLatest(3).msg, 'one');
+    t.equal(ringbuffer.getLatest(4).msg, 'android');
     t.end();
 });
