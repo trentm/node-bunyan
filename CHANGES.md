@@ -8,7 +8,10 @@ Known issues:
 
 ## bunyan 1.4.1 (not yet released)
 
-(nothing yet)
+- Dropped support for 0.8 (can't install deps easily anymore for running
+  test suite). Bump to a recent iojs version for testing (though really
+  they move too fast). Note that dtrace-provider build fails for iojs v3.0
+  right now. :|
 
 
 ## bunyan 1.4.0

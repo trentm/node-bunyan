@@ -87,23 +87,20 @@ test: $(NODEUNIT)
 # Note: 'test10' is last so (if all is well) I end up with a binary
 # dtrace-provider build for node 0.10 (my current version).
 .PHONY: testall
-testall: test22 test20 test18 test012 test08 test010
+testall: testiojs30 test012 test010
 
-.PHONY: test22
-test22:
-	@echo "# Test iojs 2.2.x (with node `$(NODEOPT)/iojs-v2.2/bin/node --version`)"
-	@$(NODEOPT)/iojs-v2.2/bin/node --version | grep '^v2\.2\.'
-	#PATH="$(NODEOPT)/iojs-v2.2/bin:$(PATH)" make distclean all test
-.PHONY: test20
-test20:
-	@echo "# Test iojs 2.0.x (with node `$(NODEOPT)/iojs-v2.0/bin/node --version`)"
-	@$(NODEOPT)/iojs-v2.0/bin/node --version | grep '^v2\.0\.'
-	PATH="$(NODEOPT)/iojs-v2.0/bin:$(PATH)" make distclean all test
-.PHONY: test18
-test18:
-	@echo "# Test iojs 1.8.x (with node `$(NODEOPT)/iojs-v1.8/bin/node --version`)"
-	@$(NODEOPT)/iojs-v1.8/bin/node --version | grep '^v1\.8\.'
-	PATH="$(NODEOPT)/iojs-v1.8/bin:$(PATH)" make distclean all test
+.PHONY: testalliojs
+testalliojs:
+	ls -d $(NODEOPT)/iojs-?.? | while read dir; do \
+		echo; \
+		echo "# Test $$dir (`$$dir/bin/node --version`)"; \
+		PATH="$$dir/bin:$(PATH)" make distclean all test; \
+	done
+
+.PHONY: testiojs30
+testiojs30:
+	@echo "# Test iojs 3.0 (`$(NODEOPT)/iojs-3.0/bin/node --version`)"
+	PATH="$(NODEOPT)/iojs-3.0/bin:$(PATH)" make distclean all test
 .PHONY: test012
 test012:
 	@echo "# Test node 0.12.x (with node `$(NODEOPT)/node-0.12/bin/node --version`)"
@@ -114,11 +111,6 @@ test010:
 	@echo "# Test node 0.10.x (with node `$(NODEOPT)/node-0.10/bin/node --version`)"
 	@$(NODEOPT)/node-0.10/bin/node --version | grep '^v0\.10\.'
 	PATH="$(NODEOPT)/node-0.10/bin:$(PATH)" make distclean all test
-.PHONY: test08
-test08:
-	@echo "# Test node 0.8.x (with node `$(NODEOPT)/node-0.8/bin/node --version`)"
-	@$(NODEOPT)/node-0.8/bin/node --version | grep '^v0\.8\.'
-	PATH="$(NODEOPT)/node-0.8/bin:$(PATH)" make distclean all test
 
 
 #---- check
