@@ -395,13 +395,13 @@ Pretty-printed:
 
 Core fields:
 
-- `v`: Required. Integer. Added by Bunyan. Cannot be overriden.
+- `v`: Required. Integer. Added by Bunyan. Cannot be overridden.
   This is the Bunyan log format version (`require('bunyan').LOG_VERSION`).
   The log version is a single integer. `0` is until I release a version
   "1.0.0" of node-bunyan. Thereafter, starting with `1`, this will be
   incremented if there is any backward incompatible change to the log record
   format. Details will be in "CHANGES.md" (the change log).
-- `level`: Required. Integer. Added by Bunyan. Cannot be overriden.
+- `level`: Required. Integer. Added by Bunyan. Cannot be overridden.
   See the "Levels" section.
 - `name`: Required. String. Provided at Logger creation.
   You must specify a name for your logger when creating it. Typically this
@@ -410,7 +410,7 @@ Core fields:
   You can specify your hostname at Logger creation or it will be retrieved
   vi `os.hostname()`.
 - `pid`: Required. Integer. Filled in automatically at Logger creation.
-- `time`: Required. String. Added by Bunyan. Can be overriden.
+- `time`: Required. String. Added by Bunyan. Can be overridden.
   The date and time of the event in [ISO 8601
   Extended Format](http://en.wikipedia.org/wiki/ISO_8601) format and in UTC,
   as from
@@ -541,7 +541,7 @@ produced by `log.error(...)`.
 
 A `type === 'stream'` is a plain ol' node.js [Writable
 Stream](http://nodejs.org/docs/latest/api/all.html#writable_Stream). A
-"stream" (the writeable stream) field is required. E.g.: `process.stdout`,
+"stream" (the writable stream) field is required. E.g.: `process.stdout`,
 `process.stderr`.
 
     var log = bunyan.createLogger({
@@ -744,7 +744,7 @@ used for anything else.</td>
 
 **Note on log rotation**: Often you may be using external log rotation utilities
 like `logrotate` on Linux or `logadm` on SmartOS/Illumos. In those cases, unless
-your are ensuring "copy and truncate" sematics (via `copytruncate` with
+your are ensuring "copy and truncate" semantics (via `copytruncate` with
 logrotate or `-c` with logadm) then the fd for your 'file' stream will change.
 You can tell bunyan to reopen the file stream with code like this in your
 app:
@@ -762,7 +762,7 @@ to your process. Any other mechanism to signal your app to run
 
 ## stream type: `raw`
 
-- `raw`: Similar to a "stream" writeable stream, except that the write method
+- `raw`: Similar to a "stream" writable stream, except that the write method
   is given raw log record *Object*s instead of a JSON-stringified string.
   This can be useful for hooking on further processing to all Bunyan logging:
   pushing to an external service, a RingBuffer (see below), etc.
@@ -1036,7 +1036,7 @@ log.info('hi on info');
 
 # Versioning
 
-The scheme I follow is most succintly described by the bootstrap guys
+The scheme I follow is most succinctly described by the bootstrap guys
 [here](https://github.com/twitter/bootstrap#versioning).
 
 tl;dr: All versions are `<major>.<minor>.<patch>` which will be incremented for
