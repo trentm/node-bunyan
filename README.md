@@ -99,6 +99,9 @@ full API is:
                     // message.
     log.info(err, 'more on this: %s', more);
                     // ... or you can specify the "msg".
+    log.info(err, {foo: 'bar'}, 'hi');
+    log.info({foo: 'bar'}, err, 'hi');
+                    // mix an error with additional fields
 
 Note that this implies **you cannot pass any object as the first argument
 to log it**. IOW, `log.info(mywidget)` may not be what you expect. Instead

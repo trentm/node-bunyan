@@ -249,3 +249,52 @@ test('log.info(<err>)', function (t) {
     });
     t.end();
 });
+
+test('log.info(<fields>, <err>)', function (t) {
+    var e = new Error('boom');
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, fields, e);
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.err.message, 'boom',
+            format('log.%s err.message: got %j', lvl, rec.err.message));
+        t.equal(rec.one, 'un');
+    });
+    t.end();
+});
+
+test('log.info(<err>, <fields>)', function (t) {
+    var e = new Error('boom');
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, e, fields);
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.err.message, 'boom',
+            format('log.%s err.message: got %j', lvl, rec.err.message));
+        t.equal(rec.one, 'un');
+    });
+    t.end();
+});
+
+test('log.info(<fields>, <fields>)', function (t) {
+    var e = new Error('boom');
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, fields, {two: 'deux'});
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.one, 'un');
+        t.equal(rec.two, 'deux');
+    });
+    t.end();
+});
+
+test('log.info(<err>, <fields>, <msg>)', function (t) {
+    var e = new Error('boom');
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, e, fields, 'some message');
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.err.message, 'boom',
+            format('log.%s err.message: got %j', lvl, rec.err.message));
+        t.equal(rec.msg, 'some message',
+            format('log.%s msg is "some message"', lvl));
+        t.equal(rec.one, 'un');
+    });
+    t.end();
+});
