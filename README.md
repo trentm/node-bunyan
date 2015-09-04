@@ -1060,3 +1060,4 @@ MIT. See "LICENSE.txt".
 - [Bunyan for Bash](https://github.com/trevoro/bash-bunyan).
 - TODO: `RequestCaptureStream` example from restify.
 - [Bunyan integration for https://logentries.com](https://www.npmjs.org/package/logentries-stream)
+- [Bunya integration for Kafka](https://github.com/yunong/bunyan-kafka)
