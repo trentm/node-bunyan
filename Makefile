@@ -31,7 +31,7 @@ NON_DTRACE_TEST_FILES := $(shell ls -1 test/*.test.js | grep -v dtrace | xargs)
 #---- Targets
 
 all $(NODEUNIT):
-	npm install
+	npm install $(NPM_INSTALL_FLAGS)
 
 # Ensure all version-carrying files have the same version.
 .PHONY: versioncheck
@@ -87,16 +87,13 @@ test: $(NODEUNIT)
 # Note: 'test10' is last so (if all is well) I end up with a binary
 # dtrace-provider build for node 0.10 (my current version).
 .PHONY: testall
-testall: testiojs30 test012 test010
+testall: test40 testiojs30 test012 test010
 
-.PHONY: testalliojs
-testalliojs:
-	ls -d $(NODEOPT)/iojs-?.? | while read dir; do \
-		echo; \
-		echo "# Test $$dir (`$$dir/bin/node --version`)"; \
-		PATH="$$dir/bin:$(PATH)" make distclean all test; \
-	done
-
+.PHONY: test40
+test40:
+	@echo "# Test node 4.0.x (with node `$(NODEOPT)/node-4.0/bin/node --version`)"
+	@$(NODEOPT)/node-4.0/bin/node --version | grep '^v4\.0\.'
+	PATH="$(NODEOPT)/node-4.0/bin:$(PATH)" NPM_INSTALL_FLAGS="--nodedir=$(HOME)/src/node" make distclean all test
 .PHONY: testiojs30
 testiojs30:
 	@echo "# Test iojs 3.0 (`$(NODEOPT)/iojs-3.0/bin/node --version`)"
