@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## bunyan 1.5.1 (not yet released)
+
+(nothing yet)
+
+
 ## bunyan 1.5.0
 
 - [pull #236, issue #231, issue #223] Fix strict mode in the browser.
