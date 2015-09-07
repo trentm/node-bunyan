@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.5.1 (not yet released)
+## 1.5.1
 
 - [issue #296] Fix `src: true`, which was broken in v1.5.0.
 
