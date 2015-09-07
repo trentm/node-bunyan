@@ -8,10 +8,13 @@ Known issues:
 
 ## bunyan 1.5.1 (not yet released)
 
-(nothing yet)
+- [issue #296] Fix `src: true`, which was broken in v1.5.0.
 
 
 ## bunyan 1.5.0
+
+Note: *Bad release.* The addition of `'use strict';` broke Bunyan's `src: true`
+feature. Use 1.5.1 instead.
 
 - [pull #236, issue #231, issue #223] Fix strict mode in the browser.
 - [pull #282, issue #213] Fixes bunyan to work with webpack. By Denis Izmaylov.
