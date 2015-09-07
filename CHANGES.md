@@ -6,12 +6,12 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.5.1 (not yet released)
+## 1.5.1 (not yet released)
 
 - [issue #296] Fix `src: true`, which was broken in v1.5.0.
 
 
-## bunyan 1.5.0
+## 1.5.0
 
 Note: *Bad release.* The addition of `'use strict';` broke Bunyan's `src: true`
 feature. Use 1.5.1 instead.
@@ -23,7 +23,7 @@ feature. Use 1.5.1 instead.
   test suite). Bump to a recent iojs version for testing.
 
 
-## bunyan 1.4.0
+## 1.4.0
 
 (Bumping minor ver b/c I'm wary of dtrace-provider changes. :)
 
@@ -32,18 +32,18 @@ feature. Use 1.5.1 instead.
 - safe-json-stringify@1.0.3 changed output, breaking some tests. Fix those.
 
 
-## bunyan 1.3.6
+## 1.3.6
 
 - [issue #244] Make `bunyan` defensive on `res.header=null`.
 
 
-## bunyan 1.3.5
+## 1.3.5
 
 - [issue #233] Make `bunyan` defensive on res.header as a boolean.
 - [issue #242] Make `bunyan` defensive on err.stack not being a string.
 
 
-## bunyan 1.3.4
+## 1.3.4
 
 - Allow `log.child(...)` to work even if the logger is a *sub-class*
   of Bunyan's Logger class.
@@ -51,20 +51,20 @@ feature. Use 1.5.1 instead.
 - [issue #218] Reset `haveNonRawStreams` on `<logger>.addStream`.
 
 
-## bunyan 1.3.3
+## 1.3.3
 
 - [pull #127] Update to dtrace-provider 0.4.0, which gives io.js 1.x support
   for dtrace-y parts of Bunyan.
 
 
-## bunyan 1.3.2
+## 1.3.2
 
 - [pull #182] Fallback to using the optional 'safe-json-stringify' module
   if `JSON.stringify` throws -- possibly with an enumerable property
   getter than throws. By Martin Gausby.
 
 
-## bunyan 1.3.1
+## 1.3.1
 
 - Export `bunyan.RotatingFileStream` which is needed if one wants to
   customize it. E.g. see issue #194.
@@ -93,7 +93,7 @@ feature. Use 1.5.1 instead.
   default level).
 
 
-## bunyan 1.3.0
+## 1.3.0
 
 - [issue #103] `bunyan -L` (or `bunyan --time local`) to show local time.
   Bunyan log records store `time` in UTC time. Sometimes it is convenient
@@ -103,7 +103,7 @@ feature. Use 1.5.1 instead.
   the common failure case when `-c CONDITION` is being used.
 
 
-## bunyan 1.2.4
+## 1.2.4
 
 - [issue #210] Export `bunyan.nameFromLevel` and `bunyan.levelFromName`. It can
   be a pain for custom streams to have to reproduce that.
@@ -119,14 +119,14 @@ feature. Use 1.5.1 instead.
         bunyan usage error: /Users/trentm/tm/node-bunyan/foo.js:12: attempt to log with an unbound log method: `this` is: { _events: { data: [Function] } }
 
 
-## bunyan 1.2.3
+## 1.2.3
 
 - [issue #184] Fix log rotation for rotation periods > ~25 days. Before this
   change, a rotation period longer than this could hit [the maximum setTimeout
   delay in node.js](https://github.com/joyent/node/issues/8656). By Daniel Juhl.
 
 
-## bunyan 1.2.2
+## 1.2.2
 
 - Drop the guard that a bunyan Logger level must be between TRACE (10)
   and FATAL (60), inclusive. This allows a trick of setting the level
@@ -135,14 +135,14 @@ feature. Use 1.5.1 instead.
   other level numbers.
 
 
-## bunyan 1.2.1
+## 1.2.1
 
 - [issue #178, #181] Get at least dtrace-provider 0.3.1 for
   optionalDependencies to get a fix for install with decoupled npm (e.g. with
   homebrew's node and npm).
 
 
-## bunyan 1.2.0
+## 1.2.0
 
 - [issue #157] Restore dtrace-provider as a dependency (in
   "optionalDependencies").
@@ -157,7 +157,7 @@ feature. Use 1.5.1 instead.
   v0.11/0.12.
 
 
-## bunyan 1.1.3
+## 1.1.3
 
 - [issue #165] Include extra `err` fields in `bunyan` CLI output. Before
   this change only the fields part of the typical node.js error stack
@@ -166,12 +166,12 @@ feature. Use 1.5.1 instead.
   in the raw JSON log record.
 
 
-## bunyan 1.1.2
+## 1.1.2
 
 - Fix a breakage in `log.info(err)` on a logger with no serializers.
 
 
-## bunyan 1.1.1
+## 1.1.1
 
 Note: *Bad release.* It breaks `log.info(err)` on a logger with no serializers.
 Use version 1.1.2.
@@ -181,13 +181,13 @@ Use version 1.1.2.
   serializer. (By Mihai Tomescu.)
 
 
-## bunyan 1.1.0
+## 1.1.0
 
 - [issue #162] Preliminary support for [browserify](http://browserify.org/).
   See [the section in the README](../README.md#browserify).
 
 
-## bunyan 1.0.1
+## 1.0.1
 
 - [issues #105, #138, #151] Export `<Logger>.addStream(...)` and
   `<Logger>.addSerializers(...)` to be able to add them after Logger creation.
@@ -208,7 +208,7 @@ Use version 1.1.2.
   <https://github.com/altercation/solarized/issues/220>).
 
 
-## bunyan 1.0.0
+## 1.0.0
 
 - [issue #87] **Backward incompatible change to `-c CODE`** improving
   performance by over 10x (good!), with a backward incompatible change to
@@ -270,7 +270,7 @@ Use version 1.1.2.
 
 
 
-## bunyan 0.23.1
+## 0.23.1
 
 - [pull #125, pull #97, issue #73] Unref rotating-file timeout which was
   preventing processes from exiting (by https://github.com/chakrit and
@@ -278,7 +278,7 @@ Use version 1.1.2.
   for node 0.10 and above.
 
 
-## bunyan 0.23.0
+## 0.23.0
 
 - [issue #139] Fix `bunyan` crash on a log record with `res.header` that is an
   object. A side effect of this improvement is that a record with `res.statusCode`
@@ -305,12 +305,12 @@ Use version 1.1.2.
         log.info(<array>)    # "msg":"" (instead of wanted "msg":util.format(<array>))
 
 
-## bunyan 0.22.3
+## 0.22.3
 
 - Republish the same code to npm.
 
 
-## bunyan 0.22.2
+## 0.22.2
 
 Note: Bad release. The published package in the npm registry got corrupted. Use 0.22.3 or later.
 
@@ -319,7 +319,7 @@ Note: Bad release. The published package in the npm registry got corrupted. Use 
 - Update 'mv' optional dep to latest.
 
 
-## bunyan 0.22.1
+## 0.22.1
 
 - [issue #111] Fix a crash when attempting to use `bunyan -p` on a platform without
   dtrace.
@@ -327,24 +327,24 @@ Note: Bad release. The published package in the npm registry got corrupted. Use 
 - [issue #101] Fix a crash in `bunyan` rendering a record with unexpected "res.headers".
 
 
-## bunyan 0.22.0
+## 0.22.0
 
 - [issue #104] `log.reopenFileStreams()` convenience method to be used with external log
   rotation.
 
 
-## bunyan 0.21.4
+## 0.21.4
 
 - [issue #96] Fix `bunyan` to default to paging (with `less`) by default in node 0.10.0.
   The intention has always been to default to paging for node >=0.8.
 
 
-## bunyan 0.21.3
+## 0.21.3
 
 - [issue #90] Fix `bunyan -p '*'` breakage in version 0.21.2.
 
 
-## bunyan 0.21.2
+## 0.21.2
 
 **Note: Bad release. The switchrate change below broke `bunyan -p '*'` usage
 (see issue #90). Use 0.21.3 or later.**
@@ -364,13 +364,13 @@ Note: Bad release. The published package in the npm registry got corrupted. Use 
   which that buffer is emptied."
 
 
-## bunyan 0.21.1
+## 0.21.1
 
 - [pull #83] Support rendering 'client_res' key in bunyan CLI (by
   github.com/mcavage).
 
 
-## bunyan 0.21.0
+## 0.21.0
 
 - 'make check' clean, 4-space indenting. No functional change here, just
   lots of code change.
@@ -378,7 +378,7 @@ Note: Bad release. The published package in the npm registry got corrupted. Use 
   a default `period` (by github.com/ricardograca).
 
 
-## bunyan 0.20.0
+## 0.20.0
 
 - [Slight backward incompatibility] Fix serializer bug introduced in 0.18.3
   (see below) to only apply serializers to log records when appropriate.
@@ -393,7 +393,7 @@ Note: Bad release. The published package in the npm registry got corrupted. Use 
   node v0.10.0.
 
 
-## bunyan 0.19.0
+## 0.19.0
 
 **WARNING**: This release includes a bug introduced in bunyan 0.18.3 (see
 below). Please upgrade to bunyan 0.20.0.
@@ -448,7 +448,7 @@ below). Please upgrade to bunyan 0.20.0.
   convenient name.
 
 
-## bunyan 0.18.3
+## 0.18.3
 
 **WARNING**: This release introduced a bug such that all serializers are
 applied to all log records even if the log record did not contain the key
@@ -480,21 +480,21 @@ Please upgrade to bunyan 0.20.0.
   without a compiler and Python around, node-gyp just falls over.
 
 
-## bunyan 0.18.2
+## 0.18.2
 
 - [pull #67] Remove debugging prints in rotating-file support.
   (by github.com/chad3814).
 - Update to dtrace-provider@0.2.7.
 
 
-## bunyan 0.18.1
+## 0.18.1
 
 - Get the `bunyan` CLI to **not** automatically page (i.e. pipe to `less`)
   if stdin isn't a TTY, or if following dtrace probe output (via `-p PID`),
   or if not given log file arguments.
 
 
-## bunyan 0.18.0
+## 0.18.0
 
 - Automatic paging support in the `bunyan` CLI (similar to `git log` et al).
   IOW, `bunyan` will open your pager (by default `less`) and pipe rendered
@@ -515,7 +515,7 @@ Please upgrade to bunyan 0.20.0.
   a helper).
 
 
-## bunyan 0.17.0
+## 0.17.0
 
 - [issue #33] Log rotation support:
 
@@ -549,7 +549,7 @@ Please upgrade to bunyan 0.20.0.
   file with, e.g.  `bunyan huge.log | head`.
 
 
-## bunyan 0.16.8
+## 0.16.8
 
 - Guards on `-c CONDITION` usage to attempt to be more user friendly.
   Bogus JS code will result in this:
@@ -620,13 +620,13 @@ Please upgrade to bunyan 0.20.0.
 
 
 
-## bunyan 0.16.7
+## 0.16.7
 
 - [issue #59] Clear a possibly interrupted ANSI color code on signal
   termination.
 
 
-## bunyan 0.16.6
+## 0.16.6
 
 - [issue #56] Support `bunyan -p NAME` to dtrace all PIDs matching 'NAME' in
   their command and args (using `ps -A -o pid,command | grep NAME` or, on SunOS
@@ -639,7 +639,7 @@ Please upgrade to bunyan 0.20.0.
   have multiple worker processes.
 
 
-## bunyan 0.16.5
+## 0.16.5
 
 - Allow `bunyan -p '*'` to capture bunyan dtrace probes from **all** processes.
 - issue #55: Add support for `BUNYAN_NO_COLOR` environment variable to
@@ -647,35 +647,35 @@ Please upgrade to bunyan 0.20.0.
   and `--no-color` options.
 
 
-## bunyan 0.16.4
+## 0.16.4
 
 - issue #54: Ensure (again, see 0.16.2) that stderr from the dtrace child
   process (when using `bunyan -p PID`) gets through. There had been a race
   between exiting bunyan and the flushing of the dtrace process' stderr.
 
 
-## bunyan 0.16.3
+## 0.16.3
 
 - Drop 'trentm-dtrace-provider' fork dep now that
   <https://github.com/chrisa/node-dtrace-provider/pull/24> has been resolved.
   Back to dtrace-provider.
 
 
-## bunyan 0.16.2
+## 0.16.2
 
 - Ensure that stderr from the dtrace child process (when using `bunyan -p PID`)
   gets through. The `pipe` usage wasn't working on SmartOS. This is important
   to show the user if they need to 'sudo'.
 
 
-## bunyan 0.16.1
+## 0.16.1
 
 - Ensure that a possible dtrace child process (with using `bunyan -p PID`) is
   terminated on signal termination of the bunyan CLI (at least for SIGINT,
   SIGQUIT, SIGTERM, SIGHUP).
 
 
-## bunyan 0.16.0
+## 0.16.0
 
 - Add `bunyan -p PID` support. This is a convenience wrapper that effectively
   calls:
@@ -683,7 +683,7 @@ Please upgrade to bunyan 0.20.0.
         dtrace -x strsize=4k -qn 'bunyan$PID:::log-*{printf("%s", copyinstr(arg0))}' | bunyan
 
 
-## bunyan 0.15.0
+## 0.15.0
 
 - issue #48: Dtrace support! The elevator pitch is you can watch all logging
   from all Bunyan-using process with something like this:
@@ -703,7 +703,7 @@ Please upgrade to bunyan 0.20.0.
   Bryan Cantrill.
 
 
-## bunyan 0.14.6
+## 0.14.6
 
 - Export `bunyan.safeCycles()`. This may be useful for custom `type == "raw"`
   streams that may do JSON stringification of log records themselves. Usage:
@@ -724,7 +724,7 @@ Please upgrade to bunyan 0.20.0.
   details in a bug report.
 
 
-## bunyan 0.14.5
+## 0.14.5
 
 - Fix a bug in the long-stack-trace error serialization added in 0.14.4. The
   symptom:
@@ -737,7 +737,7 @@ Please upgrade to bunyan 0.20.0.
             ...
 
 
-## bunyan 0.14.4
+## 0.14.4
 
 - **Bad release. Use 0.14.5 instead.**
 - Improve error serialization to walk the chain of `.cause()` errors
@@ -770,37 +770,37 @@ Please upgrade to bunyan 0.20.0.
                 at Server._handle.log.trace.req (/opt/smartdc/imgapi/node_modules/restify/lib/server.js:480:38)
 
 
-## bunyan 0.14.2
+## 0.14.2
 
 - [issue #45] Fix bunyan CLI (default output mode) to not crash on a 'res'
   field that isn't a response object, but a string.
 
 
-## bunyan 0.14.1
+## 0.14.1
 
 - [issue #44] Fix the default `bunyan` CLI output of a `res.body` that is an
   object instead of a string. See issue#38 for the same with `req.body`.
 
 
-## bunyan 0.14.0
+## 0.14.0
 
 - [pull #41] Safe `JSON.stringify`ing of emitted log records to avoid blowing
   up on circular objects (by Isaac Schlueter).
 
 
-## bunyan 0.13.5
+## 0.13.5
 
 - [issue #39] Fix a bug with `client_req` handling in the default output
   of the `bunyan` CLI.
 
 
-## bunyan 0.13.4
+## 0.13.4
 
 - [issue #38] Fix the default `bunyan` CLI output of a `req.body` that is an
   object instead of a string.
 
 
-## bunyan 0.13.3
+## 0.13.3
 
 - Export `bunyan.resolveLevel(NAME-OR-NUM)` to resolve a level name or number
   to its log level number value:
@@ -814,20 +814,20 @@ Please upgrade to bunyan 0.20.0.
   in the logger constructor.
 
 
-## bunyan 0.13.2
+## 0.13.2
 
 - [issue #35] Ensure that an accidental `log.info(BUFFER)`, where BUFFER is
   a node.js Buffer object, doesn't blow up.
 
 
-## bunyan 0.13.1
+## 0.13.1
 
 - [issue #34] Ensure `req.body`, `res.body` and other request/response fields
   are emitted by the `bunyan` CLI (mostly by Rob Gulewich).
 
 
 
-## bunyan 0.13.0
+## 0.13.0
 
 - [issue #31] Re-instate defines for the (uppercase) log level names (TRACE,
   DEBUG, etc.) in `bunyan -c "..."` filtering condition code. E.g.:
@@ -835,7 +835,7 @@ Please upgrade to bunyan 0.20.0.
         $ ... | bunyan -c 'level >= ERROR'
 
 
-## bunyan 0.12.0
+## 0.12.0
 
 - [pull #32] `bunyan -o short` for more concise output (by Dave Pacheco). E.g.:
 
@@ -846,13 +846,13 @@ Please upgrade to bunyan 0.20.0.
         [2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: My message
 
 
-## bunyan 0.11.3
+## 0.11.3
 
 - Add '--strict' option to `bunyan` CLI to suppress all but legal Bunyan JSON
   log lines. By default non-JSON, and non-Bunyan lines are passed through.
 
 
-## bunyan 0.11.2
+## 0.11.2
 
 - [issue #30] Robust handling of 'req' field without a 'headers' subfield
   in `bunyan` CLI.
@@ -861,7 +861,7 @@ Please upgrade to bunyan 0.20.0.
   affect.
 
 
-## bunyan 0.11.1
+## 0.11.1
 
 - **Bad release. The TRACE et al names are bleeding into the log records
   when using '-c'.**
@@ -871,7 +871,7 @@ Please upgrade to bunyan 0.20.0.
         $ ... | bunyan -c 'level >= ERROR'
 
 
-## bunyan 0.11.0
+## 0.11.0
 
 - [pull #29] Add -l/--level for level filtering, and -c/--condition for
   arbitrary conditional filtering (by github.com/isaacs):
@@ -883,7 +883,7 @@ Please upgrade to bunyan 0.20.0.
         $ ... | bunyan -c 'pid===123' -c '_audit'   # multiple filters
 
 
-## bunyan 0.10.0
+## 0.10.0
 
 - [pull #24] Support for gzip'ed log files in the bunyan CLI (by
   github.com/mhart):
@@ -892,7 +892,7 @@ Please upgrade to bunyan 0.20.0.
         ...
 
 
-## bunyan 0.9.0
+## 0.9.0
 
 - [pull #16] Bullet proof the `bunyan.stdSerializers` (by github.com/rlidwka).
 
@@ -950,7 +950,7 @@ Please upgrade to bunyan 0.20.0.
   actually works(!).
 
 
-## bunyan 0.8.0
+## 0.8.0
 
 - [pull #21] Bunyan loggers now re-emit `fs.createWriteStream` error events.
   By github.com/EvanOxfeld. See "examples/handle-fs-error.js" and
@@ -964,13 +964,13 @@ Please upgrade to bunyan 0.20.0.
 - jsstyle'ing (via `make check`)
 
 
-## bunyan 0.7.0
+## 0.7.0
 
 - [issue #12] Add `bunyan.createLogger(OPTIONS)` form, as is more typical in
   node.js APIs.  This'll eventually become the preferred form.
 
 
-## bunyan 0.6.9
+## 0.6.9
 
 - Change `bunyan` CLI default output to color "src" info red. Before the "src"
   information was uncolored. The "src" info is the filename, line number and
@@ -983,7 +983,7 @@ Please upgrade to bunyan 0.20.0.
   have a "stack" attribute.
 
 
-## bunyan 0.6.8
+## 0.6.8
 
 - Fix bad bug in `log.child({...}, true);` where the added child fields **would
   be added to the parent's fields**. This bug only existed for the "fast child"
@@ -992,12 +992,12 @@ Please upgrade to bunyan 0.20.0.
   instead of 10 times faster.
 
 
-## bunyan 0.6.7
+## 0.6.7
 
 - [issue #6] Fix bleeding 'type' var to global namespace. (Thanks Mike!)
 
 
-## bunyan 0.6.6
+## 0.6.6
 
 - Add support to the `bunyan` CLI taking log file path args, `bunyan foo.log`,
   in addition to the usual `cat foo.log | bunyan`.
@@ -1006,7 +1006,7 @@ Please upgrade to bunyan 0.20.0.
   fields.
 
 
-## bunyan 0.6.5
+## 0.6.5
 
 - ANSI coloring output from `bunyan` CLI tool (for the default output mode/style).
   Also add the '--color' option to force coloring if the output stream is not
@@ -1017,13 +1017,13 @@ Please upgrade to bunyan 0.20.0.
   which is a bit nicer for raw reading.
 
 
-## bunyan 0.6.4
+## 0.6.4
 
 - [issue #5] Fix `log.info() -> boolean` to work properly. Previous all were
   returning false. Ditto all trace/debug/.../fatal methods.
 
 
-## bunyan 0.6.3
+## 0.6.3
 
 - Allow an optional `msg` and arguments to the `log.info(<Error> err)` logging
   form. For example, before:
@@ -1040,24 +1040,24 @@ Please upgrade to bunyan 0.20.0.
         [2012-02-12T00:30:43.736Z] INFO: mo-docs/43194 on banana.local: buildDocs results (req_id=185edca2-2886-43dc-911c-fe41c09ec0f5, route=PutDocset, error=null, stderr="", cmd="make docs")
 
 
-## bunyan 0.6.2
+## 0.6.2
 
 - Fix/guard against unintended inclusion of some files in npm published package
   due to <https://github.com/isaacs/npm/issues/2144>
 
 
-## bunyan 0.6.1
+## 0.6.1
 
 - Internal: starting jsstyle usage.
 - Internal: add .npmignore. Previous packages had reams of bunyan crud in them.
 
 
-## bunyan 0.6.0
+## 0.6.0
 
 - Add 'pid' automatic log record field.
 
 
-## bunyan 0.5.3
+## 0.5.3
 
 - Add 'client_req' (HTTP client request) standard formatting in `bunyan` CLI
   default output.
@@ -1066,14 +1066,14 @@ Please upgrade to bunyan 0.20.0.
   subsequent block (if long or multiline).
 
 
-## bunyan 0.5.2
+## 0.5.2
 
 - [issue #3] More type checking of `new Logger(...)` and `log.child(...)`
   options.
 - Start a test suite.
 
 
-## bunyan 0.5.1
+## 0.5.1
 
 - [issue #2] Add guard on `JSON.stringify`ing of log records before emission.
   This will prevent `log.info` et al throwing on record fields that cannot be
@@ -1097,7 +1097,7 @@ Please upgrade to bunyan 0.20.0.
          - log.info:  0.07368ms per iteration
 
 
-## bunyan 0.5.0
+## 0.5.0
 
 - Use 10/20/... instead of 1/2/... for level constant values. Ostensibly this
   allows for intermediary levels from the defined "trace/debug/..." set.
@@ -1122,7 +1122,7 @@ Please upgrade to bunyan 0.20.0.
         ...
 
 
-## bunyan 0.4.0
+## 0.4.0
 
 - Add `new Logger({src: true})` config option to have a 'src' attribute be
   automatically added to log records with the log call source info. Example:
@@ -1134,7 +1134,7 @@ Please upgrade to bunyan 0.20.0.
         },
 
 
-## bunyan 0.3.0
+## 0.3.0
 
 - `log.child(options[, simple])` Added `simple` boolean arg. Set `true` to
   assert that options only add fields (no config changes). Results in a 10x
@@ -1152,13 +1152,13 @@ Please upgrade to bunyan 0.20.0.
   are non-enumerable).
 
 
-## bunyan 0.2.0
+## 0.2.0
 
 - Spec'ing core/recommended log record fields.
 - Add `LOG_VERSION` to exports.
 - Improvements to request/response serializations.
 
 
-## bunyan 0.1.0
+## 0.1.0
 
 First release.
