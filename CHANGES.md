@@ -6,8 +6,9 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## bunyan 1.4.1 (not yet released)
+## bunyan 1.5.0 (not yet released)
 
+- [pull #294] Update to dtrace-provider 0.6 to fix with node 4.0 and io.js 3.0.
 - Dropped support for 0.8 (can't install deps easily anymore for running
   test suite). Bump to a recent iojs version for testing (though really
   they move too fast). Note that dtrace-provider build fails for iojs v3.0
