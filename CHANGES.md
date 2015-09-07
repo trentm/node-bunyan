@@ -8,6 +8,7 @@ Known issues:
 
 ## bunyan 1.5.0 (not yet released)
 
+- [pull #236, issue #231, issue #223] Fix strict mode in the browser.
 - [pull #282, issue #213] Fixes bunyan to work with webpack. By Denis Izmaylov.
 - [pull #294] Update to dtrace-provider 0.6 to fix with node 4.0 and io.js 3.0.
 - Dropped support for 0.8 (can't install deps easily anymore for running
