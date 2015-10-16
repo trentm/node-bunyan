@@ -25,6 +25,7 @@ var child_process = require('child_process'),
     exec = child_process.exec,
     execFile = child_process.execFile;
 var assert = require('assert');
+var moment = require('moment');
 
 var nodeSpawnSupportsStdio = (
     Number(process.version.split('.')[0]) >= 0 ||
@@ -86,6 +87,16 @@ Object.keys(levelFromName).forEach(function (name) {
 // Display time formats.
 TIME_UTC = 1;  // the default, bunyan's native format
 TIME_LOCAL = 2;
+
+// Timestamp formats. Timezone is added at format time
+UTC_FORMATS = {
+    long: 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]',
+    short: 'HH:mm:ss.SSS[Z]'
+};
+LOCAL_FORMATS = {
+    long: 'YYYY-MM-DD[T]HH:mm:ss.SSSZ',
+    short: 'HH:mm:ss.SSS'
+};
 
 var timezoneOffsetMs; // used for TIME_LOCAL display
 
@@ -752,25 +763,26 @@ function emitRecord(rec, line, opts, stylize) {
 
         delete rec.v;
 
-        var time = rec.time;
+        var time = moment(rec.time);
+        // default to UTC
+        var zoneFormats;
         switch (opts.timeFormat) {
-        case TIME_UTC:
-            break;
         case TIME_LOCAL:
-            if (!timezoneOffsetMs) {
-                timezoneOffsetMs
-                    = (new Date(time)).getTimezoneOffset() * 60 * 1000;
-            }
-            time = new Date(
-                (new Date(time)).getTime() - timezoneOffsetMs).toISOString()
+            zoneFormats = LOCAL_FORMATS;
+            break;
+        default:
+            // default to UTC
+            zoneFormats = UTC_FORMATS;
+            time.utc();
             break;
         }
-        if (short && rec.time[10] === 'T') {
-            // Presuming `time` is ISO8601 formatted, i.e. safe to drop date.
-            time = stylize(time.substr(11), 'XXX');
+        if (short) {
+            time = time.format(zoneFormats.short);
         } else {
-            time = stylize('[' + time + ']', 'XXX');
+            // Is there any way to put square brackets in a moment format?
+            time = '[' + time.format(zoneFormats.long) + ']';
         }
+        time = stylize(time, 'XXX');
         delete rec.time;
 
         var nameStr = rec.name;
