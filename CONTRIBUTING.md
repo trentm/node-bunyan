@@ -122,10 +122,6 @@ For now, here are the various labels and their purpose:
 
 ### Meta
 
-- needslabels: Temporary label to help me work through labelling all current
-  open issues and PR.
-  See [#335](https://github.com/trentm/node-bunyan/issues/335)
-  where I'm working through this.
 - needstriage: Temporary label to help me do a single triage pass through all
   current open issues and PRs.
   See [#335](https://github.com/trentm/node-bunyan/issues/335)
@@ -135,21 +131,27 @@ For now, here are the various labels and their purpose:
 
 Color: green
 
-- Type-Question
-- Type-Bug
-- Type-Feature
-- Type-Doc
-- Type-Task
+- Type-Question: Asking a question on Bunyan usage, about the project, etc.
+  Sometimes if it is unclear if an issue is an intended feature (perhaps
+  arguing for better docs or examples to avoid confusion) or a bug, I will
+  use this category.
+- Type-Bug: A bug in Bunyan's behaviour.
+- Type-Feature: A new feature or other improvement.
+- Type-Doc: Issues with Bunyan's documentation.
+- Type-Task: A project task to be done.
 
 ### Component
 
 Color: blue
 
+- Component-Project: Project meta stuff like testing, linting, build, install,
+  etc.
 - Component-CLI: The `bunyan` command-line tool.
-- Component-Rotation: The bunyan library's log rotation support.
-- Component-Browser: Bunyan's handling/support for running in the browser.
-- Component-Library: catch-all for other library stuff
-- Component-Project: Project meta stuff like testing, linting, etc.
+- Component-Lib: catch-all for other library stuff
+    - Component-LibRotation: The bunyan library's log rotation support.
+    - Component-LibBrowser: Bunyan's handling/support for running in the browser.
+    - Component-LibFlush: A separate component for collecting the tickets related
+      to closing/flushing bunyan streams on process shutdown.
 
 The point of components is to find like issues to help with reference, search
 and resolving them. If no component fits an issue/PR, then don't add a label.
