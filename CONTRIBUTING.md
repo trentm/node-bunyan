@@ -111,7 +111,7 @@ Bunyan shall have categories of [issue
 labels](https://github.com/trentm/node-bunyan/labels) named "$category-$value".
 An issue should have max *one* label from each set. Users of Google Code's
 dearly departed issue tracker may remember this kind of thing. This is a
-poorman's version of structure issue tracker metadata.
+poorman's version of structured issue tracker metadata.
 
 I'm inclined to *not* do priorities right now. *Possibly* we'll use GitHub
 milestones to basically set targets for upcoming releases. But otherwise my

@@ -83,21 +83,23 @@ test: $(NODEUNIT)
 	$(NODEUNIT) $(NON_DTRACE_TEST_FILES)
 
 # Test will all node supported versions (presumes install locations I use on
-# my machine).
+# my machine -- "~/opt/node-VER"):
 # Note: 'test10' is last so (if all is well) I end up with a binary
 # dtrace-provider build for node 0.10 (my current version).
 .PHONY: testall
-testall: test40 testiojs30 test012 test010
+testall: test4 test012 test010
 
-.PHONY: test40
-test40:
-	@echo "# Test node 4.0.x (with node `$(NODEOPT)/node-4.0/bin/node --version`)"
-	@$(NODEOPT)/node-4.0/bin/node --version | grep '^v4\.0\.'
-	PATH="$(NODEOPT)/node-4.0/bin:$(PATH)" NPM_INSTALL_FLAGS="--nodedir=$(HOME)/src/node" make distclean all test
-.PHONY: testiojs30
-testiojs30:
-	@echo "# Test iojs 3.0 (`$(NODEOPT)/iojs-3.0/bin/node --version`)"
-	PATH="$(NODEOPT)/iojs-3.0/bin:$(PATH)" make distclean all test
+#XXX Still need NPM_INSTALL_FLAGS thing?
+.PHONY: test5
+test5:
+	@echo "# Test node 5.x (with node `$(NODEOPT)/node-5/bin/node --version`)"
+	@$(NODEOPT)/node-5/bin/node --version | grep '^v5\.'
+	PATH="$(NODEOPT)/node-5/bin:$(PATH)" NPM_INSTALL_FLAGS="--nodedir=$(HOME)/src/node" make distclean all test
+.PHONY: test4
+test4:
+	@echo "# Test node 4.x (with node `$(NODEOPT)/node-4/bin/node --version`)"
+	@$(NODEOPT)/node-4/bin/node --version | grep '^v4\.'
+	PATH="$(NODEOPT)/node-4/bin:$(PATH)" NPM_INSTALL_FLAGS="--nodedir=$(HOME)/src/node" make distclean all test
 .PHONY: test012
 test012:
 	@echo "# Test node 0.12.x (with node `$(NODEOPT)/node-0.12/bin/node --version`)"
