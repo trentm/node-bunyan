@@ -209,10 +209,9 @@ test('log.info(<fields>, <function>)', function (t) {
     names.forEach(function (lvl) {
         log3[lvl].call(log3, fields, func);
         var rec = catcher.records[catcher.records.length - 1];
-        t.equal(rec.msg, '',
+        t.equal(rec.msg, '[Function: func2]',
             format('log.%s msg: got %j', lvl, rec.msg));
         t.equal(rec.one, 'un');
-        t.afterEach()
     });
     t.end();
 });
