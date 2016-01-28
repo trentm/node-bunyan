@@ -16,17 +16,19 @@ If you want to help me here, great! Thank you! Some ideas:
   (at least partially) in the browser. Is there a good service for that?
   Please discuss on [issue #342](https://github.com/trentm/node-bunyan/issues/342).
 
-- Fielding issues labelled with "[Type-Question](#type)", if you are familiar
+- Fielding issues labelled with "[Type-Question][Type-Question]", if you are familiar
   with Bunyan and know how to answer them, would be great.
 
 - If you want to dive into code, but aren't *that* familiar with node-bunyan,
-  then [issues labelled with Experience-Easy][Experience-Easy] is a good
+  then [issues labelled with Experience-Easy][Experience-Easy] are a good
   place to start.
 
 - [Once I've made a once over
   triaging](https://github.com/trentm/node-bunyan/issues/335) and consolodating
   issues and PRs, volunteering for issues in a particular
   [component](#component) with which you have familiarity would be great.
+
+[Type-Question]: https://github.com/trentm/node-bunyan/issues?q=is%3Aopen+is%3Aissue+label%3AType-Question
 
 
 ## Trent's Biased Rules for Code
