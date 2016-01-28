@@ -14,7 +14,8 @@ If you want to help me here, great! Thank you! Some ideas:
   Windows. Also, support for node.js versions 0.10 up to whatever the current
   latest is. Are those too tall an order? What's more, Bunyan is meant to work
   (at least partially) in the browser. Is there a good service for that?
-  TODO: start an issue for this.
+  Please discuss on [issue
+  #342](https://github.com/trentm/node-bunyan/issues/342).
 
 - Fielding issues labelled with ["Type-Question"](#type) if you are familiar
   with Bunyan and know how to answer them would be great.
@@ -38,8 +39,9 @@ provide feedback on it and merge it. I'll politely request missing pieces.
 
 
 - Please follow existing code style. Contributed code must pass `make check`.
-  (Note: I intended to change to eslint soon, so currently `make check` might
-  be a moving target. TODO: link to ticket for that.)
+  (Note: I intended to [change to eslint
+  soon](https://github.com/trentm/node-bunyan/issues/341), so currently `make
+  check` might be a moving target.)
 
 - Any user visible change in behaviour should almost certainly include an
   update to the docs. Currently the "docs" is the README.md.
@@ -139,6 +141,8 @@ Color: green
 - Type-Feature: A new feature or other improvement.
 - Type-Doc: Issues with Bunyan's documentation.
 - Type-Task: A project task to be done.
+
+TODO: consider Type-Unknown for the "unclear if bug or feature" tickets.
 
 ### Component
 
