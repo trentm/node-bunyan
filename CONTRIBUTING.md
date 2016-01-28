@@ -14,18 +14,17 @@ If you want to help me here, great! Thank you! Some ideas:
   Windows. Also, support for node.js versions 0.10 up to whatever the current
   latest is. Are those too tall an order? What's more, Bunyan is meant to work
   (at least partially) in the browser. Is there a good service for that?
-  Please discuss on [issue
-  #342](https://github.com/trentm/node-bunyan/issues/342).
+  Please discuss on [issue #342](https://github.com/trentm/node-bunyan/issues/342).
 
-- Fielding issues labelled with ["Type-Question"](#type) if you are familiar
-  with Bunyan and know how to answer them would be great.
+- Fielding issues labelled with "[Type-Question](#type)", if you are familiar
+  with Bunyan and know how to answer them, would be great.
 
 - If you want to dive into code, but aren't *that* familiar with node-bunyan,
-  then [issues labelled with Experience-Easy](Experience-Easy) is a good
+  then [issues labelled with Experience-Easy][Experience-Easy] is a good
   place to start.
 
 - [Once I've made a once over
-  triaging]https://github.com/trentm/node-bunyan/issues/335) and consolodating
+  triaging](https://github.com/trentm/node-bunyan/issues/335) and consolodating
   issues and PRs, volunteering for issues in a particular
   [component](#component) with which you have familiarity would be great.
 
@@ -189,7 +188,7 @@ One of the "Experience-\*" labels can optionally be put on an issue or PR to
 indicate what kind of experience a contributor would need with node-bunyan
 (and/or node.js) to complete it. For example, if you're looking for somewhere to
 start, check out the [Experience-Easy][Experience-Easy] tag. This category idea
-is borrowed from [rust's E-\* labels](rust-issue-triage).
+is borrowed from [rust's E-\* labels][rust-issue-triage].
 
 [Experience-Easy]: https://github.com/trentm/node-bunyan/issues?q=is%3Aopen+is%3Aissue+label%3AExperience-Easy
 [rust-issue-triage]: https://github.com/rust-lang/rust/blob/master/CONTRIBUTING.md#issue-triage
