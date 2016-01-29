@@ -48,6 +48,7 @@ test('basic dtrace', function (t) {
         '-c', format('node %s/log-some.js', __dirname)];
     var dtrace = spawn(argv[0], argv.slice(1));
     //console.error('ARGV: %j', argv);
+    //console.error('CMD: %s', argv.join(' '));
 
     var traces = [];
     dtrace.stdout.on('data', function (data) {
