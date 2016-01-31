@@ -134,10 +134,10 @@ For now, here are the various labels and their purpose:
 
 Color: green
 
+- Type-Unknown: If it is still unclear or undecided if an issue is an intended
+  feature (perhaps arguing for better docs or examples to avoid confusion) or a
+  bug, I will use this category.
 - Type-Question: Asking a question on Bunyan usage, about the project, etc.
-  Sometimes if it is unclear if an issue is an intended feature (perhaps
-  arguing for better docs or examples to avoid confusion) or a bug, I will
-  use this category.
 - Type-Bug: A bug in Bunyan's behaviour.
 - Type-Feature: A new feature or other improvement.
 - Type-Doc: Issues with Bunyan's documentation.
