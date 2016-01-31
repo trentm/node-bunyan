@@ -1,6 +1,7 @@
 # This is the MIT license
 
-Copyright (c) 2011-2012 Joyent Inc.
+Copyright 2016 Trent Mick
+Copyright 2016 Joyent Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
