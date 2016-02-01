@@ -350,7 +350,7 @@ in production.**
 # Levels
 
 The log levels in bunyan are as follows. The level descriptions are best
-practice *opinions*.
+practice *opinions* of the author.
 
 - "fatal" (60): The service/app is going to stop or become unusable now.
   An operator should definitely look into this soon.
@@ -363,17 +363,19 @@ practice *opinions*.
 - "trace" (10): Logging from external libraries used by your app or *very*
   detailed application logging.
 
-Suggestions: Use "debug" sparingly. Information that will be useful to debug
-errors *post mortem* should usually be included in "info" messages if it's
-generally relevant or else with the corresponding "error" event. Don't rely
-on spewing mostly irrelevant debug messages all the time and sifting through
-them when an error occurs.
+Setting a logger instance (or one of its streams) to a particular level implies
+that all log records *at that level and above* are logged. E.g. a logger set to
+level "info" will log records at level info and above (warn, error, fatal).
 
-Integers are used for the actual level values (10 for "trace", ..., 60 for
-"fatal") and constants are defined for the (bunyan.TRACE ... bunyan.DEBUG).
-The lowercase level names are aliases supported in the API.
+While using log level *names* is preferred, the actual level values are integers
+internally (10 for "trace", ..., 60 for "fatal"). Constants are defined for
+the levels: `bunyan.TRACE` ... `bunyan.FATAL`. The lowercase level names are
+aliases supported in the API, e.g. `log.level("info")`. There is one exception:
+DTrace integration uses the level names. The fired DTrace probes are named
+'bunyan-$levelName'.
 
-Here is the API for changing levels in an existing logger:
+Here is the API for querying and changing levels on an existing logger.
+Recall that a logger instance has an array of output "streams":
 
 ```js
 log.level() -> INFO   // gets current level (lowest level of all streams)
@@ -389,6 +391,21 @@ log.levels(0, INFO)             // set level of stream 0 to INFO
 log.levels(0, "info")           // can use "info" et al aliases
 log.levels("foo", WARN)         // set stream named "foo" to WARN
 ```
+
+
+## Level suggestions
+
+Trent's biased suggestions for server apps: Use "debug" sparingly. Information
+that will be useful to debug errors *post mortem* should usually be included in
+"info" messages if it's generally relevant or else with the corresponding
+"error" event. Don't rely on spewing mostly irrelevant debug messages all the
+time and sifting through them when an error occurs.
+
+Trent's biased suggestions for node.js libraries: IMHO, libraries should only
+ever log at `trace`-level. Fine control over log output should be up to the
+app using a library. Having a library that spews log output at higher levels
+gets in the way of the a clear story in the *app* logs.
+
 
 # Log Record Fields
 
