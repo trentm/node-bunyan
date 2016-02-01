@@ -8,6 +8,11 @@ Known issues:
 
 ## 1.7.1 (not yet released)
 
+- [issue #344] Fix "rotating-file" Bunyan streams to not miss rotations when configured
+  for a period greater than approximately 25 days. Before this there was an issue
+  where periods greater than node.js's maximum `setTimeout` length would fail to rotate.
+  (By Martijn Schrage.)
+
 - [issue #234, pull #345] Improve `bunyan` CLI rendering of "res" field
   HTTP responses to not show two blank lines for an empty body.
   (By Michael Nisi.)
