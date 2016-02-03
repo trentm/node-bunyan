@@ -15,6 +15,10 @@ Known issues:
   Before this, a bogus level like "foo" or -12 or `['some', 'array']` would
   silently be accepted -- with undefined results.
 
+- Doc updates for #340 and #305.
+
+- Update `make test` to test against node 5, 4, 0.12 and 0.10.
+
 
 ## 1.5.1
 
