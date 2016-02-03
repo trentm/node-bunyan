@@ -8,6 +8,10 @@ Known issues:
 
 ## 1.5.2 (not yet released)
 
+- [pull #291, issue #303] Fix `LOG.child(...)` to *not* override the "hostname"
+  field of the parent. A use case is when one manually sets "hostname" to
+  something other than `os.hostname()`. (By github.com/Cactusbone.)
+
 - [issue #325] Allow one to set `level: 0` in `createLogger` to turn on
   logging for all levels. (Adapted from #336 by github.com/sometimesalready.)
 

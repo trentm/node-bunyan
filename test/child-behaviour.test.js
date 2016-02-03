@@ -134,3 +134,28 @@ test('child can set level of inherited streams and add streams', function (t) {
 
     t.end();
 });
+
+// issue #291
+test('child should not lose parent "hostname"', function (t) {
+    var stream = new CapturingStream();
+    var dad = bunyan.createLogger({
+        name: 'hostname-test',
+        hostname: 'bar0',
+        streams: [ {
+            type: 'raw',
+            stream: stream,
+            level: 'info'
+        } ]
+    });
+    var son = dad.child({component: 'son'});
+
+    dad.info('HI');
+    son.info('hi');
+
+    t.equal(stream.recs.length, 2);
+    t.equal(stream.recs[0].hostname, 'bar0');
+    t.equal(stream.recs[1].hostname, 'bar0');
+    t.equal(stream.recs[1].component, 'son');
+
+    t.end();
+});
