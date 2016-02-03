@@ -8,7 +8,12 @@ Known issues:
 
 ## 1.5.2 (not yet released)
 
-(nothing yet)
+- [issue #325] Allow one to set `level: 0` in `createLogger` to turn on
+  logging for all levels. (Adapted from #336 by github.com/sometimesalready.)
+
+- Add guards (to `resolveLevel`) so that all "level" values are validated.
+  Before this, a bogus level like "foo" or -12 or `['some', 'array']` would
+  silently be accepted -- with undefined results.
 
 
 ## 1.5.1

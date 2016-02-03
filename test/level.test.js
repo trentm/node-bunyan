@@ -69,5 +69,30 @@ test('log.level(<weird numbers>)', function (t) {
     t.equal(log1.level(), 0);
     log1.level(Number.MAX_VALUE);
     t.equal(log1.level(), Number.MAX_VALUE);
+    log1.level(Infinity);
+    t.equal(log1.level(), Infinity);
+    t.end();
+});
+
+test('log.level(<invalid values>)', function (t) {
+    t.throws(function () {
+        var log = bunyan.createLogger({name: 'invalid', level: 'booga'});
+    // JSSTYLED
+    }, /unknown level name: "booga"/);
+    t.throws(function () {
+        var log = bunyan.createLogger({name: 'invalid', level: []});
+    }, /cannot resolve level: invalid arg \(object\): \[\]/);
+    t.throws(function () {
+        var log = bunyan.createLogger({name: 'invalid', level: true});
+    }, /cannot resolve level: invalid arg \(boolean\): true/);
+    t.throws(function () {
+        var log = bunyan.createLogger({name: 'invalid', level: -1});
+    }, /level is not a positive integer: -1/);
+    t.throws(function () {
+        var log = bunyan.createLogger({name: 'invalid', level: 3.14});
+    }, /level is not a positive integer: 3.14/);
+    t.throws(function () {
+        var log = bunyan.createLogger({name: 'invalid', level: -Infinity});
+    }, /level is not a positive integer: -Infinity/);
     t.end();
 });

@@ -171,3 +171,14 @@ test('two streams, one with "level" specified', function (t) {
     t.equal(log.streams[1].level, bunyan.FATAL);
     t.end();
 });
+
+// Issue #335
+test('log level 0 to turn on all logging', function (t) {
+    var log = bunyan.createLogger({
+        name: 'foo',
+        level: 0
+    });
+    t.equal(log.level(), 0);
+    t.equal(log.streams[0].level, 0);
+    t.end();
+});
