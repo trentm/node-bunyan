@@ -491,16 +491,16 @@ Recommended/Best Practice Fields:
 - `err`: Object. A caught JS exception. Log that thing with `log.info(err)`
     to get:
 
-        ```js
-        ...
-        "err": {
-          "message": "boom",
-          "name": "TypeError",
-          "stack": "TypeError: boom\n    at Object.<anonymous> ..."
-        },
-        "msg": "boom",
-        ...
-        ```
+```js
+...
+"err": {
+  "message": "boom",
+  "name": "TypeError",
+  "stack": "TypeError: boom\n    at Object.<anonymous> ..."
+},
+"msg": "boom",
+...
+```
 
     Or use the `bunyan.stdSerializers.err` serializer in your Logger and
     do this `log.error({err: err}, "oops")`. See "examples/err.js".
@@ -516,28 +516,28 @@ Recommended/Best Practice Fields:
 - `req`: An HTTP server request. Bunyan provides `bunyan.stdSerializers.req`
   to serialize a request with a suggested set of keys. Example:
 
-        ```js
-        {
-          "method": "GET",
-          "url": "/path?q=1#anchor",
-          "headers": {
-            "x-hi": "Mom",
-            "connection": "close"
-          },
-          "remoteAddress": "120.0.0.1",
-          "remotePort": 51244
-        }
-        ```
+```js
+{
+  "method": "GET",
+  "url": "/path?q=1#anchor",
+  "headers": {
+    "x-hi": "Mom",
+    "connection": "close"
+  },
+  "remoteAddress": "120.0.0.1",
+  "remotePort": 51244
+}
+```
 
 - `res`: An HTTP server response. Bunyan provides `bunyan.stdSerializers.res`
   to serialize a response with a suggested set of keys. Example:
 
-        ```js
-        {
-          "statusCode": 200,
-          "header": "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nConnection: keep-alive\r\nTransfer-Encoding: chunked\r\n\r\n"
-        }
-        ```
+```js
+{
+  "statusCode": 200,
+  "header": "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nConnection: keep-alive\r\nTransfer-Encoding: chunked\r\n\r\n"
+}
+```
 
 Other fields to consider:
 
