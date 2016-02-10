@@ -18,7 +18,8 @@ ifeq ($(shell uname -s),Darwin)
 endif
 NODEOPT ?= $(HOME)/opt
 
-
+# Run tests in a set timezone, so local time is predictable
+export TZ=Pacific/Honolulu
 
 #---- Files
 

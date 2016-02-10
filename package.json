@@ -32,5 +32,8 @@
 
   "scripts": {
     "test": "make test"
+  },
+  "dependencies": {
+    "moment": "^2.10.6"
   }
 }
