@@ -1,0 +1,2 @@
+{"name":"aclientreq","hostname":"danger0.local","pid":23280,"level":10,"client_req":{"method":"GET","url":"/--ping"},"msg":"request sent","time":"2016-02-10T07:28:40.510Z","v":0}
+{"name":"aclientreq","hostname":"danger0.local","pid":23280,"level":10,"client_res":{"statusCode":200,"headers":{"request-id":"e8a5a700-cfc7-11e5-a3dc-3b85d20f26ef","content-type":"application/json"}},"msg":"Response received","time":"2016-02-10T07:28:41.419Z","v":0}
