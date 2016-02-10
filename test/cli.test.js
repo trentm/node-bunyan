@@ -424,3 +424,22 @@ test('should not crash on corpus/old-crashers/*.log', function (t) {
         t.end();
     });
 });
+
+test('client_req extra newlines, client_res={} (pull #252)', function (t) {
+    var expect = [
+        /* BEGIN JSSTYLED */
+        '[2016-02-10T07:28:40.510Z] TRACE: aclientreq/23280 on danger0.local: request sent',
+        '    GET /--ping HTTP/1.1',
+        '[2016-02-10T07:28:41.419Z] TRACE: aclientreq/23280 on danger0.local: Response received',
+        '    HTTP/1.1 200 OK',
+        '    request-id: e8a5a700-cfc7-11e5-a3dc-3b85d20f26ef',
+        '    content-type: application/json'
+        /* END JSSTYLED */
+    ].join('\n') + '\n';
+    exec(_('%s %s/corpus/clientreqres.log', BUNYAN, __dirname),
+            function (err, stdout, stderr) {
+        t.ifError(err);
+        t.equal(stdout, expect);
+        t.end();
+    });
+});

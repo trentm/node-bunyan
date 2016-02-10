@@ -8,6 +8,9 @@ Known issues:
 
 ## 1.5.2 (not yet released)
 
+- [pull #252] Fix errant `client_res={}` in `bunyan` CLI rendering, and avoid
+  extra newlines in `client_req` rendering in some cases. (By Thomas Heymann.)
+
 - [pull #291, issue #303] Fix `LOG.child(...)` to *not* override the "hostname"
   field of the parent. A use case is when one manually sets "hostname" to
   something other than `os.hostname()`. (By github.com/Cactusbone.)
