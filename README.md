@@ -54,7 +54,7 @@ node.js library usage of bunyan in your apps.
   [`src: true`](#src)
 - lightweight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
-- [Runtime log snooping via Dtrace support](#runtime-log-snooping-via-dtrace)
+- [Runtime log snooping via DTrace support](#runtime-log-snooping-via-dtrace)
 - Support for [browserify](http://browserify.org/). See [Browserify
   section](#browserify) below.
 
@@ -918,12 +918,9 @@ place to start.)
 
 # Runtime log snooping via DTrace
 
-**Note**: To use Bunyan's DTrace facilities you need to manually install
-the "dtrace-provider" lib separately via `npm install dtrace-provider`.
-
-On systems that support DTrace (e.g., MacOS, FreeBSD, illumos derivatives
-like SmartOS and OmniOS), Bunyan will create a DTrace provider (`bunyan`)
-that makes available the following probes:
+On systems that support DTrace (e.g., illumos derivatives like SmartOS and
+OmniOS, FreeBSD, Mac), Bunyan will create a DTrace provider (`bunyan`) that
+makes available the following probes:
 
 ```sh
 log-trace
