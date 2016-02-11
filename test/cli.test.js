@@ -86,7 +86,8 @@ test('cat simple.log', function (t) {
         }
     );
 });
-test('simple.log local long', function (t) {
+
+test('time: simple.log local long', function (t) {
     exec(_('%s -o long -L %s/corpus/simple.log', BUNYAN, __dirname),
              function (err, stdout, stderr) {
         t.ifError(err)
@@ -96,8 +97,8 @@ test('simple.log local long', function (t) {
         t.end();
     });
 });
-test('simple.log utc long', function (t) {
-    exec(_('%s -o long %s/corpus/simple.log', BUNYAN, __dirname),
+test('time: simple.log utc long', function (t) {
+    exec(_('%s -o long --time utc %s/corpus/simple.log', BUNYAN, __dirname),
              function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout,
@@ -106,7 +107,7 @@ test('simple.log utc long', function (t) {
         t.end();
     });
 });
-test('simple.log local short', function (t) {
+test('time: simple.log local short', function (t) {
     exec(_('%s -o short -L %s/corpus/simple.log', BUNYAN, __dirname),
              function (err, stdout, stderr) {
         t.ifError(err)
@@ -116,7 +117,7 @@ test('simple.log local short', function (t) {
         t.end();
     });
 });
-test('simple.log utc short', function (t) {
+test('time: simple.log utc short', function (t) {
     exec(_('%s -o short %s/corpus/simple.log', BUNYAN, __dirname),
              function (err, stdout, stderr) {
         t.ifError(err)
@@ -126,6 +127,7 @@ test('simple.log utc short', function (t) {
         t.end();
     });
 });
+
 test('simple.log with color', function (t) {
     exec(_('%s --color %s/corpus/simple.log', BUNYAN, __dirname),
         function (err, stdout, stderr) {

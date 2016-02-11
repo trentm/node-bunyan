@@ -6,7 +6,12 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.5.2 (not yet released)
+## 1.6.0 (not yet released)
+
+- [pull #304, issue #245] Use [Moment.js][momentjs.com] library to handle
+  `bunyan` CLI time formatting in some cases, especially to fix display of
+  local time. It is now required for local time formatting (i.e. `bunyan -L`
+  or `bunyan --time local`). (By David M. Lee.)
 
 - [pull #252] Fix errant `client_res={}` in `bunyan` CLI rendering, and avoid
   extra newlines in `client_req` rendering in some cases. (By Thomas Heymann.)

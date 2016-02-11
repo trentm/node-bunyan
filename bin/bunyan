@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Copyright (c) 2015 Trent Mick. All rights reserved.
- * Copyright (c) 2015 Joyent Inc. All rights reserved.
+ * Copyright 2016 Trent Mick. All rights reserved.
+ * Copyright 2016 Joyent Inc. All rights reserved.
  *
  * bunyan -- filter and pretty-print Bunyan log files (line-delimited JSON)
  *
@@ -11,7 +11,7 @@
  * vim: expandtab:ts=4:sw=4
  */
 
-var VERSION = '1.5.2';
+var VERSION = '1.6.0';
 
 var p = console.log;
 var util = require('util');
@@ -25,15 +25,19 @@ var child_process = require('child_process'),
     exec = child_process.exec,
     execFile = child_process.execFile;
 var assert = require('assert');
-var moment = require('moment');
+
+try {
+    var moment = require('moment');
+} catch (e) {
+    moment = null;
+}
+
+
+//---- globals and constants
 
 var nodeSpawnSupportsStdio = (
     Number(process.version.split('.')[0]) >= 0 ||
     Number(process.version.split('.')[1]) >= 8);
-
-
-
-//---- globals and constants
 
 // Internal debug logging via `console.warn`.
 var _DEBUG = false;
@@ -85,20 +89,18 @@ Object.keys(levelFromName).forEach(function (name) {
 
 
 // Display time formats.
-TIME_UTC = 1;  // the default, bunyan's native format
-TIME_LOCAL = 2;
+var TIME_UTC = 1;  // the default, bunyan's native format
+var TIME_LOCAL = 2;
 
-// Timestamp formats. Timezone is added at format time
-UTC_FORMATS = {
-    long: 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]',
+// Timezone formats: output format -> momentjs format string
+var TIMEZONE_UTC_FORMATS = {
+    long:  '[[]YYYY-MM-DD[T]HH:mm:ss.SSS[Z][]]',
     short: 'HH:mm:ss.SSS[Z]'
 };
-LOCAL_FORMATS = {
-    long: 'YYYY-MM-DD[T]HH:mm:ss.SSSZ',
+var TIMEZONE_LOCAL_FORMATS = {
+    long:  '[[]YYYY-MM-DD[T]HH:mm:ss.SSSZ[]]',
     short: 'HH:mm:ss.SSS'
 };
-
-var timezoneOffsetMs; // used for TIME_LOCAL display
 
 
 // The current raw input line being processed. Used for `uncaughtException`.
@@ -423,7 +425,7 @@ function parseArgv(argv) {
         strict: false,
         pids: null,
         pidsType: null,
-        timeFormat: null  // one of the TIME_ constants
+        timeFormat: TIME_UTC  // one of the TIME_ constants
     };
 
     // Turn '-iH' into '-i -H', except for argument-accepting options.
@@ -512,6 +514,10 @@ function parseArgv(argv) {
                 break;
             case '-L':
                 parsed.timeFormat = TIME_LOCAL;
+                if (!moment) {
+                    throw new Error(
+                        'could not find moment package required for "-L"');
+                }
                 break;
             case '--time':
                 var timeArg = args.shift();
@@ -521,6 +527,10 @@ function parseArgv(argv) {
                     break
                 case 'local':
                     parsed.timeFormat = TIME_LOCAL;
+                    if (!moment) {
+                        throw new Error('could not find moment package '
+                            + 'required for "--time=local"');
+                    }
                     break
                 case undefined:
                     throw new Error('missing argument to "--time"');
@@ -763,24 +773,30 @@ function emitRecord(rec, line, opts, stylize) {
 
         delete rec.v;
 
-        var time = moment(rec.time);
-        // default to UTC
-        var zoneFormats;
-        switch (opts.timeFormat) {
-        case TIME_LOCAL:
-            zoneFormats = LOCAL_FORMATS;
-            break;
-        default:
-            // default to UTC
-            zoneFormats = UTC_FORMATS;
-            time.utc();
-            break;
-        }
-        if (short) {
-            time = time.format(zoneFormats.short);
+        // Time.
+        var time;
+        if (!short && opts.timeFormat === TIME_UTC) {
+            // Fast default path: We assume the raw `rec.time` is a UTC time
+            // in ISO 8601 format (per spec).
+            time = '[' + rec.time + ']';
+        } else if (!moment && opts.timeFormat === TIME_UTC) {
+            // Don't require momentjs install, as long as not using TIME_LOCAL.
+            time = rec.time.substr(11);
         } else {
-            // Is there any way to put square brackets in a moment format?
-            time = '[' + time.format(zoneFormats.long) + ']';
+            var tzFormat;
+            var moTime = moment(rec.time);
+            switch (opts.timeFormat) {
+            case TIME_UTC:
+                tzFormat = TIMEZONE_UTC_FORMATS[short ? 'short' : 'long'];
+                moTime.utc();
+                break;
+            case TIME_LOCAL:
+                tzFormat = TIMEZONE_LOCAL_FORMATS[short ? 'short' : 'long'];
+                break;
+            default:
+                throw new Error('unexpected timeFormat: ' + opts.timeFormat);
+            };
+            time = moTime.format(tzFormat);
         }
         time = stylize(time, 'XXX');
         delete rec.time;
