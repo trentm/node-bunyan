@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.6.0 (not yet released)
+## 1.6.0
 
 - [pull #304, issue #245] Use [Moment.js][momentjs.com] library to handle
   `bunyan` CLI time formatting in some cases, especially to fix display of
