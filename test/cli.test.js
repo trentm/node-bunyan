@@ -108,6 +108,7 @@ test('time: simple.log local long', function (t) {
             {env: tzEnv}, function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout,
+            // JSSTYLED
             '[2012-02-08T12:56:52.856-10:00]  INFO: myservice/123 on example.com: '
             + 'My message\n');
         t.end();
