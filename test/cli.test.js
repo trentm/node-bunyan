@@ -20,17 +20,29 @@ var before = tap4nodeunit.before;
 var test = tap4nodeunit.test;
 
 
+// ---- globals
 
 var BUNYAN = path.resolve(__dirname, '../bin/bunyan');
 
-//child = exec('cat *.js bad_file | wc -l',
-//  function (error, stdout, stderr) {
-//    console.log('stdout: ' + stdout);
-//    console.log('stderr: ' + stderr);
-//    if (error !== null) {
-//      console.log('exec error: ' + error);
-//    }
-//});
+
+// ---- support stuff
+
+/**
+ * Copies over all keys in `from` to `to`, or
+ * to a new object if `to` is not given.
+ */
+function objCopy(from, to) {
+    if (to === undefined) {
+        to = {};
+    }
+    for (var k in from) {
+        to[k] = from[k];
+    }
+    return to;
+}
+
+
+// ---- tests
 
 test('--version', function (t) {
     var version = require('../package.json').version;
@@ -87,9 +99,13 @@ test('cat simple.log', function (t) {
     );
 });
 
+// A stable 'TZ' for 'local' timezone output.
+tzEnv = objCopy(process.env);
+tzEnv.TZ = 'Pacific/Honolulu';
+
 test('time: simple.log local long', function (t) {
     exec(_('%s -o long -L %s/corpus/simple.log', BUNYAN, __dirname),
-             function (err, stdout, stderr) {
+            {env: tzEnv}, function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout,
             '[2012-02-08T12:56:52.856-10:00]  INFO: myservice/123 on example.com: '
@@ -99,7 +115,7 @@ test('time: simple.log local long', function (t) {
 });
 test('time: simple.log utc long', function (t) {
     exec(_('%s -o long --time utc %s/corpus/simple.log', BUNYAN, __dirname),
-             function (err, stdout, stderr) {
+            {env: tzEnv}, function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout,
             '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
@@ -109,7 +125,7 @@ test('time: simple.log utc long', function (t) {
 });
 test('time: simple.log local short', function (t) {
     exec(_('%s -o short -L %s/corpus/simple.log', BUNYAN, __dirname),
-             function (err, stdout, stderr) {
+            {env: tzEnv}, function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout,
             '12:56:52.856  INFO myservice: '
@@ -119,7 +135,7 @@ test('time: simple.log local short', function (t) {
 });
 test('time: simple.log utc short', function (t) {
     exec(_('%s -o short %s/corpus/simple.log', BUNYAN, __dirname),
-             function (err, stdout, stderr) {
+            {env: tzEnv}, function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout,
             '22:56:52.856Z  INFO myservice: '

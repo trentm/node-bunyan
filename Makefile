@@ -18,15 +18,12 @@ ifeq ($(shell uname -s),Darwin)
 endif
 NODEOPT ?= $(HOME)/opt
 
-# Run tests in a set timezone, so local time is predictable
-export TZ=Pacific/Honolulu
 
 #---- Files
 
 JSSTYLE_FILES := $(shell find lib test tools examples -name "*.js") bin/bunyan
 # All test files *except* dtrace.test.js.
 NON_DTRACE_TEST_FILES := $(shell ls -1 test/*.test.js | grep -v dtrace | xargs)
-
 
 
 #---- Targets
