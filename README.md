@@ -593,7 +593,7 @@ type "stream" emitting to `process.stdout` at the "info" level.
 
 ## stream errors
 
-Bunyan re-emits error events from the created `WriteStream`. So you can
+Bunyan re-emits "error" events from the created `WriteStream`. So you can
 do this:
 
 ```js
@@ -603,8 +603,11 @@ log.on('error', function (err, stream) {
 });
 ```
 
-Note: This is **not** that same as a log record at the "error" level as
-produced by `log.error(...)`.
+As of bunyan@1.7.0, "error" events are re-emitted for any stream, as long as
+it has a `.on()` -- e.g. if it inherits from EventEmitter.
+
+Note: This error eventi is **not** related to log records at the "error" level
+as produced by `log.error(...)`.
 
 
 ## stream type: `stream`

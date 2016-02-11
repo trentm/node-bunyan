@@ -1,9 +1,12 @@
 /*
- * Copyright (c) 2012 Trent Mick. All rights reserved.
+ * Copyright 2016 Trent Mick. All rights reserved.
  *
  * Test emission and handling of 'error' event in a logger with a 'path'
  * stream.
  */
+
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
 var bunyan = require('../lib/bunyan');
 
@@ -26,6 +29,38 @@ test('error event on log write', function (t) {
         t.ok(stream, 'got a stream argument');
         t.equal(stream.path, LOG_PATH);
         t.equal(stream.type, 'file');
+        t.end();
+    });
+    log.info('info log message');
+});
+
+
+function MyErroringStream() {
+
+}
+util.inherits(MyErroringStream, EventEmitter);
+
+MyErroringStream.prototype.write = function (rec) {
+    this.emit('error', new Error('boom'));
+}
+
+test('error event on log write (raw stream)', function (t) {
+    LOG_PATH = '/this/path/is/bogus.log'
+    var log = bunyan.createLogger({
+        name: 'error-event-raw',
+        streams: [
+            {
+                stream: new MyErroringStream(),
+                type: 'raw'
+            }
+        ]
+    });
+    log.on('error', function (err, stream) {
+        t.ok(err, 'got err in error event: ' + err);
+        t.equal(err.message, 'boom');
+        t.ok(stream, 'got a stream argument');
+        t.ok(stream.stream instanceof MyErroringStream);
+        t.equal(stream.type, 'raw');
         t.end();
     });
     log.info('info log message');

@@ -6,9 +6,13 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.6.1 (not yet released)
+## 1.7.0 (not yet released)
 
-(nothing yet)
+- [pull #318] Re-emit Bunyan stream 'error' events on the Logger instance from
+  *any stream with a `.on()`* -- which is any that inherits from EventEmitter.
+  Before this change, 'error' events were only re-emitted on [`file`
+  streams](https://github.com/trentm/node-bunyan#stream-type-file).
+  (By Marc Udoff.)
 
 
 ## 1.6.0
