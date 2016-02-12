@@ -264,15 +264,21 @@ include the unique request id (as "req\_id"). Handy.
 
 ## Serializers
 
-Bunyan has a concept of **"serializers" to produce a JSON-able object from a
-JavaScript object**, so you can easily do the following:
+Bunyan has a concept of **"serializer" functions to produce a JSON-able object
+from a JavaScript object**, so you can easily do the following:
 
 ```js
 log.info({req: <request object>}, 'something about handling this request');
 ```
 
-Serializers is a mapping of log record field name, "req" in this example, to
-a serializer function. That looks like this:
+and have the `req` entry in the log record be just a reasonable subset of
+`<request object>` fields (or computed data about those fields).
+
+
+A logger instance can have a `serializers` mapping of log record field name
+("req" in this example) to a serializer function. When creating the log
+record, Bunyan will call the serializer function for fields of that name.
+An example:
 
 ```js
 function reqSerializer(req) {
@@ -280,7 +286,7 @@ function reqSerializer(req) {
         method: req.method,
         url: req.url,
         headers: req.headers
-    }
+    };
 }
 var log = bunyan.createLogger({
     name: 'myapp',
@@ -290,28 +296,57 @@ var log = bunyan.createLogger({
 });
 ```
 
-Or this:
+
+Typically serializers are added to a logger at creation time via
+`bunyan.createLogger({..., serializers: <serializers>})`. However, serializers
+can be added after creation via `<logger>.addSerializers(...)`, e.g.:
 
 ```js
-var log = bunyan.createLogger({
-    name: 'myapp',
-    serializers: {req: bunyan.stdSerializers.req}
-});
+var log = bunyan.createLogger({name: 'myapp'});
+log.addSerializers({req: reqSerializer});
 ```
 
-because Bunyan includes a small set of standard serializers. To use all the
-standard serializers you can use:
-
-```js
-var log = bunyan.createLogger({
-  ...
-  serializers: bunyan.stdSerializers
-});
-```
 
 **Note**: Your own serializers should never throw, otherwise you'll get an
 ugly message on stderr from Bunyan (along with the traceback) and the field
 in your log record will be replaced with a short error message.
+
+
+### Standard Serializers
+
+Bunyan includes a small set of "standard serializers", exported as
+`bunyan.stdSerializers`. Their use is completely optional. Example using
+all of them:
+
+```js
+var log = bunyan.createLogger({
+    name: 'myapp',
+    serializers: bunyan.stdSerializers
+});
+```
+
+or particular ones:
+
+```js
+var log = bunyan.createLogger({
+    name: 'myapp',
+    serializers: {err: bunyan.stdSerializers.err}
+});
+```
+
+Standard serializers are:
+
+| Field | Description |
+| ----- | ----------- |
+| err   | Used for serializing JavaScript error objects, including traversing an error's cause chain for error objects with a `.cause()` -- e.g. as from [verror](https://github.com/davepacheco/node-verror). |
+| req   | Common fields from a node.js HTTP request object. |
+| res   | Common fields from a node.js HTTP response object. |
+
+Note that the `req` and `res` serializers intentionally do not include the
+request/response *body*, as that can be prohibitively large. If helpful, the
+[restify framework's audit logger plugin](https://github.com/restify/node-restify/blob/ac13902ad9716dcb20aaa62295403983075b1841/lib/plugins/audit.js#L38-L87)
+has its own req/res serializers that include more information (optionally
+including the body).
 
 
 ## src
