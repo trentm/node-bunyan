@@ -26,6 +26,7 @@ import codecs
 import logging
 import optparse
 import json
+import time
 
 
 
@@ -152,14 +153,15 @@ def cutarelease(project_name, version_files, dry_run=False):
         f = codecs.open(changes_path, 'w', 'utf-8')
         f.write(changes_txt)
         f.close()
-        run('git commit %s -m "prepare for %s release"'
+        run('git commit %s -m "%s"'
             % (changes_path, version))
 
     # Tag version and push.
     curr_tags = set(t for t in _capture_stdout(["git", "tag", "-l"]).split('\n') if t)
     if not dry_run and version not in curr_tags:
         log.info("tag the release")
-        run('git tag -a "%s" -m "version %s"' % (version, version))
+        date = time.strftime("%Y-%m-%d")
+        run('git tag -a "%s" -m "version %s (%s)"' % (version, version, date))
         run('git push --tags')
 
     # Optionally release.
@@ -248,7 +250,7 @@ def cutarelease(project_name, version_files, dry_run=False):
             f.close()
 
     if not dry_run:
-        run('git commit %s %s -m "prep for future dev"' % (
+        run('git commit %s %s -m "bumpver for subsequent work"' % (
             changes_path, ' '.join(version_files)))
         run('git push')
 
