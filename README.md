@@ -714,7 +714,9 @@ var log = bunyan.createLogger({
 <td>The level to which logging to this stream is enabled. If not
 specified it defaults to "info". If specified this can be one of the
 level strings ("trace", "debug", ...) or constants (`bunyan.TRACE`,
-`bunyan.DEBUG`, ...). This serves as a severity threshold for that stream so logs of greater severity will also pass through (i.e. If level="warn", error and fatal will also pass through this stream)</td>
+`bunyan.DEBUG`, ...). This serves as a severity threshold for that stream
+so logs of greater severity will also pass through (i.e. If level="warn",
+error and fatal will also pass through this stream).</td>
 </tr>
 <tr>
 <td>name</td>
@@ -768,7 +770,9 @@ var log = bunyan.createLogger({
 <td>The level to which logging to this stream is enabled. If not
 specified it defaults to "info". If specified this can be one of the
 level strings ("trace", "debug", ...) or constants (`bunyan.TRACE`,
-`bunyan.DEBUG`, ...). This serves as a severity threshold for that stream so logs of greater severity will also pass through (i.e. If level="warn", error and fatal will also pass through this stream)</td>
+`bunyan.DEBUG`, ...). This serves as a severity threshold for that
+stream so logs of greater severity will also pass through (i.e. If
+level="warn", error and fatal will also pass through this stream).</td>
 </tr>
 <tr>
 <td>name</td>
