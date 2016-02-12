@@ -299,7 +299,7 @@ var log = bunyan.createLogger({
 });
 ```
 
-because Bunyan includes a small set of standard serializers. To use all the
+because Bunyan includes a small set of standard serializers, including serializers for Error objects using the `error` key, and `request` and `response` objects using the `req` and `res` keys. To use all these
 standard serializers you can use:
 
 ```js
