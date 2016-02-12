@@ -21,7 +21,7 @@ Also: log4j is way more than you need.
 # Current Status
 
 Solid core functionality is there. Joyent is using this for a number of
-production services. Bunyan supports node 0.6 and greater. Follow
+production services. Bunyan supports node 0.10 and greater. Follow
 <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
 for updates to Bunyan.
 
@@ -64,8 +64,8 @@ node.js library usage of bunyan in your apps.
 Like most logging libraries you create a Logger instance and call methods
 named after the logging levels:
 
-```sh
-$ cat hi.js
+```js
+// hi.js
 var bunyan = require('bunyan');
 var log = bunyan.createLogger({name: 'myapp'});
 log.info('hi');
@@ -84,6 +84,26 @@ $ node hi.js
 {"name":"myapp","hostname":"banana.local","pid":40161,"level":40,"lang":"fr","msg":"au revoir","time":"2013-01-04T18:46:23.853Z","v":0}
 ```
 
+
+## Constructor API
+
+```js
+var bunyan = require('bunyan');
+var log = bunyan.createLogger({
+    name: <string>,                     // Required
+    level: <level name or number>,      // Optional, see "Levels" section
+    stream: <node.js stream>,           // Optional, see "Streams" section
+    streams: [<bunyan streams>, ...],   // Optional, see "Streams" section
+    serializers: <serializers mapping>, // Optional, see "Serializers" section
+    src: <boolean>,                     // Optional, see "src" section
+
+    // Any other fields are added to all log records as is.
+    foo: 'bar',
+    ...
+});
+```
+
+
 ## Log Method API
 
 The example above shows two different ways to call `log.info(...)`. The
@@ -98,8 +118,8 @@ log.info('hi');                     // Log a simple string message (or number).
 log.info('hi %s', bob, anotherVar); // Uses `util.format` for msg formatting.
 
 log.info({foo: 'bar'}, 'hi');
-                // Adds "foo" field to log record. You can add any number
-                // of additional fields here.
+                // The first field can optionally be a "fields" object, which
+                // is merged into the log record.
 
 log.info(err);  // Special case to log an `Error` instance to the record.
                 // This adds an "err" field with exception details
@@ -107,13 +127,19 @@ log.info(err);  // Special case to log an `Error` instance to the record.
                 // message.
 log.info(err, 'more on this: %s', more);
                 // ... or you can specify the "msg".
+
+log.info({foo: 'bar', err: err}, 'some msg about this error');
+                // To pass in an Error *and* other fields, use the `err`
+                // field name for the Error instance.
 ```
 
-Note that this implies **you cannot pass any object as the first argument
-to log it**. IOW, `log.info(mywidget)` may not be what you expect. Instead
-of a string representation of `mywidget` that other logging libraries may
-give you, Bunyan will try to JSON-ify your object. It is a Bunyan best
-practice to always give a field name to included objects, e.g.:
+Note that this implies **you cannot blindly pass any object as the first
+argument to log it** because that object might include fields that collide with
+Bunyan's [core record fields](#core-fields). In other words,
+`log.info(mywidget)` may not yield what you expect. Instead of a string
+representation of `mywidget` that other logging libraries may give you, Bunyan
+will try to JSON-ify your object. It is a Bunyan best practice to always give a
+field name to included objects, e.g.:
 
 ```js
 log.info({widget: mywidget}, ...)
@@ -123,8 +149,8 @@ This will dove-tail with [Bunyan serializer support](#serializers), discussed
 later.
 
 The same goes for all of Bunyan's log levels: `log.trace`, `log.debug`,
-`log.info`, `log.warn`, `log.error`, and `log.fatal`. See the [levels section](#levels)
-below for details and suggestions.
+`log.info`, `log.warn`, `log.error`, and `log.fatal`. See the [levels
+section](#levels) below for details and suggestions.
 
 
 ## CLI Usage
