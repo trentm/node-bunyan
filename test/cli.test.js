@@ -502,3 +502,31 @@ test('client_req extra newlines, client_res={} (pull #252)', function (t) {
         t.end();
     });
 });
+
+test('should only show nonempty response bodies', function (t) {
+    var expect = [
+        /* BEGIN JSSTYLED */
+        '[2016-02-10T07:28:41.419Z]  INFO: myservice/123 on example.com: UnauthorizedError',
+        '    HTTP/1.1 401 Unauthorized',
+        '    content-type: text/plain',
+        '    date: Sat, 07 Mar 2015 06:58:43 GMT',
+        '[2016-02-10T07:28:41.419Z]  INFO: myservice/123 on example.com: hello',
+        '    HTTP/1.1 200 OK',
+        '    content-type: text/plain',
+        '    content-length: 0',
+        '    date: Sat, 07 Mar 2015 06:58:43 GMT',
+        '    ',
+        '    hello',
+        '[2016-02-10T07:28:41.419Z]  INFO: myservice/123 on example.com: UnauthorizedError',
+        '    HTTP/1.1 401 Unauthorized',
+        '    content-type: text/plain',
+        '    date: Sat, 07 Mar 2015 06:58:43 GMT'
+        /* END JSSTYLED */
+    ].join('\n') + '\n';
+    exec(_('%s %s/corpus/content-length-0-res.log', BUNYAN, __dirname),
+            function (err, stdout, stderr) {
+        t.ifError(err);
+        t.equal(stdout, expect);
+        t.end();
+    });
+});

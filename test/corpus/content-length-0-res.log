@@ -1,0 +1,3 @@
+{"name":"myservice","hostname":"example.com","pid":123,"level":30,"client_res":{"statusCode":401,"headers":{"content-type":"text/plain","date":"Sat, 07 Mar 2015 06:58:43 GMT"},"body":""},"msg":"UnauthorizedError","time":"2016-02-10T07:28:41.419Z","v":0}
+{"name":"myservice","hostname":"example.com","pid":123,"level":30,"client_res":{"statusCode":200,"headers":{"content-type":"text/plain","content-length":0,"date":"Sat, 07 Mar 2015 06:58:43 GMT"},"body":"hello"},"msg":"hello","time":"2016-02-10T07:28:41.419Z","v":0}
+{"name":"myservice","hostname":"example.com","pid":123,"level":30,"client_res":{"statusCode":401,"headers":{"content-type":"text/plain","date":"Sat, 07 Mar 2015 06:58:43 GMT"}},"msg":"UnauthorizedError","time":"2016-02-10T07:28:41.419Z","v":0}

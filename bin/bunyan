@@ -972,8 +972,9 @@ function emitRecord(rec, line, opts, stylize) {
                     function (h) { return h + ': ' + headers[h]; }).join('\n');
             }
             if (res.body !== undefined) {
-                s += '\n\n' + (typeof (res.body) === 'object'
+                var body = (typeof (res.body) === 'object'
                     ? JSON.stringify(res.body, null, 2) : res.body);
+                if (body.length > 0) { s += '\n\n' + body };
                 delete res.body;
             } else {
                 s = s.trimRight();
