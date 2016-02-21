@@ -55,8 +55,8 @@ node.js library usage of bunyan in your apps.
 - lightweight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
 - [Runtime log snooping via DTrace support](#runtime-log-snooping-via-dtrace)
-- Support for [browserify](http://browserify.org/). See [Browserify
-  section](#browserify) below.
+- Support for a few [runtime environments](#runtime-environments): Node.js,
+  [Browserify](http://browserify.org/), [NW.js](http://nwjs.io/).
 
 
 # Introduction
@@ -1139,7 +1139,27 @@ Output of the above might be:
           node`_start+0x83
 ```
 
-# Browserify
+
+# Runtime environments
+
+Node-bunyan supports running in a few runtime environments:
+
+- [Node.js](https://nodejs.org/)
+- [Browserify](http://browserify.org/): See the
+  [Browserify section](#browserify) below.
+- [NW.js](http://nwjs.io/)
+
+Support for other runtime environments is welcome. If you have suggestions,
+fixes, or mentions that node-bunyan already works in some other JavaScript
+runtime, please open an [issue](https://github.com/trentm/node-bunyan/issues/new)
+or a pull request.
+
+The primary target is Node.js. It is the only environment in which I
+regularly test. If you have suggestions for how to automate testing for other
+environments, I'd appreciate feedback on [this automated testing
+issue](https://github.com/trentm/node-bunyan/issues/342).
+
+## Browserify
 
 As the [Browserify](http://browserify.org/) site says it "lets you
 `require('modules')` in the browser by bundling up all of your dependencies."
@@ -1236,12 +1256,10 @@ log.info('hi on info');
 
 # Versioning
 
-The scheme I follow is most succinctly described by the bootstrap guys
-[here](https://github.com/twitter/bootstrap#versioning).
-
-tl;dr: All versions are `<major>.<minor>.<patch>` which will be incremented for
+All versions are `<major>.<minor>.<patch>` which will be incremented for
 breaking backward compat and major reworks, new features without breaking
-change, and bug fixes, respectively.
+change, and bug fixes, respectively. tl;dr: [Semantic
+versioning](http://semver.org/).
 
 # License
 

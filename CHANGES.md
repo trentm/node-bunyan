@@ -8,6 +8,10 @@ Known issues:
 
 ## 1.7.0 (not yet released)
 
+- [pull #311, #302, #310] Improve the runtime environment detection to fix
+  running under [NW.js](http://nwjs.io/). Contributions by Adam Lynch, Jeremy
+  Ruppel, and Aleksey Timchenko.
+
 - [pull #318] Add `reemitErrorEvents` optional boolean for streams added to a
   Bunyan logger to control whether an "error" event on the stream will be
   re-emitted on the `Logger` instance.

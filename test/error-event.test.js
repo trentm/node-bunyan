@@ -38,10 +38,10 @@ test('error event on file stream (reemitErrorEvents=undefined)', function (t) {
 test('error event on file stream (reemitErrorEvents=true)', function (t) {
     var log = bunyan.createLogger({
         name: 'error-event-2',
-        streams: [{
+        streams: [ {
             path: BOGUS_PATH,
             reemitErrorEvents: true
-        }]
+        } ]
     });
     log.on('error', function (err, stream) {
         t.ok(err, 'got err in error event: ' + err);
@@ -58,10 +58,10 @@ test('error event on file stream (reemitErrorEvents=false)',
         function (t) {
     var log = bunyan.createLogger({
         name: 'error-event-3',
-        streams: [{
+        streams: [ {
             path: BOGUS_PATH,
             reemitErrorEvents: false
-        }]
+        } ]
     });
     // Hack into the underlying created file stream to catch the error event.
     log.streams[0].stream.on('error', function (err) {
