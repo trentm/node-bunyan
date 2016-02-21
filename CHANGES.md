@@ -8,11 +8,41 @@ Known issues:
 
 ## 1.7.0 (not yet released)
 
-- [pull #318] Re-emit Bunyan stream 'error' events on the Logger instance from
-  *any stream with a `.on()`* -- which is any that inherits from EventEmitter.
-  Before this change, 'error' events were only re-emitted on [`file`
-  streams](https://github.com/trentm/node-bunyan#stream-type-file).
-  (By Marc Udoff.)
+- [pull #318] Add `reemitErrorEvents` optional boolean for streams added to a
+  Bunyan logger to control whether an "error" event on the stream will be
+  re-emitted on the `Logger` instance.
+
+        var log = bunyan.createLogger({
+            name: 'foo',
+            streams: [
+                {
+                    type: 'raw',
+                    stream: new MyCustomStream(),
+                    reemitErrorEvents: true
+                }
+            ]
+        });
+
+  Before this change, "error" events were re-emitted on [`file`
+  streams](https://github.com/trentm/node-bunyan#stream-type-file) only. The new
+  behaviour is as follows:
+
+    - `reemitErrorEvents` not specified: `file` streams will re-emit error events
+      on the Logger instance.
+    - `reemitErrorEvents: true`: error events will be re-emitted on the Logger
+      for any stream with a `.on()` function -- which includes file streams,
+      process.stdout/stderr, and any object that inherits from EventEmitter.
+    - `reemitErrorEvents: false`: error events will not be re-emitted for any
+      streams.
+
+  Dev Note: Bunyan `Logger` objects don't currently have a `.close()` method
+  in which registered error event handlers can be *un*registered. That means
+  that a (presumably rare) situation where code adds dozens of Bunyan Logger
+  streams to, e.g. process.stdout, and with `reemitErrorEvents: true`, could
+  result in leaking Logger objects.
+
+  Original work for allowing "error" re-emitting on non-file streams is
+  by Marc Udoff in pull #318.
 
 
 ## 1.6.0

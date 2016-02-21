@@ -612,9 +612,9 @@ follow (feedback from actual users welcome).
 
 # Streams
 
-A "stream" is Bunyan's name for an output for log messages (the equivalent
+A "stream" is Bunyan's name for where it outputs log messages (the equivalent
 to a log4j Appender). Ultimately Bunyan uses a
-[Writable Stream](http://nodejs.org/docs/latest/api/all.html#writable_Stream)
+[Writable Stream](https://nodejs.org/docs/latest/api/all.html#writable_Stream)
 interface, but there are some additional attributes used to create and
 manage the stream. A Bunyan Logger instance has one or more streams.
 In general streams are specified with the "streams" option:
@@ -654,8 +654,9 @@ type "stream" emitting to `process.stdout` at the "info" level.
 
 ## stream errors
 
-Bunyan re-emits "error" events from the created `WriteStream`. So you can
-do this:
+A Bunyan logger instance can be made to re-emit "error" events from its
+streams. Bunyan does so by defualt for [`type === "file"`
+streams](#stream-type-file), so you can do this:
 
 ```js
 var log = bunyan.createLogger({name: 'mylog', streams: [{path: LOG_PATH}]});
@@ -664,11 +665,45 @@ log.on('error', function (err, stream) {
 });
 ```
 
-As of bunyan@1.7.0, "error" events are re-emitted for any stream, as long as
-it has a `.on()` -- e.g. if it inherits from EventEmitter.
+As of bunyan@1.7.0, the `reemitErrorEvents` field can be used when adding a
+stream to control whether "error" events are re-emitted on the Logger. For
+example:
 
-Note: This error eventi is **not** related to log records at the "error" level
-as produced by `log.error(...)`.
+    var EventEmitter = require('events').EventEmitter;
+    var util = require('util');
+
+    function MyFlakyStream() {}
+    util.inherits(MyFlakyStream, EventEmitter);
+
+    MyFlakyStream.prototype.write = function (rec) {
+        this.emit('error', new Error('boom'));
+    }
+
+    var log = bunyan.createLogger({
+        name: 'this-is-flaky',
+        streams: [
+            {
+                type: 'raw',
+                stream: new MyFlakyStream(),
+                reemitErrorEvents: true
+            }
+        ]
+    });
+    log.info('hi there');
+
+The behaviour is as follows:
+
+- `reemitErrorEvents` not specified: `file` streams will re-emit error events
+  on the Logger instance.
+- `reemitErrorEvents: true`: error events will be re-emitted on the Logger
+  for any stream with a `.on()` function -- which includes file streams,
+  process.stdout/stderr, and any object that inherits from EventEmitter.
+- `reemitErrorEvents: false`: error events will not be re-emitted for any
+  streams.
+
+Note: "error" events are **not** related to log records at the "error" level
+as produced by `log.error(...)`. See [the node.js docs on error
+events](https://nodejs.org/api/events.html#events_error_events) for details.
 
 
 ## stream type: `stream`
