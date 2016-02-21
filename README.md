@@ -1,3 +1,5 @@
+ [![npm version](https://img.shields.io/npm/v/bunyan.svg?style=flat)](https://www.npmjs.com/package/bunyan)
+
 Bunyan is **a simple and fast JSON logging library** for node.js services:
 
 ```js
