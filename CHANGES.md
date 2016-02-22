@@ -8,7 +8,9 @@ Known issues:
 
 ## 1.7.1 (not yet released)
 
-(nothing yet)
+- [issue #234, pull #345] Improve `bunyan` CLI rendering of "res" field
+  HTTP responses to not show two blank lines for an empty body.
+  (By Michael Nisi.)
 
 
 ## 1.7.0
