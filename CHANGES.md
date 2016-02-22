@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## 1.7.1 (not yet released)
+
+(nothing yet)
+
+
 ## 1.7.0
 
 - [pull #311, #302, #310] Improve the runtime environment detection to fix
