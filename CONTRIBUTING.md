@@ -139,7 +139,7 @@ Color: green
   bug, I will use this category.
 - Type-Question: Asking a question on Bunyan usage, about the project, etc.
 - Type-Bug: A bug in Bunyan's behaviour.
-- Type-Feature: A new feature or other improvement.
+- Type-Improvement: A new feature or other improvement.
 - Type-Doc: Issues with Bunyan's documentation.
 - Type-Task: A project task to be done.
 
