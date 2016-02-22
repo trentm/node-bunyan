@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.7.0 (not yet released)
+## 1.7.0
 
 - [pull #311, #302, #310] Improve the runtime environment detection to fix
   running under [NW.js](http://nwjs.io/). Contributions by Adam Lynch, Jeremy
