@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.7.1 (not yet released)
+## 1.7.1
 
 - [issue #332, pull #355] Ensure stream for type='stream' stream is a writable
   stream. (By Michael Nisi.)
