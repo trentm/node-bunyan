@@ -8,6 +8,9 @@ Known issues:
 
 ## 1.7.1 (not yet released)
 
+- [issue #332, pull #355] Ensure stream for type='stream' stream is a writable
+  stream. (By Michael Nisi.)
+
 - [issue #344] Fix "rotating-file" Bunyan streams to not miss rotations when configured
   for a period greater than approximately 25 days. Before this there was an issue
   where periods greater than node.js's maximum `setTimeout` length would fail to rotate.
