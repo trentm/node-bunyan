@@ -86,6 +86,8 @@ Known issues:
 
 - Update `make test` to test against node 5, 4, 0.12 and 0.10.
 
+- [issue #344 ] Fix log rotation failures for periods > approx. 25 days.
+
 
 ## 1.5.1
 
