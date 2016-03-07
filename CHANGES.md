@@ -6,9 +6,12 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.7.2 (not yet released)
+## 1.8.0 (not yet released)
 
-(nothing yet)
+- [issue #329, pull #330] Update the 'rotating-file' stream to do a file
+  rotation on initialization if the mtime on the file path indicates the
+  last rotation time was missed -- i.e. if the app wasn't running at the
+  time. (by Paul Milham.)
 
 
 ## 1.7.1
