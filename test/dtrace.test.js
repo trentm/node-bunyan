@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Trent Mick. All rights reserved.
+ * Copyright 2016 Trent Mick
  *
  * If available, test dtrace support.
  */
@@ -22,7 +22,7 @@ var test = tap4nodeunit.test;
 var dtracePlats = ['sunos', 'darwin', 'freebsd'];
 var runDtraceTests = true;
 try {
-    require('dtrace-provider')
+    require('dtrace-provider');
 } catch (e) {
     console.log('# skip dtrace tests: no dtrace-provider module');
     runDtraceTests = false;
@@ -72,6 +72,50 @@ test('basic dtrace', function (t) {
         }
         t.end();
     });
+});
+
+
+/*
+ * Run a logger that logs a couple records every second.
+ * Then run `bunyan -p PID` to capture.
+ * Let those run for a few seconds to ensure dtrace has time to attach and
+ * capture something.
+ */
+test('bunyan -p', function (t) {
+    var p = spawn('node', [__dirname + '/log-some-loop.js']);
+
+    var bunyanP = spawn('node',
+        [__dirname + '/../bin/bunyan', '-p', String(p.pid), '-0']);
+    var traces = [];
+    bunyanP.stdout.on('data', function (data) {
+        //console.error('BUNYAN -P STDOUT:', data.toString());
+        traces.push(data.toString());
+    });
+    bunyanP.stderr.on('data', function (data) {
+        console.error('BUNYAN -P STDERR:', data.toString());
+    });
+    bunyanP.on('exit', function (code) {
+        traces = traces.join('').split('\n')
+            .filter(function (t) { return t.trim().length })
+            .map(function (t) { return JSON.parse(t) });
+        t.ok(traces.length >= 3, 'got >=3 log records: ' + traces.length);
+        if (traces.length >= 3) {
+            if (traces[0].level !== bunyan.DEBUG) {
+                traces.shift();
+            }
+            t.equal(traces[0].level, bunyan.DEBUG);
+            t.equal(traces[0].foo, 'bar');
+            t.equal(traces[1].level, bunyan.TRACE);
+            t.equal(traces[1].msg, 'hi at trace');
+        }
+        t.end();
+    });
+
+    // Give it a few seconds to ensure we get some traces.
+    setTimeout(function () {
+        p.kill();
+        bunyanP.kill();
+    }, 3000);
 });
 
 

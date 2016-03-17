@@ -35,9 +35,8 @@ try {
 
 //---- globals and constants
 
-var nodeSpawnSupportsStdio = (
-    Number(process.version.split('.')[0]) >= 0 ||
-    Number(process.version.split('.')[1]) >= 8);
+var nodeVer = process.versions.node.split('.').map(Number);
+var nodeSpawnSupportsStdio = (nodeVer[0] > 0 || nodeVer[1] >= 8);
 
 // Internal debug logging via `console.warn`.
 var _DEBUG = false;
@@ -1555,7 +1554,6 @@ function main(argv) {
     var stylize = (opts.color ? stylizeWithColor : stylizeWithoutColor);
 
     // Pager.
-    var nodeVer = process.versions.node.split('.').map(Number);
     var paginate = (
         process.stdout.isTTY &&
         process.stdin.isTTY &&
@@ -1655,7 +1653,6 @@ if (require.main === module) {
     // We override the `process.stdout.end` guard that core node.js puts in
     // place. The real fix is that `.end()` shouldn't be called on stdout
     // in node core. Node v0.6.9 fixes that. Only guard for v0.6.0..v0.6.8.
-    var nodeVer = process.versions.node.split('.').map(Number);
     if ([0, 6, 0] <= nodeVer && nodeVer <= [0, 6, 8]) {
         var stdout = process.stdout;
         stdout.end = stdout.destroy = stdout.destroySoon = function () {

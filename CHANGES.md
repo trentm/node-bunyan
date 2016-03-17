@@ -8,6 +8,8 @@ Known issues:
 
 ## 1.8.0 (not yet released)
 
+- [issue #370] Fix `bunyan -p ...` (i.e. DTrace integration) on node
+  4.x and 5.x.
 - [issue #329, pull #330] Update the 'rotating-file' stream to do a file
   rotation on initialization if the mtime on the file path indicates the
   last rotation time was missed -- i.e. if the app wasn't running at the
