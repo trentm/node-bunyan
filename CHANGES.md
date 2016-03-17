@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## 1.8.1 (not yet released)
+
+(nothing yet)
+
+
 ## 1.8.0
 
 - [issue #370] Fix `bunyan -p ...` (i.e. DTrace integration) on node

@@ -11,7 +11,7 @@
  * vim: expandtab:ts=4:sw=4
  */
 
-var VERSION = '1.8.0';
+var VERSION = '1.8.1';
 
 var p = console.log;
 var util = require('util');
