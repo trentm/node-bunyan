@@ -467,7 +467,7 @@ time and sifting through them when an error occurs.
 Trent's biased suggestions for node.js libraries: IMHO, libraries should only
 ever log at `trace`-level. Fine control over log output should be up to the
 app using a library. Having a library that spews log output at higher levels
-gets in the way of the a clear story in the *app* logs.
+gets in the way of the clear story in the *app* logs.
 
 
 # Log Record Fields
