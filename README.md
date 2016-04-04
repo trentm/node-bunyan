@@ -133,6 +133,8 @@ log.info(err, 'more on this: %s', more);
 log.info({foo: 'bar', err: err}, 'some msg about this error');
                 // To pass in an Error *and* other fields, use the `err`
                 // field name for the Error instance.
+
+log.i('this is the shorthand way to use log.info');
 ```
 
 Note that this implies **you cannot blindly pass any object as the first
