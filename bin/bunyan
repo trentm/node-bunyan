@@ -11,7 +11,7 @@
  * vim: expandtab:ts=4:sw=4
  */
 
-var VERSION = '1.8.1';
+var VERSION = '1.8.0';
 
 var p = console.log;
 var util = require('util');
@@ -48,6 +48,7 @@ var OM_INSPECT = 3;
 var OM_SIMPLE = 4;
 var OM_SHORT = 5;
 var OM_BUNYAN = 6;
+var OM_TINY = 7;
 var OM_FROM_NAME = {
     'long': OM_LONG,
     'paul': OM_LONG,  /* backward compat */
@@ -55,7 +56,8 @@ var OM_FROM_NAME = {
     'inspect': OM_INSPECT,
     'simple': OM_SIMPLE,
     'short': OM_SHORT,
-    'bunyan': OM_BUNYAN
+    'bunyan': OM_BUNYAN,
+    'tiny': OM_TINY
 };
 
 
@@ -244,6 +246,7 @@ function printHelp() {
     p('                  bunyan: 0 indented JSON, bunyan\'s native format');
     p('                  inspect: node.js `util.inspect` output');
     p('                  short: like "long", but more concise');
+    p('                  tiny: like "long", but message only');
     p('  -j            shortcut for `-o json`');
     p('  -0            shortcut for `-o bunyan`');
     p('  -L, --time local');
@@ -750,8 +753,13 @@ function handleLogLine(file, line, opts, stylize) {
  */
 function emitRecord(rec, line, opts, stylize) {
     var short = false;
+    var tiny = false;
 
     switch (opts.outputMode) {
+    case OM_TINY:
+        tiny = true;
+        /* jsl:fall-thru */
+
     case OM_SHORT:
         short = true;
         /* jsl:fall-thru */
@@ -849,12 +857,16 @@ function emitRecord(rec, line, opts, stylize) {
         }
         delete rec.req_id;
 
-        var onelineMsg;
-        if (rec.msg.indexOf('\n') !== -1) {
-            onelineMsg = '';
-            details.push(indent(stylize(rec.msg, 'cyan')));
-        } else {
-            onelineMsg = ' ' + stylize(rec.msg, 'cyan');
+        var onelineMsg = '';
+        if (!tiny) {
+            if (rec.msg.indexOf('\n') !== -1) {
+                details.push(indent(stylize(rec.msg, 'cyan')));
+            } else {
+                onelineMsg = ' ' + stylize(rec.msg, 'cyan');
+            }
+        }
+        else {
+            onelineMsg = stylize(rec.msg, 'cyan');
         }
         delete rec.msg;
 
@@ -1045,21 +1057,26 @@ function emitRecord(rec, line, opts, stylize) {
             (extras.length ? ' (' + extras.join(', ') + ')' : ''), 'XXX');
         details = stylize(
             (details.length ? details.join('\n    --\n') + '\n' : ''), 'XXX');
-        if (!short)
+        if (tiny)
+            emit(format('%s%s\n%s',
+                onelineMsg,
+                extras,
+                details));
+        else if (short)
+            emit(format('%s %s %s:%s%s\n%s',
+                time,
+                level,
+                nameStr,
+                onelineMsg,
+                extras,
+                details));
+        else
             emit(format('%s %s: %s on %s%s:%s%s\n%s',
                 time,
                 level,
                 nameStr,
                 hostname || '<no-hostname>',
                 src,
-                onelineMsg,
-                extras,
-                details));
-        else
-            emit(format('%s %s %s:%s%s\n%s',
-                time,
-                level,
-                nameStr,
                 onelineMsg,
                 extras,
                 details));
