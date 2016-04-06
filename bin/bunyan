@@ -11,7 +11,7 @@
  * vim: expandtab:ts=4:sw=4
  */
 
-var VERSION = '1.8.0';
+var VERSION = '1.8.1';
 
 var p = console.log;
 var util = require('util');
@@ -858,15 +858,12 @@ function emitRecord(rec, line, opts, stylize) {
         delete rec.req_id;
 
         var onelineMsg = '';
-        if (!tiny) {
-            if (rec.msg.indexOf('\n') !== -1) {
-                details.push(indent(stylize(rec.msg, 'cyan')));
-            } else {
-                onelineMsg = ' ' + stylize(rec.msg, 'cyan');
-            }
-        }
-        else {
+        if (tiny) {
             onelineMsg = stylize(rec.msg, 'cyan');
+        } else if (rec.msg.indexOf('\n') !== -1) {
+            details.push(indent(stylize(rec.msg, 'cyan')));
+        } else {
+            onelineMsg = ' ' + stylize(rec.msg, 'cyan');
         }
         delete rec.msg;
 
