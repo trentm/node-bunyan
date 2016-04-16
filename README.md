@@ -657,7 +657,7 @@ type "stream" emitting to `process.stdout` at the "info" level.
 ## stream errors
 
 A Bunyan logger instance can be made to re-emit "error" events from its
-streams. Bunyan does so by defualt for [`type === "file"`
+streams. Bunyan does so by default for [`type === "file"`
 streams](#stream-type-file), so you can do this:
 
 ```js
