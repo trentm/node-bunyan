@@ -8,10 +8,15 @@ Known issues:
 
 ## 1.8.1 (not yet released)
 
-(nothing yet)
+- [pull #386] Fix bad bug in rotation that could cause a crash with
+  error message "cannot start a rotation when already rotating"
+  (by Frankie O'Rourke). The bug was introduced in 1.8.0.
 
 
 ## 1.8.0
+
+Note: *Bad release.* An addition in this release broke 'rotating-file' usage.
+Use 1.8.1 instead.
 
 - [issue #370] Fix `bunyan -p ...` (i.e. DTrace integration) on node
   4.x and 5.x.
