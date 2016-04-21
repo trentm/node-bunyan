@@ -6,7 +6,7 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.8.1 (not yet released)
+## 1.8.1
 
 - [pull #386] Fix bad bug in rotation that could cause a crash with
   error message "cannot start a rotation when already rotating"
