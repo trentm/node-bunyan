@@ -6,6 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
+## 1.8.2 (not yet released)
+
+(nothing yet)
+
+
 ## 1.8.1
 
 - [pull #386] Fix bad bug in rotation that could cause a crash with
