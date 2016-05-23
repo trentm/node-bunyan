@@ -244,6 +244,7 @@ function printHelp() {
     p('                  bunyan: 0 indented JSON, bunyan\'s native format');
     p('                  inspect: node.js `util.inspect` output');
     p('                  short: like "long", but more concise');
+    p('                  simple: level, followed by "-" and then the message');
     p('  -j            shortcut for `-o json`');
     p('  -0            shortcut for `-o bunyan`');
     p('  -L, --time local');
