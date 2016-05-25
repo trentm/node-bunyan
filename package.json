@@ -23,6 +23,7 @@
     "dtrace-provider": "~0.6",
     "mv": "~2",
     "safe-json-stringify": "~1",
+    "source-map-support": "~.5",
     "moment": "^2.10.6"
   },
   "devDependencies": {
