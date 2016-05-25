@@ -118,9 +118,6 @@ var gUsingConditionOpts = false;
 var pager = null;
 var stdout = process.stdout;
 
-// Whether we are reading from stdin.
-var readingStdin = false;
-
 
 
 //---- support functions
@@ -1133,7 +1130,6 @@ function drainStdoutAndExit(code) {
  * @param callback {Function} `function ()`
  */
 function processStdin(opts, stylize, callback) {
-    readingStdin = true;
     var leftover = '';  // Left-over partial line from last chunk.
     var stdin = process.stdin;
     stdin.resume();
@@ -1469,16 +1465,7 @@ function cleanupAndExit(code, signal) {
 
 //---- mainline
 
-process.on('SIGINT', function () {
-    /**
-     * Ignore SIGINT (Ctrl+C) if processing stdin -- we should process
-     * remaining output from preceding process in the pipeline and
-     * except *it* to close.
-     */
-    if (!readingStdin) {
-        cleanupAndExit(1, 'SIGINT');
-    }
-});
+process.on('SIGINT', function () { cleanupAndExit(1, 'SIGINT'); });
 process.on('SIGQUIT', function () { cleanupAndExit(1, 'SIGQUIT'); });
 process.on('SIGTERM', function () { cleanupAndExit(1, 'SIGTERM'); });
 process.on('SIGHUP', function () { cleanupAndExit(1, 'SIGHUP'); });
