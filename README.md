@@ -1041,6 +1041,7 @@ written to the log.  Note that when a probe is enabled, it will
 fire whenever the corresponding function is called, even if the level of
 the log message is less than that of any stream.
 
+> On newer versions of Node.js (>=6.0) enabling DTrace support currently causes a lot of deprecation warnings to be printed to the console. To avoid this, you may wish to disable DTrace support completely by setting the `BUNYAN_NO_DTRACE` environment variable to any truthy value.
 
 ## DTrace examples
 
