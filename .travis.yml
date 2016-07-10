@@ -1,0 +1,19 @@
+language: node_js
+
+os:
+  - linux
+  - osx
+
+node_js:
+  - '0.10'
+  - '0.12'
+  - '4'
+  - '5'
+  - 'node'
+  - 'iojs'
+
+# Gives us faster boot time, see https://docs.travis-ci.com/user/ci-environment/
+sudo: false
+
+script:
+  - npm test
