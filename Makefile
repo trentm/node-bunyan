@@ -46,13 +46,18 @@ cutarelease: versioncheck check
 	./tools/cutarelease.py -p bunyan -f package.json -f lib/bunyan.js -f bin/bunyan
 
 .PHONY: docs
-docs:
+docs: toc
 	@[[ `which ronn` ]] || (echo "No 'ronn' on your PATH. Install with 'gem install ronn'" && exit 2)
 	mkdir -p man/man1
 	ronn --style=toc --manual="bunyan manual" --date=$(shell git log -1 --pretty=format:%cd --date=short) --roff --html docs/bunyan.1.ronn
 	python -c 'import sys; h = open("docs/bunyan.1.html").read(); h = h.replace(".mp dt.flush {float:left;width:8ex}", ""); open("docs/bunyan.1.html", "w").write(h)'
 	python -c 'import sys; h = open("docs/bunyan.1.html").read(); h = h.replace("</body>", """<a href="https://github.com/trentm/node-bunyan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a></body>"""); open("docs/bunyan.1.html", "w").write(h)'
 	@echo "# test with 'man ./docs/bunyan.1' and 'open ./docs/bunyan.1.html'"
+
+# Re-generate the README.md table of contents.
+toc:
+	./node_modules/.bin/markdown-toc -i README.md
+
 
 .PHONY: publish
 publish:
