@@ -8,7 +8,8 @@ Known issues:
 
 ## 1.8.2 (not yet released)
 
-(nothing yet)
+- [issue #426] Ensure `log.info({err: err})` results in a "msg" value, just
+  like `log.info(err)`.
 
 
 ## 1.8.1
