@@ -1,4 +1,4 @@
- [![npm version](https://img.shields.io/npm/v/bunyan.svg?style=flat)](https://www.npmjs.com/package/bunyan)
+[![npm version](https://img.shields.io/npm/v/bunyan.svg?style=flat)](https://www.npmjs.com/package/bunyan)
 
 Bunyan is **a simple and fast JSON logging library** for node.js services:
 
@@ -19,6 +19,47 @@ record (see below).
 
 Also: log4j is way more than you need.
 
+
+## Table of Contents
+
+<!-- toc -->
+
+- [Current Status](#current-status)
+- [Installation](#installation)
+- [Features](#features)
+- [Introduction](#introduction)
+  * [Constructor API](#constructor-api)
+  * [Log Method API](#log-method-api)
+  * [CLI Usage](#cli-usage)
+  * [Streams Introduction](#streams-introduction)
+  * [log.child](#logchild)
+  * [Serializers](#serializers)
+    + [Standard Serializers](#standard-serializers)
+  * [src](#src)
+- [Levels](#levels)
+  * [Level suggestions](#level-suggestions)
+- [Log Record Fields](#log-record-fields)
+  * [Core fields](#core-fields)
+  * [Recommended/Best Practice Fields](#recommendedbest-practice-fields)
+  * [Other fields to consider](#other-fields-to-consider)
+- [Streams](#streams)
+  * [stream errors](#stream-errors)
+  * [stream type: `stream`](#stream-type-stream)
+  * [stream type: `file`](#stream-type-file)
+  * [stream type: `rotating-file`](#stream-type-rotating-file)
+  * [stream type: `raw`](#stream-type-raw)
+  * [`raw` + RingBuffer Stream](#raw--ringbuffer-stream)
+  * [third-party streams](#third-party-streams)
+- [Runtime log snooping via DTrace](#runtime-log-snooping-via-dtrace)
+  * [DTrace examples](#dtrace-examples)
+- [Runtime environments](#runtime-environments)
+  * [Browserify](#browserify)
+  * [Webpack](#webpack)
+- [Versioning](#versioning)
+- [License](#license)
+- [See Also](#see-also)
+
+<!-- tocstop -->
 
 # Current Status
 
