@@ -204,7 +204,7 @@ pretty-printing bunyan logs** and for **filtering** (e.g.
 `| bunyan -c 'this.foo == "bar"'`). Using our example above:
 
 ```sh
-$ node hi.js | ./bin/bunyan
+$ node hi.js | ./node_modules/.bin/bunyan
 [2013-01-04T19:01:18.241Z]  INFO: myapp/40208 on banana.local: hi
 [2013-01-04T19:01:18.242Z]  WARN: myapp/40208 on banana.local: au revoir (lang=fr)
 ```
