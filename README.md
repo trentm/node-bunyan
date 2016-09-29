@@ -50,6 +50,7 @@ Also: log4j is way more than you need.
   * [stream type: `raw`](#stream-type-raw)
   * [`raw` + RingBuffer Stream](#raw--ringbuffer-stream)
   * [third-party streams](#third-party-streams)
+- [Filtering of log messages](#filtering-of-log-messages)
 - [Runtime log snooping via DTrace](#runtime-log-snooping-via-dtrace)
   * [DTrace examples](#dtrace-examples)
 - [Runtime environments](#runtime-environments)
@@ -1061,6 +1062,39 @@ place to start.)
 - TODO: eventually https://github.com/trentm/node-bunyan-winston
 
 
+# Filtering of log messages
+Log messages can be filtered before they are formatted and written to
+streams. This filtering capability can be used to throttle log
+messages, to remove duplicate messages or to filter log messages with
+sensitive information. At its core, a filter is a function of the
+following form:
+
+```js
+function myFilter (level, msgArgs) {
+    return /Error/i.test(msgArgs[0]);
+}
+```
+
+Clarifying, the filter will receive the log level as a `Number` and
+the arguments used when calling the logging functions, i.e.
+`log.info(…)`, `log.warn(…)`, as an `Arguments` object. Note that
+there are no guarantees about the contents of the `Arguments` objects
+as the content depends on the caller of the logging functions. When
+filter functions return falsy values, the log messages will be ignored.
+
+Filters can be registered via the `log.addFilter(myFilter)` function or
+via the logger options. Example:
+
+```js
+bunyan.createLogger({
+    name: 'log1',
+    filters: [
+        function myFilter (level, msgArgs) {
+            return /Error/i.test(msgArgs[0]);
+        }
+    ]
+});
+```
 
 # Runtime log snooping via DTrace
 
