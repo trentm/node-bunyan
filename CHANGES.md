@@ -6,10 +6,11 @@ Known issues:
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 
-## 1.8.2 (not yet released)
+## 1.9.0 (not yet released)
 
 - [issue #426] Ensure `log.info({err: err})` results in a "msg" value, just
   like `log.info(err)`.
+- [issue #443] Support filtering of log messages. (by Ben Ripkens.)
 
 
 ## 1.8.1

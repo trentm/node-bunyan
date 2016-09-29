@@ -10,6 +10,7 @@ var util = require('util'),
 var p = console.log;
 
 var bunyan = require('../lib/bunyan');
+var Catcher = require('./Catcher');
 
 // node-tap API
 if (require.cache[__dirname + '/tap4nodeunit.js'])
@@ -67,12 +68,6 @@ test('log.LEVEL() -> boolean', function (t) {
 
 // ---- test `log.<level>(...)` calls which various input types
 
-function Catcher() {
-    this.records = [];
-}
-Catcher.prototype.write = function (record) {
-    this.records.push(record);
-}
 var catcher = new Catcher();
 var log3 = new bunyan.createLogger({
     name: 'log3',
