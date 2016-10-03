@@ -249,3 +249,29 @@ test('log.info(<err>)', function (t) {
     });
     t.end();
 });
+
+var log4 = new bunyan.createLogger({
+    name: 'log4',
+    inspectDepth: 6,
+    streams: [
+        {
+            type: 'raw',
+            stream: catcher,
+            level: 'trace'
+        }
+    ]
+});
+
+test('log.info(<fields>, <deepobj>)', function (t) {
+    var deepObject = { a: { b : { c : { d : {
+        nestedValue: "nestedValue",
+        nestedArray: ['a', 1, {two: 'deux'}]
+    }}}}};
+    names.forEach(function (lvl) {
+        log4[lvl].call(log4, fields, deepObject);
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.msg, inspect(deepObject, {depth: 6}),
+            format('log.%s msg: got %j', lvl, rec.msg));
+    });
+    t.end();
+});

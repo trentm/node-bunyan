@@ -139,6 +139,7 @@ var log = bunyan.createLogger({
     streams: [<bunyan streams>, ...],   // Optional, see "Streams" section
     serializers: <serializers mapping>, // Optional, see "Serializers" section
     src: <boolean>,                     // Optional, see "src" section
+    inspectDepth: <number>,             // Optional, see "Depth" section
 
     // Any other fields are added to all log records as is.
     foo: 'bar',
@@ -449,6 +450,14 @@ This adds the call source info with the 'src' field, like this:
 
 **WARNING: Determining the call source info is slow. Never use this option
 in production.**
+
+
+## Depth
+
+Sometimes, specially while debugging your code, it is necessary to log large objects 
+with nested objects/arrays of multiple levels deep. To do so, just instance the logger 
+with the `inspectDepth` option to indicate the number of times to recurse while 
+formatting the object.
 
 
 # Levels
