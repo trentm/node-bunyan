@@ -115,7 +115,7 @@ test('bunyan -p', function (t) {
     setTimeout(function () {
         p.kill();
         bunyanP.kill();
-    }, 3000);
+    }, 5000);
 });
 
 

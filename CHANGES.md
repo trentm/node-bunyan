@@ -8,6 +8,11 @@ Known issues:
 ## not yet released
 
 
+## 1.8.5
+
+- [issue #401] Improved performance when using disabled log levels.
+
+
 ## 1.8.4
 
 - [issue #454] Fix `src` usage with node v7.

@@ -1,6 +1,6 @@
 {
   "name": "bunyan",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "a JSON logging library for node.js services",
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "main": "./lib/bunyan.js",
@@ -20,7 +20,7 @@
   "// mv": "required for RotatingFileStream",
   "// moment": "required for local time with CLI",
   "optionalDependencies": {
-    "dtrace-provider": "~0.7",
+    "dtrace-provider": "~0.8",
     "mv": "~2",
     "safe-json-stringify": "~1",
     "moment": "^2.10.6"
