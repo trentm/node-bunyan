@@ -5,9 +5,13 @@ Known issues:
 - [issue #58] Can't install to a dir with spaces. This is [this node-gyp
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
+## not yet released
 
-## 1.8.2 (not yet released)
 
+## 1.8.2
+
+- [issue #449] Bump dtrace-provider dep to 0.7.0 to help avoid deprecation
+  warnings with node v6 in some cases.
 - [issue #426] Ensure `log.info({err: err})` results in a "msg" value, just
   like `log.info(err)`.
 
