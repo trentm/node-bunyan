@@ -239,13 +239,33 @@ test('log.info(<fields>, <array>)', function (t) {
     t.end();
 });
 
-test('log.info(<err>)', function (t) {
-    var e = new Error('boom');
+
+/*
+ * By accident (starting with trentm/node-bunyan#85 in bunyan@0.23.0),
+ *      log.info(null, ...)
+ * was interpreted as `null` being the object of fields. It is gracefully
+ * handled, which is good. However, had I to do it again, I would have made
+ * that interpret `null` as the *message*, and no fields having been passed.
+ * I think it is baked now. It would take a major bunyan rev to change it,
+ * but I don't think it is worth it: passing `null` as the first arg isn't
+ * really an intended way to call these Bunyan methods for either case.
+ */
+
+test('log.info(null)', function (t) {
     names.forEach(function (lvl) {
-        log3[lvl].call(log3, e);
+        log3[lvl].call(log3, null);
         var rec = catcher.records[catcher.records.length - 1];
-        t.equal(rec.err.message, 'boom',
-            format('log.%s err.message: got %j', lvl, rec.err.message));
+        t.equal(rec.msg, '', format('log.%s msg: got %j', lvl, rec.msg));
+    });
+    t.end();
+});
+
+test('log.info(null, <msg>)', function (t) {
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, null, 'my message');
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.msg, 'my message',
+            format('log.%s msg: got %j', lvl, rec.msg));
     });
     t.end();
 });

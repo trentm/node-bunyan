@@ -8,6 +8,11 @@ Known issues:
 ## not yet released
 
 
+## 1.8.3
+
+- [issue #450] Fix `log.info(null)` crash that resulted from #426 in v1.8.2.
+
+
 ## 1.8.2
 
 - [issue #449] Bump dtrace-provider dep to 0.7.0 to help avoid deprecation
@@ -26,7 +31,7 @@ Known issues:
 ## 1.8.0
 
 Note: *Bad release.* An addition in this release broke 'rotating-file' usage.
-Use 1.8.1 instead.
+Use 1.8.1 or later.
 
 - [issue #370] Fix `bunyan -p ...` (i.e. DTrace integration) on node
   4.x and 5.x.
