@@ -1045,21 +1045,17 @@ This example emits:
 (There are a lot that aren't listed here. `npm search bunyan` is a good
 place to start.)
 
-- syslog:
-  [mcavage/node-bunyan-syslog](https://github.com/mcavage/node-bunyan-syslog)
-  provides support for directing bunyan logging to a syslog server.
+- [bunyan-cloudwatch](https://github.com/mirkokiefer/bunyan-cloudwatch): Bunyan stream for sending logs to AWS CloudWatch.
 
-- bunyan-slack:
-[qualitybath/bunyan-slack](https://github.com/qualitybath/bunyan-slack) Bunyan stream for Slack chat integration.
+- [bunyan-dynamo](https://github.com/ssmereka/bunyan-dynamo): Bunyan stream for sending logs to AWS [DynamoDB](https://aws.amazon.com/dynamodb/).
 
-- bunyan-fogbugz
-[qualitybath/bunyan-fogbugz](https://github.com/qualitybath/bunyan-fogbugz) Bunyan stream for sending automated crash reports to FogBugz
+- [bunyan-fogbugz](https://github.com/qualitybath/bunyan-fogbugz): Bunyan stream for sending automated crash reports to FogBugz
 
-- bunyan-cloudwatch:
-[mirkokiefer/bunyan-cloudwatch](https://github.com/mirkokiefer/bunyan-cloudwatch) Bunyan stream for sending logs to AWS CloudWatch.
+- [bunyan-slack](https://github.com/qualitybath/bunyan-slack): Bunyan stream for Slack chat integration.
+
+- [node-bunyan-syslog](https://github.com/mcavage/node-bunyan-syslog): provides support for directing bunyan logging to a syslog server.
 
 - TODO: eventually https://github.com/trentm/node-bunyan-winston
-
 
 
 # Runtime log snooping via DTrace
