@@ -3,3 +3,4 @@
 *.log
 !/test/corpus/*.log
 /*.tgz
+/test/*.log.0
