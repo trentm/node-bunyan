@@ -17,8 +17,6 @@ that. A log record is one line of `JSON.stringify`'d output. Let's also
 specify some common names for the requisite and common fields for a log
 record (see below).
 
-Also: log4j is way more than you need.
-
 
 ## Table of Contents
 
@@ -1042,24 +1040,8 @@ This example emits:
 
 ## third-party streams
 
-(There are a lot that aren't listed here. `npm search bunyan` is a good
-place to start.)
-
-- syslog:
-  [mcavage/node-bunyan-syslog](https://github.com/mcavage/node-bunyan-syslog)
-  provides support for directing bunyan logging to a syslog server.
-
-- bunyan-slack:
-[qualitybath/bunyan-slack](https://github.com/qualitybath/bunyan-slack) Bunyan stream for Slack chat integration.
-
-- bunyan-fogbugz
-[qualitybath/bunyan-fogbugz](https://github.com/qualitybath/bunyan-fogbugz) Bunyan stream for sending automated crash reports to FogBugz
-
-- bunyan-cloudwatch:
-[mirkokiefer/bunyan-cloudwatch](https://github.com/mirkokiefer/bunyan-cloudwatch) Bunyan stream for sending logs to AWS CloudWatch.
-
-- TODO: eventually https://github.com/trentm/node-bunyan-winston
-
+See the [user-maintained list in the Bunyan
+wiki](https://github.com/trentm/node-bunyan/wiki/Awesome-Bunyan).
 
 
 # Runtime log snooping via DTrace
