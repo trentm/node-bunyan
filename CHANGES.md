@@ -8,6 +8,11 @@ Known issues:
 ## not yet released
 
 
+## 1.8.4
+
+- [issue #454] Fix `src` usage with node v7.
+
+
 ## 1.8.3
 
 - [issue #450] Fix `log.info(null)` crash that resulted from #426 in v1.8.2.

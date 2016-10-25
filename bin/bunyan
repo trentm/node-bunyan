@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Copyright 2016 Trent Mick. All rights reserved.
- * Copyright 2016 Joyent Inc. All rights reserved.
+ * Copyright 2016 Trent Mick
+ * Copyright 2016 Joyent Inc.
  *
  * bunyan -- filter and pretty-print Bunyan log files (line-delimited JSON)
  *
@@ -11,7 +11,7 @@
  * vim: expandtab:ts=4:sw=4
  */
 
-var VERSION = '1.8.3';
+var VERSION = '1.8.4';
 
 var p = console.log;
 var util = require('util');

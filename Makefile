@@ -105,8 +105,13 @@ test: $(NODEUNIT)
 # Note: 'test4' is last so (if all is well) I end up with a binary
 # dtrace-provider build for my current default node version.
 .PHONY: testall
-testall: test6 test012 test010 test4
+testall: test7 test6 test012 test010 test4
 
+.PHONY: test7
+test7:
+	@echo "# Test node 7.x (with node `$(NODEOPT)/node-7/bin/node --version`)"
+	@$(NODEOPT)/node-7/bin/node --version | grep '^v7\.'
+	PATH="$(NODEOPT)/node-7/bin:$(PATH)" make distclean all test
 .PHONY: test6
 test6:
 	@echo "# Test node 6.x (with node `$(NODEOPT)/node-6/bin/node --version`)"
