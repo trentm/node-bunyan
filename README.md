@@ -1326,3 +1326,4 @@ versioning](http://semver.org/).
 - TODO: `RequestCaptureStream` example from restify.
 - [Bunyan integration for https://logentries.com](https://www.npmjs.org/package/logentries-stream)
 - [Bunyan integration for Kafka](https://github.com/yunong/bunyan-kafka)
+- [Ougai](https://github.com/tilfin/ougai): A Ruby logging library compatible with Bunyan.
