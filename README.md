@@ -1316,13 +1316,5 @@ versioning](http://semver.org/).
 
 # See Also
 
-- Bunyan syslog support: <https://github.com/mcavage/node-bunyan-syslog>.
-- Bunyan + Graylog2: <https://github.com/mhart/gelf-stream>.
-- Bunyan middleware for Express: <https://github.com/villadora/express-bunyan-logger>
-- An example of a Bunyan shim to the Winston logging system:
-  <https://github.com/trentm/node-bunyan-winston>. Also a [comparison of
-  Winston and Bunyan](http://strongloop.com/strongblog/compare-node-js-logging-winston-bunyan/).
-- [Bunyan for Bash](https://github.com/trevoro/bash-bunyan).
-- TODO: `RequestCaptureStream` example from restify.
-- [Bunyan integration for https://logentries.com](https://www.npmjs.org/package/logentries-stream)
-- [Bunyan integration for Kafka](https://github.com/yunong/bunyan-kafka)
+See the [user-maintained list of Bunyan-related software in the Bunyan
+wiki](https://github.com/trentm/node-bunyan/wiki/Awesome-Bunyan).
