@@ -890,7 +890,8 @@ var log = bunyan.createLogger({
         type: 'rotating-file',
         path: '/var/log/foo.log',
         period: '1d',   // daily rotation
-        count: 3        // keep 3 back copies
+        count: 3,        // keep 3 back copies,
+        maxSizeKB: 1024 // rotate every 1024KB
     }]
 });
 ```
