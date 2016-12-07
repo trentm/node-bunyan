@@ -530,3 +530,99 @@ test('should only show nonempty response bodies', function (t) {
         t.end();
     });
 });
+
+test('--map ""', function (t) {
+    exec(BUNYAN + ' --map ""', function (err, stdout, stderr) {
+        t.ok(err, 'should error out')
+        t.equal(err.code, 1, '... with exit code 1')
+        t.end();
+    });
+});
+
+test('--map "=bogus"', function (t) {
+    exec(BUNYAN + ' --map "=bogus"', function (err, stdout, stderr) {
+        t.ok(err, 'should error out')
+        t.equal(err.code, 1, '... with exit code 1')
+        t.end();
+    });
+});
+
+test('--map "10="', function (t) {
+    exec(BUNYAN + ' --map "10="', function (err, stdout, stderr) {
+        t.ok(err, 'should error out')
+        t.equal(err.code, 1, '... with exit code 1')
+        t.end();
+    });
+});
+
+test('--map "bogus="', function (t) {
+    exec(BUNYAN + ' --map "bogus="', function (err, stdout, stderr) {
+        t.ok(err, 'should error out')
+        t.equal(err.code, 1, '... with exit code 1')
+        t.end();
+    });
+});
+
+test('--map "35=notice"', function (t) {
+    var expect = [
+        '# levels\n',
+        '[2012-02-08T22:56:50.856Z]  TRACE: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:51.856Z]  DEBUG: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:52.856Z]   INFO: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:53.856Z] NOTICE: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:54.856Z]   WARN: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:55.856Z]  ERROR: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:56.856Z] LVL55: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:57.856Z]  FATAL: myservice/123 on example.com: My message\n'
+    ].join('');
+    var cmd = _('%s --map "35=notice" %s/corpus/mapped-levels.log',
+        BUNYAN, __dirname);
+    exec(cmd, function (err, stdout, stderr) {
+        t.ifError(err);
+        t.equal(stdout, expect);
+        t.done();
+    });
+});
+
+test('--map "35=notice" --map "55=test"', function (t) {
+    var expect = [
+        '# levels\n',
+        '[2012-02-08T22:56:50.856Z]  TRACE: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:51.856Z]  DEBUG: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:52.856Z]   INFO: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:53.856Z] NOTICE: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:54.856Z]   WARN: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:55.856Z]  ERROR: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:56.856Z]   TEST: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:57.856Z]  FATAL: myservice/123 on example.com: My message\n'
+    ].join('');
+    var cmd = _('%s --map "35=notice" --map "55=TEST" %s/corpus/mapped-levels.log',
+        BUNYAN, __dirname);
+    exec(cmd, function (err, stdout, stderr) {
+        t.ifError(err);
+        t.equal(stdout, expect);
+        t.done();
+    });
+});
+
+test('--map "35=notice" --map "55=TEST" --map="35=TEST"', function (t) {
+    var expect = [
+        '# levels\n',
+        '[2012-02-08T22:56:50.856Z]  TRACE: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:51.856Z]  DEBUG: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:52.856Z]   INFO: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:53.856Z] NOTICE: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:54.856Z]   WARN: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:55.856Z]  ERROR: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:56.856Z]   TEST: myservice/123 on example.com: My message\n',
+        '[2012-02-08T22:56:57.856Z]  FATAL: myservice/123 on example.com: My message\n'
+    ].join('');
+    var cmd = _('%s --map "35=notice" --map "55=TEST" %s/corpus/mapped-levels.log',
+        BUNYAN, __dirname);
+    exec(cmd, function (err, stdout, stderr) {
+        t.ifError(err);
+        t.equal(stdout, expect);
+        t.done();
+    });
+});
+
