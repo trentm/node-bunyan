@@ -43,6 +43,7 @@ record (see below).
   * [Recommended/Best Practice Fields](#recommendedbest-practice-fields)
   * [Other fields to consider](#other-fields-to-consider)
 - [Streams](#streams)
+  * [Adding a Stream](#adding-a-stream)
   * [stream errors](#stream-errors)
   * [stream type: `stream`](#stream-type-stream)
   * [stream type: `file`](#stream-type-file)
@@ -740,6 +741,20 @@ on log records).
 If neither "streams" nor "stream" are specified, the default is a stream of
 type "stream" emitting to `process.stdout` at the "info" level.
 
+## Adding a Stream
+
+After a bunyan instance has been initialized, you may add additional streams by
+calling the `addStream` function.
+
+```js
+var bunyan = require('bunyan');
+var log = bunyan.createLogger('myLogger');
+log.addStream({
+  name: "myNewStream",
+  stream: process.stderr,
+  level: "debug"
+});
+```
 
 ## stream errors
 
