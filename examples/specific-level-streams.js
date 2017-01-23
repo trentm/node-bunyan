@@ -9,7 +9,7 @@
  */
 
 var bunyan = require('../lib/bunyan'),
-    safeCycles = bunyan.safeCycles;
+    replacer = bunyan.replacer;
 var fs = require('fs');
 
 /**
@@ -28,7 +28,7 @@ function SpecificLevelStream(levels, stream) {
 }
 SpecificLevelStream.prototype.write = function (rec) {
     if (this.levels[rec.level] !== undefined) {
-        var str = JSON.stringify(rec, safeCycles()) + '\n';
+        var str = JSON.stringify(rec, replacer()) + '\n';
         this.stream.write(str);
     }
 }
