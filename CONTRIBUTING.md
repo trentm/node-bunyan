@@ -47,7 +47,7 @@ provide feedback on it and merge it. I'll politely request missing pieces.
 - Any user visible change in behaviour should almost certainly include an
   update to the docs. Currently the "docs" is the README.md.
 
-- Adding a test case for code changes is **stronly recommended**, else I
+- Adding a test case for code changes is **strongly recommended**, else I
   can't easily promise to not break your fix/feature later. If you don't
   grok the test suite, please ask. We can use it to form the basis for a
   "test/README.md".
