@@ -1282,7 +1282,7 @@ log.info('hi on info');
 
 ## Webpack
 Webpack can work with the same example Browserify above. To do this, we need to make webpack ignore optional files:
-Create "empty-shim.js":
+Create "empty_shim.js":
 ```javascript
 // This is an empty shim for things that should be not be included in webpack
 ```
