@@ -8,7 +8,14 @@ Known issues:
 ## not yet released
 
 
+## 1.8.8
+
+- Fix breakage due to a silly last minute "fix 'make check'".
+
+
 ## 1.8.7
+
+Note: *Bad release.* Use 1.8.8 or later.
 
 - [issue #484] Fix breakage due to #474 in previous release.
 
