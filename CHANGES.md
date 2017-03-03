@@ -8,7 +8,14 @@ Known issues:
 ## not yet released
 
 
+## 1.8.7
+
+- [issue #484] Fix breakage due to #474 in previous release.
+
+
 ## 1.8.6
+
+Note: *Bad release.* Use 1.8.7 or later.
 
 - [issue #474] Bunyan's `safeCycles` is too slow when logging large objects.
 
