@@ -7,6 +7,10 @@ Known issues:
 
 ## not yet released
 
+## 1.8.6
+
+- [issue #462] Allows `"v"` to be overridden
+
 
 ## 1.8.6
 

@@ -556,7 +556,7 @@ Pretty-printed:
 
 ## Core fields
 
-- `v`: Required. Integer. Added by Bunyan. Cannot be overridden.
+- `v`: Required. Integer. Added by Bunyan. Can be overridden.
   This is the Bunyan log format version (`require('bunyan').LOG_VERSION`).
   The log version is a single integer. `0` is until I release a version
   "1.0.0" of node-bunyan. Thereafter, starting with `1`, this will be
