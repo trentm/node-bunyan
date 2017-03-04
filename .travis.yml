@@ -15,6 +15,7 @@ node_js:
   - '6'
   - 'node'
 
+
 # Gives us faster boot time, see https://docs.travis-ci.com/user/ci-environment/
 sudo: false
 
