@@ -7,6 +7,8 @@ Known issues:
 
 ## not yet released
 
+- [pull #469] Fix a strict mode (`"use strict;"`) error in some versions of
+  Safari.
 
 ## 1.8.8
 
