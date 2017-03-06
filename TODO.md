@@ -7,10 +7,12 @@
 # changes to ctor and log.child to separate fields from config
 
 Current:
+
     createLogger(<config-and-fields>)
     log.child(<config-and-fields>, <just-fields-bool>)
 
 Could be:
+
     createLogger(<config-and-fields>, <fields>)
     log.child(<config-and-fields>, <fields>)
         # Still support: log.child(<config-and-fields>, <just-fields-bool>)
@@ -19,11 +21,15 @@ Pros: Compat issues are minimal: a change is only required if there is a
 collision with used field and a new config var name.
 Cons: A *slight* con is that my guess is the common usage of child is
 `log.child(<fields>)`, so the more future-proof common usage becomes:
+
     log.child(null, <fields>)
+
 That's not too bad. It is clearer at least than:
+
     log.child(<fields>, true)
 
 TODO:
+
 - is there a ticket for this work already?
 - make the change
 - do a migration guide? i.e. provide the grep commands to find all
