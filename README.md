@@ -374,10 +374,56 @@ var log = bunyan.createLogger({name: 'myapp'});
 log.addSerializers({req: reqSerializer});
 ```
 
+### Requirements for serializers functions
 
-**Note**: Your own serializers should never throw, otherwise you'll get an
-ugly message on stderr from Bunyan (along with the traceback) and the field
-in your log record will be replaced with a short error message.
+A serializer function is passed unprotected objects that are passed to the
+`log.info`, `log.debug`, etc. call. This means a poorly written serializer
+function can case side-effects. Logging shouldn't do that. Here are a few
+rules and best practices for serializer functions:
+
+- A serializer function *should never throw*. The bunyan library *does*
+  protect somewhat from this: if the serializer throws an error, then
+  bunyan will (a) write an ugly message on stderr (along with the traceback),
+  and (b) the field in the log record will be replace with a short error message.
+  For example:
+
+    ```
+    bunyan: ERROR: Exception thrown from the "foo" Bunyan serializer. This should never happen. This is a bug in that serializer function.
+    TypeError: Cannot read property 'not' of undefined
+        at Object.fooSerializer [as foo] (/Users/trentm/tm/node-bunyan/bar.js:8:26)
+        at /Users/trentm/tm/node-bunyan/lib/bunyan.js:873:50
+        at Array.forEach (native)
+        at Logger._applySerializers (/Users/trentm/tm/node-bunyan/lib/bunyan.js:865:35)
+        at mkRecord (/Users/trentm/tm/node-bunyan/lib/bunyan.js:978:17)
+        at Logger.info (/Users/trentm/tm/node-bunyan/lib/bunyan.js:1044:19)
+        at Object.<anonymous> (/Users/trentm/tm/node-bunyan/bar.js:13:5)
+        at Module._compile (module.js:409:26)
+        at Object.Module._extensions..js (module.js:416:10)
+        at Module.load (module.js:343:32)
+    {"name":"bar","hostname":"danger0.local","pid":47411,"level":30,"foo":"(Error in Bunyan log \"foo\" serializer broke field. See stderr for details.)","msg":"one","time":"2017-03-08T02:53:51.173Z","v":0}
+    ```
+
+- A serializer function *should never mutate the given object*. Doing so will
+  change the object in your application.
+
+- A serializer function *should be defensive*. In my experience it is common to
+  set a serializer in an app, say for field name "foo", and then accidentally
+  have a log line that passes a "foo" that is undefined, or null, or of some
+  unexpected type. A good start at defensiveness is to start with this:
+
+    ```javascript
+    function fooSerializers(foo) {
+        // Guard against foo be null/undefined. Check that expected fields
+        // are defined.
+        if (!foo || !foo.bar)
+            return foo;
+        var obj = {
+            // Create the object to be logged.
+            bar: foo.bar
+        }
+        return obj;
+    };
+    ```
 
 
 ### Standard Serializers
