@@ -33,6 +33,7 @@ record (see below).
   * [Streams Introduction](#streams-introduction)
   * [log.child](#logchild)
   * [Serializers](#serializers)
+    + [Requirements for serializers functions](#requirements-for-serializers-functions)
     + [Standard Serializers](#standard-serializers)
   * [src](#src)
 - [Levels](#levels)
