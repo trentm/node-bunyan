@@ -1,2 +1,11 @@
-deps/*
-build/*
+/deps/*
+/build/*
+/node_modules/*
+/tmp/*
+/*.js
+
+# Eventually would be nice to include these, but I don't want to work
+# through them to start using eslint.
+/test/*
+/examples/*
+/tools/*
