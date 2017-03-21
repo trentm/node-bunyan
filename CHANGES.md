@@ -7,8 +7,17 @@ Known issues:
 
 ## not yet released
 
+(nothing yet)
+
+
+## 1.8.9
+
+- [pull #409, issue #246] Revert a change added to the `bunyan` CLI version
+  1.0.1 where `SIGINT` was ignored, such that Ctrl+C could not be used to
+  terminate bunyan. (By @zbjornson and @davepacheco.)
 - [pull #469] Fix a strict mode (`"use strict;"`) error in some versions of
   Safari.
+
 
 ## 1.8.8
 
