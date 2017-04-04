@@ -2,9 +2,34 @@
 
 - `bunyan` (without redir) ^C should stop, doesn't since recent change
 - man page for the bunyan CLI (refer to it in the readme)
+    - perhaps wait for a bunyan new version with deps, and use dashdash
+      with a (vapour) man page generator
+
+# v2
+
+- ^C fix
+- node-exeunt
+- `createLogger(<config-and-fields>, <fields>)` changes (#460)
+    - see section below
+- the dtrace-provider thing (#487)
+    TODO: answer Cody email
+- use package.json version for VERSION
+- use deps
+    - dashdash
+    - assert-plus?
+    - verror?
+- break out to multiple files
+    - want to work through PRs before that, so don't just break them all
+- TODO: a quick pass through tickets and pulls for other things to include
+- get ticket refs for the above, if any
+- formatters: read up again on `glp master..1.x`
+- support for customer formatters
+    - for the CLI as well? How? ~/.bunyanrc?
 
 
 # changes to ctor and log.child to separate fields from config
+
+<https://github.com/trentm/node-bunyan/issues/460>
 
 Current:
 
@@ -37,6 +62,7 @@ TODO:
   code, then you are fine. And one time future-proofing via changing
   to fields in the *second* arg.
 - list of issues/pulls that wanted to add new config fields
+
 
 
 # docs
