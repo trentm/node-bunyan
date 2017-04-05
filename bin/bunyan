@@ -1525,9 +1525,9 @@ function main(argv) {
         console.log('bunyan ' + getVersion());
         return;
     }
-    if (opts.pid && opts.args.length > 0) {
+    if (opts.pids && opts.args.length > 0) {
         warn('bunyan: error: can\'t use both "-p PID" (%s) and file (%s) args',
-            opts.pid, opts.args.join(' '));
+            opts.pids, opts.args.join(' '));
         return drainStdoutAndExit(1);
     }
     if (opts.color === null) {

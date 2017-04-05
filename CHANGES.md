@@ -7,7 +7,8 @@ Known issues:
 
 ## not yet released
 
-(nothing yet)
+- Ensure that `bunyan` errors out if attempting to use `-p PID` and
+  file args at the same time.
 
 
 ## 1.8.9
