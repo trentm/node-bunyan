@@ -795,7 +795,7 @@ function emitRecord(rec, line, opts, stylize) {
             };
             time = moTime.format(tzFormat);
         }
-        time = stylize(time, 'XXX');
+        time = stylize(time, 'none');
         delete rec.time;
 
         var nameStr = rec.name;
@@ -1040,9 +1040,9 @@ function emitRecord(rec, line, opts, stylize) {
         }
 
         extras = stylize(
-            (extras.length ? ' (' + extras.join(', ') + ')' : ''), 'XXX');
+            (extras.length ? ' (' + extras.join(', ') + ')' : ''), 'none');
         details = stylize(
-            (details.length ? details.join('\n    --\n') + '\n' : ''), 'XXX');
+            (details.length ? details.join('\n    --\n') + '\n' : ''), 'none');
         if (!short)
             emit(format('%s %s: %s on %s%s:%s%s\n%s',
                 time,
