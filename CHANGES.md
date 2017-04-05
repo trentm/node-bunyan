@@ -7,6 +7,11 @@ Known issues:
 
 ## not yet released
 
+(nothing yet)
+
+
+## 1.8.10
+
 - Ensure that `bunyan` errors out if attempting to use `-p PID` and
   file args at the same time.
 
