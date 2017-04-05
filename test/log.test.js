@@ -64,6 +64,23 @@ test('log.LEVEL() -> boolean', function (t) {
     t.end();
 });
 
+test('log.LEVEL -> shorthand notation', function (t) {
+    t.equal(log1.trace, log1.t)
+    t.equal(log1.debug, log1.d)
+    t.equal(log1.info, log1.i)
+    t.equal(log1.warn, log1.w)
+    t.equal(log1.error, log1.e)
+    t.equal(log1.fatal, log1.f)
+
+    t.equal(log2.trace, log2.t)
+    t.equal(log2.debug, log2.d)
+    t.equal(log2.info, log2.i)
+    t.equal(log2.warn, log2.w)
+    t.equal(log2.error, log2.e)
+    t.equal(log2.fatal, log2.f)
+    t.end();
+});
+
 
 // ---- test `log.<level>(...)` calls which various input types
 
