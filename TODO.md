@@ -1,13 +1,7 @@
-# higher prio
-
-- `bunyan` (without redir) ^C should stop, doesn't since recent change
-- man page for the bunyan CLI (refer to it in the readme)
-    - perhaps wait for a bunyan new version with deps, and use dashdash
-      with a (vapour) man page generator
-
 # v2
 
-- ^C fix
+- ^C fix. Done in 1.8.9. However, see a recent ticket about ^C/EPIPE issues.
+  I suspect the uncommited exeunt work will fix that.
 - node-exeunt
 - `createLogger(<config-and-fields>, <fields>)` changes (#460)
     - see section below
@@ -55,7 +49,7 @@ That's not too bad. It is clearer at least than:
 
 TODO:
 
-- is there a ticket for this work already?
+- is there a ticket for this work already?  #460
 - make the change
 - do a migration guide? i.e. provide the grep commands to find all
   possible calls to inspect. E.g. if don't have `rg logUndefined` in your
@@ -63,6 +57,12 @@ TODO:
   to fields in the *second* arg.
 - list of issues/pulls that wanted to add new config fields
 
+
+# higher prio
+
+- man page for the bunyan CLI (refer to it in the readme)
+    - perhaps wait for a bunyan new version with deps, and use dashdash
+      with a (vapour) man page generator
 
 
 # docs

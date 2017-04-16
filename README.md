@@ -64,15 +64,19 @@ record (see below).
 
 # Current Status
 
-Solid core functionality is there. Joyent is using this for a number of
-production services. Bunyan supports node 0.10 and greater. Follow
-<a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
-for updates to Bunyan.
+Stable. I do my best to follow semver: i.e. you should only need to worry
+about code breaking for a *major* version bump.  Bunyan currently supports node
+0.10 and greater. Follow <a href="https://twitter.com/intent/user?screen_name=trentmick"
+target="_blank">@trentmick</a> for updates to Bunyan.
 
 There is an email discussion list
 [bunyan-logging@googlegroups.com](mailto:bunyan-logging@googlegroups.com),
 also [as a forum in the
 browser](https://groups.google.com/forum/?fromgroups#!forum/bunyan-logging).
+
+Active branches:
+- "master" is currently for coming Bunyan 2.x work.
+- "1.x" is for 1.x maintenance work, if any.
 
 
 # Installation
