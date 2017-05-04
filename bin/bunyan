@@ -42,7 +42,7 @@ var nodeSpawnSupportsStdio = (nodeVer[0] > 0 || nodeVer[1] >= 8);
 
 // Internal debug logging via `console.warn`.
 var _selfTrace = function selfTraceNoop() {};
-if (process.env.BUNYAN_SELF_TRACE === "1") {
+if (process.env.BUNYAN_SELF_TRACE === '1') {
     _selfTrace = function selfTrace() {
         process.stderr.write('[bunyan self-trace] ');
         console.warn.apply(null, arguments);
