@@ -1,17 +1,9 @@
 # v2
 
-- figure out how to 'make cutarelease' for 2.x but tag as beta
-- comment/grokking of bunyan.js flushing issues at
-  https://github.com/trentm/node-bunyan/issues/37 would be nice. Even if just a
-  link to exeunt and some examples. Wiki page?
-    - respond to Qs here: https://github.com/trentm/node-bunyan/issues/37#issuecomment-282933502
-- consider whether to backport the exit handling work to 1.x???
 - `createLogger(<config-and-fields>, <fields>)` changes (#460)
     - see section below
 - the dtrace-provider thing (#487)
     TODO: answer Cody email
-- https://github.com/trentm/node-bunyan/issues/398 if easy, perhaps on 1.x
-  as well
 - use package.json version for VERSION
 - use deps
     - dashdash
@@ -67,6 +59,11 @@ TODO:
 
 # higher prio
 
+- https://github.com/trentm/node-bunyan/issues/398 if easy, perhaps on 1.x
+  as well
+- published organized advice for
+  https://github.com/trentm/node-bunyan/issues/37 so can close that out.
+  Perhaps a wiki page with examples and strategies.
 - man page for the bunyan CLI (refer to it in the readme)
     - perhaps wait for a bunyan new version with deps, and use dashdash
       with a (vapour) man page generator
