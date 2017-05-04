@@ -79,7 +79,8 @@ Active branches:
   npm.
 - "master" is currently for coming Bunyan 2.x work. For now, 2.x releases are
   published to npm with the "beta" tag, meaning that `npm install bunyan` is
-  still 1.x for now.
+  still 1.x for now. To install 2.x use `npm install bunyan@2` or
+  `npm install bunyan@beta`.
 
 
 # Installation
