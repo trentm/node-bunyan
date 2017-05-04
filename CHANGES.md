@@ -5,7 +5,12 @@ Known issues:
 - [issue #58] Can't install to a dir with spaces. This is [this node-gyp
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
-## not yet released (2.x)
+## not yet released
+
+(nothing yet)
+
+
+## 2.0.0 (beta)
 
 - [issue #499] Fix some `bunyan` CLI exit handling problems.
 

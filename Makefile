@@ -56,9 +56,9 @@ cutarelease: check
 	    read
 	ver=$(shell cat package.json | json version) && \
 	    date=$(shell date -u "+%Y-%m-%d") && \
-	    git tag -a "$$ver" -m "version $$ver ($$date)" && \
+	    git tag -a "$$ver" -m "version $$ver ($$date) beta" && \
 	    git push --tags origin && \
-	    npm publish
+	    npm publish --tag beta
 
 .PHONY: docs
 docs: toc
