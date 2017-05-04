@@ -16,6 +16,9 @@
   "keywords": ["log", "logging", "log4j", "json", "bunyan"],
   "license": "MIT",
 
+  "dependencies": {
+    "exeunt": "1.1.0"
+  },
   "// dtrace-provider": "required for dtrace features",
   "// mv": "required for RotatingFileStream",
   "// moment": "required for local time with CLI",
@@ -35,7 +38,5 @@
 
   "scripts": {
     "test": "make test"
-  },
-  "dependencies": {
   }
 }
