@@ -59,8 +59,6 @@ TODO:
 
 # higher prio
 
-- https://github.com/trentm/node-bunyan/issues/398 if easy, perhaps on 1.x
-  as well
 - published organized advice for
   https://github.com/trentm/node-bunyan/issues/37 so can close that out.
   Perhaps a wiki page with examples and strategies.

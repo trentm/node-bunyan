@@ -182,7 +182,13 @@ log.info(err, 'more on this: %s', more);
 
 log.info({foo: 'bar', err: err}, 'some msg about this error');
                 // To pass in an Error *and* other fields, use the `err`
-                // field name for the Error instance.
+                // field name for the Error instance **and ensure your logger
+                // has a `err` serializer.** One way to ensure the latter is:
+                //      var log = bunyan.createLogger({
+                //          ...,
+                //          serializers: bunyan.stdSerializers
+                //      });
+                // See the "Serializers" section below for details.
 ```
 
 Note that this implies **you cannot blindly pass any object as the first
@@ -354,9 +360,9 @@ and have the `req` entry in the log record be just a reasonable subset of
 
 
 A logger instance can have a `serializers` mapping of log record field name
-("req" in this example) to a serializer function. When creating the log
-record, Bunyan will call the serializer function for fields of that name.
-An example:
+("req" in this example) to a serializer function. When creating the log record,
+Bunyan will call the serializer function for *top-level* fields of that name. An
+example:
 
 ```js
 function reqSerializer(req) {
@@ -375,9 +381,26 @@ var log = bunyan.createLogger({
 ```
 
 
-Typically serializers are added to a logger at creation time via
-`bunyan.createLogger({..., serializers: <serializers>})`. However, serializers
-can be added after creation via `<logger>.addSerializers(...)`, e.g.:
+Typically serializers are added to a logger at creation time via:
+
+```js
+var log = bunyan.createLogger({
+    name: 'myapp',
+    serializers: {
+        foo: function fooSerializer(foo) { ... },
+        ...
+    }
+});
+
+// or
+var log = bunyan.createLogger({
+    name: 'myapp',
+    serializers: bunyan.stdSerializers
+});
+```
+
+Serializers can also be added after creation via `<logger>.addSerializers(...)`,
+e.g.:
 
 ```js
 var log = bunyan.createLogger({name: 'myapp'});
@@ -422,7 +445,7 @@ rules and best practices for serializer functions:
   unexpected type. A good start at defensiveness is to start with this:
 
     ```javascript
-    function fooSerializers(foo) {
+    function fooSerializer(foo) {
         // Guard against foo be null/undefined. Check that expected fields
         // are defined.
         if (!foo || !foo.bar)
@@ -439,7 +462,7 @@ rules and best practices for serializer functions:
 ### Standard Serializers
 
 Bunyan includes a small set of "standard serializers", exported as
-`bunyan.stdSerializers`. Their use is completely optional. Example using
+`bunyan.stdSerializers`. Their use is completely optional. An example using
 all of them:
 
 ```js
@@ -462,7 +485,7 @@ Standard serializers are:
 
 | Field | Description |
 | ----- | ----------- |
-| err   | Used for serializing JavaScript error objects, including traversing an error's cause chain for error objects with a `.cause()` -- e.g. as from [verror](https://github.com/davepacheco/node-verror). |
+| err   | Used for serializing JavaScript error objects, including traversing an error's cause chain for error objects with a `.cause()` -- e.g. as from [verror](https://github.com/joyent/node-verror). |
 | req   | Common fields from a node.js HTTP request object. |
 | res   | Common fields from a node.js HTTP response object. |
 
