@@ -302,6 +302,34 @@ test('err serializer: long stack', function (t) {
     t.end();
 });
 
+test('stream serializers', function (t) {
+    var serializedRecords = [];
+    var records = [];
+    var log = bunyan.createLogger({
+        name: 'serializer-test',
+        streams: [
+            {
+                stream: new CapturingStream(serializedRecords),
+                type: 'raw',
+                serializers: {
+                    foo: function (foo) {
+                        return 'serialized ' + foo;
+                    }
+                }
+            }, {
+                stream: new CapturingStream(records),
+                type: 'raw'
+            }
+        ]
+    });
+
+    log.info({foo: 'bar'}, 'record me');
+
+    t.equal(records[0].foo, 'bar');
+    t.equal(serializedRecords[0].foo, 'serialized bar');
+
+    t.end();
+});
 
 // Bunyan 0.18.3 introduced a bug where *all* serializers are applied
 // even if the log record doesn't have the associated key. That means
