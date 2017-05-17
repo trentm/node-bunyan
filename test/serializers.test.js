@@ -56,6 +56,15 @@ test('req serializer', function (t) {
         t.equal(records[i].req, bogusReqs[i]);
     }
 
+    // Test originalUrl
+    var originalUrlReq = {
+      url: "/",
+      originalUrl: "/foo/bar",
+      connection: {}, // fake connection object
+    };
+    log.info({req: originalUrlReq}, 'hi');
+    t.equal(records[records.length-1].req.url, originalUrlReq.originalUrl);
+
     // Get http request and response objects to play with and test.
     var theReq, theRes;
     var server = http.createServer(function (req, res) {
