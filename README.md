@@ -248,6 +248,42 @@ $ node hi.js | bunyan -c 'this.lang == "fr"'
 
 See `bunyan --help` for other facilities.
 
+## Use with Gulp and Nodemon
+
+If you use [gulp-nodemon](https://www.npmjs.com/package/gulp-nodemon) to run your
+application during development, you can automatically pipe the application's output
+through the bunyan CLI to format it:
+
+```js
+var nodemon = require('gulp-nodemon');
+var childProcess = require('child_process');
+var path = require('path');
+
+gulp.task('server', function (done) {
+
+	nodemon({
+		script: './server.js', // <-- your application
+		watch: ['./app'],
+		stdout: false // <-- important, otherwise output won't get piped properly
+	})
+	.on('readable', function () {
+		// Pass output through bunyan formatter
+		var bunyan = childProcess.fork(
+			path.join('.', 'node_modules', 'bunyan', 'bin', 'bunyan'),
+			['--output', 'simple'], // <-- any of the CLI options that you prefer
+			{silent: true}
+		);
+
+		bunyan.stdout.pipe(process.stdout);
+		bunyan.stderr.pipe(process.stderr);
+		this.stdout.pipe(bunyan.stdin);
+		this.stderr.pipe(bunyan.stdin);
+	});
+
+	done();
+};
+
+```
 
 ## Streams Introduction
 
