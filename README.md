@@ -1078,6 +1078,82 @@ to your process. Any other mechanism to signal your app to run
 `log.reopenFileStreams()` would work as well.
 
 
+## stream type: `periodic-file`
+
+**WARNING on node 0.8 usage:** Users of Bunyan's `periodic-file` should (a) be
+using at least bunyan 0.23.1 (with the fix for [this
+issue](https://github.com/trentm/node-bunyan/pull/97)), and (b) should use at
+least node 0.10 (node 0.8 does not support the `unref()` method on
+`setTimeout(...)` needed for the mentioned fix). The symptom is that process
+termination will hang for up to a full period.
+
+**WARNING on [cluster](http://nodejs.org/docs/latest/api/all.html#all_cluster)
+usage:** Using Bunyan's `periodic-file` stream with node.js's "cluster" module
+can result in unexpected file management. You must not have multiple processes
+in the cluster logging to the same file path. In other words, you must have
+a separate log file path for the master and each worker in the cluster.
+
+A `type === 'periodic-file'` is a file stream that creates files with date/time stamps.
+
+    var log = bunyan.createLogger({
+        name: 'foo',
+        streams: [{
+            type: 'periodic-file',
+            path: '/var/log/foo',
+            period: 'daily',   // daily rotation
+        }]
+    });
+
+This will create a log file as <code>/var/log/foo.YYYY-MM-DD.log</code> and each night at midnight localtime a new file will be created.  It also supports hourly log files with the format like <code>/var/log/foo.YYYY-MM-DD_HH.log</code>. 
+
+Older log files are not managed so you should have some other process in place to purge older files, for example <code>find /var/log -mtime +7 -exec rm {};</code>.
+
+<table>
+<tr>
+<th>Field</th>
+<th>Required?</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>type</td>
+<td>Yes</td>
+<td>-</td>
+<td>"periodic-file"</td>
+</tr>
+<tr>
+<td>path</td>
+<td>Yes</td>
+<td>-</td>
+<td>A base file path to which to log. The path will have a timestamp and ".log" appended</td>
+</tr>
+<tr>
+<td>period</td>
+<td>No</td>
+<td>daily</td>
+<td>The period to create new files, either <code>daily</code> or <code>hourly</code></td>
+</tr>
+<tr>
+<td>level</td>
+<td>No</td>
+<td>info</td>
+<td>The level at which logging to this stream is enabled. If not
+specified it defaults to "info". If specified this can be one of the
+level strings ("trace", "debug", ...) or constants (`bunyan.TRACE`,
+`bunyan.DEBUG`, ...).</td>
+</tr>
+<tr>
+<td>name</td>
+<td>No</td>
+<td>-</td>
+<td>A name for this stream. This may be useful for usage of `log.level(NAME,
+LEVEL)`. See the [Levels section](#levels) for details. A stream "name" isn't
+used for anything else.</td>
+</tr>
+</table>
+
+
+
 ## stream type: `raw`
 
 - `raw`: Similar to a "stream" writable stream, except that the write method
