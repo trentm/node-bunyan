@@ -865,7 +865,7 @@ function emitRecord(rec, line, opts, stylize) {
         delete rec.req_id;
 
         var onelineMsg;
-        if (rec.msg.indexOf('\n') !== -1) {
+        if (!short || rec.msg.indexOf('\n') !== -1) {
             onelineMsg = '';
             details.push(indent(stylize(rec.msg, 'cyan')));
         } else {
