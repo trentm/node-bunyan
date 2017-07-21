@@ -1377,7 +1377,6 @@ log.info('hi on info');
 ## Webpack
 Webpack can work with the same example Browserify above. To do this, we need to make webpack ignore optional files:
 
-```
 Now tell webpack to ignore files for 
 [optional dependencies](https://webpack.js.org/configuration/module/#module-noparse)
 in your "webpack.config.js":
