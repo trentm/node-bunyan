@@ -1,0 +1,1 @@
+{"name":"res-header","hostname":"danger0.local","pid":76488,"level":30,"res":{"statusCode":200,"header":"HTTP/1.1 200 OK\r\nFoo: bar\r\nDate: Wed, 02 Aug 2017 22:37:34 GMT\r\nConnection: keep-alive\r\nContent-Length: 21\r\n\r\n"},"msg":"response sent","time":"2017-08-02T22:37:34.798Z","v":0}

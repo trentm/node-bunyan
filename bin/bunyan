@@ -979,17 +979,21 @@ function emitRecord(rec, line, opts, stylize) {
 
         function _res(res) {
             var s = '';
-            if (res.statusCode !== undefined) {
-                s += format('HTTP/1.1 %s %s\n', res.statusCode,
-                    http.STATUS_CODES[res.statusCode]);
-                delete res.statusCode;
-            }
-            // Handle `res.header` or `res.headers` as either a string or
-            // and object of header key/value pairs. Prefer `res.header` if set
-            // (TODO: Why? I don't recall. Typical of restify serializer?
-            // Typical JSON.stringify of a core node HttpResponse?)
+
+            /*
+             * Handle `res.header` or `res.headers` as either a string or
+             * an object of header key/value pairs. Prefer `res.header` if set,
+             * because that's what Bunyan's own `res` serializer specifies,
+             * because that's the value in Node.js's core HTTP server response
+             * implementation that has all the implicit headers.
+             *
+             * Note: `res.header` (string) typically includes the 'HTTP/1.1 ...'
+             * status line.
+             */
             var headerTypes = {string: true, object: true};
             var headers;
+            var headersStr = '';
+            var headersHaveStatusLine = false;
             if (res.header && headerTypes[typeof (res.header)]) {
                 headers = res.header;
                 delete res.header;
@@ -1000,11 +1004,26 @@ function emitRecord(rec, line, opts, stylize) {
             if (headers === undefined) {
                 /* pass through */
             } else if (typeof (headers) === 'string') {
-                s += headers.trimRight();
+                headersStr = headers.trimRight(); // Trim the CRLF.
+                if (headersStr.slice(0, 5) === 'HTTP/') {
+                    headersHaveStatusLine = true;
+                }
             } else {
-                s += Object.keys(headers).map(
+                headersStr += Object.keys(headers).map(
                     function (h) { return h + ': ' + headers[h]; }).join('\n');
             }
+
+            /*
+             * Add a 'HTTP/1.1 ...' status line if the headers didn't already
+             * include it.
+             */
+            if (!headersHaveStatusLine && res.statusCode !== undefined) {
+                s += format('HTTP/1.1 %s %s\n', res.statusCode,
+                    http.STATUS_CODES[res.statusCode]);
+            }
+            delete res.statusCode;
+            s += headersStr;
+
             if (res.body !== undefined) {
                 var body = (typeof (res.body) === 'object'
                     ? JSON.stringify(res.body, null, 2) : res.body);

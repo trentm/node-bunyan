@@ -7,7 +7,8 @@ Known issues:
 
 ## not yet released
 
-(nothing yet)
+- [issue #444] Fix the `bunyan` CLI to not duplicate the "HTTP/1.1 ..." status
+  line when serializing a "res" field.
 
 
 ## 1.8.11
