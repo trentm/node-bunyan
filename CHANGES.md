@@ -7,7 +7,13 @@ Known issues:
 
 ## not yet released
 
-(nothing yet)
+- [issue #504] The `bunyan` 1.x CLI adds a `Host: $client_req.address[:$client_req.port]`
+  header when rendering a `client_req` field in a log record. Fix that here to:
+  (a) not add it if `client_req.headers` already includes a host header; and
+  (b) not include the given `port` if it is 80 or 443 (*assuming* that is the
+  default port.
+  Note: `bunyan` 2.x CLI will stop adding this Host header because it is a guess
+  that can be wrong and misleading.
 
 
 ## 1.8.10

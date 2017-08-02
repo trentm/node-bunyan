@@ -898,21 +898,57 @@ function emitRecord(rec, line, opts, stylize) {
             })
         }
 
+        /*
+         * `client_req` is the typical field name for an *HTTP client request
+         * object* serialized by the restify-clients library. Render the
+         * client request somewhat like `curl` debug output shows it.
+         */
         if (rec.client_req && typeof (rec.client_req) === 'object') {
             var client_req = rec.client_req;
             delete rec.client_req;
+
             var headers = client_req.headers;
-            var hostHeaderLine = '';
-            var s = '';
-            if (client_req.address) {
-                hostHeaderLine = '\nHost: ' + client_req.address;
-                if (client_req.port)
-                    hostHeaderLine += ':' + client_req.port;
-            }
             delete client_req.headers;
-            delete client_req.address;
-            delete client_req.port;
-            s += format('%s %s HTTP/%s%s%s', client_req.method,
+
+            /*
+             * `client_req.address`, and `client_req.port`, provide values for
+             * a *likely* "Host" header that wasn't included in the serialized
+             * headers. Node.js will often add this "Host" header in its
+             * `http.ClientRequest`, e.g. for node v6.10.3:
+             *      // JSSTYLED
+             *      https://github.com/nodejs/node/blob/v6.10.3/lib/_http_client.js#L88-L105
+             *
+             * If `client_req.port` exists and is 80 or 443, we *assume* that
+             * is the default protocol port, and elide it per the `defaultPort`
+             * handling in the node.js link above.
+             *
+             * Note: This added Host header is a *guess*. Bunyan shouldn't be
+             * doing this "favour" for users because it can be wrong and
+             * misleading. Bunyan 2.x will drop adding this. See issue #504
+             * for details.
+             */
+            var hostHeaderLine = '';
+            if (!headers || !(
+                    Object.hasOwnProperty.call(headers, 'host') ||
+                    Object.hasOwnProperty.call(headers, 'Host') ||
+                    Object.hasOwnProperty.call(headers, 'HOST')
+                )
+            ) {
+                if (Object.hasOwnProperty.call(client_req, 'address')) {
+                    hostHeaderLine = '\nHost: ' + client_req.address;
+                    if (Object.hasOwnProperty.call(client_req, 'port')) {
+                        // XXX
+                        var port = +client_req.port;
+                        if (port !== 80 && port !== 443) {
+                            hostHeaderLine += ':' + client_req.port;
+                        }
+                        delete client_req.port;
+                    }
+                    delete client_req.address;
+                }
+            }
+
+            var s = format('%s %s HTTP/%s%s%s', client_req.method,
                 client_req.url,
                 client_req.httpVersion || '1.1',
                 hostHeaderLine,
@@ -925,6 +961,7 @@ function emitRecord(rec, line, opts, stylize) {
             delete client_req.method;
             delete client_req.url;
             delete client_req.httpVersion;
+
             if (client_req.body) {
                 s += '\n\n' + (typeof (client_req.body) === 'object' ?
                     JSON.stringify(client_req.body, null, 2) :
