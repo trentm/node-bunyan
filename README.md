@@ -964,6 +964,7 @@ least node 0.10 (node 0.8 does not support the `unref()` method on
 `setTimeout(...)` needed for the mentioned fix). The symptom is that process
 termination will hang for up to a full rotation period.
 
+<!--
 **WARNING on [cluster](http://nodejs.org/docs/latest/api/all.html#all_cluster)
 usage:** Using Bunyan's `rotating-file` stream with node.js's "cluster" module
 can result in unexpected file rotation. You must not have multiple processes
@@ -973,6 +974,7 @@ Alternatively, consider using a system file rotation facility such as
 `logrotate` on Linux or `logadm` on SmartOS/Illumos. See
 [this comment on issue #117](https://github.com/trentm/node-bunyan/issues/117#issuecomment-44804938)
 for details.
+-->
 
 A `type === 'rotating-file'` is a file stream that handles file automatic
 rotation.
