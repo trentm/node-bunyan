@@ -1,0 +1,1 @@
+{"name":"minfo","hostname":"sharptooth.local","pid":66266,"level":10,"client_req":{"method":"HEAD","url":"/dap/stor","address":"127.0.0.1","headers":{"accept":"application/json, */*","host":"foo.example.com","date":"Fri, 12 May 2017 23:59:15 GMT"}},"msg":"request sent","time":"2017-05-12T23:59:15.877Z","v":0}

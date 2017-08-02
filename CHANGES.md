@@ -7,7 +7,12 @@ Known issues:
 
 ## not yet released
 
-(nothing yet)
+- [issue #504] **Backward incompatible change to the `bunyan` CLI:**
+  The `bunyan` CLI no longer adds a `Host` header when rendering a `client_req`
+  field in a log record. In 1.x it used to do this (using `client_req.address`
+  and `client_req.port`), on the *guess* that Node.js' `http.ClientRequest`
+  handling would add it.  However, the guess can be wrong and misleading. It is
+  better not to guess.
 
 
 ## 2.0.0 (beta)

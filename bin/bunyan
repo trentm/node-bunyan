@@ -918,21 +918,14 @@ function emitRecord(rec, line, opts, stylize) {
         if (rec.client_req && typeof (rec.client_req) === 'object') {
             var client_req = rec.client_req;
             delete rec.client_req;
+
             var headers = client_req.headers;
-            var hostHeaderLine = '';
-            var s = '';
-            if (client_req.address) {
-                hostHeaderLine = '\nHost: ' + client_req.address;
-                if (client_req.port)
-                    hostHeaderLine += ':' + client_req.port;
-            }
             delete client_req.headers;
-            delete client_req.address;
-            delete client_req.port;
-            s += format('%s %s HTTP/%s%s%s', client_req.method,
+
+            var s = format('%s %s HTTP/%s%s',
+                client_req.method,
                 client_req.url,
                 client_req.httpVersion || '1.1',
-                hostHeaderLine,
                 (headers ?
                     '\n' + Object.keys(headers).map(
                         function (h) {
@@ -942,6 +935,7 @@ function emitRecord(rec, line, opts, stylize) {
             delete client_req.method;
             delete client_req.url;
             delete client_req.httpVersion;
+
             if (client_req.body) {
                 s += '\n\n' + (typeof (client_req.body) === 'object' ?
                     JSON.stringify(client_req.body, null, 2) :
@@ -953,7 +947,7 @@ function emitRecord(rec, line, opts, stylize) {
             // to stomp on a literal 'client_req.foo' key.
             Object.keys(client_req).forEach(function (k) {
                 rec['client_req.' + k] = client_req[k];
-            })
+            });
             details.push(indent(s));
         }
 
