@@ -100,7 +100,7 @@ test: $(NODEUNIT)
 		$(SUDO) $(NODEUNIT) test/dtrace.test.js)
 	$(NODEUNIT) $(NON_DTRACE_TEST_FILES)
 
-# Test will all node supported versions (presumes install locations I use on
+# Test with all node supported versions (presumes install locations I use on
 # my machine -- "~/opt/node-VER"):
 # Note: 'test4' is last so (if all is well) I end up with a binary
 # dtrace-provider build for my current default node version.

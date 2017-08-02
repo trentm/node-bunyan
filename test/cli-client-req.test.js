@@ -55,7 +55,7 @@ test('client_req.address is not used for Host header in 2.x (issue #504)',
              function (err, stdout, stderr) {
         t.ifError(err)
         t.equal(stdout, [
-            // JSSTYLED:
+            // JSSTYLED
             '[2017-05-12T23:59:15.877Z] TRACE: minfo/66266 on sharptooth.local: request sent (client_req.address=127.0.0.1)',
             '    HEAD /dap/stor HTTP/1.1',
             '    accept: application/json, */*',

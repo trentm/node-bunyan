@@ -7,6 +7,11 @@ Known issues:
 
 ## not yet released
 
+(nothing yet)
+
+
+## 2.0.1 (beta)
+
 - [issue #504] **Backward incompatible change to the `bunyan` CLI:**
   The `bunyan` CLI no longer adds a `Host` header when rendering a `client_req`
   field in a log record. In 1.x it used to do this (using `client_req.address`
