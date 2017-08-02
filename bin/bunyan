@@ -11,8 +11,6 @@
  * vim: expandtab:ts=4:sw=4
  */
 
-var VERSION = '2.0.1';
-
 var p = console.log;
 var util = require('util');
 var pathlib = require('path');
@@ -134,8 +132,12 @@ var stdout = process.stdout;
 
 //---- support functions
 
+var _version = null;
 function getVersion() {
-    return VERSION;
+    if (_version === null) {
+        _version = require('../package.json').version;
+    }
+    return _version;
 }
 
 
