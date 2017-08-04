@@ -85,6 +85,20 @@ var log3 = new bunyan.createLogger({
     ]
 });
 
+var log4Catcher = new Catcher();
+var functionAttribute = 123;
+var log4 = new bunyan.createLogger({
+  name: 'log4',
+  streams: [
+    {
+      type: 'raw',
+      stream: log4Catcher,
+      level: 'trace'
+    }
+  ],
+  funcAttr: function () { return functionAttribute; }
+});
+
 var names = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 var fields = {one: 'un'};
 
@@ -266,6 +280,19 @@ test('log.info(null, <msg>)', function (t) {
         var rec = catcher.records[catcher.records.length - 1];
         t.equal(rec.msg, 'my message',
             format('log.%s msg: got %j', lvl, rec.msg));
+    });
+    t.end();
+});
+
+test('function attributes', function (t) {
+    names.forEach(function (lvl) {
+        functionAttribute = lvl;
+
+        log4[lvl].call(log4, 'some message');
+        var rec = log4Catcher.records[log4Catcher.records.length - 1];
+
+        t.equal(rec.funcAttr, lvl,
+          format('log.%s funcAttr is %s', lvl, rec.funcAttr));
     });
     t.end();
 });
