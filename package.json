@@ -12,7 +12,9 @@
     "type": "git",
     "url": "git://github.com/trentm/node-bunyan.git"
   },
-  "engines": ["node >=0.10.0"],
+  "engines": {
+    "node": ">=0.10.0"
+  },
   "keywords": ["log", "logging", "log4j", "json", "bunyan"],
   "license": "MIT",
 
