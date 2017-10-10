@@ -44,12 +44,12 @@ var expect =
             },
             {
                 'name': 'blammo',
-                'level': 30,
                 'bang': 'boom',
                 'KABOOM': {
                     'bang': 'boom',
                     'KABOOM': '[Circular]'
                 },
+                'level': 30,
                 'msg': '',
                 'v': 0
             }
