@@ -804,27 +804,30 @@ As of bunyan@1.7.0, the `reemitErrorEvents` field can be used when adding a
 stream to control whether "error" events are re-emitted on the Logger. For
 example:
 
-    var EventEmitter = require('events').EventEmitter;
-    var util = require('util');
+```js
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
-    function MyFlakyStream() {}
-    util.inherits(MyFlakyStream, EventEmitter);
+function MyFlakyStream() {}
+util.inherits(MyFlakyStream, EventEmitter);
 
-    MyFlakyStream.prototype.write = function (rec) {
-        this.emit('error', new Error('boom'));
+MyFlakyStream.prototype.write = function (rec) {
+  this.emit('error', new Error('boom'));
+}
+
+var log = bunyan.createLogger({
+  name: 'this-is-flaky',
+  streams: [
+    {
+      type: 'raw',
+      stream: new MyFlakyStream(),
+      reemitErrorEvents: true
     }
+  ]
+});
 
-    var log = bunyan.createLogger({
-        name: 'this-is-flaky',
-        streams: [
-            {
-                type: 'raw',
-                stream: new MyFlakyStream(),
-                reemitErrorEvents: true
-            }
-        ]
-    });
-    log.info('hi there');
+log.info('hi there');
+```
 
 The behaviour is as follows:
 
