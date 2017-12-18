@@ -1693,16 +1693,5 @@ function main(argv) {
 }
 
 if (require.main === module) {
-    // HACK guard for <https://github.com/trentm/json/issues/24>.
-    // We override the `process.stdout.end` guard that core node.js puts in
-    // place. The real fix is that `.end()` shouldn't be called on stdout
-    // in node core. Node v0.6.9 fixes that. Only guard for v0.6.0..v0.6.8.
-    if ([0, 6, 0] <= nodeVer && nodeVer <= [0, 6, 8]) {
-        var stdout = process.stdout;
-        stdout.end = stdout.destroy = stdout.destroySoon = function () {
-            /* pass */
-        };
-    }
-
     main(process.argv);
 }
