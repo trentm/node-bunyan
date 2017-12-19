@@ -29,7 +29,7 @@
     "moment": "^2.19.3"
   },
   "devDependencies": {
-    "nodeunit": "0.9",
+    "nodeunit": "0.11",
     "ben": "0.0.0",
     "markdown-toc": "0.12.x",
     "verror": "1.3.3",
