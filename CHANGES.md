@@ -379,7 +379,7 @@ Use version 1.1.2.
   `<Logger>.addSerializers(...)` to be able to add them after Logger creation.
   Thanks @andreineculau!
 
-- [issue #159] Fix bad handling in construtor guard intending to allow
+- [issue #159] Fix bad handling in constructor guard intending to allow
   creation without "new": `var log = Logger(...)`. Thanks @rmg!
 
 - [issue #156] Smaller install size via .npmignore file.
@@ -401,7 +401,7 @@ Use version 1.1.2.
   semantics (unfortunate), and adding some sugar (good!).
 
   The `-c CODE` implementation was changed to use a JS function for processing
-  rather than `vm.runInNewContext`. The latter was specatularly slow, so
+  rather than `vm.runInNewContext`. The latter was spectacularly slow, so
   won't be missed. Unfortunately this does mean a few semantic differences in
   the `CODE`, the most noticeable of which is that **`this` is required to
   access the object fields:**
@@ -1217,7 +1217,7 @@ Please upgrade to bunyan 0.20.0.
         log.debug(my_error_instance)            // good
         log.debug(my_error_instance, "boom!")   // wasn't allowed
 
-  Now the latter is allowed if you want to expliciting set the log msg. Of course
+  Now the latter is allowed if you want to explicitly set the log msg. Of course
   this applies to all the `log.{trace|debug|info...}()` methods.
 
 - `bunyan` cli output: clarify extra fields with quoting if empty or have
