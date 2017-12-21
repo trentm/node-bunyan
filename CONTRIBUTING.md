@@ -47,7 +47,7 @@ provide feedback on it and merge it. I'll politely request missing pieces.
 - Any user visible change in behaviour should almost certainly include an
   update to the docs. Currently the "docs" is the README.md.
 
-- Adding a test case for code changes is **stronly recommended**, else I
+- Adding a test case for code changes is **strongly recommended**, else I
   can't easily promise to not break your fix/feature later. If you don't
   grok the test suite, please ask. We can use it to form the basis for a
   "test/README.md".
@@ -111,7 +111,7 @@ Bunyan shall have categories of [issue
 labels](https://github.com/trentm/node-bunyan/labels) named "$category-$value".
 An issue should have max *one* label from each set. Users of Google Code's
 dearly departed issue tracker may remember this kind of thing. This is a
-poorman's version of structured issue tracker metadata.
+poor man's version of structured issue tracker metadata.
 
 I'm inclined to *not* do priorities right now. *Possibly* we'll use GitHub
 milestones to basically set targets for upcoming releases. But otherwise my
