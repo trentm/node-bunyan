@@ -1374,19 +1374,19 @@ var log = bunyan.createLogger({
 log.info('hi on info');
 ```
 
-## Webpack
-Webpack can work with the same example Browserify above. To do this, we need to make webpack ignore optional files:
+## webpack
+To include bunyan in your webpack bundle you need to tell webpack to
+ignore the optional dependencies that are unavailable in browser environments.
 
-Now tell webpack to ignore files for 
-[optional dependencies](https://webpack.js.org/configuration/module/#module-noparse)
-in your "webpack.config.js":
+Mark the following dependencies as
+[externals](https://webpack.js.org/configuration/externals/) in your webpack
+configuration file to exclude them from the bundle:
+
 ```
 module: {
-    noParse: [/dtrace-provider$/, /safe-json-stringify$/, /mv/],
-    ...
+    externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support']
 }
 ```
-Now webpack builds.
 
 # Versioning
 
