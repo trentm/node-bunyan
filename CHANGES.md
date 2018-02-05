@@ -7,8 +7,8 @@ Known issues:
 
 ## not yet released
 
-- Express support: inspect req.origialUrl, and, if present, prefer that over
-  req.url.
+(nothing yet)
+
 
 ## 2.0.2 (beta)
 
