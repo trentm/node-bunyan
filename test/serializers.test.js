@@ -25,10 +25,8 @@ CapturingStream.prototype.write = function (rec) {
     this.recs.push(rec);
 }
 
-
-test('req serializer', function (t) {
-    var records = [];
-    var log = bunyan.createLogger({
+function createLogger(serializers, records) {
+    return bunyan.createLogger({
         name: 'serializer-test',
         streams: [
             {
@@ -36,10 +34,13 @@ test('req serializer', function (t) {
                 type: 'raw'
             }
         ],
-        serializers: {
-            req: bunyan.stdSerializers.req
-        }
+        serializers: serializers
     });
+}
+
+test('req serializer', function (t) {
+    var records = [];
+    var log = createLogger({ req: bunyan.stdSerializers.req }, records);
 
     // None of these should blow up.
     var bogusReqs = [
@@ -85,20 +86,42 @@ test('req serializer', function (t) {
 });
 
 
+test('req serializer - express.originalUrl', function (t) {
+    var records = [];
+    var log = createLogger({ req: bunyan.stdSerializers.req }, records);
+
+    // Get http request and response objects to play with and test.
+    var theReq, theRes;
+    var server = http.createServer(function (req, res) {
+        theReq = req;
+        theRes = res;
+        req.originalUrl = '/original-url' + req.url;
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end('Hello World\n');
+    })
+    server.listen(8765, function () {
+        http.get({host: '127.0.0.1', port: 8765, path: '/'}, function (res) {
+            res.resume();
+            log.info({req: theReq}, 'the request');
+            var lastRecord = records[records.length-1];
+            t.equal(lastRecord.req.method, 'GET');
+            t.equal(lastRecord.req.url, '/original-url' + theReq.url);
+            t.equal(lastRecord.req.remoteAddress,
+                theReq.connection.remoteAddress);
+            t.equal(lastRecord.req.remotePort, theReq.connection.remotePort);
+            server.close();
+            t.end();
+        }).on('error', function (err) {
+            t.ok(false, 'error requesting to our test server: ' + err);
+            server.close();
+            t.end();
+        });
+    });
+});
+
 test('res serializer', function (t) {
     var records = [];
-    var log = bunyan.createLogger({
-        name: 'serializer-test',
-        streams: [
-            {
-                stream: new CapturingStream(records),
-                type: 'raw'
-            }
-        ],
-        serializers: {
-            res: bunyan.stdSerializers.res
-        }
-    });
+    var log = createLogger({ res: bunyan.stdSerializers.res }, records);
 
     // None of these should blow up.
     var bogusRess = [
@@ -143,18 +166,7 @@ test('res serializer', function (t) {
 
 test('err serializer', function (t) {
     var records = [];
-    var log = bunyan.createLogger({
-        name: 'serializer-test',
-        streams: [
-            {
-                stream: new CapturingStream(records),
-                type: 'raw'
-            }
-        ],
-        serializers: {
-            err: bunyan.stdSerializers.err
-        }
-    });
+    var log = createLogger({ err: bunyan.stdSerializers.err }, records);
 
     // None of these should blow up.
     var bogusErrs = [
@@ -193,18 +205,7 @@ test('err serializer: custom serializer', function (t) {
         };
     }
 
-    var log = bunyan.createLogger({
-        name: 'serializer-test',
-        streams: [
-            {
-                stream: new CapturingStream(records),
-                type: 'raw'
-            }
-        ],
-        serializers: {
-            err: customSerializer
-        }
-    });
+    var log = createLogger({ err: customSerializer }, records);
 
     var e1 = new Error('message1');
     e1.beep = 'bop';
@@ -221,16 +222,7 @@ test('err serializer: custom serializer', function (t) {
 
 test('err serializer: long stack', function (t) {
     var records = [];
-    var log = bunyan.createLogger({
-        name: 'serializer-test',
-        streams: [ {
-                stream: new CapturingStream(records),
-                type: 'raw'
-        } ],
-        serializers: {
-            err: bunyan.stdSerializers.err
-        }
-    });
+    var log = createLogger({ err: bunyan.stdSerializers.err }, records);
 
     var topErr, midErr, bottomErr;
 
@@ -308,19 +300,14 @@ test('err serializer: long stack', function (t) {
 // serializers that don't handle an `undefined` value will blow up.
 test('do not apply serializers if no record key', function (t) {
     var records = [];
-    var log = bunyan.createLogger({
-        name: 'serializer-test',
-        streams: [ {
-                stream: new CapturingStream(records),
-                type: 'raw'
-        } ],
-        serializers: {
+    var log = createLogger({
             err: bunyan.stdSerializers.err,
             boom: function (value) {
                 throw new Error('boom');
             }
-        }
-    });
+        },
+        records
+    );
 
     log.info({foo: 'bar'}, 'record one');
     log.info({err: new Error('record two err')}, 'record two');
