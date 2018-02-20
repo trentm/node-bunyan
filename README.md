@@ -649,7 +649,7 @@ Pretty-printed:
   is the name of the service/app using Bunyan for logging.
 - `hostname`: Required. String. Provided or determined at Logger creation.
   You can specify your hostname at Logger creation or it will be retrieved
-  vi `os.hostname()`.
+  via `os.hostname()`.
 - `pid`: Required. Integer. Filled in automatically at Logger creation.
 - `time`: Required. String. Added by Bunyan. Can be overridden.
   The date and time of the event in [ISO 8601
