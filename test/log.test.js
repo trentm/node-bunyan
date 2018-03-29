@@ -269,3 +269,13 @@ test('log.info(null, <msg>)', function (t) {
     });
     t.end();
 });
+
+test('log.info({msg})', function (t) {
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, {msg: 'my message'});
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.msg, 'my message',
+            format('log.%s msg: got %j', lvl, rec.msg));
+    });
+    t.end();
+});
