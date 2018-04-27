@@ -24,7 +24,7 @@ If you want to help me here, great! Thank you! Some ideas:
   place to start.
 
 - [Once I've made a once over
-  triaging](https://github.com/trentm/node-bunyan/issues/335) and consolodating
+  triaging](https://github.com/trentm/node-bunyan/issues/335) and consolidating
   issues and PRs, volunteering for issues in a particular
   [component](#component) with which you have familiarity would be great.
 
