@@ -800,10 +800,11 @@ log.on('error', function (err, stream) {
 });
 ```
 
-As of bunyan@1.7.0, the `reemitErrorEvents` field can be used when adding a
+As of `bunyan@1.7.0`, the `reemitErrorEvents` field can be used when adding a
 stream to control whether "error" events are re-emitted on the Logger. For
 example:
 
+```javascript
     var EventEmitter = require('events').EventEmitter;
     var util = require('util');
 
@@ -825,6 +826,7 @@ example:
         ]
     });
     log.info('hi there');
+```
 
 The behaviour is as follows:
 
