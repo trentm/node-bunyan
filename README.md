@@ -94,6 +94,12 @@ all versions of Bunyan logs. Therefore you might want to `npm install -g bunyan`
 to get the bunyan CLI on your PATH, then use local bunyan installs for
 node.js library usage of bunyan in your apps.
 
+**Tip**: Installing without optional dependencies can dramatically reduce
+bunyan's install size. **dtrace-provider** is used for dtrace features,
+**mv** is used for RotatingFileStream, and **moment** is used for local time.
+If you don't need these features, consider installing with the
+`--no-optional` flag.
+
 
 # Features
 
