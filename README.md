@@ -380,7 +380,7 @@ log.addSerializers({req: reqSerializer});
 
 A serializer function is passed unprotected objects that are passed to the
 `log.info`, `log.debug`, etc. call. This means a poorly written serializer
-function can case side-effects. Logging shouldn't do that. Here are a few
+function can cause side-effects. Logging shouldn't do that. Here are a few
 rules and best practices for serializer functions:
 
 - A serializer function *should never throw*. The bunyan library *does*
