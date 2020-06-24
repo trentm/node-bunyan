@@ -10,6 +10,20 @@ Known issues:
 (nothing yet)
 
 
+## 2.0.3 (beta)
+
+- Fix a vulnerability from a crafted argument to 'bunyan -p ARG'
+
+  This was reported privately as:
+      https://hackerone.com/reports/902739
+      bunyan - RCE via insecure command formatting
+
+  Previous to this version the 'bunyan' CLI was not escaping a given argument
+  to the '-p' option before executing `ps -A -o pid,command | grep '$ARG'`
+  which could lead to unintended execution.
+
+  (This same change is also in bunyan@1.8.3.)
+
 ## 2.0.2 (beta)
 
 - [issue #444] Fix the `bunyan` CLI to not duplicate the "HTTP/1.1 ..." status
