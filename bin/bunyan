@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Copyright 2017 Trent Mick
- * Copyright 2017 Joyent Inc.
+ * Copyright 2020 Trent Mick
+ * Copyright 2020 Joyent Inc.
  *
  * bunyan -- filter and pretty-print Bunyan log files (line-delimited JSON)
  *
@@ -11,7 +11,7 @@
  * vim: expandtab:ts=4:sw=4
  */
 
-var VERSION = '1.8.12';
+var VERSION = '1.8.13';
 
 var p = console.log;
 var util = require('util');
@@ -1266,7 +1266,15 @@ function processPids(opts, stylize, callback) {
                 // own search.
                 regex = '[' + regex[0] + ']' + regex.slice(1);
             }
-            exec(format('ps -A -o pid,command | grep \'%s\'', regex),
+            var cmd = format('ps -A -o pid,command | grep \'%s\'',
+                // Escape single-quotes to avoid breaking the grep arg quoting
+                // (leading to a possible *code execution*) and backslashes to
+                // avoid undoing that escaping.
+                regex.replace(/\\/g, '\\\\')
+                    // JSSTYLED
+                    .replace(/'/g, "'\\''"));
+            if (_DEBUG) { warn('(bunyan: exec cmd: %j)', cmd); }
+            exec(cmd,
                 function (pidsErr, stdout, stderr) {
                     if (pidsErr) {
                         warn('bunyan: error getting PIDs for "%s": %s\n%s\n%s',
