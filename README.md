@@ -423,7 +423,7 @@ rules and best practices for serializer functions:
 - A serializer function *should never throw*. The bunyan library *does*
   protect somewhat from this: if the serializer throws an error, then
   bunyan will (a) write an ugly message on stderr (along with the traceback),
-  and (b) the field in the log record will be replace with a short error message.
+  and (b) the field in the log record will be replaced with a short error message.
   For example:
 
     ```
@@ -445,7 +445,7 @@ rules and best practices for serializer functions:
 - A serializer function *should never mutate the given object*. Doing so will
   change the object in your application.
 
-- A serializer function *should be defensive*. In my experience it is common to
+- A serializer function *should be defensive*. In my experience, it is common to
   set a serializer in an app, say for field name "foo", and then accidentally
   have a log line that passes a "foo" that is undefined, or null, or of some
   unexpected type. A good start at defensiveness is to start with this:
@@ -655,7 +655,7 @@ Pretty-printed:
   is the name of the service/app using Bunyan for logging.
 - `hostname`: Required. String. Provided or determined at Logger creation.
   You can specify your hostname at Logger creation or it will be retrieved
-  vi `os.hostname()`.
+  via `os.hostname()`.
 - `pid`: Required. Integer. Filled in automatically at Logger creation.
 - `time`: Required. String. Added by Bunyan. Can be overridden.
   The date and time of the event in [ISO 8601
@@ -732,7 +732,7 @@ follow (feedback from actual users welcome).
 - `req.username`: Authenticated user (or for a 401, the user attempting to
   auth).
 - Some mechanism to calculate response latency. "restify" users will have
-  a "X-Response-Time" header. A `latency` custom field would be fine.
+  an "X-Response-Time" header. A `latency` custom field would be fine.
 - `req.body`: If you know that request bodies are small (common in APIs,
   for example), then logging the request body is good.
 
@@ -1066,7 +1066,7 @@ used for anything else.</td>
 
 **Note on log rotation**: Often you may be using external log rotation utilities
 like `logrotate` on Linux or `logadm` on SmartOS/Illumos. In those cases, unless
-your are ensuring "copy and truncate" semantics (via `copytruncate` with
+you are ensuring "copy and truncate" semantics (via `copytruncate` with
 logrotate or `-c` with logadm) then the fd for your 'file' stream will change.
 You can tell bunyan to reopen the file stream with code like this in your
 app:
