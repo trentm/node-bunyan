@@ -89,11 +89,20 @@ var names = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 var fields = {one: 'un'};
 
 test('log.info(undefined, <msg>)', function (t) {
+    // https://github.com/nodejs/node/pull/23162 (starting in node v12) changed
+    // util.format() handling such that this test case expected string differs.
+    var expect;
+    if (Number(process.versions.node.split('.')[0]) >= 12) {
+        expect = 'undefined some message';
+    } else {
+        expect = 'undefined \'some message\'';
+    }
+
     names.forEach(function (lvl) {
         log3[lvl].call(log3, undefined, 'some message');
         var rec = catcher.records[catcher.records.length - 1];
-        t.equal(rec.msg, 'undefined \'some message\'',
-            format('log.%s msg is "some message"', lvl));
+        t.equal(rec.msg, expect,
+            format('log.%s(undefined, "some message")', lvl));
     });
     t.end();
 });
