@@ -7,8 +7,8 @@ Known issues:
 
 ## not yet released
 
-(nothing yet)
-
+- [issue #589] Use `os.EOL` for newlines in bunyan output, which helps with
+  some Unix-EOL-naive apps like notepad. (By @bwknight877.)
 
 ## 1.8.13
 
