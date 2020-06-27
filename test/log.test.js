@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick.
  *
  * Test the `log.trace(...)`, `log.debug(...)`, ..., `log.fatal(...)` API.
  */

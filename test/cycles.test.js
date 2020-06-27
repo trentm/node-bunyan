@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick.
  *
  * Make sure cycles are safe.
  */
@@ -27,7 +27,6 @@ outstr.end = function (c) {
     this.emit('end');
 };
 
-// these are lacking a few fields that will probably never match
 var expect =
         [
             {
@@ -67,24 +66,39 @@ var log = new Logger({
 });
 
 test('cycles', function (t) {
+    var rec;
+
     outstr.on('end', function () {
         output.forEach(function (o, i) {
             // Drop variable parts for comparison.
             delete o.hostname;
             delete o.pid;
             delete o.time;
-            // Hack object/dict comparison: JSONify.
+
+            // In change https://github.com/nodejs/node/pull/27685 (part of
+            // node v14), how objects with circular references are stringified
+            // with `util.inspect` changed.
+            if (Number(process.versions.node.split('.')[0]) >= 14) {
+                expect[i].msg = expect[i].msg.replace(
+                    // JSSTYLED
+                    /{ bang: 'boom', KABOOM: \[Circular\] }/,
+                    '<ref *1> { bang: \'boom\', KABOOM: [Circular *1] }'
+                );
+            }
+
             t.equal(JSON.stringify(o), JSON.stringify(expect[i]),
-                'log item ' + i + ' matches');
+                'log record ' + i + ' matches');
         });
         t.end();
     });
 
     var obj = { bang: 'boom' };
-    obj.KABOOM = obj;
+    obj.KABOOM = obj;  // This creates a circular reference.
+
     log.info('bango', obj);
     log.info('kaboom', obj.KABOOM);
     log.info(obj);
+
     outstr.end();
     t.ok('did not throw');
 });
