@@ -9,11 +9,12 @@ env:
 
 node_js:
   - '0.10'
-  - '0.12'
   - '4'
-  - '5'
   - '6'
-  - 'node'
+  - '8'
+  - '10'
+  - '12'
+  - '14'
 
 
 # Gives us faster boot time, see https://docs.travis-ci.com/user/ci-environment/
