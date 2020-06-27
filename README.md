@@ -760,7 +760,7 @@ var log = bunyan.createLogger({
 });
 ```
 
-For convenience, if there is only one stream, it can specified with the
+For convenience, if there is only one stream, it can be specified with the
 "stream" and "level" options (internally converted to a `Logger.streams`).
 
 ```js
