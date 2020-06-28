@@ -649,7 +649,7 @@ line: while (<$filehandle>) {
 	if (/^\s*\(void\)[^ ]/) {
 		err("missing space after (void) cast");
 	}
-	if (/\S{/ && !/({|\(){/ &&
+	if (/\S\{/ && !/(\{|\()\{/ &&
 	    # Allow a brace in a regex quantifier.
 	    !/\/.*?\{\d+,?\d*\}.*?\//) {
 		err("missing space before left brace");
