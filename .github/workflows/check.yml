@@ -1,0 +1,13 @@
+name: Check Lint/Style
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        # Use current node LTS version.
+        node-version: '12.x'
+    - run: npm ci
+    - run: npm run check
