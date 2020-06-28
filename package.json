@@ -14,6 +14,10 @@
   "engines": [
     "node >=0.10.0"
   ],
+  "files": [
+    "bin",
+    "lib"
+  ],
   "keywords": [
     "log",
     "logging",
@@ -39,7 +43,8 @@
     "vasync": "1.4.3"
   },
   "scripts": {
-    "test": "make test"
+    "check": "make check",
+    "test": "nodeunit test/*.test.js  # skip dtrace tests"
   },
   "dependencies": {}
 }
