@@ -6,16 +6,20 @@ on:
     - 'docs/**'
     - '*.md'
   pull_request:
+    paths-ignore:
     - 'docs/**'
     - '*.md'
 
 jobs:
   # Test once on every (available) plat, using LTS node version
   # (https://nodejs.org/en/about/releases/).
+  #
+  # TODO: add windows-latest when moved to node-tap and don't have to
+  # rely on shell globbing
   test-plats:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2

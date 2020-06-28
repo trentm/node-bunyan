@@ -1,4 +1,6 @@
 
+SHELL := bash
+
 #---- Tools
 
 NODEUNIT := ./node_modules/.bin/nodeunit
@@ -32,8 +34,8 @@ all $(NODEUNIT):
 # Ensure all version-carrying files have the same version.
 .PHONY: versioncheck
 versioncheck:
-	@echo version is: $(shell cat package.json | json version)
-	[[ `cat package.json | json version` == `grep '^## ' CHANGES.md | head -2 | tail -1 | awk '{print $$2}'` ]]
+	@echo version is: $(shell node -e 'console.log(require("./package.json").version)')
+	[[ `node -e 'console.log(require("./package.json").version)'` == `grep '^## ' CHANGES.md | head -2 | tail -1 | awk '{print $$2}'` ]]
 	@echo Version check ok.
 
 .PHONY: cutarelease
