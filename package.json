@@ -33,7 +33,7 @@
     "dtrace-provider": "~0.8",
     "mv": "~2",
     "safe-json-stringify": "~1",
-    "moment": "^2.10.6"
+    "moment": "^2.19.3"
   },
   "devDependencies": {
     "nodeunit": "0.9",
