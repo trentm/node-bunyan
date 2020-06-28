@@ -1,4 +1,6 @@
 
+SHELL := bash
+
 #---- Tools
 
 NODEUNIT := ./node_modules/.bin/nodeunit
