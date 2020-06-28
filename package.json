@@ -22,6 +22,10 @@
     "bunyan"
   ],
   "license": "MIT",
+  "files": [
+    "bin",
+    "lib"
+  ],
   "dependencies": {
     "exeunt": "1.1.0"
   },
@@ -42,6 +46,7 @@
     "vasync": "1.4.3"
   },
   "scripts": {
-    "test": "make test"
+    "check": "make check",
+    "test": "nodeunit test/*.test.js  # skip dtrace tests"
   }
 }

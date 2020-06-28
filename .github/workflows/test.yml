@@ -1,0 +1,57 @@
+name: Test
+
+on:
+  push:
+    paths-ignore:
+    - 'docs/**'
+    - '*.md'
+  pull_request:
+    - 'docs/**'
+    - '*.md'
+
+jobs:
+  # Test once on every (available) plat, using LTS node version
+  # (https://nodejs.org/en/about/releases/).
+  test-plats:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: npm ci
+    - run: npm test
+
+  # Test once for every supported node version (don't repeat the LTS
+  # node version from the previous step). Only test on one
+  # platform to not overkill the number of builds.
+  test-vers:
+    strategy:
+      matrix:
+        node: ['8.x', '10.x', '14.x']
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+    - run: npm ci
+    - run: npm test
+
+  # Test older versions separately because really old node/npm don't support
+  # 'npm ci'.
+  test-old-vers:
+    strategy:
+      matrix:
+        node: ['0.10.x', '4.x', '6.x']
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+    - run: npm install
+    - run: npm test

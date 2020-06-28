@@ -22,8 +22,6 @@ NODEOPT ?= $(HOME)/opt
 #---- Files
 
 JSSTYLE_FILES := $(shell find lib test tools examples -name "*.js") bin/bunyan
-# All test files *except* dtrace.test.js.
-NON_DTRACE_TEST_FILES := $(shell ls -1 test/*.test.js | grep -v dtrace | xargs)
 
 
 #---- Targets
@@ -95,8 +93,8 @@ test: $(NODEUNIT)
 	test -z "$(DTRACE_UP_IN_HERE)" || test -n "$(SKIP_DTRACE)" || \
 		(node -e 'require("dtrace-provider").createDTraceProvider("isthisthingon")' && \
 		echo "\nNote: Use 'SKIP_DTRACE=1 make test' to skip parts of the test suite that require root." && \
-		$(SUDO) $(NODEUNIT) test/dtrace.test.js)
-	$(NODEUNIT) $(NON_DTRACE_TEST_FILES)
+		$(SUDO) $(NODEUNIT) test/dtrace/*.test.js)
+	$(NODEUNIT) test/*.test.js
 
 # Test with all node supported versions (presumes install locations I use on
 # my machine -- "~/opt/node-VER"):
