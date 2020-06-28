@@ -767,8 +767,8 @@ process_indent($)
 
 	# skip over enumerations, array definitions, initializers, etc.
 	if ($cont_off <= 0 && !/^\s*$special/ &&
-	    (/(?:(?:\b(?:enum|struct|union)\s*[^\{]*)|(?:\s+=\s*)){/ ||
-	    (/^\s*{/ && $prev =~ /=\s*(?:\/\*.*\*\/\s*)*$/))) {
+	    (/(?:(?:\b(?:enum|struct|union)\s*[^\{]*)|(?:\s+=\s*))\{/ ||
+	    (/^\s*\{/ && $prev =~ /=\s*(?:\/\*.*\*\/\s*)*$/))) {
 		$cont_in = 0;
 		$cont_off = tr/{/{/ - tr/}/}/;
 		return;
