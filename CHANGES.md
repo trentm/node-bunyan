@@ -7,9 +7,14 @@ Known issues:
 
 ## not yet released
 
+(nothing yet)
+
+## 2.0.4 (beta)
+
+- [pull #558] Update minimum "moment" version to 2.19.3 for CVE-2017-18214.
 - [issue #589] Use `os.EOL` for newlines in bunyan output, which helps with
   some Unix-EOL-naive apps like notepad. (By @bwknight877.)
-
+- Development change: Switched to GitHub Actions for CI.
 
 ## 2.0.3 (beta)
 
