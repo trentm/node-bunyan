@@ -153,7 +153,7 @@ var log = bunyan.createLogger({
     stream: <node.js stream>,           // Optional, see "Streams" section
     streams: [<bunyan streams>, ...],   // Optional, see "Streams" section
     serializers: <serializers mapping>, // Optional, see "Serializers" section
-    src: <boolean>,                     // Optional, see "src" section
+    src: <boolean | integer>,                     // Optional, see "src" section
 
     // Any other fields are added to all log records as is.
     foo: 'bar',
@@ -505,7 +505,13 @@ including the body).
 ## src
 
 The **source file, line and function of the log call site** can be added to
-log records by using the `src: true` config option:
+log records by using the `src` config option. This option can be integer or boolean. (Default `false`)
+
+An integer is how many stack levels to ignore before grabbing the source file, line and function call name.
+
+A `true` boolean will set the value to `2`.
+
+A higher integer can be used if the logger is behind a custom wrapper.
 
 ```js
 var log = bunyan.createLogger({src: true, ...});
