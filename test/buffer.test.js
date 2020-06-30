@@ -34,7 +34,7 @@ var log = new bunyan.createLogger({
 
 
 test('log.info(BUFFER)', function (t) {
-    var b = new Buffer('foo');
+    var b = Buffer.from ? Buffer.from('foo') : new Buffer('foo');
 
     ['trace',
      'debug',
@@ -62,7 +62,7 @@ test('log.info(BUFFER)', function (t) {
 
 
 //test('log.info({buf: BUFFER})', function (t) {
-//  var b = new Buffer('foo');
+//  var b = Buffer.from ? Buffer.from('foo') : new Buffer('foo');
 //
 //  // Really there isn't much Bunyan can do here. See
 //  // <https://github.com/joyent/node/issues/3905>. An unwelcome hack would
