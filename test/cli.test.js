@@ -7,6 +7,7 @@
 var p = console.warn;
 var exec = require('child_process').exec;
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 var _ = require('util').format;
 var test = require('tap').test;
@@ -16,6 +17,9 @@ var vasync = require('vasync');
 // ---- globals
 
 var BUNYAN = path.resolve(__dirname, '../bin/bunyan');
+if (os.platform() === 'win32') {
+    BUNYAN = process.execPath + ' ' + BUNYAN;
+}
 
 
 // ---- support stuff
