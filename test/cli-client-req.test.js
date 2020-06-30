@@ -17,6 +17,9 @@ var test = require('tap').test;
 // ---- globals
 
 var BUNYAN = path.resolve(__dirname, '../bin/bunyan');
+if (os.platform() === 'win32') {
+    BUNYAN = process.execPath + ' ' + BUNYAN;
+}
 
 
 // ---- tests
