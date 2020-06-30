@@ -96,50 +96,57 @@ test('cat simple.log', function (t) {
     );
 });
 
-// A stable 'TZ' for 'local' timezone output.
-tzEnv = objCopy(process.env);
-tzEnv.TZ = 'Pacific/Honolulu';
+test('time TZ tests', {
+    skip: os.platform() === 'win32'
+        ? "TZ is not working on win32 for me" : false
+}, function (suite) {
+    // A stable 'TZ' for 'local' timezone output.
+    tzEnv = objCopy(process.env);
+    tzEnv.TZ = 'Pacific/Honolulu';
 
-test('time: simple.log local long', function (t) {
-    exec(_('%s -o long -L %s/corpus/simple.log', BUNYAN, __dirname),
-            {env: tzEnv}, function (err, stdout, stderr) {
-        t.ifError(err)
-        t.equal(stdout,
-            // JSSTYLED
-            '[2012-02-08T12:56:52.856-10:00]  INFO: myservice/123 on example.com: '
-            + 'My message\n');
-        t.end();
+    test('time: simple.log local long', function (t) {
+        exec(_('%s -o long -L %s/corpus/simple.log', BUNYAN, __dirname),
+                {env: tzEnv}, function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout,
+                // JSSTYLED
+                '[2012-02-08T12:56:52.856-10:00]  INFO: myservice/123 on example.com: '
+                + 'My message\n');
+            t.end();
+        });
     });
-});
-test('time: simple.log utc long', function (t) {
-    exec(_('%s -o long --time utc %s/corpus/simple.log', BUNYAN, __dirname),
-            {env: tzEnv}, function (err, stdout, stderr) {
-        t.ifError(err)
-        t.equal(stdout,
-            '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
-            + 'My message\n');
-        t.end();
+    test('time: simple.log utc long', function (t) {
+        exec(_('%s -o long --time utc %s/corpus/simple.log', BUNYAN, __dirname),
+                {env: tzEnv}, function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout,
+                '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
+                + 'My message\n');
+            t.end();
+        });
     });
-});
-test('time: simple.log local short', function (t) {
-    exec(_('%s -o short -L %s/corpus/simple.log', BUNYAN, __dirname),
-            {env: tzEnv}, function (err, stdout, stderr) {
-        t.ifError(err)
-        t.equal(stdout,
-            '12:56:52.856  INFO myservice: '
-            + 'My message\n');
-        t.end();
+    test('time: simple.log local short', function (t) {
+        exec(_('%s -o short -L %s/corpus/simple.log', BUNYAN, __dirname),
+                {env: tzEnv}, function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout,
+                '12:56:52.856  INFO myservice: '
+                + 'My message\n');
+            t.end();
+        });
     });
-});
-test('time: simple.log utc short', function (t) {
-    exec(_('%s -o short %s/corpus/simple.log', BUNYAN, __dirname),
-            {env: tzEnv}, function (err, stdout, stderr) {
-        t.ifError(err)
-        t.equal(stdout,
-            '22:56:52.856Z  INFO myservice: '
-            + 'My message\n');
-        t.end();
+    test('time: simple.log utc short', function (t) {
+        exec(_('%s -o short %s/corpus/simple.log', BUNYAN, __dirname),
+                {env: tzEnv}, function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout,
+                '22:56:52.856Z  INFO myservice: '
+                + 'My message\n');
+            t.end();
+        });
     });
+
+    suite.end();
 });
 
 test('simple.log with color', function (t) {
@@ -223,7 +230,8 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
                 /^bunyan: ENOENT.*?, open 'doesnotexist2.log'/m,
             ];
             matches.forEach(function (match) {
-                t.ok(match.test(stderr), 'stderr matches ' + match.toString());
+                t.ok(match.test(stderr), 'stderr matches ' + match.toString() +
+                    ', stderr=' + JSON .stringify(stderr));
             });
             t.end();
         }
