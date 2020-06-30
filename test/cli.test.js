@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick
  *
  * Test the `bunyan` CLI.
  */
@@ -9,15 +9,8 @@ var exec = require('child_process').exec;
 var fs = require('fs');
 var path = require('path');
 var _ = require('util').format;
+var test = require('tap').test;
 var vasync = require('vasync');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
 
 
 // ---- globals
@@ -390,7 +383,7 @@ test('--condition "this.level === TRACE', function (t) {
     exec(cmd, function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, expect);
-        t.done();
+        t.end();
     });
 });
 

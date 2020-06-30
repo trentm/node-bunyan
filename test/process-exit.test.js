@@ -8,12 +8,7 @@
  */
 
 var exec = require('child_process').exec;
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-    delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var test = tap4nodeunit.test;
+var test = require('tap').test;
 
 var nodeVer = process.versions.node.split('.').map(Number);
 
