@@ -9,6 +9,7 @@
 
 var exec = require('child_process').exec;
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 var _ = require('util').format;
 var test = require('tap').test;
