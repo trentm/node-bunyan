@@ -96,9 +96,15 @@ test('cat simple.log', function (t) {
     );
 });
 
+// Test some local/UTC time handling by changing to a known non-UTC timezone
+// for some tests.
+//
+// I don't know how to effectively do this on Windows (at least
+// https://stackoverflow.com/questions/2611017 concurs), so we skip these on
+// Windows. Help is welcome if you know how to do this on Windows.
 test('time TZ tests', {
     skip: os.platform() === 'win32'
-        ? "TZ is not working on win32 for me" : false
+        ? 'do not know how to set timezone on Windows' : false
 }, function (suite) {
     // A stable 'TZ' for 'local' timezone output.
     tzEnv = objCopy(process.env);
@@ -120,6 +126,7 @@ test('time TZ tests', {
                 {env: tzEnv}, function (err, stdout, stderr) {
             t.ifError(err)
             t.equal(stdout,
+                // JSSTYLED
                 '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
                 + 'My message\n');
             t.end();
@@ -225,9 +232,12 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
             //   ENOENT, open 'asdf.log'
             // io.js 2.2 (at least):
             //   ENOENT: no such file or directory, open 'doesnotexist1.log'
+            // in GitHub Actions windows-latest runner:
+            //   JSSTYLED
+            //   ENOENT: no such file or directory, open 'D:\\a\\node-bunyan\\node-bunyan\\doesnotexist1.log
             var matches = [
-                /^bunyan: ENOENT.*?, open 'doesnotexist1.log'/m,
-                /^bunyan: ENOENT.*?, open 'doesnotexist2.log'/m,
+                /^bunyan: ENOENT.*?, open '.*?doesnotexist1.log'/m,
+                /^bunyan: ENOENT.*?, open '.*?doesnotexist2.log'/m,
             ];
             matches.forEach(function (match) {
                 t.ok(match.test(stderr), 'stderr matches ' + match.toString() +
