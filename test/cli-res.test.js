@@ -1,27 +1,23 @@
 /*
- * Copyright (c) 2017, Trent Mick.
+ * Copyright 2020 Trent Mick
  *
  * Test the bunyan CLI's handling of the "res" field.
  */
 
 var exec = require('child_process').exec;
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 var _ = require('util').format;
-var vasync = require('vasync');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
+var test = require('tap').test;
 
 
 // ---- globals
 
 var BUNYAN = path.resolve(__dirname, '../bin/bunyan');
+if (os.platform() === 'win32') {
+    BUNYAN = process.execPath + ' ' + BUNYAN;
+}
 
 
 // ---- tests

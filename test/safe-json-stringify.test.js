@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick
  *
  * If available, use `safe-json-stringfy` as a fallback stringifier.
  * This covers the case where an enumerable property throws an error
@@ -8,17 +8,8 @@
  * See <https://github.com/trentm/node-bunyan/pull/182>
  */
 
-var p = console.warn;
 var exec = require('child_process').exec;
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
-
+var test = require('tap').test;
 
 test('__defineGetter__ boom', function (t) {
     var cmd = process.execPath + ' ' + __dirname + '/safe-json-stringify-1.js';

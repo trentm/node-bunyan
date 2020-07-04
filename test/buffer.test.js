@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2012 Trent Mick. All rights reserved.
- * Copyright (c) 2012 Joyent Inc. All rights reserved.
+ * Copyright 2020 Trent Mick
+ * Copyright 2012 Joyent Inc.
  *
  * Test logging with (accidental) usage of buffers.
  */
@@ -8,16 +8,9 @@
 var util = require('util'),
     inspect = util.inspect,
     format = util.format;
+var test = require('tap').test;
+
 var bunyan = require('../lib/bunyan');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
-
 
 
 function Catcher() {
@@ -41,7 +34,7 @@ var log = new bunyan.createLogger({
 
 
 test('log.info(BUFFER)', function (t) {
-    var b = new Buffer('foo');
+    var b = Buffer.from ? Buffer.from('foo') : new Buffer('foo');
 
     ['trace',
      'debug',
@@ -69,7 +62,7 @@ test('log.info(BUFFER)', function (t) {
 
 
 //test('log.info({buf: BUFFER})', function (t) {
-//  var b = new Buffer('foo');
+//  var b = Buffer.from ? Buffer.from('foo') : new Buffer('foo');
 //
 //  // Really there isn't much Bunyan can do here. See
 //  // <https://github.com/joyent/node/issues/3905>. An unwelcome hack would

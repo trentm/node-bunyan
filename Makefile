@@ -3,7 +3,7 @@ SHELL := bash
 
 #---- Tools
 
-NODEUNIT := ./node_modules/.bin/nodeunit
+TAP_EXEC := ./node_modules/.bin/tap
 SUDO := sudo
 ifeq ($(shell uname -s),SunOS)
 	# On SunOS (e.g. SmartOS) we expect to run the test suite as the
@@ -18,7 +18,6 @@ endif
 ifeq ($(shell uname -s),Darwin)
     DTRACE_UP_IN_HERE=1
 endif
-NODEOPT ?= $(HOME)/opt
 
 
 #---- Files
@@ -28,7 +27,7 @@ JSSTYLE_FILES := $(shell find lib test tools examples -name "*.js") bin/bunyan
 
 #---- Targets
 
-all $(NODEUNIT):
+all $(TAP_EXEC):
 	npm install $(NPM_INSTALL_FLAGS)
 
 # Ensure all version-carrying files have the same version.
@@ -91,45 +90,12 @@ distclean:
 #---- test
 
 .PHONY: test
-test: $(NODEUNIT)
+test: $(TAP_EXEC)
 	test -z "$(DTRACE_UP_IN_HERE)" || test -n "$(SKIP_DTRACE)" || \
 		(node -e 'require("dtrace-provider").createDTraceProvider("isthisthingon")' && \
 		echo "\nNote: Use 'SKIP_DTRACE=1 make test' to skip parts of the test suite that require root." && \
-		$(SUDO) $(NODEUNIT) test/dtrace/*.test.js)
-	$(NODEUNIT) test/*.test.js
-
-# Test with all node supported versions (presumes install locations I use on
-# my machine -- "~/opt/node-VER"):
-# Note: 'test4' is last so (if all is well) I end up with a binary
-# dtrace-provider build for my current default node version.
-.PHONY: testall
-testall: test7 test6 test012 test010 test4
-
-.PHONY: test7
-test7:
-	@echo "# Test node 7.x (with node `$(NODEOPT)/node-7/bin/node --version`)"
-	@$(NODEOPT)/node-7/bin/node --version | grep '^v7\.'
-	PATH="$(NODEOPT)/node-7/bin:$(PATH)" make distclean all test
-.PHONY: test6
-test6:
-	@echo "# Test node 6.x (with node `$(NODEOPT)/node-6/bin/node --version`)"
-	@$(NODEOPT)/node-6/bin/node --version | grep '^v6\.'
-	PATH="$(NODEOPT)/node-6/bin:$(PATH)" make distclean all test
-.PHONY: test4
-test4:
-	@echo "# Test node 4.x (with node `$(NODEOPT)/node-4/bin/node --version`)"
-	@$(NODEOPT)/node-4/bin/node --version | grep '^v4\.'
-	PATH="$(NODEOPT)/node-4/bin:$(PATH)" make distclean all test
-.PHONY: test012
-test012:
-	@echo "# Test node 0.12.x (with node `$(NODEOPT)/node-0.12/bin/node --version`)"
-	@$(NODEOPT)/node-0.12/bin/node --version | grep '^v0\.12\.'
-	PATH="$(NODEOPT)/node-0.12/bin:$(PATH)" make distclean all test
-.PHONY: test010
-test010:
-	@echo "# Test node 0.10.x (with node `$(NODEOPT)/node-0.10/bin/node --version`)"
-	@$(NODEOPT)/node-0.10/bin/node --version | grep '^v0\.10\.'
-	PATH="$(NODEOPT)/node-0.10/bin:$(PATH)" make distclean all test
+		$(SUDO) $(TAP_EXEC) test/dtrace/*.test.js)
+	$(TAP_EXEC) test/*.test.js
 
 
 #---- check

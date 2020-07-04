@@ -1,23 +1,16 @@
 /*
- * Copyright (c) 2014 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick
  *
  * Test the `log.level(...)`.
  */
 
+var test = require('tap').test;
 var util = require('util'),
     format = util.format,
     inspect = util.inspect;
 var p = console.log;
 
 var bunyan = require('../lib/bunyan');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
 
 
 // ---- test boolean `log.<level>()` calls

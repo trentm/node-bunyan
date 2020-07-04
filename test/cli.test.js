@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick
  *
  * Test the `bunyan` CLI.
  */
@@ -7,22 +7,19 @@
 var p = console.warn;
 var exec = require('child_process').exec;
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 var _ = require('util').format;
+var test = require('tap').test;
 var vasync = require('vasync');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
 
 
 // ---- globals
 
 var BUNYAN = path.resolve(__dirname, '../bin/bunyan');
+if (os.platform() === 'win32') {
+    BUNYAN = process.execPath + ' ' + BUNYAN;
+}
 
 
 // ---- support stuff
@@ -99,50 +96,64 @@ test('cat simple.log', function (t) {
     );
 });
 
-// A stable 'TZ' for 'local' timezone output.
-tzEnv = objCopy(process.env);
-tzEnv.TZ = 'Pacific/Honolulu';
+// Test some local/UTC time handling by changing to a known non-UTC timezone
+// for some tests.
+//
+// I don't know how to effectively do this on Windows (at least
+// https://stackoverflow.com/questions/2611017 concurs), so we skip these on
+// Windows. Help is welcome if you know how to do this on Windows.
+test('time TZ tests', {
+    skip: os.platform() === 'win32'
+        ? 'do not know how to set timezone on Windows' : false
+}, function (suite) {
+    // A stable 'TZ' for 'local' timezone output.
+    tzEnv = objCopy(process.env);
+    tzEnv.TZ = 'Pacific/Honolulu';
 
-test('time: simple.log local long', function (t) {
-    exec(_('%s -o long -L %s/corpus/simple.log', BUNYAN, __dirname),
-            {env: tzEnv}, function (err, stdout, stderr) {
-        t.ifError(err)
-        t.equal(stdout,
-            // JSSTYLED
-            '[2012-02-08T12:56:52.856-10:00]  INFO: myservice/123 on example.com: '
-            + 'My message\n');
-        t.end();
+    test('time: simple.log local long', function (t) {
+        exec(_('%s -o long -L %s/corpus/simple.log', BUNYAN, __dirname),
+                {env: tzEnv}, function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout,
+                // JSSTYLED
+                '[2012-02-08T12:56:52.856-10:00]  INFO: myservice/123 on example.com: '
+                + 'My message\n');
+            t.end();
+        });
     });
-});
-test('time: simple.log utc long', function (t) {
-    exec(_('%s -o long --time utc %s/corpus/simple.log', BUNYAN, __dirname),
-            {env: tzEnv}, function (err, stdout, stderr) {
-        t.ifError(err)
-        t.equal(stdout,
-            '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
-            + 'My message\n');
-        t.end();
+    test('time: simple.log utc long', function (t) {
+        exec(_('%s -o long --time utc %s/corpus/simple.log', BUNYAN, __dirname),
+                {env: tzEnv}, function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout,
+                // JSSTYLED
+                '[2012-02-08T22:56:52.856Z]  INFO: myservice/123 on example.com: '
+                + 'My message\n');
+            t.end();
+        });
     });
-});
-test('time: simple.log local short', function (t) {
-    exec(_('%s -o short -L %s/corpus/simple.log', BUNYAN, __dirname),
-            {env: tzEnv}, function (err, stdout, stderr) {
-        t.ifError(err)
-        t.equal(stdout,
-            '12:56:52.856  INFO myservice: '
-            + 'My message\n');
-        t.end();
+    test('time: simple.log local short', function (t) {
+        exec(_('%s -o short -L %s/corpus/simple.log', BUNYAN, __dirname),
+                {env: tzEnv}, function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout,
+                '12:56:52.856  INFO myservice: '
+                + 'My message\n');
+            t.end();
+        });
     });
-});
-test('time: simple.log utc short', function (t) {
-    exec(_('%s -o short %s/corpus/simple.log', BUNYAN, __dirname),
-            {env: tzEnv}, function (err, stdout, stderr) {
-        t.ifError(err)
-        t.equal(stdout,
-            '22:56:52.856Z  INFO myservice: '
-            + 'My message\n');
-        t.end();
+    test('time: simple.log utc short', function (t) {
+        exec(_('%s -o short %s/corpus/simple.log', BUNYAN, __dirname),
+                {env: tzEnv}, function (err, stdout, stderr) {
+            t.ifError(err)
+            t.equal(stdout,
+                '22:56:52.856Z  INFO myservice: '
+                + 'My message\n');
+            t.end();
+        });
     });
+
+    suite.end();
 });
 
 test('simple.log with color', function (t) {
@@ -221,12 +232,16 @@ test('simple.log doesnotexist1.log doesnotexist2.log', function (t) {
             //   ENOENT, open 'asdf.log'
             // io.js 2.2 (at least):
             //   ENOENT: no such file or directory, open 'doesnotexist1.log'
+            // in GitHub Actions windows-latest runner:
+            //   JSSTYLED
+            //   ENOENT: no such file or directory, open 'D:\\a\\node-bunyan\\node-bunyan\\doesnotexist1.log
             var matches = [
-                /^bunyan: ENOENT.*?, open 'doesnotexist1.log'/m,
-                /^bunyan: ENOENT.*?, open 'doesnotexist2.log'/m,
+                /^bunyan: ENOENT.*?, open '.*?doesnotexist1.log'/m,
+                /^bunyan: ENOENT.*?, open '.*?doesnotexist2.log'/m,
             ];
             matches.forEach(function (match) {
-                t.ok(match.test(stderr), 'stderr matches ' + match.toString());
+                t.ok(match.test(stderr), 'stderr matches ' + match.toString() +
+                    ', stderr=' + JSON .stringify(stderr));
             });
             t.end();
         }
@@ -390,7 +405,7 @@ test('--condition "this.level === TRACE', function (t) {
     exec(cmd, function (err, stdout, stderr) {
         t.ifError(err);
         t.equal(stdout, expect);
-        t.done();
+        t.end();
     });
 });
 
