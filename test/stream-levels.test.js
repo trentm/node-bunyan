@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick
  *
  * Test that streams (the various way they can be added to
  * a Logger instance) get the appropriate level.
@@ -8,15 +8,9 @@
 var util = require('util'),
     format = util.format,
     inspect = util.inspect;
-var p = console.log;
+var test = require('tap').test;
 
 var bunyan = require('../lib/bunyan');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var test = tap4nodeunit.test;
 
 
 // ---- Tests

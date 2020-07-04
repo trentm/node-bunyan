@@ -4,13 +4,9 @@
  * Test stream adding.
  */
 
-var bunyan = require('../lib/bunyan');
+var test = require('tap').test;
 
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var test = tap4nodeunit.test;
+var bunyan = require('../lib/bunyan');
 
 
 test('non-writables passed as stream', function (t) {

@@ -1,20 +1,13 @@
 /*
- * Copyright (c) 2012 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick
  *
  * Test type checking on creation of the Logger.
  */
 
-var bunyan = require('../lib/bunyan'),
-        Logger = bunyan;
+var test = require('tap').test;
 
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
-
+var bunyan = require('../lib/bunyan')
+var Logger = bunyan;
 
 
 test('ensure Logger creation options', function (t) {

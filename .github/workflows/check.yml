@@ -1,4 +1,4 @@
-name: Check Lint/Style
+name: Check Lint & Style
 on: [push, pull_request]
 jobs:
   check:

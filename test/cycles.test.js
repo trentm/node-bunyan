@@ -5,14 +5,7 @@
  */
 
 var Logger = require('../lib/bunyan.js');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
+var test = require('tap').test;
 
 
 var Stream = require('stream').Stream;
@@ -99,6 +92,7 @@ test('cycles', function (t) {
     log.info('kaboom', obj.KABOOM);
     log.info(obj);
 
-    outstr.end();
     t.ok('did not throw');
+
+    outstr.end();
 });

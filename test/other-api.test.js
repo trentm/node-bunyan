@@ -1,18 +1,12 @@
 /*
- * Copyright (c) 2012 Trent Mick. All rights reserved.
+ * Copyright 2020 Trent Mick
  *
  * Test other parts of the exported API.
  */
 
-var bunyan = require('../lib/bunyan');
+var test = require('tap').test;
 
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
+var bunyan = require('../lib/bunyan');
 
 
 test('bunyan.<LEVEL>s', function (t) {
