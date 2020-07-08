@@ -1349,28 +1349,19 @@ var log = bunyan.createLogger({
 log.info('hi on info');
 ```
 
-## Webpack
-Webpack can work with the same example Browserify above. To do this, we need to make webpack ignore optional files:
-Create "empty_shim.js":
-```javascript
-// This is an empty shim for things that should be not be included in webpack
+## webpack
+To include bunyan in your webpack bundle you need to tell webpack to
+ignore the optional dependencies that are unavailable in browser environments.
+
+Mark the following dependencies as
+[externals](https://webpack.js.org/configuration/externals/) in your webpack
+configuration file to exclude them from the bundle:
+
 ```
-Now tell webpack to use this file for
-[optional dependencies](https://webpack.github.io/docs/configuration.html#resolve-alias)
-in your "webpack.config.js":
-```
-resolve: {
-    // These shims are needed for bunyan
-    alias: {
-        'dtrace-provider': '/path/to/shim/empty_shim.js',
-        fs: '/path/to/shim/empty_shim.js',
-        'safe-json-stringify': '/path/to/shim/empty_shim.js',
-        mv: '/path/to/shim/empty_shim.js',
-        'source-map-support': '/path/to/shim/empty_shim.js'
-    }
+module: {
+    externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support']
 }
 ```
-Now webpack builds, ignoring these optional dependencies via shimming in an empty JS file!
 
 # Versioning
 
