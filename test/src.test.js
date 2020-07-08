@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Trent Mick.
+ * Copyright 2020 Trent Mick.
  *
  * Test `src: true` usage.
  */
@@ -7,17 +7,10 @@
 // Intentionally on line 8 for tests below:
 function logSomething(log) { log.info('something'); }
 
-
+var test = require('tap').test;
 var format = require('util').format;
-var Logger = require('../lib/bunyan');
 
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
+var Logger = require('../lib/bunyan');
 
 
 function CapturingStream(recs) {

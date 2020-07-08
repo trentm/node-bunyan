@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Trent Mick.
+ * Copyright 2020 Trent Mick
  *
  * Test the `log.trace(...)`, `log.debug(...)`, ..., `log.fatal(...)` API.
  */
@@ -7,17 +7,10 @@
 var util = require('util'),
     format = util.format,
     inspect = util.inspect;
+var test = require('tap').test;
 var p = console.log;
 
 var bunyan = require('../lib/bunyan');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
 
 
 // ---- test boolean `log.<level>()` calls

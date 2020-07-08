@@ -7,7 +7,9 @@ Known issues:
 
 ## not yet released
 
-(nothing yet)
+- Development change: Switch to node-tap for testing (from nodeunit, which is
+  now obsolete). Currently just tap v9 because that is the last major version
+  of node-tap that supports back to node v0.10.
 
 ## 1.8.14
 
