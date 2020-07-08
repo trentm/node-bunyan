@@ -7,6 +7,10 @@ Known issues:
 
 ## not yet released
 
+- [pull #575, #278] Change the default "req" serializer to accept expressjs's
+  `req.originalUrl` for the "url" field per
+  <https://expressjs.com/en/api.html#req.originalUrl>. (By @twelve17 and
+  @kingcody.)
 - Development change: Switch to node-tap for testing (from nodeunit, which is
   now obsolete). Currently just tap v9 because that is the last major version
   of node-tap that supports back to node v0.10.
