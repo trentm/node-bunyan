@@ -420,7 +420,7 @@ rules and best practices for serializer functions:
   unexpected type. A good start at defensiveness is to start with this:
 
     ```javascript
-    function fooSerializers(foo) {
+    function fooSerializer(foo) {
         // Guard against foo be null/undefined. Check that expected fields
         // are defined.
         if (!foo || !foo.bar)
@@ -437,7 +437,7 @@ rules and best practices for serializer functions:
 ### Standard Serializers
 
 Bunyan includes a small set of "standard serializers", exported as
-`bunyan.stdSerializers`. Their use is completely optional. Example using
+`bunyan.stdSerializers`. Their use is completely optional. An example using
 all of them:
 
 ```js
@@ -460,7 +460,7 @@ Standard serializers are:
 
 | Field | Description |
 | ----- | ----------- |
-| err   | Used for serializing JavaScript error objects, including traversing an error's cause chain for error objects with a `.cause()` -- e.g. as from [verror](https://github.com/davepacheco/node-verror). |
+| err   | Used for serializing JavaScript error objects, including traversing an error's cause chain for error objects with a `.cause()` -- e.g. as from [verror](https://github.com/joyent/node-verror). |
 | req   | Common fields from a node.js HTTP request object. |
 | res   | Common fields from a node.js HTTP response object. |
 
