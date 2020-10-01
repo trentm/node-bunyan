@@ -79,7 +79,7 @@ TODO:
 - full-on docs
 - better examples/
 - better coloring
-- look at pino (bunyan style, perf benefits)
+- look at pino (bunyan style, perf benefits), also logpp (https://github.com/mrkmarron/logpp)
 - would be exciting to have bunyan support in http://lnav.org/ if that
   made sense
 - "template" support for 'rotating-file' stream to get dated rolled files
