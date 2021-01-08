@@ -1,11 +1,18 @@
 # bunyan Changelog
 
+See [the bunyan@2.x changelog](https://github.com/trentm/node-bunyan/blob/master/CHANGES.md)
+for details on recent 2.x releases.
+
 Known issues:
 
 - [issue #58] Can't install to a dir with spaces. This is [this node-gyp
   bug](https://github.com/TooTallNate/node-gyp/issues/65).
 
 ## not yet released
+
+(nothing yet)
+
+## 1.8.15
 
 - [pull #575, #278] Change the default "req" serializer to accept expressjs's
   `req.originalUrl` for the "url" field per
