@@ -580,7 +580,6 @@ log.levels(0, "info")           // can use "info" et al aliases
 log.levels("foo", WARN)         // set stream named "foo" to WARN
 ```
 
-
 ## Level suggestions
 
 Trent's biased suggestions for server apps: Use "debug" sparingly. Information
@@ -594,6 +593,34 @@ ever log at `trace`-level. Fine control over log output should be up to the
 app using a library. Having a library that spews log output at higher levels
 gets in the way of a clear story in the *app* logs.
 
+## Creating new Levels
+
+You can register a new level:
+ 
+ ```js
+ var bunyan = require('bunyan');
+ 
+ bunyan.createLevel('notice', 35);
+ ```
+ 
+ .. at which point that level is usable in (most of) the normal ways:
+ 
+ 
+ ```js
+ log.level("notice")    // set all streams to level NOTICE
+ log.notice("this will be logged");
+ 
+ log.level("warn")      // set all streams to level WARN
+ log.notice("this will not be logged");
+ ```
+ 
+ There are some caveats:
+ 
+   1. If you require DTrace support (see below), you need to create
+    new levels prior to instantiating Loggers; levels will work if
+    you do it the other way around, but DTrace won't be fired.
+   2. No constants are defined for dynamically created levels; you'll
+    need to track your level values yourself.
 
 # Log Record Fields
 
