@@ -154,6 +154,7 @@ var log = bunyan.createLogger({
     streams: [<bunyan streams>, ...],   // Optional, see "Streams" section
     serializers: <serializers mapping>, // Optional, see "Serializers" section
     src: <boolean>,                     // Optional, see "src" section
+    req_id: <string | function>,        // Optional, see "Request ID" section
 
     // Any other fields are added to all log records as is.
     foo: 'bar',
@@ -726,6 +727,100 @@ follow (feedback from actual users welcome).
       "header": "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nConnection: keep-alive\r\nTransfer-Encoding: chunked\r\n\r\n"
     }
     ```
+
+
+## Request ID
+
+When processing HTTP requests, it's a good practice to specify a unique request ID
+value for each log entry. This way, multiple log entries could be grouped together according to the
+specified request ID, which dramatically helps in debugging/analysing
+requests processing.
+
+This can be done globally for the entire logger instance
+or locally when adding individual entries:
+
+```js
+// Global request ID example
+
+var logger = bunyan.createLogger({
+  req_id: '66e925ba-ee2b-11eb-9a03-0242ac130003',
+  // ...
+});
+```
+
+```js
+// Local request ID example
+
+// First log entry:
+logger.info(
+  { req_id: '66e925ba-ee2b-11eb-9a03-0242ac130003' },
+  'Processing some HTTP request'
+);
+
+// Some time later:
+logger.info(
+  { req_id: '66e925ba-ee2b-11eb-9a03-0242ac130003' }, // the same value as above ^
+  'Finished processing the HTTP request'
+);
+```
+
+
+### Handling request IDs automatically
+
+However, in any serious application it's absolutely unpractical
+to manually generate and specify request ID for each log entry.
+
+Thanks to bunyan, it could be easily automated. You just need to specify
+the request ID generator function to the logger constructor:
+
+```js
+var logger = bunyan.createLogger({
+  req_id: () => {
+    // @todo: generate your uqniue request ID here
+    return '66e925ba-ee2b-11eb-9a03-0242ac130003';
+  },
+  ...
+});
+```
+
+The main problem here, is that you need to return the same request ID value
+for all the logging calls made in terms of the same request.
+However, the [cls-rtracer](https://github.com/puzpuzpuz/cls-rtracer)
+library could be utilized for exactly this purpose:
+
+```js
+const express = require('express')
+const rTracer = require('cls-rtracer')
+
+const app = express();
+
+app.use(rTracer.expressMiddleware());
+
+var logger = bunyan.createLogger({
+  
+  // Using the rTracer to generate stable request IDs
+  req_id: rTracer.id,
+  
+  // ...
+  
+});
+
+
+// The same Request ID will be added automatically
+// to the both log entries below:
+app.get('/foo', (req, res, next) => {
+ 
+  logger.info('Starting to process HTTP request');
+  
+  setTimeout(() => {
+    logger.info('Finished processing the HTTP request');
+    next();
+    
+  }, 3000);
+  
+});
+```
+
 
 ## Other fields to consider
 
