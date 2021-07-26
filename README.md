@@ -41,6 +41,7 @@ record (see below).
 - [Log Record Fields](#log-record-fields)
   * [Core fields](#core-fields)
   * [Recommended/Best Practice Fields](#recommendedbest-practice-fields)
+  * [Request ID](#request-id)
   * [Other fields to consider](#other-fields-to-consider)
 - [Streams](#streams)
   * [Adding a Stream](#adding-a-stream)
