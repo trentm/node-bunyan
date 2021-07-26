@@ -33,7 +33,6 @@
   "// mv": "required for RotatingFileStream",
   "// moment": "required for local time with CLI",
   "optionalDependencies": {
-    "cls-rtracer": "*",
     "dtrace-provider": "~0.8",
     "moment": "^2.19.3",
     "mv": "~2",
