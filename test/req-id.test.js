@@ -22,12 +22,12 @@ var logStream = new CapturingStream();
 
 var logger = bunyan.createLogger({
     name: 'logger',
-    streams: [{
+    streams: [ {
         type: 'raw',
         stream: logStream,
         level: 'info',
-    }],
-    req_id: () => {
+    } ],
+    req_id: function () {
         return '543' + '21';
     }
 });
