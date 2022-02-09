@@ -734,22 +734,22 @@ function handleLogLine(file, line, opts, stylize) {
     // Emit non-JSON lines immediately.
     var rec;
     if (!line) {
-        if (!opts.strict) emit(line + '\n');
+        if (!opts.strict) emit(line);
         return;
     } else if (line[0] !== '{') {
-        if (!opts.strict) emit(line + '\n');  // not JSON
+        if (!opts.strict) emit(line);  // not JSON
         return;
     } else {
         try {
             rec = JSON.parse(line);
         } catch (e) {
-            if (!opts.strict) emit(line + '\n');
+            if (!opts.strict) emit(line);
             return;
         }
     }
 
     if (!isValidRecord(rec)) {
-        if (!opts.strict) emit(line + '\n');
+        if (!opts.strict) emit(line);
         return;
     }
 
@@ -784,7 +784,7 @@ function emitRecord(rec, line, opts, stylize) {
         // If 'res', show the response.
         // If 'err' and 'err.stack' then show that.
         if (!isValidRecord(rec)) {
-            return emit(line + '\n');
+            return emit(line);
         }
 
         delete rec.v;
@@ -1111,7 +1111,7 @@ function emitRecord(rec, line, opts, stylize) {
         /* JSSTYLED */
         // <http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/SimpleLayout.html>
         if (!isValidRecord(rec)) {
-            return emit(line + '\n');
+            return emit(line);
         }
         emit(format('%s - %s\n',
             upperNameFromLevel[rec.level] || 'LVL' + rec.level,
@@ -1141,7 +1141,6 @@ function emit(s) {
  * @param callback {Function} `function ()`
  */
 function processStdin(opts, stylize, callback) {
-    var leftover = '';  // Left-over partial line from last chunk.
     var stdin = process.stdin;
     stdin.resume();
     stdin.setEncoding('utf8');
@@ -1149,24 +1148,20 @@ function processStdin(opts, stylize, callback) {
         var lines = chunk.split(/\r\n|\n/);
         var length = lines.length;
         if (length === 1) {
-            leftover += lines[0];
+            handleLogLine(null, lines[0], opts, stylize);
             return;
         }
 
         if (length > 1) {
-            handleLogLine(null, leftover + lines[0], opts, stylize);
+            handleLogLine(null, lines[0] + '\n', opts, stylize);
         }
-        leftover = lines.pop();
+
         length -= 1;
         for (var i = 1; i < length; i++) {
-            handleLogLine(null, lines[i], opts, stylize);
+            handleLogLine(null, lines[i] + '\n', opts, stylize);
         }
     });
     stdin.on('end', function () {
-        if (leftover) {
-            handleLogLine(null, leftover, opts, stylize);
-            leftover = '';
-        }
         callback();
     });
 }
@@ -1313,12 +1308,12 @@ function processPids(opts, stylize, callback) {
                 return;
             }
             if (length > 1) {
-                handleLogLine(null, leftover + lines[0], opts, stylize);
+                handleLogLine(null, leftover + lines[0] + '\n', opts, stylize);
             }
             leftover = lines.pop();
             length -= 1;
             for (var i = 1; i < length; i++) {
-                handleLogLine(null, lines[i], opts, stylize);
+                handleLogLine(null, lines[i] + '\n', opts, stylize);
             }
         });
 
@@ -1390,12 +1385,12 @@ function processFile(file, opts, stylize, callback) {
         }
 
         if (length > 1) {
-            handleLogLine(file, leftover + lines[0], opts, stylize);
+            handleLogLine(file, leftover + lines[0] + '\n', opts, stylize);
         }
         leftover = lines.pop();
         length -= 1;
         for (var i = 1; i < length; i++) {
-            handleLogLine(file, lines[i], opts, stylize);
+            handleLogLine(file, lines[i] + '\n', opts, stylize);
         }
     });
 
