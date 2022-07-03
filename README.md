@@ -793,6 +793,27 @@ log.addStream({
 });
 ```
 
+## Ending a Stream
+
+After a bunyan instance has been initialized, and a stream has been added you may end the stream like so:
+
+```js
+const log = bunyan.createLogger({
+  name: 'myLogger',
+  streams: [
+    {
+      level: 'info',
+      format: 'json',
+      path: `myNewStream.log`,
+    }
+  ],
+});
+
+log.streams[0].stream.end();
+```
+
+
+
 ## stream errors
 
 A Bunyan logger instance can be made to re-emit "error" events from its
