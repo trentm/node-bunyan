@@ -148,17 +148,17 @@ $ node hi.js
 ```js
 var bunyan = require('bunyan');
 var log = bunyan.createLogger({
-    name: <string>,                     // Required
+  name: <string>,                     // Required
     level: <level name or number>,      // Optional, see "Levels" section
-    stream: <node.js stream>,           // Optional, see "Streams" section
-    streams: [<bunyan streams>, ...],   // Optional, see "Streams" section
-    serializers: <serializers mapping>, // Optional, see "Serializers" section
-    src: <boolean>,                     // Optional, see "src" section
+      stream: <node.js stream>,           // Optional, see "Streams" section
+        streams: [<bunyan streams>, ...],   // Optional, see "Streams" section
+          serializers: <serializers mapping>, // Optional, see "Serializers" section
+            src: <boolean>,                     // Optional, see "src" section
 
-    // Any other fields are added to all log records as is.
-    foo: 'bar',
-    ...
-});
+              // Any other fields are added to all log records as is.
+              foo: 'bar',
+              ...
+              });
 ```
 
 
@@ -176,25 +176,25 @@ log.info('hi');                     // Log a simple string message (or number).
 log.info('hi %s', bob, anotherVar); // Uses `util.format` for msg formatting.
 
 log.info({foo: 'bar'}, 'hi');
-                // The first field can optionally be a "fields" object, which
-                // is merged into the log record.
+// The first field can optionally be a "fields" object, which
+// is merged into the log record.
 
 log.info(err);  // Special case to log an `Error` instance to the record.
                 // This adds an "err" field with exception details
                 // (including the stack) and sets "msg" to the exception
                 // message.
 log.info(err, 'more on this: %s', more);
-                // ... or you can specify the "msg".
+// ... or you can specify the "msg".
 
 log.info({foo: 'bar', err: err}, 'some msg about this error');
-                // To pass in an Error *and* other fields, use the `err`
-                // field name for the Error instance **and ensure your logger
-                // has a `err` serializer.** One way to ensure the latter is:
-                //      var log = bunyan.createLogger({
-                //          ...,
-                //          serializers: bunyan.stdSerializers
-                //      });
-                // See the "Serializers" section below for details.
+// To pass in an Error *and* other fields, use the `err`
+// field name for the Error instance **and ensure your logger
+// has a `err` serializer.** One way to ensure the latter is:
+//      var log = bunyan.createLogger({
+//          ...,
+//          serializers: bunyan.stdSerializers
+//      });
+// See the "Serializers" section below for details.
 ```
 
 Note that this implies **you cannot blindly pass any object as the first
@@ -262,9 +262,9 @@ looks like:
 
 ```js
 var log = bunyan.createLogger({
-    name: 'myapp',
-    stream: process.stdout,
-    level: 'info'
+  name: 'myapp',
+  stream: process.stdout,
+  level: 'info'
 });
 ```
 
@@ -305,11 +305,11 @@ var bunyan = require('bunyan');
 var log = bunyan.createLogger({name: 'myapp'});
 
 function Wuzzle(options) {
-    this.log = options.log.child({widget_type: 'wuzzle'});
-    this.log.info('creating a wuzzle')
+  this.log = options.log.child({widget_type: 'wuzzle'});
+  this.log.info('creating a wuzzle')
 }
 Wuzzle.prototype.woos = function () {
-    this.log.warn('This wuzzle is woosey.')
+  this.log.warn('This wuzzle is woosey.')
 }
 
 log.info('start');
@@ -372,17 +372,17 @@ example:
 
 ```js
 function reqSerializer(req) {
-    return {
-        method: req.method,
-        url: req.url,
-        headers: req.headers
-    };
+  return {
+    method: req.method,
+    url: req.url,
+    headers: req.headers
+  };
 }
 var log = bunyan.createLogger({
-    name: 'myapp',
-    serializers: {
-        req: reqSerializer
-    }
+  name: 'myapp',
+  serializers: {
+    req: reqSerializer
+  }
 });
 ```
 
@@ -391,17 +391,17 @@ Typically serializers are added to a logger at creation time via:
 
 ```js
 var log = bunyan.createLogger({
-    name: 'myapp',
-    serializers: {
-        foo: function fooSerializer(foo) { ... },
-        ...
-    }
+  name: 'myapp',
+  serializers: {
+    foo: function fooSerializer(foo) { ... },
+    ...
+  }
 });
 
 // or
 var log = bunyan.createLogger({
-    name: 'myapp',
-    serializers: bunyan.stdSerializers
+  name: 'myapp',
+  serializers: bunyan.stdSerializers
 });
 ```
 
@@ -473,8 +473,8 @@ all of them:
 
 ```js
 var log = bunyan.createLogger({
-    name: 'myapp',
-    serializers: bunyan.stdSerializers
+  name: 'myapp',
+  serializers: bunyan.stdSerializers
 });
 ```
 
@@ -482,8 +482,8 @@ or particular ones:
 
 ```js
 var log = bunyan.createLogger({
-    name: 'myapp',
-    serializers: {err: bunyan.stdSerializers.err}
+  name: 'myapp',
+  serializers: {err: bunyan.stdSerializers.err}
 });
 ```
 
@@ -516,16 +516,16 @@ This adds the call source info with the 'src' field, like this:
 ```js
 {
   "name": "src-example",
-  "hostname": "banana.local",
-  "pid": 123,
-  "component": "wuzzle",
-  "level": 4,
-  "msg": "This wuzzle is woosey.",
-  "time": "2012-02-06T04:19:35.605Z",
-  "src": {
+          "hostname": "banana.local",
+          "pid": 123,
+          "component": "wuzzle",
+          "level": 4,
+          "msg": "This wuzzle is woosey.",
+          "time": "2012-02-06T04:19:35.605Z",
+          "src": {
     "file": "/Users/trentm/tm/node-bunyan/examples/src.js",
-    "line": 20,
-    "func": "Wuzzle.woos"
+            "line": 20,
+            "func": "Wuzzle.woos"
   },
   "v": 0
 }
@@ -621,22 +621,22 @@ Pretty-printed:
 ```js
 {
   "name": "myserver",
-  "hostname": "banana.local",
-  "pid": 123,
-  "req": {
+          "hostname": "banana.local",
+          "pid": 123,
+          "req": {
     "method": "GET",
-    "url": "/path?q=1#anchor",
-    "headers": {
+            "url": "/path?q=1#anchor",
+            "headers": {
       "x-hi": "Mom",
-      "connection": "close"
+              "connection": "close"
     },
     "remoteAddress": "120.0.0.1",
-    "remotePort": 51244
+            "remotePort": 51244
   },
   "level": 3,
-  "msg": "start request",
-  "time": "2012-02-03T19:02:57.534Z",
-  "v": 0
+          "msg": "start request",
+          "time": "2012-02-03T19:02:57.534Z",
+          "v": 0
 }
 ```
 
@@ -677,7 +677,7 @@ follow (feedback from actual users welcome).
 ## Recommended/Best Practice Fields
 
 - `err`: Object. A caught JS exception. Log that thing with `log.info(err)`
-    to get:
+  to get:
 
     ```js
     ...
@@ -690,8 +690,8 @@ follow (feedback from actual users welcome).
     ...
     ```
 
-    Or use the `bunyan.stdSerializers.err` serializer in your Logger and
-    do this `log.error({err: err}, "oops")`. See "examples/err.js".
+  Or use the `bunyan.stdSerializers.err` serializer in your Logger and
+  do this `log.error({err: err}, "oops")`. See "examples/err.js".
 
 - `req_id`: String. A request identifier. Including this field in all logging
   tied to handling a particular request to your server is strongly suggested.
@@ -749,14 +749,14 @@ In general streams are specified with the "streams" option:
 ```js
 var bunyan = require('bunyan');
 var log = bunyan.createLogger({
-    name: "foo",
-    streams: [
-        {
-            stream: process.stderr,
-            level: "debug"
-        },
-        ...
-    ]
+  name: "foo",
+  streams: [
+    {
+      stream: process.stderr,
+      level: "debug"
+    },
+    ...
+  ]
 });
 ```
 
@@ -765,9 +765,9 @@ For convenience, if there is only one stream, it can be specified with the
 
 ```js
 var log = bunyan.createLogger({
-    name: "foo",
-    stream: process.stderr,
-    level: "debug"
+  name: "foo",
+  stream: process.stderr,
+  level: "debug"
 });
 ```
 
@@ -793,6 +793,27 @@ log.addStream({
 });
 ```
 
+## Ending a Stream
+
+After a bunyan instance has been initialized, and a stream has been added you may end the stream like so:
+
+```js
+const log = bunyan.createLogger({
+  name: 'myLogger',
+  streams: [
+    {
+      level: 'info',
+      format: 'json',
+      path: `myNewStream.log`,
+    }
+  ],
+});
+
+log.streams[0].stream.end();
+```
+
+
+
 ## stream errors
 
 A Bunyan logger instance can be made to re-emit "error" events from its
@@ -802,7 +823,7 @@ streams](#stream-type-file), so you can do this:
 ```js
 var log = bunyan.createLogger({name: 'mylog', streams: [{path: LOG_PATH}]});
 log.on('error', function (err, stream) {
-    // Handle stream write or create error here.
+  // Handle stream write or create error here.
 });
 ```
 
@@ -856,11 +877,11 @@ Stream](http://nodejs.org/docs/latest/api/all.html#writable_Stream). A
 
 ```js
 var log = bunyan.createLogger({
-    name: 'foo',
-    streams: [{
-        stream: process.stderr
-        // `type: 'stream'` is implied
-    }]
+  name: 'foo',
+  streams: [{
+    stream: process.stderr
+    // `type: 'stream'` is implied
+  }]
 });
 ```
 
@@ -912,11 +933,11 @@ file for appending. E.g.:
 
 ```js
 var log = bunyan.createLogger({
-    name: 'foo',
-    streams: [{
-        path: '/var/log/foo.log',
-        // `type: 'file'` is implied
-    }]
+  name: 'foo',
+  streams: [{
+    path: '/var/log/foo.log',
+    // `type: 'file'` is implied
+  }]
 });
 ```
 
@@ -985,13 +1006,13 @@ rotation.
 
 ```js
 var log = bunyan.createLogger({
-    name: 'foo',
-    streams: [{
-        type: 'rotating-file',
-        path: '/var/log/foo.log',
-        period: '1d',   // daily rotation
-        count: 3        // keep 3 back copies
-    }]
+  name: 'foo',
+  streams: [{
+    type: 'rotating-file',
+    path: '/var/log/foo.log',
+    period: '1d',   // daily rotation
+    count: 3        // keep 3 back copies
+  }]
 });
 ```
 
@@ -1075,7 +1096,7 @@ app:
 var log = bunyan.createLogger(...);
 ...
 process.on('SIGUSR2', function () {
-    log.reopenFileStreams();
+  log.reopenFileStreams();
 });
 ```
 
@@ -1108,18 +1129,18 @@ To use a RingBuffer:
 var bunyan = require('bunyan');
 var ringbuffer = new bunyan.RingBuffer({ limit: 100 });
 var log = bunyan.createLogger({
-    name: 'foo',
-    streams: [
-        {
-            level: 'info',
-            stream: process.stdout
-        },
-        {
-            level: 'trace',
-            type: 'raw',    // use 'raw' to get raw log record objects
-            stream: ringbuffer
-        }
-    ]
+  name: 'foo',
+  streams: [
+    {
+      level: 'info',
+      stream: process.stdout
+    },
+    {
+      level: 'trace',
+      type: 'raw',    // use 'raw' to get raw log record objects
+      stream: ringbuffer
+    }
+  ]
 });
 
 log.info('hello world');
@@ -1130,12 +1151,12 @@ This example emits:
 
 ```js
 [ { name: 'foo',
-    hostname: '912d2b29',
-    pid: 50346,
-    level: 30,
-    msg: 'hello world',
-    time: '2012-06-19T21:34:19.906Z',
-    v: 0 } ]
+  hostname: '912d2b29',
+  pid: 50346,
+  level: 30,
+  msg: 'hello world',
+  time: '2012-06-19T21:34:19.906Z',
+  v: 0 } ]
 ```
 
 ## third-party streams
@@ -1360,21 +1381,21 @@ var bunyan = require('./lib/bunyan');
 
 function MyRawStream() {}
 MyRawStream.prototype.write = function (rec) {
-    console.log('[%s] %s: %s',
-        rec.time.toISOString(),
-        bunyan.nameFromLevel[rec.level],
-        rec.msg);
+  console.log('[%s] %s: %s',
+          rec.time.toISOString(),
+          bunyan.nameFromLevel[rec.level],
+          rec.msg);
 }
 
 var log = bunyan.createLogger({
-    name: 'play',
-    streams: [
-        {
-            level: 'info',
-            stream: new MyRawStream(),
-            type: 'raw'
-        }
-    ]
+  name: 'play',
+  streams: [
+    {
+      level: 'info',
+      stream: new MyRawStream(),
+      type: 'raw'
+    }
+  ]
 });
 
 log.info('hi on info');
