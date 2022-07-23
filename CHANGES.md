@@ -42,7 +42,7 @@ Known issues:
   to the '-p' option before executing `ps -A -o pid,command | grep '$ARG'`
   which could lead to unintended execution.
 
-  (This same change is also in bunyan@1.8.3.)
+  (This same change is also in bunyan@1.8.13.)
 
 ## 2.0.2 (beta)
 
