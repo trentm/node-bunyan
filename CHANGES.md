@@ -202,7 +202,7 @@ Use 1.8.1 or later.
 
 ## 1.6.0
 
-- [pull #304, issue #245] Use [Moment.js][momentjs.com] library to handle
+- [pull #304, issue #245] Use [Moment.js](https://momentjs.com/) library to handle
   `bunyan` CLI time formatting in some cases, especially to fix display of
   local time. It is now required for local time formatting (i.e. `bunyan -L`
   or `bunyan --time local`). (By David M. Lee.)
