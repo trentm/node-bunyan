@@ -1389,7 +1389,8 @@ Mark the following dependencies as
 configuration file to exclude them from the bundle:
 
 ```
-module: {
+module.exports = {
+    //...
     externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support']
 }
 ```
