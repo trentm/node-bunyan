@@ -229,6 +229,7 @@ $ node hi.js | ./node_modules/.bin/bunyan
 [2013-01-04T19:01:18.241Z]  INFO: myapp/40208 on banana.local: hi
 [2013-01-04T19:01:18.242Z]  WARN: myapp/40208 on banana.local: au revoir (lang=fr)
 ```
+**Replace `./bin/bunyan` with `./bin/bunyan.cmd` for consistent behaviour on Windows.**
 
 See the screenshot above for an example of the default coloring of rendered
 log output. That example also shows the nice formatting automatically done for
