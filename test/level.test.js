@@ -43,6 +43,12 @@ test('log.level(<num>)', function (t) {
     t.end();
 });
 
+test('log.level(<numAsString>)', function (t) {
+    log1.level('10');
+    t.equal(log1.level(), bunyan.TRACE);
+    t.end();
+})
+
 test('log.level(<name>)', function (t) {
     log1.level('error');
     t.equal(log1.level(), bunyan.ERROR);
