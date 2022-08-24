@@ -65,7 +65,7 @@ var OM_FROM_NAME = {
 };
 
 
-// Levels
+// Default Levels
 var TRACE = 10;
 var DEBUG = 20;
 var INFO = 30;
@@ -81,15 +81,71 @@ var levelFromName = {
     'error': ERROR,
     'fatal': FATAL
 };
+
+function colorFromLevel(level) {
+    if (level <= 10) {
+        return 'white';
+    }
+
+    if (level <= 20) {
+        return 'yellow';
+    }
+
+    if (level <= 30) {
+        return 'cyan';
+    }
+
+    if (level <= 40) {
+        return 'magenta';
+    }
+
+    if (level <= 50) {
+        return 'red';
+    }
+
+    return 'inverse';
+}
+
+var maxNameLength = 0;
 var nameFromLevel = {};
 var upperNameFromLevel = {};
 var upperPaddedNameFromLevel = {};
-Object.keys(levelFromName).forEach(function (name) {
-    var lvl = levelFromName[name];
+var LEVELS = {};
+
+function mkLevel(name, lvl) {
     nameFromLevel[lvl] = name;
     upperNameFromLevel[lvl] = name.toUpperCase();
-    upperPaddedNameFromLevel[lvl] = (
-        name.length === 4 ? ' ' : '') + name.toUpperCase();
+
+    if (name.length > maxNameLength) {
+        // pad, pad.
+        Object.keys(upperPaddedNameFromLevel).forEach(function(l) {
+            var paddedName = upperPaddedNameFromLevel[l];
+            for (var delta = name.length - maxNameLength; delta > 0; delta--) {
+                paddedName = ' ' + paddedName;
+            }
+            upperPaddedNameFromLevel[l] = paddedName;
+        });
+        maxNameLength = name.length;
+    }
+
+    if (name.length < maxNameLength) {
+        for (var delta = maxNameLength - name.length; delta > 0; delta--) {
+            name = ' ' + name;
+        }
+    }
+    upperPaddedNameFromLevel[lvl] = name.toUpperCase();
+
+    LEVELS[name.toUpperCase()] = lvl;
+
+    // if adding mappings..
+    if (!levelFromName[name]) {
+        levelFromName[name] = lvl;
+    }
+}
+
+Object.keys(levelFromName).forEach(function (name) {
+    var lvl = levelFromName[name];
+    mkLevel(name, lvl);
 });
 
 
@@ -260,6 +316,13 @@ function printHelp() {
     p('  -0            shortcut for `-o bunyan`');
     p('  -L, --time local');
     p('                Display time field in local time, rather than UTC.');
+    p('  --map "NUM=NAME"');
+    p('                Map specific error levels to names in the output.  You');
+    p('                can pass this option multiple times, first use wins, e.g.');
+    p('                  --map "35=notice" --map "35=security"');
+    p('                will map level 35 to the string \'NOTICE\'.  You cannot');
+    p('                override the default mappings (i.e., 30 will always mean');
+    p('                INFO).');
     p('');
     p('Environment Variables:');
     p('  BUNYAN_NO_COLOR    Set to a non-empty value to force no output ');
@@ -517,6 +580,25 @@ function parseArgv(argv) {
                     throw new Error('unknown output mode: "'+name+'"');
                 }
                 break;
+            case '--map':
+                var lvlArg = args.shift().trim();
+                var lvlIdx = lvlArg.indexOf('=');
+                var lvl = null;
+                var mapsTo = null;
+                if (lvlIdx !== -1) {
+                    lvl = lvlArg.substring(0, lvlIdx).trim();
+                    mapsTo = lvlArg.substring(lvlIdx+1).trim();
+                }
+
+                if (parseInt(lvl, 10).toString() !== lvl || !mapsTo) {
+                    throw new Error('level argument must be NUMBER=NAME, e.g. "35=notice"');
+                }
+
+                if (!nameFromLevel[lvl]) {
+                    mkLevel(mapsTo, lvl);
+                }
+
+                break;
             case '-j': // output with JSON.stringify
                 parsed.outputMode = OM_JSON;
                 break;
@@ -710,7 +792,7 @@ function isValidRecord(rec) {
 }
 var minValidRecord = {
     v: 0,   //TODO: get this from bunyan.LOG_VERSION
-    level: INFO,
+    level: LEVELS.INFO,
     name: 'name',
     hostname: 'hostname',
     pid: 123,
@@ -831,15 +913,7 @@ function emitRecord(rec, line, opts, stylize) {
 
         var level = (upperPaddedNameFromLevel[rec.level] || 'LVL' + rec.level);
         if (opts.color) {
-            var colorFromLevel = {
-                10: 'white',    // TRACE
-                20: 'yellow',   // DEBUG
-                30: 'cyan',     // INFO
-                40: 'magenta',  // WARN
-                50: 'red',      // ERROR
-                60: 'inverse',  // FATAL
-            };
-            level = stylize(level, colorFromLevel[rec.level]);
+            level = stylize(level, colorFromLevel(rec.level));
         }
         delete rec.level;
 
