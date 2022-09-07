@@ -152,3 +152,24 @@ test('child should not lose parent "hostname"', function (t) {
 
     t.end();
 });
+
+// issue #538
+test('child should not lose parent "pid"', function (t) {
+    var stream = new CapturingStream();
+    var parentLogger = bunyan.createLogger({
+        name: 'pid-test',
+        pid: 'my-pid',
+        streams: [ {
+            type: 'raw',
+            stream: stream,
+            level: 'info'
+        } ]
+    });
+    var childLogger = parentLogger.child({foo: 'bar'});
+
+    childLogger.info('hi');
+
+    t.equal(stream.recs[0].pid, 'my-pid');
+
+    t.end();
+});
