@@ -11,7 +11,7 @@ Known issues:
 
 ## not yet released
 
-(nothing yet)
+- Enable rotating-file to be used in a clustered environment.
 
 ## 2.0.5 (beta)
 
