@@ -16,7 +16,8 @@ if (nodeVer[0] <= 0 && nodeVer[1] <= 8) {
     console.warn('skip test (node <= 0.8)');
 } else {
     test('log with rotating file stream will terminate', function (t) {
-        exec('node ' +__dirname + '/process-exit.js', {timeout: 1000},
+        exec('node ' +__dirname + '/process-exit.js',
+                {timeout: 1000, env: { PATH: process.env.PATH }},
                 function (err, stdout, stderr) {
             t.ifError(err);
             t.equal(stdout, 'done\n');
