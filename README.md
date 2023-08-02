@@ -273,17 +273,17 @@ streams at different levels**.
 
 ```js
 var log = bunyan.createLogger({
-  name: 'myapp',
-  streams: [
-    {
-      level: 'info',
-      stream: process.stdout            // log INFO and above to stdout
-    },
-    {
-      level: 'error',
-      path: '/var/tmp/myapp-error.log'  // log ERROR and above to a file
-    }
-  ]
+    name: 'myapp',
+    streams: [
+        {
+            level: 'info',
+            stream: process.stdout            // log INFO and above to stdout
+        },
+        {
+            level: 'error',
+            path: '/var/tmp/myapp-error.log'  // log ERROR and above to a file
+        }
+    ]
 });
 ```
 
@@ -513,7 +513,7 @@ var log = bunyan.createLogger({src: true, ...});
 
 This adds the call source info with the 'src' field, like this:
 
-```js
+```json
 {
   "name": "src-example",
   "hostname": "banana.local",
@@ -566,10 +566,10 @@ Here is the API for querying and changing levels on an existing logger.
 Recall that a logger instance has an array of output "streams":
 
 ```js
-log.level() -> INFO   // gets current level (lowest level of all streams)
+log.level() -> INFO             // gets current level (lowest level of all streams)
 
-log.level(INFO)       // set all streams to level INFO
-log.level("info")     // set all streams to level INFO
+log.level(INFO)                 // set all streams to level INFO
+log.level("info")               // set all streams to level INFO
 
 log.levels() -> [DEBUG, INFO]   // get array of levels of all streams
 log.levels(0) -> DEBUG          // get level of stream at index 0
@@ -612,13 +612,13 @@ incorrect signature) is always a bug in Bunyan.**
 
 A typical Bunyan log record looks like this:
 
-```js
+```json
 {"name":"myserver","hostname":"banana.local","pid":123,"req":{"method":"GET","url":"/path?q=1#anchor","headers":{"x-hi":"Mom","connection":"close"}},"level":3,"msg":"start request","time":"2012-02-03T19:02:46.178Z","v":0}
 ```
 
 Pretty-printed:
 
-```js
+```json
 {
   "name": "myserver",
   "hostname": "banana.local",
@@ -682,9 +682,9 @@ follow (feedback from actual users welcome).
     ```js
     ...
     "err": {
-      "message": "boom",
-      "name": "TypeError",
-      "stack": "TypeError: boom\n    at Object.<anonymous> ..."
+        "message": "boom",
+        "name": "TypeError",
+        "stack": "TypeError: boom\n    at Object.<anonymous> ..."
     },
     "msg": "boom",
     ...
@@ -704,7 +704,7 @@ follow (feedback from actual users welcome).
 - `req`: An HTTP server request. Bunyan provides `bunyan.stdSerializers.req`
   to serialize a request with a suggested set of keys. Example:
 
-    ```js
+    ```json
     {
       "method": "GET",
       "url": "/path?q=1#anchor",
@@ -720,7 +720,7 @@ follow (feedback from actual users welcome).
 - `res`: An HTTP server response. Bunyan provides `bunyan.stdSerializers.res`
   to serialize a response with a suggested set of keys. Example:
 
-    ```js
+    ```json
     {
       "statusCode": 200,
       "header": "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nConnection: keep-alive\r\nTransfer-Encoding: chunked\r\n\r\n"
@@ -787,9 +787,9 @@ calling the `addStream` function.
 var bunyan = require('bunyan');
 var log = bunyan.createLogger('myLogger');
 log.addStream({
-  name: "myNewStream",
-  stream: process.stderr,
-  level: "debug"
+    name: "myNewStream",
+    stream: process.stderr,
+    level: "debug"
 });
 ```
 
@@ -810,27 +810,29 @@ As of bunyan@1.7.0, the `reemitErrorEvents` field can be used when adding a
 stream to control whether "error" events are re-emitted on the Logger. For
 example:
 
-    var EventEmitter = require('events').EventEmitter;
-    var util = require('util');
+```js
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
-    function MyFlakyStream() {}
-    util.inherits(MyFlakyStream, EventEmitter);
+function MyFlakyStream() {}
+util.inherits(MyFlakyStream, EventEmitter);
 
-    MyFlakyStream.prototype.write = function (rec) {
-        this.emit('error', new Error('boom'));
-    }
+MyFlakyStream.prototype.write = function (rec) {
+    this.emit('error', new Error('boom'));
+}
 
-    var log = bunyan.createLogger({
-        name: 'this-is-flaky',
-        streams: [
-            {
-                type: 'raw',
-                stream: new MyFlakyStream(),
-                reemitErrorEvents: true
-            }
-        ]
-    });
-    log.info('hi there');
+var log = bunyan.createLogger({
+    name: 'this-is-flaky',
+    streams: [
+        {
+            type: 'raw',
+            stream: new MyFlakyStream(),
+            reemitErrorEvents: true
+        }
+    ]
+});
+log.info('hi there');
+```
 
 The behaviour is as follows:
 
@@ -1129,13 +1131,15 @@ console.log(ringbuffer.records);
 This example emits:
 
 ```js
-[ { name: 'foo',
+[ {
+    name: 'foo',
     hostname: '912d2b29',
     pid: 50346,
     level: 30,
     msg: 'hello world',
     time: '2012-06-19T21:34:19.906Z',
-    v: 0 } ]
+    v: 0
+} ]
 ```
 
 ## third-party streams
@@ -1388,7 +1392,7 @@ Mark the following dependencies as
 [externals](https://webpack.js.org/configuration/externals/) in your webpack
 configuration file to exclude them from the bundle:
 
-```
+```js
 module: {
     externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support']
 }
